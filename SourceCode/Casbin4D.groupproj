@@ -3,7 +3,7 @@
         <ProjectGuid>{4C61AAEF-77DD-4C09-B439-DF6D2E16F7B2}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
-        <Projects Include="Packages\CasbinD103Rio.dproj">
+        <Projects Include="Packages\CasbinD102Tokyo.dproj">
             <Dependencies/>
         </Projects>
     </ItemGroup>
@@ -14,23 +14,23 @@
             <Default.Personality/>
         </BorlandProject>
     </ProjectExtensions>
-    <Target Name="CasbinD103Rio">
-        <MSBuild Projects="Packages\CasbinD103Rio.dproj"/>
+    <Target Name="CasbinD102Tokyo">
+        <MSBuild Projects="Packages\CasbinD102Tokyo.dproj"/>
     </Target>
-    <Target Name="CasbinD103Rio:Clean">
-        <MSBuild Projects="Packages\CasbinD103Rio.dproj" Targets="Clean"/>
+    <Target Name="CasbinD102Tokyo:Clean">
+        <MSBuild Projects="Packages\CasbinD102Tokyo.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="CasbinD103Rio:Make">
-        <MSBuild Projects="Packages\CasbinD103Rio.dproj" Targets="Make"/>
+    <Target Name="CasbinD102Tokyo:Make">
+        <MSBuild Projects="Packages\CasbinD102Tokyo.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="CasbinD103Rio"/>
+        <CallTarget Targets="CasbinD102Tokyo"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="CasbinD103Rio:Clean"/>
+        <CallTarget Targets="CasbinD102Tokyo:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="CasbinD103Rio:Make"/>
+        <CallTarget Targets="CasbinD102Tokyo:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

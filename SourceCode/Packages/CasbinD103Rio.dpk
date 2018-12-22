@@ -34,6 +34,11 @@ contains
   Core.Logger.Types in '..\Common\Core\Core.Logger.Types.pas',
   Core.Base.Types in '..\Common\Core\Core.Base.Types.pas',
   Core.Logger.Base in '..\Common\Core\Core.Logger.Base.pas',
-  Core.Logger.Default in '..\Common\Core\Core.Logger.Default.pas';
+  Core.Logger.Default in '..\Common\Core\Core.Logger.Default.pas',
+  Lexer.Tokens.Types in '..\Common\Lexer\Lexer.Tokens.Types.pas',
+  Lexer.Tokens.Messages in '..\Common\Lexer\Lexer.Tokens.Messages.pas',
+  Lexer.Tokeniser.Types in '..\Common\Lexer\Lexer.Tokeniser.Types.pas',
+  Lexer.Tokens.List in '..\Common\Lexer\Lexer.Tokens.List.pas',
+  Lexer.Utilities in '..\Common\Lexer\Lexer.Utilities.pas';
 
 end.

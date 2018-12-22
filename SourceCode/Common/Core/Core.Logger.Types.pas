@@ -18,6 +18,33 @@ interface
 type
   ILogger = interface
     ['{A2FB7DFB-BB81-421C-B2DF-5E76AB6FCB4D}']
+    function getEnabled: Boolean;
+    function getLastLoggedMessage: String;
+    {$REGION 'Loggs a message'}
+    /// <summary>
+    ///   Logs a message
+    /// </summary>
+    {$ENDREGION}
+    procedure log(const aMessage: string);
+    procedure setEnabled(const aValue: Boolean);
+
+    {$REGION 'Enables and Disables the logger'}
+    /// <summary>
+    ///   Enables and Disables the logger
+    /// </summary>
+    {$ENDREGION}
+    property Enabled: Boolean read getEnabled write setEnabled;
+    {$REGION 'Retrieves the logged message. Used for debugging purposes'}
+    /// <summary>
+    ///   <para>
+    ///     Retrieves the logged message.
+    ///   </para>
+    ///   <para>
+    ///     Used for debugging purposes
+    ///   </para>
+    /// </summary>
+    {$ENDREGION}
+    property LastLoggedMessage: String read getLastLoggedMessage;
   end;
 
 implementation

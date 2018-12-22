@@ -117,6 +117,8 @@
         <DCCReference Include="rtl.dcp"/>
         <DCCReference Include="..\Common\Core\Core.Logger.Types.pas"/>
         <DCCReference Include="..\Common\Core\Core.Base.Types.pas"/>
+        <DCCReference Include="..\Common\Core\Core.Logger.Base.pas"/>
+        <DCCReference Include="..\Common\Core\Core.Logger.Default.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -168,7 +170,7 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="C:\Users\Public\Documents\Embarcadero\Studio\20.0\Bpl\CasbinD103Rio.bpl" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile LocalName="..\..\Builds\Packages\D103Rio\Win32\Debug\CasbinD103Rio.bpl" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>CasbinD103Rio.bpl</RemoteName>
                         <Overwrite>true</Overwrite>

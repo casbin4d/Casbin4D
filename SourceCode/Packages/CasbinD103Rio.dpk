@@ -32,6 +32,8 @@ requires
 
 contains
   Core.Logger.Types in '..\Common\Core\Core.Logger.Types.pas',
-  Core.Base.Types in '..\Common\Core\Core.Base.Types.pas';
+  Core.Base.Types in '..\Common\Core\Core.Base.Types.pas',
+  Core.Logger.Base in '..\Common\Core\Core.Logger.Base.pas',
+  Core.Logger.Default in '..\Common\Core\Core.Logger.Default.pas';
 
 end.

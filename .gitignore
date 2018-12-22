@@ -73,3 +73,4 @@ Thumbs.db
 *.vlb
 *.res
 *.$manifest
+Tests/Win32/

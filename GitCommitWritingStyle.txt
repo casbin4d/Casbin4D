@@ -1,0 +1,17 @@
+Git Commit Writing Guide
+Git commit messages follow the general guidelines widely available (atomic commits, imperative writing style, etc.)
+
+In addition, commits can use the following semantics:
+
+Commit		Element	Equivalent							Commit Message Example
++			Add											+ methods to calculate ratios
+-			Remove										- redundant calls to API
+*			Update										* project files
+Dolphins	Used to describe that the commit has 
+			some necessary changes but nothing 
+			relevant (eg. a blank line was added, 
+			the newly saved file has rearranged 
+			elements in the settings file, etc.)
+
+			Use this when the modified files in the 
+			commit have just "indescribable" changes	

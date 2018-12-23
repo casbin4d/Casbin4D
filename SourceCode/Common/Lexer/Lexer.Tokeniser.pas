@@ -15,12 +15,14 @@ type
     fTokenMessages: TObjectList<TTokenMessage>;
     fStatus: TTokeniserStatus;
 
-    procedure addToken(const currCh: Char; const currPosition: TPosition);
+    procedure addToken(const currCh: Char; const currPosition: TPosition; const
+        aNomicalCol: integer);
   private
 {$REGION 'Interface'}
 
-    procedure addEOL(const currPosition: TPosition);
-    procedure addIdentifier(const value: string; const currPosition: TPosition);
+    procedure addEOL(const currPosition: TPosition; const aNomicalCol: integer);
+    procedure addIdentifier(const value: string; const currPosition: TPosition;
+        const aNomicalCol: integer);
     function getLogger: ILogger;
     function getTokenList: TTokenList;
     function getTokenMessages: TObjectList<TTokenMessage>;
@@ -92,20 +94,23 @@ type
     NextChar: Char;
 
     function currentAndNextChar: string;
+    function currentAndPreviousChar: string;
   end;
-
 
 function TCharBuffer.currentAndNextChar: string;
 begin
   Result:=CurrentChar+NextChar;
 end;
 
-
+function TCharBuffer.currentAndPreviousChar: string;
+begin
+  result:=PreviousChar+CurrentChar;
+end;
 
 /////////////////////////
 
 procedure TTokeniser.addIdentifier(const value: string; const currPosition:
-    TPosition);
+    TPosition; const aNomicalCol: integer);
 var
   token: PToken;
 begin
@@ -114,18 +119,19 @@ begin
 
   token.Value:=value;
   token.&Type:=ttIdentifier;
-  if currPosition.Column-Length(value)<Low(string) then
+  if aNomicalCol-Length(value)<Low(string) then
     token.StartPosition.Column:=Low(string)
   else
-    token.StartPosition.Column:=currPosition.Column-Length(value)+1;
+    token.StartPosition.Column:=aNomicalCol-Length(value)+1;
   token.StartPosition.Row:=currPosition.Row;
-  token.EndPosition.Column:=currPosition.Column;
+  token.EndPosition.Column:=aNomicalCol;
   token.EndPosition.Row:=currPosition.Row;
 
   fTokenList.Add(token);
 end;
 
-procedure TTokeniser.addEOL(const currPosition: TPosition);
+procedure TTokeniser.addEOL(const currPosition: TPosition; const aNomicalCol:
+    integer);
 var
   token: PToken;
 begin
@@ -134,24 +140,24 @@ begin
 
   token.Value:='(eol)';
   token.&Type:=ttEOL;
-  token.StartPosition.Column:=currPosition.Column;
+  token.StartPosition.Column:=aNomicalCol;
   token.StartPosition.Row:=currPosition.Row;
-  token.EndPosition.Column:=currPosition.Column;
+  token.EndPosition.Column:=aNomicalCol;
   token.EndPosition.Row:=currPosition.Row;
 
   fTokenList.Add(token);
 end;
 
 procedure TTokeniser.addToken(const currCh: Char; const currPosition:
-    TPosition);
+    TPosition; const aNomicalCol: integer);
 var
   token: PToken;
 begin
   token:=tokenForOneCharReserved(currCh);
 
-  token.StartPosition.Column:=currPosition.Column;
+  token.StartPosition.Column:=aNomicalCol;
   token.StartPosition.Row:=currPosition.Row;
-  token.EndPosition.Column:=currPosition.Column;
+  token.EndPosition.Column:=aNomicalCol;
   token.EndPosition.Row:=currPosition.Row;
 
   fTokenList.Add(token);
@@ -166,6 +172,7 @@ var
   value: string;
   token: PToken;
   buffer: PCharBuffer;
+  nominalColumn: Integer;
 begin
   fTokenList.Clear;
   fTokenMessages.Clear;
@@ -184,6 +191,9 @@ begin
   currPosition.Row:=0;
   lastPosition.Column:=currPosition.Column;
   lastPosition.Row:=currPosition.Row;
+
+  nominalColumn:=currPosition.Column;
+
   fStatus:=tsRunning;
 
   New(buffer);
@@ -204,15 +214,24 @@ begin
 
     //Check if EOL
     //Code from System unit for sLineBreak
-//    if {$IFDEF POSIX} currCh = sLineBreak {$ENDIF}
-//     {$IFDEF MSWINDOWS} buffer.currentAndNextChar = sLineBreak {$ENDIF} then
-//      addEOL(currPosition)
-//    else
+    if {$IFDEF POSIX} currCh = sLineBreak {$ENDIF}
+     {$IFDEF MSWINDOWS} buffer.currentAndNextChar = sLineBreak {$ENDIF} then
+    begin
+      addEOL(currPosition, nominalColumn);
+      Inc(currPosition.Row);
+      nominalColumn:=Low(string)-1;
+    end
+    else
+    // Skip if an EOL has been added already
+    if {$IFDEF POSIX} (buffer.PreviousChar = sLineBreak) {$ENDIF}
+     {$IFDEF MSWINDOWS} (buffer.currentAndPreviousChar = sLineBreak) {$ENDIF} then
+      Dec(nominalColumn)
+    else
     begin
       //Check if character is in reserved chars or/and whitespace
       if CharInSet(currCh, oneCharReserved + whiteSpaceChars) then
       begin
-        addToken(currCh, currPosition);
+        addToken(currCh, currPosition, nominalColumn);
         value:='';
       end
       else
@@ -222,7 +241,7 @@ begin
         if CharInSet(buffer^.NextChar, oneCharReserved + whiteSpaceChars) or
           (buffer^.NextChar = #0) then
         begin
-          addIdentifier(value, currPosition);
+          addIdentifier(value, currPosition, nominalColumn);
           value:='';
         end;
       end;
@@ -230,6 +249,7 @@ begin
 
     //Increase the Column
     Inc(currPosition.Column);
+    Inc(nominalColumn);
   end;
 
   fStatus:=tsFinished;

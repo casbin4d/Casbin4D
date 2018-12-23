@@ -104,6 +104,24 @@ const
   tokenTestNumTokens7 = '3';
   tokenTest7 = tokenTestPass7+testSeparator+tokenTestExpected7+testSeparator
                                                           +tokenTestNumTokens7;
+///////////////////////////////////////////////////////////
+  tokenTestName8 = 'Multiline identifier with space';
+  tokenTestPass8 = '[two line '+slineBreak+'  identifier]';
+  tokenTestExpected8 =
+          '{Token: LSquareBracket; Value: [; (1,0) --> (1,0)}'+sLineBreak+
+          '{Token: Identifier; Value: two; (2,0) --> (4,0)}'+sLineBreak+
+          '{Token: Space; Value: (space); (5,0) --> (5,0)}'+sLineBreak+
+          '{Token: Identifier; Value: line; (6,0) --> (9,0)}'+sLineBreak+
+          '{Token: Space; Value: (space); (10,0) --> (10,0)}'+sLineBreak+
+          '{Token: EOL; Value: (eol); (11,0) --> (11,0)}'+sLineBreak+
+          '{Token: Space; Value: (space); (1,1) --> (1,1)}'+sLineBreak+
+          '{Token: Space; Value: (space); (2,1) --> (2,1)}'+sLineBreak+
+          '{Token: Identifier; Value: identifier; (3,1) --> (12,1)}'+sLineBreak+
+          '{Token: RSquareBracket; Value: ]; (13,1) --> (13,1)}';
+  tokenTestNumTokens8 = '10';
+  tokenTest8 = tokenTestPass8+testSeparator+tokenTestExpected8+testSeparator
+                                                          +tokenTestNumTokens8;
+
 
 implementation
 

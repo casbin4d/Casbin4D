@@ -16,7 +16,9 @@ type
     fStatus: TTokeniserStatus;
 
     procedure addToken(const currCh: Char; const currPosition: TPosition; const
-        aNomicalCol: integer);
+        aNomicalCol: integer); overload;
+    procedure addToken(const token: string; const currPosition: TPosition; const
+        aNomicalCol: integer); overload;
   private
 {$REGION 'Interface'}
 
@@ -148,6 +150,24 @@ begin
   fTokenList.Add(token);
 end;
 
+procedure TTokeniser.addToken(const token: string;
+  const currPosition: TPosition; const aNomicalCol: integer);
+var
+  nToken: PToken;
+begin
+  if Length(token) = 2 then
+  begin
+    nToken:=tokenForTwoCharReserved(token);
+
+    nToken.StartPosition.Column:=aNomicalCol;
+    nToken.StartPosition.Row:=currPosition.Row;
+    nToken.EndPosition.Column:=aNomicalCol+1;
+    nToken.EndPosition.Row:=currPosition.Row;
+
+    fTokenList.Add(nToken);
+  end;
+end;
+
 procedure TTokeniser.addToken(const currCh: Char; const currPosition:
     TPosition; const aNomicalCol: integer);
 var
@@ -222,31 +242,45 @@ begin
       nominalColumn:=Low(string)-1;
     end
     else
-    // Skip if an EOL has been added already
-    if {$IFDEF POSIX} (buffer.PreviousChar = sLineBreak) {$ENDIF}
-     {$IFDEF MSWINDOWS} (buffer.currentAndPreviousChar = sLineBreak) {$ENDIF} then
-      Dec(nominalColumn)
-    else
     begin
-      //Check if character is in reserved chars or/and whitespace
-      if CharInSet(currCh, oneCharReserved + whiteSpaceChars) then
-      begin
-        addToken(currCh, currPosition, nominalColumn);
-        value:='';
-      end
+      // Skip if an EOL has been added already
+      if {$IFDEF POSIX} (buffer.PreviousChar = sLineBreak) {$ENDIF}
+       {$IFDEF MSWINDOWS} (buffer.currentAndPreviousChar = sLineBreak) {$ENDIF} then
+        Dec(nominalColumn)
       else
       begin
-        //Build the 'value'
-        value:=value+currCh;
-        if CharInSet(buffer^.NextChar, oneCharReserved + whiteSpaceChars) or
-          (buffer^.NextChar = #0) then
+        //Check if the two-chars are reserved
+        if MatchStr(buffer.currentAndNextChar, twoCharReserved) then
         begin
-          addIdentifier(value, currPosition, nominalColumn);
-          value:='';
+          addToken(buffer.currentAndNextChar, currPosition, nominalColumn);
+          Value:='';
+        end
+        else
+        begin
+          //Skip if a two-chars reserved has been added already
+          if not MatchStr(buffer.currentAndPreviousChar, twoCharReserved) then
+          begin
+            //Check if character is in reserved chars or/and whitespace
+            if CharInSet(currCh, oneCharReserved + whiteSpaceChars) then
+            begin
+              addToken(currCh, currPosition, nominalColumn);
+              value:='';
+            end
+            else
+            begin
+              //Build the 'value'
+              value:=value+currCh;
+              if CharInSet(buffer^.NextChar, oneCharReserved + whiteSpaceChars) or
+                (buffer^.NextChar = #0) then
+              begin
+                addIdentifier(value, currPosition, nominalColumn);
+                value:='';
+              end;
+            end;
+          end;
         end;
       end;
     end;
-
     //Increase the Column
     Inc(currPosition.Column);
     Inc(nominalColumn);

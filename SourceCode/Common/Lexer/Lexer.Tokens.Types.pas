@@ -3,7 +3,7 @@ unit Lexer.Tokens.Types;
 interface
 
 uses
-  System.SysUtils;
+  System.SysUtils, System.Types;
 
 type
   TTokenType = (ttIdentifier,
@@ -18,6 +18,8 @@ type
                 ttDot,
                 ttEquality,
                 ttDoubleSlash,
+                ttBackslash,
+                //Operations
                 ttAND,
                 ttOR,
                 ttNOT,
@@ -27,18 +29,23 @@ type
                 ttDivide,
                 ttModulo,
                 ttGreaterThan,
-                ttGreateEqualThan,
+                ttGreaterEqualThan,
                 ttLowerThan,
                 ttLowerEqualThan,
-                ttBackslash,
 
+                //Whitespace
                 ttTab,
                 ttSpace,
                 ttCR,
                 ttLF,
                 ttEOL,
                 ttEOF,
-                ttUnknown);
+
+                //Unknown
+                ttUnknown
+
+                //Keywords
+                );
 
   TPosition = record
     Row: Integer;
@@ -54,32 +61,17 @@ type
   end;
 
 const
-  oneCharReserved: TSysCharSet  = ['#', ';', //Comments
-                                    '[', ']',
-                                    '=',
-                                    ',',
-                                    '(', ')',
-                                    '_',
-                                    '.',
-                                    '+', '-', '*', '/', '%',
-                                    '>',
-                                    '<',
-                                    '\',
-                                    '!'];
+  oneCharReserved: TSysCharSet  =
+      ['#', ';', //Comments
+       '[', ']', '=', ',', '(', ')', '_', '.',
+       '+', '-', '*', '/', '%',
+       '>', '<', '\', '!'];
+
   whiteSpaceChars: TSysCharSet = [#9, #32, #13, #10];
 
-
-
+  twoCharReserved: TStringDynArray = ['==', '//', '&&', '||', '>=', '<='];
 
 implementation
 
 end.
 
-                ttEquality,
-                ttDoubleSlash,
-                ttAND,
-                ttOR,
-                ttNOT,
-
-                ttGreateEqualThan,
-                ttLowerEqualThan,

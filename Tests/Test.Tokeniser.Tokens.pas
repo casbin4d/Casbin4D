@@ -2,6 +2,9 @@
 
 interface
 
+uses
+  System.Types;
+
 //////////////////////////////////////////////////////////////////////////////////
 // The positions of the strings are for NON-ARC compilers (eg.Win32, Win64, etc.)
 //////////////////////////////////////////////////////////////////////////////////
@@ -133,7 +136,20 @@ const
   tokenTestNumToken9 = '3';
   tokenTest9 = tokenTestPass9+testSeparator+tokenTestExpected9+testSeparator
                                                             +tokenTestNumToken9;
+///////////////////////////////////////////////////////////
+  tokenTestName10 = 'Two Tokens';
+  tokenTestPass10 = '==//&&||>=<=';
+  tokenTestExpected10 =
+            '{Token: Equality; Value: ==; (1,0) --> (2,0)}'+sLineBreak+
+            '{Token: DoubleSlash; Value: //; (3,0) --> (4,0)}'+sLineBreak+
+            '{Token: AND; Value: &&; (5,0) --> (6,0)}'+sLineBreak+
+            '{Token: OR; Value: ||; (7,0) --> (8,0)}'+sLineBreak+
+            '{Token: GreaterEqualThan; Value: >=; (9,0) --> (10,0)}'+sLineBreak+
+            '{Token: LowerEqualThan; Value: <=; (11,0) --> (12,0)}';
 
+  tokenTestNumTokens10= '6';
+  tokenTest10 = tokenTestPass10+testSeparator+tokenTestExpected10+testSeparator
+                                                          +tokenTestNumTokens10;
 implementation
 
 end.

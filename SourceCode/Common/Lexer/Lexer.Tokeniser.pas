@@ -21,7 +21,6 @@ type
         aNomicalCol: integer); overload;
   private
 {$REGION 'Interface'}
-
     procedure addEOL(const currPosition: TPosition; const aNomicalCol: integer);
     procedure addIdentifier(const value: string; const currPosition: TPosition;
         const aNomicalCol: integer);
@@ -130,6 +129,7 @@ begin
   token.EndPosition.Row:=currPosition.Row;
 
   fTokenList.Add(token);
+  fLogger.log('Identifier '+value+' added');
 end;
 
 procedure TTokeniser.addEOL(const currPosition: TPosition; const aNomicalCol:
@@ -148,6 +148,8 @@ begin
   token.EndPosition.Row:=currPosition.Row;
 
   fTokenList.Add(token);
+
+  fLogger.log('EOL detected');
 end;
 
 procedure TTokeniser.addToken(const token: string;
@@ -176,6 +178,8 @@ begin
   nToken.EndPosition.Row:=currPosition.Row;
 
   fTokenList.Add(nToken);
+
+  fLogger.log('Token '+token+' added');
 end;
 
 procedure TTokeniser.addToken(const currCh: Char; const currPosition:
@@ -191,6 +195,7 @@ begin
   token.EndPosition.Row:=currPosition.Row;
 
   fTokenList.Add(token);
+  fLogger.log('Token '+token^.Value+' added');
 end;
 
 procedure TTokeniser.tokenise;
@@ -204,6 +209,8 @@ var
   buffer: PCharBuffer;
   nominalColumn: Integer;
 begin
+  fLogger.log('Tokenisation is starting...');
+
   fTokenList.Clear;
   fTokenMessages.Clear;
 
@@ -213,6 +220,7 @@ begin
 //    tokenMessage.Create(tmtError, 'Empty string to parse', position);
 //    tokenMessage.ErrorType:=tmeSyntaxError;
 //    fTokenMessages.Add(tokenMessage);
+    fLogger.log('The string to parse is empty');
     fStatus:=tsFatalError;
     Exit;
   end;
@@ -301,6 +309,7 @@ begin
 
   fStatus:=tsFinished;
   Dispose(buffer);
+  fLogger.log('Tokenisation finished...');
 end;
 
 end.

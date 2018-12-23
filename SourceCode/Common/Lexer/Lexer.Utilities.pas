@@ -67,13 +67,14 @@ begin
   New(result);
   FillChar(result^, SizeOf(TToken), 0);
 
-  case IndexStr(aToken,  ['==', '//', '&&', '||', '>=', '<=']) of
+  case IndexStr(UpperCase(aToken),  ['==', '//', '&&', '||', '>=', '<=', 'OR']) of
     0: result^.&Type:=ttEquality;
     1: result^.&Type:=ttDoubleSlash;
     2: result^.&Type:=ttAND;
     3: result^.&Type:=ttOR;
     4: result^.&Type:=ttGreaterEqualThan;
     5: result^.&Type:=ttLowerEqualThan;
+    6: result^.&Type:=ttOR;
   else
     result^.&Type:=ttUnknown;
   end;

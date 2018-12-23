@@ -69,7 +69,8 @@ const
 
   whiteSpaceChars: TSysCharSet = [#9, #32, #13, #10];
 
-  twoCharReserved: TStringDynArray = ['==', '//', '&&', '||', '>=', '<='];
+  twoCharReserved: TStringDynArray = ['==', '//', '&&', '||', '>=', '<=',
+                                      'or'];
 
 implementation
 

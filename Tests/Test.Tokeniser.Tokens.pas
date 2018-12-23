@@ -137,19 +137,41 @@ const
   tokenTest9 = tokenTestPass9+testSeparator+tokenTestExpected9+testSeparator
                                                             +tokenTestNumToken9;
 ///////////////////////////////////////////////////////////
-  tokenTestName10 = 'Two Tokens';
-  tokenTestPass10 = '==//&&||>=<=';
+  tokenTestName10 = 'Two-char Tokens';
+  tokenTestPass10 = '==//&&||>=<=or';
   tokenTestExpected10 =
             '{Token: Equality; Value: ==; (1,0) --> (2,0)}'+sLineBreak+
             '{Token: DoubleSlash; Value: //; (3,0) --> (4,0)}'+sLineBreak+
             '{Token: AND; Value: &&; (5,0) --> (6,0)}'+sLineBreak+
             '{Token: OR; Value: ||; (7,0) --> (8,0)}'+sLineBreak+
             '{Token: GreaterEqualThan; Value: >=; (9,0) --> (10,0)}'+sLineBreak+
-            '{Token: LowerEqualThan; Value: <=; (11,0) --> (12,0)}';
-
-  tokenTestNumTokens10= '6';
+            '{Token: LowerEqualThan; Value: <=; (11,0) --> (12,0)}'+sLineBreak+
+            '{Token: OR; Value: or; (13,0) --> (14,0)}';
+  tokenTestNumTokens10= '7';
   tokenTest10 = tokenTestPass10+testSeparator+tokenTestExpected10+testSeparator
                                                           +tokenTestNumTokens10;
+///////////////////////////////////////////////////////////
+  tokenTestName11 = 'Mixed one and two char reserved';
+  tokenTestPass11 = 'p=35+8 >= (pass || root)';
+  tokenTestExpected11 =
+        '{Token: Identifier; Value: p; (1,0) --> (1,0)}'+sLineBreak+
+        '{Token: Equality; Value: =; (2,0) --> (2,0)}'+sLineBreak+
+        '{Token: Identifier; Value: 35; (3,0) --> (4,0)}'+sLineBreak+
+        '{Token: Add; Value: +; (5,0) --> (5,0)}'+sLineBreak+
+        '{Token: Identifier; Value: 8; (6,0) --> (6,0)}'+sLineBreak+
+        '{Token: Space; Value: (space); (7,0) --> (7,0)}'+sLineBreak+
+        '{Token: GreaterEqualThan; Value: >=; (8,0) --> (9,0)}'+sLineBreak+
+        '{Token: Space; Value: (space); (10,0) --> (10,0)}'+sLineBreak+
+        '{Token: LParenthesis; Value: (; (11,0) --> (11,0)}'+sLineBreak+
+        '{Token: Identifier; Value: pass; (12,0) --> (15,0)}'+sLineBreak+
+        '{Token: Space; Value: (space); (16,0) --> (16,0)}'+sLineBreak+
+        '{Token: OR; Value: ||; (17,0) --> (18,0)}'+sLineBreak+
+        '{Token: Space; Value: (space); (19,0) --> (19,0)}'+sLineBreak+
+        '{Token: Identifier; Value: root; (20,0) --> (23,0)}'+sLineBreak+
+        '{Token: RParenthesis; Value: ); (24,0) --> (24,0)}';
+  tokenTestNumTokens11= '15';
+  tokenTest11 = tokenTestPass11+testSeparator+tokenTestExpected11+testSeparator
+                                                          +tokenTestNumTokens11;
 implementation
 
 end.

@@ -64,8 +64,12 @@ const
                                     '+', '-', '*', '/', '%',
                                     '>',
                                     '<',
-                                    '\'];
+                                    '\',
+                                    '!'];
   whiteSpaceChars: TSysCharSet = [#9, #32, #13, #10];
+
+
+
 
 implementation
 
@@ -77,6 +81,5 @@ end.
                 ttOR,
                 ttNOT,
 
-                ttEOL
                 ttGreateEqualThan,
                 ttLowerEqualThan,

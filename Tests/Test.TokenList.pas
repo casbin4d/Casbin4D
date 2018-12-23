@@ -71,8 +71,8 @@ end;
 
 procedure TTestTokenList.testOutput;
 begin
-  Assert.AreEqual('{Token: AND; Value: and; (0, 0) --> (2, 0)}'+sLineBreak+
-                  '{Token: GreaterThan; Value: >; (10, 2) --> (11, 2)}',
+  Assert.AreEqual('{Token: AND; Value: and; (0,0) --> (2,0)}'+sLineBreak+
+                  '{Token: GreaterThan; Value: >; (10,2) --> (11,2)}',
                                                         fList.toOutputString);
 end;
 

@@ -4,6 +4,18 @@ program Tests.Casbin;
 {$APPTYPE CONSOLE}
 {$ENDIF}{$STRONGLINKTYPES ON}
 uses
+  {$IFDEF EurekaLog}
+  EMemLeaks,
+  EResLeaks,
+  EDialogWinAPIEurekaLogDetailed,
+  EDialogWinAPIStepsToReproduce,
+  EDebugExports,
+  EDebugJCL,
+  EFixSafeCallException,
+  EMapWin32,
+  EAppConsole,
+  ExceptionLog7,
+  {$ENDIF EurekaLog}
   System.SysUtils,
   {$IFDEF TESTINSIGHT}
   TestInsight.DUnitX,
@@ -21,7 +33,10 @@ uses
   Lexer.Tokens.Messages in '..\SourceCode\Common\Lexer\Lexer.Tokens.Messages.pas',
   Lexer.Tokens.List in '..\SourceCode\Common\Lexer\Lexer.Tokens.List.pas',
   Lexer.Tokeniser.Types in '..\SourceCode\Common\Lexer\Lexer.Tokeniser.Types.pas',
-  Lexer.Utilities in '..\SourceCode\Common\Lexer\Lexer.Utilities.pas';
+  Lexer.Utilities in '..\SourceCode\Common\Lexer\Lexer.Utilities.pas',
+  Test.Tokeniser in 'Test.Tokeniser.pas',
+  Lexer.Tokeniser in '..\SourceCode\Common\Lexer\Lexer.Tokeniser.pas',
+  Test.TokenMessage in 'Test.TokenMessage.pas';
 
 var
   runner : ITestRunner;
@@ -29,7 +44,7 @@ var
   logger : ITestLogger;
   nunitLogger : ITestLogger;
 begin
-  ReportMemoryLeaksOnShutdown:=True;
+//  ReportMemoryLeaksOnShutdown:=True;
 {$IFDEF TESTINSIGHT}
   TestInsight.DUnitX.RunRegisteredTests;
   exit;
@@ -68,3 +83,7 @@ begin
       System.Writeln(E.ClassName, ': ', E.Message);
   end;
 end.
+
+
+
+

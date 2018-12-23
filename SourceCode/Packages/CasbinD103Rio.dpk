@@ -39,6 +39,7 @@ contains
   Lexer.Tokens.Messages in '..\Common\Lexer\Lexer.Tokens.Messages.pas',
   Lexer.Tokeniser.Types in '..\Common\Lexer\Lexer.Tokeniser.Types.pas',
   Lexer.Tokens.List in '..\Common\Lexer\Lexer.Tokens.List.pas',
-  Lexer.Utilities in '..\Common\Lexer\Lexer.Utilities.pas';
+  Lexer.Utilities in '..\Common\Lexer\Lexer.Utilities.pas',
+  Lexer.Tokeniser in '..\Common\Lexer\Lexer.Tokeniser.pas';
 
 end.

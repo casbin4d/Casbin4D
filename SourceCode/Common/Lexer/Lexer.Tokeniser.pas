@@ -200,12 +200,11 @@ end;
 
 procedure TTokeniser.tokenise;
 var
-  tokenMessage: TTokenMessage;
+  //tokenMessage: TTokenMessage;
   currPosition: TPosition;
   lastPosition: TPosition;
   currCh: Char;
   value: string;
-  token: PToken;
   buffer: PCharBuffer;
   nominalColumn: Integer;
   watch: TStopWatch;
@@ -217,10 +216,17 @@ begin
   fTokenList.Clear;
   fTokenMessages.Clear;
 
+  currPosition.Column:=Low(string);
+  currPosition.Row:=0;
+  lastPosition.Column:=currPosition.Column;
+  lastPosition.Row:=currPosition.Row;
+
+  nominalColumn:=currPosition.Column;
+
   // Empty parse string is passed
   if Trim(fInputString) = '' then
   begin
-//    tokenMessage.Create(tmtError, 'Empty string to parse', position);
+//    tokenMessage.Create(tmtError, 'Empty string to parse', currPosition);
 //    tokenMessage.ErrorType:=tmeSyntaxError;
 //    fTokenMessages.Add(tokenMessage);
     fLogger.log('The string to parse is empty');
@@ -228,12 +234,7 @@ begin
     Exit;
   end;
 
-  currPosition.Column:=Low(string);
-  currPosition.Row:=0;
-  lastPosition.Column:=currPosition.Column;
-  lastPosition.Row:=currPosition.Row;
 
-  nominalColumn:=currPosition.Column;
 
   fStatus:=tsRunning;
 

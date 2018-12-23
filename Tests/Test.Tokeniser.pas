@@ -26,6 +26,7 @@ type
     [TestCase (tokenTestName8, tokenTest8, '£')]
     [TestCase (tokenTestName9, tokenTest9, '£')]
     [TestCase (tokenTestName10, tokenTest10, '£')]
+    [TestCase (tokenTestName11, tokenTest11, '£')]
     procedure testTokeniser(const aPass, aExpected, aNumTokens: string);
   end;
 

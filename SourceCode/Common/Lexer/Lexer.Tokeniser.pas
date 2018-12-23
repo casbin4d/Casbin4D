@@ -155,17 +155,27 @@ procedure TTokeniser.addToken(const token: string;
 var
   nToken: PToken;
 begin
+  // Two-char tokens are pushed here in the beginning of the token
+  // by (peeking at next char)
+  // whereas
+  // other identifies land here after the reading of the whole token
   if Length(token) = 2 then
   begin
     nToken:=tokenForTwoCharReserved(token);
-
     nToken.StartPosition.Column:=aNomicalCol;
-    nToken.StartPosition.Row:=currPosition.Row;
-    nToken.EndPosition.Column:=aNomicalCol+1;
-    nToken.EndPosition.Row:=currPosition.Row;
-
-    fTokenList.Add(nToken);
+    nToken.EndPosition.Column:=aNomicalCol+Length(token)-1;
+  end
+  else
+  begin
+    nToken:=tokenForReservedWord(token);
+    nToken.StartPosition.Column:=aNomicalCol-Length(token)+1;
+    nToken.EndPosition.Column:=aNomicalCol;
   end;
+
+  nToken.StartPosition.Row:=currPosition.Row;
+  nToken.EndPosition.Row:=currPosition.Row;
+
+  fTokenList.Add(nToken);
 end;
 
 procedure TTokeniser.addToken(const currCh: Char; const currPosition:
@@ -273,7 +283,10 @@ begin
               if CharInSet(buffer^.NextChar, oneCharReserved + whiteSpaceChars) or
                 (buffer^.NextChar = #0) then
               begin
-                addIdentifier(value, currPosition, nominalColumn);
+                if MatchStr(value, reservedWords) then
+                  addToken (value, currPosition, nominalColumn)
+                else
+                  addIdentifier(value, currPosition, nominalColumn);
                 value:='';
               end;
             end;
@@ -291,88 +304,3 @@ begin
 end;
 
 end.
-
-//    if CharInSet(currCh, [#13, #10]) or
-//      (((currPosition.Column+1)<=High(fInputString)) and
-//          (Copy(fInputString, currPosition.Column, Length(sLineBreak)) =
-//                                                            sLineBreak)) then
-//    begin
-//      if Trim(value)<>'' then
-//      begin
-//        //Here we must check for keywords
-//        //For now we declare it as identifier
-//        New(token);
-//        FillChar(token^, SizeOf(TToken), 0);
-//        token^.&Type:=ttIdentifier;
-//        token^.Value:=value;
-//
-//        token.StartPosition.Column:=lastPosition.Column;
-//        token.StartPosition.Row:=lastPosition.Row;
-//
-//        token.EndPosition.Column:=currPosition.Column;
-//        token.EndPosition.Row:=currPosition.Row;
-//
-//        fTokenList.Add(token);
-//      end;
-//      Inc(currPosition.Row);
-//      currPosition.Column:=Low(string);
-//    end
-//    else
-//    begin
-//      if (not CharInSet(currCh, [#32, #9])) or
-//            (CharInSet(currCh, [#32, #9]) and (Trim(value)<>'')) then
-//      begin
-//        if not CharInSet(currCh, oneCharReserved) then
-//        begin
-//          if Trim(currCh)<>'' then
-//            value:=value+currCh;
-//          if ((currPosition.Column+1)<=High(fInputString)) and
-//            (CharInSet(fInputString[currPosition.Column+1],
-//                                          oneCharReserved)) then
-//          begin
-//            //Here we must check for keywords
-//            //For now we declare it as identifier
-//            New(token);
-//            FillChar(token^, SizeOf(TToken), 0);
-//            token^.&Type:=ttIdentifier;
-//            token^.Value:=value;
-//
-//            token.StartPosition.Column:=lastPosition.Column;
-//            token.StartPosition.Row:=lastPosition.Row;
-//
-//            token.EndPosition.Column:=currPosition.Column;
-//            if CharInSet(currCh, [#32, #9]) then
-//              Dec(token.EndPosition.Column);
-//
-//            token.EndPosition.Row:=currPosition.Row;
-//
-//            fTokenList.Add(token);
-//
-//            lastPosition.Column:=currPosition.Column+1;
-//            lastPosition.Row:=currPosition.Row;
-//          end;
-//        end
-//        else
-//        begin
-//          token:=tokenForOneCharReserved(currCh);
-//
-//          token.StartPosition.Column:=lastPosition.Column;
-//          token.StartPosition.Row:=lastPosition.Row;
-//          token.EndPosition.Column:=currPosition.Column;
-//          token.EndPosition.Row:=currPosition.Row;
-//
-//          fTokenList.Add(token);
-//
-//          lastPosition.Column:=currPosition.Column+1;
-//          lastPosition.Row:=currPosition.Row;
-//          value:='';
-//        end;
-//      end
-//      else
-//      begin
-//        lastPosition.Column:=currPosition.Column+1;
-//        lastPosition.Row:=currPosition.Row;
-//      end;
-//    end;
-//    Inc(currPosition.Column);
-//  end;

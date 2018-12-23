@@ -41,10 +41,18 @@ type
                 ttEOL,
                 ttEOF,
 
+                //Keywords
+                ttAllow,
+                ttDeby,
+                ttIndeterminate,
+                ttSome,
+                ttAny,
+                ttWhere,
+                ttEft,
+                ttPriority,
+
                 //Unknown
                 ttUnknown
-
-                //Keywords
                 );
 
   TPosition = record
@@ -71,6 +79,10 @@ const
 
   twoCharReserved: TStringDynArray = ['==', '//', '&&', '||', '>=', '<=',
                                       'or'];
+
+  reservedWords: TStringDynArray =
+      ['and', 'not', 'allow', 'deny', 'indeterminate', 'some', 'where', 'eft',
+       'any', 'priority'];
 
 implementation
 

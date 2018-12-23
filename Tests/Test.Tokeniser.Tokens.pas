@@ -172,6 +172,26 @@ const
   tokenTestNumTokens11= '15';
   tokenTest11 = tokenTestPass11+testSeparator+tokenTestExpected11+testSeparator
                                                           +tokenTestNumTokens11;
+///////////////////////////////////////////////////////////
+  tokenTestName12 = 'Keywords and identifiers and operators';
+  tokenTestPass12 = 'some( where(p_eft== allow))';
+  tokenTestExpected12 =
+        '{Token: Some; Value: some; (1,0) --> (4,0)}'+sLineBreak+
+        '{Token: LParenthesis; Value: (; (5,0) --> (5,0)}'+sLineBreak+
+        '{Token: Space; Value: (space); (6,0) --> (6,0)}'+sLineBreak+
+        '{Token: Where; Value: where; (7,0) --> (11,0)}'+sLineBreak+
+        '{Token: LParenthesis; Value: (; (12,0) --> (12,0)}'+sLineBreak+
+        '{Token: Identifier; Value: p; (13,0) --> (13,0)}'+sLineBreak+
+        '{Token: Underscore; Value: _; (14,0) --> (14,0)}'+sLineBreak+
+        '{Token: Eft; Value: eft; (15,0) --> (17,0)}'+sLineBreak+
+        '{Token: Equality; Value: ==; (18,0) --> (19,0)}'+sLineBreak+
+        '{Token: Space; Value: (space); (20,0) --> (20,0)}'+sLineBreak+
+        '{Token: Allow; Value: allow; (21,0) --> (25,0)}'+sLineBreak+
+        '{Token: RParenthesis; Value: ); (26,0) --> (26,0)}'+sLineBreak+
+        '{Token: RParenthesis; Value: ); (27,0) --> (27,0)}';
+  tokenTestNumTokens12= '13';
+  tokenTest12 = tokenTestPass12+testSeparator+tokenTestExpected12+testSeparator
+                                                          +tokenTestNumTokens12;
 implementation
 
 end.

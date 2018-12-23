@@ -10,6 +10,7 @@ function normalisedTokenName(aValue: TTokenType): string;
 
 function tokenForOneCharReserved (const aChar: Char): PToken;
 function tokenForTwoCharReserved (const aToken: string): PToken;
+function tokenForReservedWord (const aWord: string): PToken;
 
 implementation
 
@@ -81,4 +82,27 @@ begin
   result^.Value:=aToken;
 end;
 
+function tokenForReservedWord (const aWord: string): PToken;
+begin
+  New(result);
+  FillChar(result^, SizeOf(TToken), 0);
+
+  case IndexStr(UpperCase(aWord),
+    ['AND', 'NOT', 'ALLOW', 'DENY', 'INDETERMINATE', 'SOME', 'WHERE', 'EFT',
+                     'ANY', 'PRIORITY']) of
+    0: result^.&Type:=ttAND;
+    1: result^.&Type:=ttNOT;
+    2: result^.&Type:=ttAllow;
+    3: result^.&Type:=ttDeby;
+    4: result^.&Type:=ttIndeterminate;
+    5: result^.&Type:=ttSome;
+    6: result^.&Type:=ttWhere;
+    7: result^.&Type:=ttEft;
+    8: result^.&Type:=ttAny;
+    9: result^.&Type:=ttPriority;
+  else
+    result^.&Type:=ttUnknown;
+  end;
+  result^.Value:=aWord;
+end;
 end.

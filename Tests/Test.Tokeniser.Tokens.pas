@@ -92,6 +92,16 @@ const
   tokenTestNumTokens6= '22';
   tokenTest6 = tokenTestPass6+testSeparator+tokenTestExpected6+testSeparator
                                                           +tokenTestNumTokens6;
+///////////////////////////////////////////////////////////
+  tokenTestName7 = 'Identifier without [] and space';
+  tokenTestPass7 = 'plain Identifier';
+  tokenTestExpected7 =
+            '{Token: Identifier; Value: plain; (1,0) --> (5,0)}'+sLineBreak+
+            '{Token: Space; Value: (space); (6,0) --> (6,0)}'+sLineBreak+
+            '{Token: Identifier; Value: Identifier; (7,0) --> (16,0)}';
+  tokenTestNumTokens7 = '3';
+  tokenTest7 = tokenTestPass7+testSeparator+tokenTestExpected7+testSeparator
+                                                          +tokenTestNumTokens7;
 
 implementation
 

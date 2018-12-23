@@ -39,7 +39,7 @@ begin
   fLogger:=TDefaultLogger.Create;
   fTokenList:=TTokenList.Create;
   fTokenMessages:=TObjectList<TTokenMessage>.Create(true);
-  fInputString:=Trim(aInputString);
+  fInputString:=aInputString;
   fStatus:=tsNotStarted;
 end;
 
@@ -107,18 +107,40 @@ begin
 
   for currCh in fInputString do
   begin
-    if CharInSet(currCh, [#13, #10]) then
+    if CharInSet(currCh, [#13, #10]) or
+      (((currPosition.Column+1)<=High(fInputString)) and
+          (Copy(fInputString, currPosition.Column, Length(sLineBreak)) =
+                                                            sLineBreak)) then
     begin
+      if Trim(value)<>'' then
+      begin
+        //Here we must check for keywords
+        //For now we declare it as identifier
+        New(token);
+        FillChar(token^, SizeOf(TToken), 0);
+        token^.&Type:=ttIdentifier;
+        token^.Value:=value;
+
+        token.StartPosition.Column:=lastPosition.Column;
+        token.StartPosition.Row:=lastPosition.Row;
+
+        token.EndPosition.Column:=currPosition.Column;
+        token.EndPosition.Row:=currPosition.Row;
+
+        fTokenList.Add(token);
+      end;
       Inc(currPosition.Row);
       currPosition.Column:=Low(string);
     end
     else
     begin
-      if not CharInSet(currCh, [#32, #9]) then
+      if (not CharInSet(currCh, [#32, #9])) or
+            (CharInSet(currCh, [#32, #9]) and (Trim(value)<>'')) then
       begin
         if not CharInSet(currCh, oneCharReserved) then
         begin
-          value:=value+currCh;
+          if Trim(currCh)<>'' then
+            value:=value+currCh;
           if ((currPosition.Column+1)<=High(fInputString)) and
             (CharInSet(fInputString[currPosition.Column+1],
                                           oneCharReserved)) then
@@ -132,7 +154,11 @@ begin
 
             token.StartPosition.Column:=lastPosition.Column;
             token.StartPosition.Row:=lastPosition.Row;
+
             token.EndPosition.Column:=currPosition.Column;
+            if CharInSet(currCh, [#32, #9]) then
+              Dec(token.EndPosition.Column);
+
             token.EndPosition.Row:=currPosition.Row;
 
             fTokenList.Add(token);
@@ -156,6 +182,11 @@ begin
           lastPosition.Row:=currPosition.Row;
           value:='';
         end;
+      end
+      else
+      begin
+        lastPosition.Column:=currPosition.Column+1;
+        lastPosition.Row:=currPosition.Row;
       end;
     end;
     Inc(currPosition.Column);

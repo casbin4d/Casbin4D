@@ -43,6 +43,7 @@ begin
     ')' : result^.&Type:=ttRParenthesis;
     '_' : result^.&Type:=ttUnderscore;
     '.' : result^.&Type:=ttDot;
+    ':' : result^.&Type:=ttColon;
     '+' : result^.&Type:=ttAdd;
     '-' : result^.&Type:=ttMinus;
     '*' : result^.&Type:=ttMultiply;

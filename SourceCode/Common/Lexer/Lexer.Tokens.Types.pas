@@ -16,6 +16,7 @@ type
                 ttRParenthesis,
                 ttUnderscore,
                 ttDot,
+                ttColon,
                 ttEquality,
                 ttDoubleSlash,
                 ttBackslash,
@@ -71,7 +72,7 @@ type
 const
   oneCharReserved: TSysCharSet  =
       ['#', ';', //Comments
-       '[', ']', '=', ',', '(', ')', '_', '.',
+       '[', ']', '=', ',', '(', ')', '_', '.',':',
        '+', '-', '*', '/', '%',
        '>', '<', '\', '!'];
 

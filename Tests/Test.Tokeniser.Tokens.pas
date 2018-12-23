@@ -59,7 +59,7 @@ const
   tokenTest5 = tokenTestPass5+'#'+tokenTestExpected5+'#'+tokenTestNumTokens5;
 ///////////////////////////////////////////////////////////
   tokenTestName6 = 'OneChar Tokens';
-  tokenTestPass6 = '#;[]=,()_.+-*/%><'+#9+#32+#13+#10;
+  tokenTestPass6 = '#;[]=,()_.+-*/%><'+#9+#32+#13+#10+' ';
   tokenTestExpected6 =
             '{Token: Comment; Value: #; (1,0) --> (1,0)}'+sLineBreak+
             '{Token: Comment; Value: ;; (2,0) --> (2,0)}'+sLineBreak+
@@ -81,8 +81,9 @@ const
             '{Token: Tab; Value: (tab); (18,0) --> (18,0)}'+sLineBreak+
             '{Token: Space; Value: (space); (19,0) --> (19,0)}'+sLineBreak+
             '{Token: CR; Value: (cr); (20,0) --> (20,0)}'+sLineBreak+
-            '{Token: LF; Value: (lf); (21,0) --> (21,0)}';
-  tokenTestNumTokens6= '21';
+            '{Token: LF; Value: (lf); (21,0) --> (21,0)}'+sLineBreak+
+            '{Token: Space; Value: (space); (22,0) --> (22,0)}';
+  tokenTestNumTokens6= '22';
   tokenTest6 = tokenTestPass6+testSeparator+tokenTestExpected6+testSeparator
                                                           +tokenTestNumTokens6;
 

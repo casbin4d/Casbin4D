@@ -36,7 +36,8 @@ uses
   Lexer.Utilities in '..\SourceCode\Common\Lexer\Lexer.Utilities.pas',
   Test.Tokeniser in 'Test.Tokeniser.pas',
   Lexer.Tokeniser in '..\SourceCode\Common\Lexer\Lexer.Tokeniser.pas',
-  Test.TokenMessage in 'Test.TokenMessage.pas';
+  Test.TokenMessage in 'Test.TokenMessage.pas',
+  Test.Tokeniser.Tokens in 'Test.Tokeniser.Tokens.pas';
 
 var
   runner : ITestRunner;

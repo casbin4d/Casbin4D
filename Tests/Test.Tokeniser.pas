@@ -1,8 +1,10 @@
 unit Test.Tokeniser;
 
 interface
+
 uses
-  DUnitX.TestFramework, Lexer.Tokeniser.Types;
+  DUnitX.TestFramework, Lexer.Tokeniser.Types,
+  Test.Tokeniser.Tokens;
 
 type
   [TestFixture]
@@ -14,8 +16,12 @@ type
     [Test]
     procedure testEmptyString;
     [Test]
-    procedure testTokeniser;
-
+    [TestCase (tokenTestName1, tokenTest1, '#')]
+    [TestCase (tokenTestName2, tokenTest2, '#')]
+    [TestCase (tokenTestName3, tokenTest3, '#')]
+    [TestCase (tokenTestName4, tokenTest4, '#')]
+    [TestCase (tokenTestName5, tokenTest5, '#')]
+    procedure testTokeniser(const aPass, aExpected, aNumTokens: string);
   end;
 
 implementation
@@ -44,54 +50,16 @@ begin
   Assert.AreEqual(tsFatalError, fTokeniser.Status);
 end;
 
-type
-  TTokenTest = record
-    Name: string;
-    Pass: string;
-    Expected: string;
-    NumTokens: Integer;
-  end;
-
-const
-  numOfTests = 3;
-  // The positions of the strings are for NON-ARC compilers (eg.Win32, Win64, etc.)
-  tokenTestsArray: array [0..numOfTests - 1] of TTokenTest =
-    ( (Name: 'Simple Identifier'; Pass: '[123]';
-        Expected: '{Token: LSquareBracket; Value: [; (1,0) --> (1,0)}'+sLineBreak+
-                  '{Token: Identifier; Value: 123; (2,0) --> (4,0)}'+sLineBreak+
-                  '{Token: RSquareBracket; Value: ]; (5,0) --> (5,0)}';
-                          NumTokens: 3),
-
-      (Name: 'Simple Identifier with Spaces'; Pass: '[1 23 ]';
-        Expected: '{Token: LSquareBracket; Value: [; (1,0) --> (1,0)}'+sLineBreak+
-                  '{Token: Identifier; Value: 123; (2,0) --> (5,0)}'+sLineBreak+
-                  '{Token: RSquareBracket; Value: ]; (7,0) --> (7,0)}';
-                          NumTokens: 3),
-
-      (Name: 'Section Header'; Pass: '[request_definition]';
-        Expected: '{Token: LSquareBracket; Value: [; (0,0) --> (0,0)}'+sLineBreak+
-                  '{Token: Identifier; Value: request; (1,0) --> (7,0)}'+sLineBreak+
-                  '{Token: Underscore; Value: _; (8,0) --> (9,0)}'+sLineBreak+
-                  '{Token: Identifier; Value: definition; (9,0) --> (19,0)}'+sLineBreak+
-                  '{Token: RSquareBracket; Value: ]; (20,0) --> (21,0)}';
-                          NumTokens: 5));
-
-procedure TTestTokeniser.testTokeniser;
+procedure TTestTokeniser.testTokeniser(const aPass, aExpected,
+    aNumTokens: string);
 var
   fTokeniser: ITokeniser;
-  tokenTest: TTokenTest;
-  i: Integer;
 begin
-  for i:=0 to Length(tokenTestsArray)-1 do
-  begin
-    tokenTest:=tokenTestsArray[i];
-    fTokeniser:=TTokeniser.Create(tokenTest.Pass);
-    fTokeniser.tokenise;
-    Assert.AreEqual(tokenTest.NumTokens, fTokeniser.TokenList.Count,
-                                                        tokenTest.Name+' Nums');
-    Assert.AreEqual(tokenTest.Expected, fTokeniser.TokenList.toOutputString,
-                                                        tokenTest.Name);
-  end;
+  fTokeniser:=TTokeniser.Create(aPass);
+  fTokeniser.tokenise;
+  Assert.AreEqual(aNumTokens.ToInteger, fTokeniser.TokenList.Count,
+                                            'Nums of tokens');
+  Assert.AreEqual(aExpected, fTokeniser.TokenList.toOutputString);
 end;
 
 initialization

@@ -1,4 +1,4 @@
-unit Test.Tokeniser.Tokens;
+﻿unit Test.Tokeniser.Tokens;
 
 interface
 
@@ -7,7 +7,7 @@ interface
 //////////////////////////////////////////////////////////////////////////////////
 
 const
-  testSeparator = '�';
+  testSeparator = '£';
 
   tokenTestName1 = 'Identifier';
   tokenTestPass1 = '[123]';
@@ -121,7 +121,16 @@ const
   tokenTestNumTokens8 = '10';
   tokenTest8 = tokenTestPass8+testSeparator+tokenTestExpected8+testSeparator
                                                           +tokenTestNumTokens8;
-
+///////////////////////////////////////////////////////////
+  tokenTestName9 = 'Identifier with Unicode';
+  tokenTestPass9= '[νεοςновак新生]';
+  tokenTestExpected9=
+        '{Token: LSquareBracket; Value: [; (1,0) --> (1,0)}'+sLineBreak+
+        '{Token: Identifier; Value: νεοςновак新生; (2,0) --> (12,0)}'+sLineBreak+
+        '{Token: RSquareBracket; Value: ]; (13,0) --> (13,0)}';
+  tokenTestNumToken9 = '3';
+  tokenTest9 = tokenTestPass9+testSeparator+tokenTestExpected9+testSeparator
+                                                            +tokenTestNumToken9;
 
 implementation
 

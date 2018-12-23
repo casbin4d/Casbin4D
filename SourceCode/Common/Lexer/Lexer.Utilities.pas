@@ -48,6 +48,10 @@ begin
     '%' : result^.&Type:=ttModulo;
     '>' : result^.&Type:=ttGreaterThan;
     '<' : result^.&Type:=ttLowerThan;
+    #32 : result^.&Type:=ttSpace;
+    #13 : result^.&Type:=ttCR;
+    #10 : result^.&Type:=ttLF;
+    #9  : result^.&type:=ttTab;
   else
     result^.&Type:=ttUnknown;
   end;

@@ -46,10 +46,10 @@ begin
       value:='(space)'
     else
       if item^.Value = #13 then
-        value:='(eol)'
+        value:='(cr)'
       else
         if item^.Value = #10 then
-          value:='(eol)'
+          value:='(lf)'
         else
           if item^.Value = #9 then
             value:='(tab)'

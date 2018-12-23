@@ -39,7 +39,7 @@ type
 implementation
 
 uses
-  Core.Logger.Default, System.SysUtils, System.StrUtils, Lexer.Utilities;
+  Core.Logger.Default, System.SysUtils, System.StrUtils, Lexer.Utilities, System.Diagnostics;
 
 constructor TTokeniser.Create(const aInputString: string);
 begin
@@ -208,8 +208,11 @@ var
   token: PToken;
   buffer: PCharBuffer;
   nominalColumn: Integer;
+  watch: TStopWatch;
 begin
+  watch:=TStopwatch.StartNew;
   fLogger.log('Tokenisation is starting...');
+  fLogger.log('Input String: '+fInputString);
 
   fTokenList.Clear;
   fTokenMessages.Clear;
@@ -310,6 +313,9 @@ begin
   fStatus:=tsFinished;
   Dispose(buffer);
   fLogger.log('Tokenisation finished...');
+  watch.Stop;
+  fLogger.log('Time elapsed: '+
+    FormatDateTime('hh:nn:ss:zzz',watch.ElapsedMilliseconds/MSecsPerDay));
 end;
 
 end.

@@ -21,6 +21,9 @@ type
 
     [Test]
     procedure testOutput;
+
+    [Test]
+    procedure testSPACEItem;
   end;
 
 implementation
@@ -55,6 +58,17 @@ begin
   item.EndPosition.Column:=11;
   item.EndPosition.Row:=2;
   fList.Add(item);
+
+  //Space
+  New(item);
+  FillChar(item^, SizeOf(TToken), 0);
+  item.&Type:=ttSpace;
+  item.Value:=#32;
+  item.StartPosition.Column:=20;
+  item.StartPosition.Row:=5;
+  item.EndPosition.Column:=21;
+  item.EndPosition.Row:=5;
+  fList.Add(item);
 end;
 
 procedure TTestTokenList.TearDown;
@@ -72,8 +86,16 @@ end;
 procedure TTestTokenList.testOutput;
 begin
   Assert.AreEqual('{Token: AND; Value: and; (0,0) --> (2,0)}'+sLineBreak+
-                  '{Token: GreaterThan; Value: >; (10,2) --> (11,2)}',
+                  '{Token: GreaterThan; Value: >; (10,2) --> (11,2)}'+sLineBreak+
+                  '{Token: Space; Value: (space); (20,5) --> (21,5)}',
                                                         fList.toOutputString);
+end;
+
+procedure TTestTokenList.testSPACEItem;
+begin
+  Assert.IsTrue(fList.Count>0);
+  Assert.IsTrue(fList.Items[2]^.&Type = ttSpace);
+  Assert.AreEqual(#32, fList.Items[2]^.Value);
 end;
 
 initialization

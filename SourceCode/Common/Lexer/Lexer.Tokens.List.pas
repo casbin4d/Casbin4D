@@ -38,11 +38,26 @@ function TTokenList.toOutputString: string;
 var
   item: PToken;
   finalStr: string;
+  value: string;
 begin
   for item in Self do
   begin
+    if item^.Value = #32 then
+      value:='(space)'
+    else
+      if item^.Value = #13 then
+        value:='(eol)'
+      else
+        if item^.Value = #10 then
+          value:='(eol)'
+        else
+          if item^.Value = #9 then
+            value:='(tab)'
+          else
+            value:=item^.Value;
+
     finalStr:=finalStr+'{Token: '+normalisedTokenName(item^.&Type)+'; '+
-             'Value: '+item^.Value+'; ('+item^.StartPosition.Column.ToString+
+             'Value: '+value+'; ('+item^.StartPosition.Column.ToString+
              ','+item^.StartPosition.Row.toString+') --> ('+
                  item^.EndPosition.Column.ToString+','+
                  item^.EndPosition.Row.ToString+')}'+sLineBreak;

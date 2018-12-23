@@ -10,6 +10,12 @@ type
   public
     destructor Destroy; override;
 
+    {$REGION 'Output format: {Token: xxx; Value: xxx; (StartCol, StartRow) --> (EndCol,EndRow)'}
+    /// <summary>
+    ///   Output format: {Token: xxx; Value: xxx; (StartCol, StartRow) --&gt;
+    ///   (EndCol,EndRow) + sLineBreak
+    /// </summary>
+    {$ENDREGION}
     function toOutputString: string;
   end;
 
@@ -37,9 +43,9 @@ begin
   begin
     finalStr:=finalStr+'{Token: '+normalisedTokenName(item^.&Type)+'; '+
              'Value: '+item^.Value+'; ('+item^.StartPosition.Column.ToString+
-             ', '+item^.StartPosition.Row.toString+') --> ('+
-                 item^.EndPosition.Column.ToString+', '+
-                 item^.EndPosition.Row.ToString+')}'+sLineBreak;                    
+             ','+item^.StartPosition.Row.toString+') --> ('+
+                 item^.EndPosition.Column.ToString+','+
+                 item^.EndPosition.Row.ToString+')}'+sLineBreak;
   end;
   finalStr:=Trim(finalStr);
   Result:=finalStr;

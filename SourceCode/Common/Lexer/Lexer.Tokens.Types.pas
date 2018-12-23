@@ -2,6 +2,9 @@ unit Lexer.Tokens.Types;
 
 interface
 
+uses
+  System.SysUtils;
+
 type
   TTokenType = (ttIdentifier,
                 ttComment,
@@ -18,7 +21,7 @@ type
                 ttAND,
                 ttOR,
                 ttNOT,
-                ttADD,
+                ttAdd,
                 ttMinus,
                 ttMultiply,
                 ttDivide,
@@ -45,6 +48,27 @@ type
     EndPosition: TPosition;
   end;
 
+const
+  oneCharReserved: TSysCharSet  = ['#', ';', //Comments
+                                    '[', ']',
+                                    '=',
+                                    ',',
+                                    '(', ')',
+                                    '_',
+                                    '.',
+                                    '+', '-', '*', '/', '%',
+                                    '>',
+                                    '<'];
+
 implementation
 
 end.
+
+                ttEquality,
+                ttDoubleSlash,
+                ttAND,
+                ttOR,
+                ttNOT,
+
+                ttGreateEqualThan,
+                ttLowerEqualThan,

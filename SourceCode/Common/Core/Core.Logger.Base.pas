@@ -28,7 +28,7 @@ type
     fLastLoggedMessage: string;
   public
 {$REGION 'Interface'}
-    procedure log(const aMessage: string);
+    procedure log(const aMessage: string); virtual;
 {$ENDREGION}
   public
     constructor Create;

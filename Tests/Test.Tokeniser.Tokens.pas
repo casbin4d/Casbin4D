@@ -67,7 +67,7 @@ const
   tokenTestName6 = 'OneChar Tokens';
   // Here we test individual characters so we use #10#13 instead of
   // #13#10 because in Windows this is EOL
-  tokenTestPass6 = '#;[]=,()_.+-*/%><'+#9+#32+#10+#13+' ';
+  tokenTestPass6 = '#;[]=,()_.+-*/%><'+#9+#32+#10+#13+' \';
   tokenTestExpected6 =
             '{Token: Comment; Value: #; (1,0) --> (1,0)}'+sLineBreak+
             '{Token: Comment; Value: ;; (2,0) --> (2,0)}'+sLineBreak+
@@ -90,8 +90,9 @@ const
             '{Token: Space; Value: (space); (19,0) --> (19,0)}'+sLineBreak+
             '{Token: LF; Value: (lf); (20,0) --> (20,0)}'+sLineBreak+
             '{Token: CR; Value: (cr); (21,0) --> (21,0)}'+sLineBreak+
-            '{Token: Space; Value: (space); (22,0) --> (22,0)}';
-  tokenTestNumTokens6= '22';
+            '{Token: Space; Value: (space); (22,0) --> (22,0)}'+sLineBreak+
+            '{Token: Backslash; Value: \; (23,0) --> (23,0)}';
+  tokenTestNumTokens6= '23';
   tokenTest6 = tokenTestPass6+testSeparator+tokenTestExpected6+testSeparator
                                                           +tokenTestNumTokens6;
 ///////////////////////////////////////////////////////////

@@ -48,6 +48,7 @@ begin
     '%' : result^.&Type:=ttModulo;
     '>' : result^.&Type:=ttGreaterThan;
     '<' : result^.&Type:=ttLowerThan;
+    '\' : result^.&Type:=ttBackSlash;
     #32 : result^.&Type:=ttSpace;
     #13 : result^.&Type:=ttCR;        //#$D
     #10 : result^.&Type:=ttLF;        //#$A

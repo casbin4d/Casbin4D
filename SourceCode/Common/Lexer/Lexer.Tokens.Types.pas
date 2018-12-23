@@ -30,6 +30,7 @@ type
                 ttGreateEqualThan,
                 ttLowerThan,
                 ttLowerEqualThan,
+                ttBackslash,
 
                 ttTab,
                 ttSpace,
@@ -62,7 +63,8 @@ const
                                     '.',
                                     '+', '-', '*', '/', '%',
                                     '>',
-                                    '<'];
+                                    '<',
+                                    '\'];
   whiteSpaceChars: TSysCharSet = [#9, #32, #13, #10];
 
 implementation

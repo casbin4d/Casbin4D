@@ -19,6 +19,8 @@ type
   private
 {$REGION 'Interface'}
 
+    procedure addEOL(const currPosition: TPosition);
+    procedure addIdentifier(const value: string; const currPosition: TPosition);
     function getLogger: ILogger;
     function getTokenList: TTokenList;
     function getTokenMessages: TObjectList<TTokenMessage>;
@@ -89,13 +91,55 @@ type
     CurrentChar: Char;
     NextChar: Char;
 
-    function nextTwoChars: string;
+    function currentAndNextChar: string;
   end;
 
 
-function TCharBuffer.nextTwoChars: string;
+function TCharBuffer.currentAndNextChar: string;
 begin
   Result:=CurrentChar+NextChar;
+end;
+
+
+
+/////////////////////////
+
+procedure TTokeniser.addIdentifier(const value: string; const currPosition:
+    TPosition);
+var
+  token: PToken;
+begin
+  New(token);
+  FillChar(token^, SizeOf(TToken), 0);
+
+  token.Value:=value;
+  token.&Type:=ttIdentifier;
+  if currPosition.Column-Length(value)<Low(string) then
+    token.StartPosition.Column:=Low(string)
+  else
+    token.StartPosition.Column:=currPosition.Column-Length(value)+1;
+  token.StartPosition.Row:=currPosition.Row;
+  token.EndPosition.Column:=currPosition.Column;
+  token.EndPosition.Row:=currPosition.Row;
+
+  fTokenList.Add(token);
+end;
+
+procedure TTokeniser.addEOL(const currPosition: TPosition);
+var
+  token: PToken;
+begin
+  New(token);
+  FillChar(token^, SizeOf(TToken), 0);
+
+  token.Value:='(eol)';
+  token.&Type:=ttEOL;
+  token.StartPosition.Column:=currPosition.Column;
+  token.StartPosition.Row:=currPosition.Row;
+  token.EndPosition.Column:=currPosition.Column;
+  token.EndPosition.Row:=currPosition.Row;
+
+  fTokenList.Add(token);
 end;
 
 procedure TTokeniser.addToken(const currCh: Char; const currPosition:
@@ -112,8 +156,6 @@ begin
 
   fTokenList.Add(token);
 end;
-
-/////////////////////////
 
 procedure TTokeniser.tokenise;
 var
@@ -160,11 +202,31 @@ begin
     else
       buffer^.NextChar:=#0;
 
-    //Check if character is in reserved chars or/and whitespace
-    if CharInSet(currCh, oneCharReserved + whiteSpaceChars) then
-      addToken(currCh, currPosition);
-
-
+    //Check if EOL
+    //Code from System unit for sLineBreak
+//    if {$IFDEF POSIX} currCh = sLineBreak {$ENDIF}
+//     {$IFDEF MSWINDOWS} buffer.currentAndNextChar = sLineBreak {$ENDIF} then
+//      addEOL(currPosition)
+//    else
+    begin
+      //Check if character is in reserved chars or/and whitespace
+      if CharInSet(currCh, oneCharReserved + whiteSpaceChars) then
+      begin
+        addToken(currCh, currPosition);
+        value:='';
+      end
+      else
+      begin
+        //Build the 'value'
+        value:=value+currCh;
+        if CharInSet(buffer^.NextChar, oneCharReserved + whiteSpaceChars) or
+          (buffer^.NextChar = #0) then
+        begin
+          addIdentifier(value, currPosition);
+          value:='';
+        end;
+      end;
+    end;
 
     //Increase the Column
     Inc(currPosition.Column);

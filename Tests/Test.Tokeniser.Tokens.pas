@@ -23,19 +23,24 @@ const
   tokenTestPass2 = '[1 23 ]';
   tokenTestExpected2 =
             '{Token: LSquareBracket; Value: [; (1,0) --> (1,0)}'+sLineBreak+
-            '{Token: Identifier; Value: 123; (2,0) --> (5,0)}'+sLineBreak+
+            '{Token: Identifier; Value: 1; (2,0) --> (2,0)}'+sLineBreak+
+            '{Token: Space; Value: (space); (3,0) --> (3,0)}'+sLineBreak+
+            '{Token: Identifier; Value: 23; (4,0) --> (5,0)}'+sLineBreak+
+            '{Token: Space; Value: (space); (6,0) --> (6,0)}'+sLineBreak+
             '{Token: RSquareBracket; Value: ]; (7,0) --> (7,0)}';
-  tokenTestNumTokens2 = '3';
+  tokenTestNumTokens2 = '6';
   tokenTest2 = tokenTestPass2+testSeparator+tokenTestExpected2+testSeparator+
                                                             tokenTestNumTokens2;
 ///////////////////////////////////////////////////////////
   tokenTestName3 = 'Identifier with Spaces At the beginning';
   tokenTestPass3= '  [1]';
   tokenTestExpected3=
+          '{Token: Space; Value: (space); (1,0) --> (1,0)}'+sLineBreak+
+          '{Token: Space; Value: (space); (2,0) --> (2,0)}'+sLineBreak+
           '{Token: LSquareBracket; Value: [; (3,0) --> (3,0)}'+sLineBreak+
           '{Token: Identifier; Value: 1; (4,0) --> (4,0)}'+sLineBreak+
           '{Token: RSquareBracket; Value: ]; (5,0) --> (5,0)}';
-  tokenTestNumToken3 = '3';
+  tokenTestNumToken3 = '5';
   tokenTest3 = tokenTestPass3+testSeparator+tokenTestExpected3+testSeparator
                                                             +tokenTestNumToken3;
 ///////////////////////////////////////////////////////////
@@ -54,9 +59,10 @@ const
   tokenTestName5 = 'Identifier without []';
   tokenTestPass5 = 'plainIdentifier';
   tokenTestExpected5 =
-            '{Token: Identifier; Value: plainIdentifier; (1,1) --> (15,0)}';
+            '{Token: Identifier; Value: plainIdentifier; (1,0) --> (15,0)}';
   tokenTestNumTokens5 = '1';
-  tokenTest5 = tokenTestPass5+'#'+tokenTestExpected5+'#'+tokenTestNumTokens5;
+  tokenTest5 = tokenTestPass5+testSeparator+tokenTestExpected5+testSeparator
+                                                          +tokenTestNumTokens5;
 ///////////////////////////////////////////////////////////
   tokenTestName6 = 'OneChar Tokens';
   tokenTestPass6 = '#;[]=,()_.+-*/%><'+#9+#32+#13+#10+' ';

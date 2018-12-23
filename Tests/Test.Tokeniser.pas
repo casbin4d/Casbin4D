@@ -16,11 +16,11 @@ type
     [Test]
     procedure testEmptyString;
     [Test]
-//    [TestCase (tokenTestName1, tokenTest1, '£')]
-//    [TestCase (tokenTestName2, tokenTest2, '£')]
-//    [TestCase (tokenTestName3, tokenTest3, '£')]
-//    [TestCase (tokenTestName4, tokenTest4, '£')]
-//    [TestCase (tokenTestName5, tokenTest5, '£')]
+    [TestCase (tokenTestName1, tokenTest1, '£')]
+    [TestCase (tokenTestName2, tokenTest2, '£')]
+    [TestCase (tokenTestName3, tokenTest3, '£')]
+    [TestCase (tokenTestName4, tokenTest4, '£')]
+    [TestCase (tokenTestName5, tokenTest5, '£')]
     [TestCase (tokenTestName6, tokenTest6, '£')]
     procedure testTokeniser(const aPass, aExpected, aNumTokens: string);
   end;

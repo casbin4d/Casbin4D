@@ -37,7 +37,13 @@ uses
   Test.Tokeniser in 'Test.Tokeniser.pas',
   Lexer.Tokeniser in '..\SourceCode\Common\Lexer\Lexer.Tokeniser.pas',
   Test.TokenMessage in 'Test.TokenMessage.pas',
-  Test.Tokeniser.Tokens in 'Test.Tokeniser.Tokens.pas';
+  Test.Tokeniser.Tokens in 'Test.Tokeniser.Tokens.pas',
+  Parser.Types in '..\SourceCode\Common\Parser\Parser.Types.pas',
+  Parser.Config in '..\SourceCode\Common\Parser\Parser.Config.pas',
+  Parser.Config.Types in '..\SourceCode\Common\Parser\Parser.Config.Types.pas',
+  Model.Sections.Types in '..\SourceCode\Common\Model\Model.Sections.Types.pas',
+  Parser.Messages in '..\SourceCode\Common\Parser\Parser.Messages.pas',
+  Parser in '..\SourceCode\Common\Parser\Parser.pas';
 
 var
   runner : ITestRunner;

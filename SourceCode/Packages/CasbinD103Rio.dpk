@@ -40,6 +40,7 @@ contains
   Lexer.Tokeniser.Types in '..\Common\Lexer\Lexer.Tokeniser.Types.pas',
   Lexer.Tokens.List in '..\Common\Lexer\Lexer.Tokens.List.pas',
   Lexer.Utilities in '..\Common\Lexer\Lexer.Utilities.pas',
-  Lexer.Tokeniser in '..\Common\Lexer\Lexer.Tokeniser.pas';
+  Lexer.Tokeniser in '..\Common\Lexer\Lexer.Tokeniser.pas',
+  Parser.Types in '..\Common\Parser\Parser.Types.pas';
 
 end.

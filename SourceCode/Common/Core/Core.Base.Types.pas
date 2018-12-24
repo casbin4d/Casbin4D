@@ -11,6 +11,10 @@ type
 
   end;
 
+  TBaseObject = class (TObject)
+
+  end;
+
 implementation
 
 end.

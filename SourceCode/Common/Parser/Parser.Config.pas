@@ -30,7 +30,7 @@ constructor TParserConfig.Create;
 begin
   inherited;
   fAssignmentChar:='=';
-  fAutoAssignSections:=False;
+  fAutoAssignSections:=true;
   fRespectSpacesInValues:=False;
 end;
 

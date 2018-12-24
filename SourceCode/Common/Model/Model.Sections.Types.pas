@@ -6,8 +6,8 @@ uses
   Core.Base.Types;
 
 type
-  TSectionType = (tstRequestDefinition, tstPolicyDefinition,
-                  tstRoleDefinition, tstPolicyEffect, tstMatchers);
+  TSectionType = (stRequestDefinition, stPolicyDefinition,
+                  stRoleDefinition, stPolicyEffect, stMatchers);
   {$REGION 'Determines a section in the configuration files'}
   /// <summary>
   ///   Determines a section in the configuration files

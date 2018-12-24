@@ -44,7 +44,7 @@ type
 
                 //Keywords
                 ttAllow,
-                ttDeby,
+                ttDeny,
                 ttIndeterminate,
                 ttSome,
                 ttAny,

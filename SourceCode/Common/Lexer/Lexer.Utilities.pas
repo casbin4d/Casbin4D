@@ -94,7 +94,7 @@ begin
     0: result^.&Type:=ttAND;
     1: result^.&Type:=ttNOT;
     2: result^.&Type:=ttAllow;
-    3: result^.&Type:=ttDeby;
+    3: result^.&Type:=ttDeny;
     4: result^.&Type:=ttIndeterminate;
     5: result^.&Type:=ttSome;
     6: result^.&Type:=ttWhere;

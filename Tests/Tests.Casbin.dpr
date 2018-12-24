@@ -43,7 +43,9 @@ uses
   Parser.Config.Types in '..\SourceCode\Common\Parser\Parser.Config.Types.pas',
   Model.Sections.Types in '..\SourceCode\Common\Model\Model.Sections.Types.pas',
   Parser.Messages in '..\SourceCode\Common\Parser\Parser.Messages.pas',
-  Parser in '..\SourceCode\Common\Parser\Parser.pas';
+  Parser in '..\SourceCode\Common\Parser\Parser.pas',
+  Test.Parser in 'Test.Parser.pas',
+  Test.Parser.Config in 'Test.Parser.Config.pas';
 
 var
   runner : ITestRunner;

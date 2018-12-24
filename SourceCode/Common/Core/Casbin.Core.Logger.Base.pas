@@ -1,9 +1,9 @@
-unit Core.Logger.Base;
+unit Casbin.Core.Logger.Base;
 
 interface
 
 uses
-  Core.Base.Types, Core.Logger.Types;
+  Casbin.Core.Base.Types, Casbin.Core.Logger.Types;
 
 type
   {$REGION 'This is the base logger class. It does not do anything. You can expand the functionality by subclassing this one'}

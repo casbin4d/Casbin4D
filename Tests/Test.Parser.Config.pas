@@ -2,7 +2,7 @@ unit Test.Parser.Config;
 
 interface
 uses
-  DUnitX.TestFramework, Parser.Config.Types;
+  DUnitX.TestFramework, Casbin.Parser.Config.Types;
 
 type
 
@@ -22,7 +22,7 @@ type
 implementation
 
 uses
-  Parser.Config;
+  Casbin.Parser.Config;
 
 procedure TTestParserConfig.Setup;
 begin

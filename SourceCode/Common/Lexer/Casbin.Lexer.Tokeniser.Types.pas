@@ -1,10 +1,10 @@
-unit Lexer.Tokeniser.Types;
+unit Casbin.Lexer.Tokeniser.Types;
 
 interface
 
 uses
-  Core.Base.Types, Core.Logger.Types, Lexer.Tokens.List,
-  System.Generics.Collections, Lexer.Tokens.Messages, System.SysUtils;
+  Casbin.Core.Base.Types, Casbin.Core.Logger.Types, Casbin.Lexer.Tokens.List,
+  System.Generics.Collections, Casbin.Lexer.Tokens.Messages, System.SysUtils;
 
 type
   ELexerException = class (Exception);

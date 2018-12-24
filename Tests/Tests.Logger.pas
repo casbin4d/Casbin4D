@@ -3,7 +3,7 @@ unit Tests.Logger;
 interface
 
 uses
-  DUnitX.TestFramework, Core.Logger.Types;
+  DUnitX.TestFramework, Casbin.Core.Logger.Types;
 
 type
   [TestFixture]
@@ -29,7 +29,7 @@ type
 implementation
 
 uses
-  Core.Logger.Default;
+  Casbin.Core.Logger.Default;
 
 procedure TTestLogger.Setup;
 begin

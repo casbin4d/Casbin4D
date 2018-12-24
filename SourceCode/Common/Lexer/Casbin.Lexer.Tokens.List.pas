@@ -1,9 +1,9 @@
-unit Lexer.Tokens.List;
+unit Casbin.Lexer.Tokens.List;
 
 interface
 
 uses
-  Lexer.Tokens.Types, System.Generics.Collections;
+  Casbin.Lexer.Tokens.Types, System.Generics.Collections;
 
 type
   TTokenList = class (TList<PToken>)
@@ -23,7 +23,7 @@ implementation
 
 uses
   System.TypInfo,
-  SysUtils, Lexer.Utilities;
+  SysUtils, Casbin.Lexer.Utilities;
 
 destructor TTokenList.Destroy;
 var

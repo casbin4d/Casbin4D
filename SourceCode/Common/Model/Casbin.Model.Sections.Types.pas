@@ -1,9 +1,9 @@
-unit Model.Sections.Types;
+unit Casbin.Model.Sections.Types;
 
 interface
 
 uses
-  Core.Base.Types;
+  Casbin.Core.Base.Types;
 
 type
   TSectionType = (stRequestDefinition, stPolicyDefinition,

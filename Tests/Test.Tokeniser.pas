@@ -3,7 +3,7 @@ unit Test.Tokeniser;
 interface
 
 uses
-  DUnitX.TestFramework, Lexer.Tokeniser.Types,
+  DUnitX.TestFramework, Casbin.Lexer.Tokeniser.Types,
   Test.Tokeniser.Tokens;
 
 type
@@ -34,7 +34,7 @@ type
 implementation
 
 uses
-  Lexer.Tokeniser, System.SysUtils, System.Classes;
+  Casbin.Lexer.Tokeniser, System.SysUtils, System.Classes;
 
 
 { TTestTokeniser }

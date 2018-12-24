@@ -1,9 +1,9 @@
-unit Core.Logger.Default;
+unit Casbin.Core.Logger.Default;
 
 interface
 
 uses
-  Core.Logger.Base;
+  Casbin.Core.Logger.Base;
 
 type
   TDefaultLogger = class (TBaseLogger)

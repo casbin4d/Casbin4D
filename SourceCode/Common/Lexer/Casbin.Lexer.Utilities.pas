@@ -1,9 +1,9 @@
-unit Lexer.Utilities;
+unit Casbin.Lexer.Utilities;
 
 interface
 
 uses
-  Lexer.Tokens.Types;
+  Casbin.Lexer.Tokens.Types;
 
 function tokenName(aValue: TTokenType): string;
 function normalisedTokenName(aValue: TTokenType): string;

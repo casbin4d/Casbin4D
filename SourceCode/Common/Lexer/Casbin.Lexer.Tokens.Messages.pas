@@ -1,9 +1,9 @@
-unit Lexer.Tokens.Messages;
+unit Casbin.Lexer.Tokens.Messages;
 
 interface
 
 uses
-  Lexer.Tokens.Types;
+  Casbin.Lexer.Tokens.Types;
 
 type
   TTokenMessageErrorType = (tmeNoError, tmeSyntaxError);

@@ -31,16 +31,16 @@ requires
   rtl;
 
 contains
-  Core.Logger.Types in '..\Common\Core\Core.Logger.Types.pas',
-  Core.Base.Types in '..\Common\Core\Core.Base.Types.pas',
-  Core.Logger.Base in '..\Common\Core\Core.Logger.Base.pas',
-  Core.Logger.Default in '..\Common\Core\Core.Logger.Default.pas',
-  Lexer.Tokens.Types in '..\Common\Lexer\Lexer.Tokens.Types.pas',
-  Lexer.Tokens.Messages in '..\Common\Lexer\Lexer.Tokens.Messages.pas',
-  Lexer.Tokeniser.Types in '..\Common\Lexer\Lexer.Tokeniser.Types.pas',
-  Lexer.Tokens.List in '..\Common\Lexer\Lexer.Tokens.List.pas',
-  Lexer.Utilities in '..\Common\Lexer\Lexer.Utilities.pas',
-  Lexer.Tokeniser in '..\Common\Lexer\Lexer.Tokeniser.pas',
-  Parser.Types in '..\Common\Parser\Parser.Types.pas';
+  Casbin.Core.Logger.Types in '..\Common\Core\Casbin.Core.Logger.Types.pas',
+  Casbin.Core.Base.Types in '..\Common\Core\Casbin.Core.Base.Types.pas',
+  Casbin.Core.Logger.Base in '..\Common\Core\Casbin.Core.Logger.Base.pas',
+  Casbin.Core.Logger.Default in '..\Common\Core\Casbin.Core.Logger.Default.pas',
+  Casbin.Lexer.Tokens.Types in '..\Common\Lexer\Casbin.Lexer.Tokens.Types.pas',
+  Casbin.Lexer.Tokens.Messages in '..\Common\Lexer\Casbin.Lexer.Tokens.Messages.pas',
+  Casbin.Lexer.Tokeniser.Types in '..\Common\Lexer\Casbin.Lexer.Tokeniser.Types.pas',
+  Casbin.Lexer.Tokens.List in '..\Common\Lexer\Casbin.Lexer.Tokens.List.pas',
+  Casbin.Lexer.Utilities in '..\Common\Lexer\Casbin.Lexer.Utilities.pas',
+  Casbin.Lexer.Tokeniser in '..\Common\Lexer\Casbin.Lexer.Tokeniser.pas',
+  Casbin.Parser.Types in '..\Common\Parser\Casbin.Parser.Types.pas';
 
 end.

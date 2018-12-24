@@ -129,28 +129,28 @@
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
         <DCCReference Include="Tests.Logger.pas"/>
-        <DCCReference Include="..\SourceCode\Common\Core\Core.Logger.Types.pas"/>
-        <DCCReference Include="..\SourceCode\Common\Core\Core.Logger.Default.pas"/>
-        <DCCReference Include="..\SourceCode\Common\Core\Core.Logger.Base.pas"/>
-        <DCCReference Include="..\SourceCode\Common\Core\Core.Base.Types.pas"/>
+        <DCCReference Include="..\SourceCode\Common\Core\Casbin.Core.Logger.Types.pas"/>
+        <DCCReference Include="..\SourceCode\Common\Core\Casbin.Core.Logger.Default.pas"/>
+        <DCCReference Include="..\SourceCode\Common\Core\Casbin.Core.Logger.Base.pas"/>
+        <DCCReference Include="..\SourceCode\Common\Core\Casbin.Core.Base.Types.pas"/>
         <DCCReference Include="Test.TokenList.pas"/>
-        <DCCReference Include="..\SourceCode\Common\Lexer\Lexer.Tokens.Types.pas"/>
-        <DCCReference Include="..\SourceCode\Common\Lexer\Lexer.Tokens.Messages.pas"/>
-        <DCCReference Include="..\SourceCode\Common\Lexer\Lexer.Tokens.List.pas"/>
-        <DCCReference Include="..\SourceCode\Common\Lexer\Lexer.Tokeniser.Types.pas"/>
-        <DCCReference Include="..\SourceCode\Common\Lexer\Lexer.Utilities.pas"/>
+        <DCCReference Include="..\SourceCode\Common\Lexer\Casbin.Lexer.Tokens.Types.pas"/>
+        <DCCReference Include="..\SourceCode\Common\Lexer\Casbin.Lexer.Tokens.Messages.pas"/>
+        <DCCReference Include="..\SourceCode\Common\Lexer\Casbin.Lexer.Tokens.List.pas"/>
+        <DCCReference Include="..\SourceCode\Common\Lexer\Casbin.Lexer.Tokeniser.Types.pas"/>
+        <DCCReference Include="..\SourceCode\Common\Lexer\Casbin.Lexer.Utilities.pas"/>
         <DCCReference Include="Test.Tokeniser.pas"/>
-        <DCCReference Include="..\SourceCode\Common\Lexer\Lexer.Tokeniser.pas"/>
+        <DCCReference Include="..\SourceCode\Common\Lexer\Casbin.Lexer.Tokeniser.pas"/>
         <DCCReference Include="Test.TokenMessage.pas"/>
         <DCCReference Include="Test.Tokeniser.Tokens.pas"/>
-        <DCCReference Include="..\SourceCode\Common\Parser\Parser.Types.pas"/>
-        <DCCReference Include="..\SourceCode\Common\Parser\Parser.Config.pas"/>
-        <DCCReference Include="..\SourceCode\Common\Parser\Parser.Config.Types.pas"/>
-        <DCCReference Include="..\SourceCode\Common\Model\Model.Sections.Types.pas"/>
-        <DCCReference Include="..\SourceCode\Common\Parser\Parser.Messages.pas"/>
-        <DCCReference Include="..\SourceCode\Common\Parser\Parser.pas"/>
+        <DCCReference Include="..\SourceCode\Common\Parser\Casbin.Parser.Types.pas"/>
+        <DCCReference Include="..\SourceCode\Common\Parser\Casbin.Parser.Config.Types.pas"/>
+        <DCCReference Include="..\SourceCode\Common\Model\Casbin.Model.Sections.Types.pas"/>
+        <DCCReference Include="..\SourceCode\Common\Parser\Casbin.Parser.Messages.pas"/>
         <DCCReference Include="Test.Parser.pas"/>
         <DCCReference Include="Test.Parser.Config.pas"/>
+        <DCCReference Include="..\SourceCode\Common\Parser\Casbin.Parser.pas"/>
+        <DCCReference Include="..\SourceCode\Common\Parser\Casbin.Parser.Config.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -173,13 +173,19 @@
                 </Source>
             </Delphi.Personality>
             <Deployment Version="3">
-                <DeployFile LocalName="$(BDS)\Redist\osx64\libcgsqlite3.dylib" Class="DependencyModule">
-                    <Platform Name="OSX64">
+                <DeployFile LocalName="$(BDS)\Redist\osx32\libcgunwind.1.0.dylib" Class="DependencyModule">
+                    <Platform Name="OSX32">
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="$(BDS)\Redist\osx32\libcgunwind.1.0.dylib" Class="DependencyModule">
-                    <Platform Name="OSX32">
+                <DeployFile LocalName="Win32\Debug\Tests.Casbin.exe" Configuration="Debug" Class="ProjectOutput">
+                    <Platform Name="Win32">
+                        <RemoteName>Tests_Casbin.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="$(BDS)\Redist\osx64\libcgsqlite3.dylib" Class="DependencyModule">
+                    <Platform Name="OSX64">
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -195,12 +201,6 @@
                 </DeployFile>
                 <DeployFile LocalName="$(BDS)\Redist\osx32\libcgsqlite3.dylib" Class="DependencyModule">
                     <Platform Name="OSX32">
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="Win32\Debug\Tests.Casbin.exe" Configuration="Debug" Class="ProjectOutput">
-                    <Platform Name="Win32">
-                        <RemoteName>Tests_Casbin.exe</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

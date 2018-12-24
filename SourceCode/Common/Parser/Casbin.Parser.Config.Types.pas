@@ -1,9 +1,9 @@
-unit Parser.Config.Types;
+unit Casbin.Parser.Config.Types;
 
 interface
 
 uses
-  Core.Base.Types, Core.Logger.Types;
+  Casbin.Core.Base.Types, Casbin.Core.Logger.Types;
 
 type
   IParserConfig = interface (IBaseInterface)

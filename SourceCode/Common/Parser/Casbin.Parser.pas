@@ -1,11 +1,12 @@
-unit Parser;
+unit Casbin.Parser;
 
 interface
 
 uses
-  Core.Base.Types, Parser.Types, Parser.Config.Types, Core.Logger.Types,
-  System.Generics.Collections, Parser.Messages, Model.Sections.Types,
-  Lexer.Tokens.List, System.Rtti;
+  Casbin.Core.Base.Types, Casbin.Parser.Types, Casbin.Parser.Config.Types,
+  Casbin.Core.Logger.Types,
+  System.Generics.Collections, Casbin.Parser.Messages, Casbin.Model.Sections.Types,
+  Casbin.Lexer.Tokens.List, System.Rtti;
 
 type
   TParser = class (TBaseInterfacedObject, IParser)
@@ -23,6 +24,7 @@ type
     procedure loadSections;
     procedure checkSyntaxErrors;
     procedure cleanWhiteSpace;
+    procedure postError(var errString: string);
   private
 {$REGION 'Interface'}
     function getConfig: IParserConfig;
@@ -44,7 +46,11 @@ type
 implementation
 
 uses
-  System.SysUtils, Parser.Config, Core.Logger.Default, Lexer.Tokens.Types;
+  System.SysUtils, Casbin.Parser.Config, Casbin.Core.Logger.Default,
+  Casbin.Lexer.Tokens.Types;
+
+const
+  sSyntaxError = 'Syntax Error (%d,%d): Unexpected %s';
 
 constructor TParser.Create(const aTokenList: TTokenList);
 begin
@@ -74,12 +80,44 @@ end;
 procedure TParser.checkSyntaxErrors;
 var
   token: PToken;
+  numOpeningParenthesis: Integer;
+  numClosingParenthesis: Integer;
+  openedSquare: Boolean;
+  errMes: TParserMessage;
+  errString: string;
 begin
   fLogger.log('Checking for syntax errors...');
 
+  openedSquare:=False;
+  numOpeningParenthesis:=0;
+  numClosingParenthesis:=0;
+
   for token in fTokenList do
   begin
-
+    if (token^.&Type=ttLSquareBracket) then
+      if openedSquare then
+      begin
+        errString:= Format(sSyntaxError,
+                              [token^.StartPosition.Column,
+                                token^.StartPosition.Row, '[']);
+        postError(errString);
+        fLogger.log('Parsing aborted');
+        Exit;
+      end
+      else
+        openedSquare:=True;
+    if (token^.&Type=ttRSquareBracket) then
+      if not openedSquare then
+      begin
+        errString:= Format(sSyntaxError,
+                              [token^.StartPosition.Column,
+                                token^.StartPosition.Row, ']']);
+        postError(errString);
+        fLogger.log('Parsing aborted');
+        Exit;
+      end
+      else
+        openedSquare:=False;
   end;
 
   fLogger.log('Syntax checking finished...');
@@ -241,7 +279,19 @@ begin
   checkSyntaxErrors;
 
   fLogger.log('Parsing finished');
-  fStatus:=psFinished;
+  if fStatus=psRunning then
+    fStatus:=psFinished;
+end;
+
+procedure TParser.postError(var errString: string);
+var
+  errMes: TParserMessage;
+begin
+  errMes:=TParserMessage.Create(peError, errString);
+  errMes.ErrorType:=peSyntaxError;
+  fMessages.Add(errMes);
+  fStatus:=psError;
+  fLogger.log(errString);
 end;
 
 procedure TParser.setConfig(const aValue: IParserConfig);

@@ -2,7 +2,7 @@ unit Test.TokenMessage;
 
 interface
 uses
-  DUnitX.TestFramework, Lexer.Tokens.Messages;
+  DUnitX.TestFramework, Casbin.Lexer.Tokens.Messages;
 
 type
   [TestFixture]
@@ -21,7 +21,7 @@ type
 implementation
 
 uses
-  Lexer.Tokens.Types;
+  Casbin.Lexer.Tokens.Types;
 
 procedure TTestTokenMessage.Setup;
 var

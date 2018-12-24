@@ -1,10 +1,10 @@
-unit Parser.Types;
+unit Casbin.Parser.Types;
 
 interface
 
 uses
-  Core.Base.Types, Core.Logger.Types, Parser.Config.Types, Parser.Messages,
-  System.Generics.Collections, Model.Sections.Types;
+  Casbin.Core.Base.Types, Casbin.Core.Logger.Types, Casbin.Parser.Config.Types,
+  Casbin.Parser.Messages, System.Generics.Collections, Casbin.Model.Sections.Types;
 
 type
   TParserStatus = (psNotStarted, psRunning, psError, psFinished);

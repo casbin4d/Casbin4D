@@ -1,9 +1,9 @@
-unit Parser.Config;
+unit Casbin.Parser.Config;
 
 interface
 
 uses
-  Core.Base.Types, Parser.Config.Types;
+  Casbin.Core.Base.Types, Casbin.Parser.Config.Types;
 
 type
   TParserConfig = class (TBaseInterfacedObject, IParserConfig)

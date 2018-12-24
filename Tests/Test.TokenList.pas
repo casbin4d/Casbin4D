@@ -2,7 +2,7 @@ unit Test.TokenList;
 
 interface
 uses
-  DUnitX.TestFramework, Lexer.Tokens.List;
+  DUnitX.TestFramework, Casbin.Lexer.Tokens.List;
 
 type
 
@@ -29,7 +29,7 @@ type
 implementation
 
 uses
-  Lexer.Tokens.Types;
+  Casbin.Lexer.Tokens.Types;
 
 procedure TTestTokenList.Setup;
 var

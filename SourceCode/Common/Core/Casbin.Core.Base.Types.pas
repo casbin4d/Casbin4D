@@ -1,4 +1,4 @@
-unit Core.Base.Types;
+unit Casbin.Core.Base.Types;
 
 interface
 

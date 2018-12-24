@@ -2,7 +2,8 @@ unit Test.Parser;
 
 interface
 uses
-  DUnitX.TestFramework, Parser.Types, Lexer.Tokens.List, Lexer.Tokeniser.Types;
+  DUnitX.TestFramework, Casbin.Parser.Types, Casbin.Lexer.Tokens.List,
+  Casbin.Lexer.Tokeniser.Types;
 
 const
   testSeparator = '#';
@@ -52,7 +53,7 @@ type
 implementation
 
 uses
-  Parser, Lexer.Tokeniser, System.StrUtils;
+  Casbin.Parser, Casbin.Lexer.Tokeniser, System.StrUtils;
 
 procedure TTestParser.runParser(const aTokenList: TTokenList);
 begin

@@ -1,10 +1,11 @@
-unit Lexer.Tokeniser;
+unit Casbin.Lexer.Tokeniser;
 
 interface
 
 uses
-  Core.Base.Types, Lexer.Tokens.Messages, Lexer.Tokens.List, Core.Logger.Types,
-  System.Generics.Collections, Lexer.Tokeniser.Types, Lexer.Tokens.Types;
+  Casbin.Core.Base.Types, Casbin.Lexer.Tokens.Messages, Casbin.Lexer.Tokens.List,
+  Casbin.Core.Logger.Types,
+  System.Generics.Collections, Casbin.Lexer.Tokeniser.Types, Casbin.Lexer.Tokens.Types;
 
 type
   TTokeniser = class (TBaseInterfacedObject, ITokeniser)
@@ -39,7 +40,8 @@ type
 implementation
 
 uses
-  Core.Logger.Default, System.SysUtils, System.StrUtils, Lexer.Utilities, System.Diagnostics;
+  Casbin.Core.Logger.Default, System.SysUtils, System.StrUtils,
+  Casbin.Lexer.Utilities, System.Diagnostics;
 
 constructor TTokeniser.Create(const aInputString: string);
 begin

@@ -67,6 +67,7 @@ type
     Value: string;
     StartPosition: TPosition;
     EndPosition: TPosition;
+    IsDeleted: Boolean;
   end;
 
 const

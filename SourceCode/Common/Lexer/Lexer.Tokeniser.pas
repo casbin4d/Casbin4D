@@ -127,6 +127,7 @@ begin
   token.StartPosition.Row:=currPosition.Row;
   token.EndPosition.Column:=aNomicalCol;
   token.EndPosition.Row:=currPosition.Row;
+  token.IsDeleted:=False;
 
   fTokenList.Add(token);
   fLogger.log('Identifier '+value+' added');
@@ -146,6 +147,7 @@ begin
   token.StartPosition.Row:=currPosition.Row;
   token.EndPosition.Column:=aNomicalCol;
   token.EndPosition.Row:=currPosition.Row;
+  token.IsDeleted:=False;
 
   fTokenList.Add(token);
 
@@ -176,6 +178,7 @@ begin
 
   nToken.StartPosition.Row:=currPosition.Row;
   nToken.EndPosition.Row:=currPosition.Row;
+  nToken.IsDeleted:=False;
 
   fTokenList.Add(nToken);
 
@@ -193,6 +196,7 @@ begin
   token.StartPosition.Row:=currPosition.Row;
   token.EndPosition.Column:=aNomicalCol;
   token.EndPosition.Row:=currPosition.Row;
+  token.IsDeleted:=False;
 
   fTokenList.Add(token);
   fLogger.log('Token '+token^.Value+' added');

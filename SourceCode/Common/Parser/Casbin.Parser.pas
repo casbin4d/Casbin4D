@@ -82,6 +82,7 @@ var
   token: PToken;
   numOpeningParenthesis: Integer;
   numClosingParenthesis: Integer;
+  numIdentifiers: Integer;
   openedSquare: Boolean;
   errMes: TParserMessage;
   errString: string;
@@ -91,7 +92,7 @@ begin
   openedSquare:=False;
   numOpeningParenthesis:=0;
   numClosingParenthesis:=0;
-
+  numIdentifiers:=0;
   for token in fTokenList do
   begin
     if (token^.&Type=ttLSquareBracket) then
@@ -106,6 +107,7 @@ begin
       end
       else
         openedSquare:=True;
+
     if (token^.&Type=ttRSquareBracket) then
       if not openedSquare then
       begin
@@ -118,6 +120,21 @@ begin
       end
       else
         openedSquare:=False;
+
+    if token^.&Type=ttIdentifier then
+      Inc(numIdentifiers);
+
+    if (token^.&Type=ttAssignment) and (token^.Value = fConfig.AssignmentChar)
+          and (numIdentifiers = 0) then
+    begin
+      errString:=Format(sSyntaxError,
+                              [token^.StartPosition.Column,
+                                token^.StartPosition.Row,
+                               'Assignment attempted without identifier']);
+      postError(errString);
+      Exit;
+    end;
+
   end;
 
   fLogger.log('Syntax checking finished...');

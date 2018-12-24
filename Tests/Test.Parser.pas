@@ -42,12 +42,14 @@ type
     [TestCase('Remove multiple multi-line ',
                 'r = \'+sLineBreak+' \'+sLineBreak+'\'+testSeparator+
                                  'r=', testSeparator)]
-//    [TestCase('Double L Square','[[request_definition]'+testSeparator+
-//                                '[request_definition]', testSeparator)]
-//    [TestCase('Double L Square random',
-//                  '[requ[est_definition]'+testSeparator+
-//                  '[request_definition]', testSeparator)]
     procedure testRemoveWhitespace(const aInputString, expectedValue: string);
+
+    [Test]
+    [TestCase('Double L Square','[[request_definition]')]
+    [TestCase('Double L Square random', '[requ[est_definition]')]
+    [TestCase('Multiple R Square random', '[requ]est_definition]')]
+    [TestCase('Assignment without identifier', '=sub, obj, act')]
+    procedure testSyntaxErrors(const aInputString: string);
   end;
 
 implementation
@@ -109,6 +111,18 @@ begin
   Assert.IsTrue(fParser.Status = psFinished, 'Status');
 
   Assert.AreEqual(expectedValue, fParser.toOutputString);
+end;
+
+procedure TTestParser.testSyntaxErrors(const aInputString: string);
+var
+  list: TTokenList;
+begin
+  fLexer:=nil;
+  fLexer:=TTokeniser.Create(aInputString);
+  fLexer.tokenise;
+  runParser(fLexer.TokenList);
+
+  Assert.AreEqual(psError, fParser.Status);
 end;
 
 initialization

@@ -37,7 +37,7 @@ begin
     '#', ';': result^.&Type:=ttComment;
     '[' : result^.&Type:=ttLSquareBracket;
     ']' : result^.&Type:=ttRSquareBracket;
-    '=' : result^.&Type:=ttEquality;
+    '=' : result^.&Type:=ttAssignment;
     ',' : result^.&Type:=ttComma;
     '(' : result^.&Type:=ttLParenthesis;
     ')' : result^.&Type:=ttRParenthesis;

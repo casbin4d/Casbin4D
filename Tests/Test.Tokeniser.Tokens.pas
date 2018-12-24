@@ -76,7 +76,7 @@ const
             '{Token: Comment; Value: ;; (2,0) --> (2,0)}'+sLineBreak+
             '{Token: LSquareBracket; Value: [; (3,0) --> (3,0)}'+sLineBreak+
             '{Token: RSquareBracket; Value: ]; (4,0) --> (4,0)}'+sLineBreak+
-            '{Token: Equality; Value: =; (5,0) --> (5,0)}'+sLineBreak+
+            '{Token: Assignment; Value: =; (5,0) --> (5,0)}'+sLineBreak+
             '{Token: Comma; Value: ,; (6,0) --> (6,0)}'+sLineBreak+
             '{Token: LParenthesis; Value: (; (7,0) --> (7,0)}'+sLineBreak+
             '{Token: RParenthesis; Value: ); (8,0) --> (8,0)}'+sLineBreak+
@@ -156,7 +156,7 @@ const
   tokenTestPass11 = 'p=35+8 >= (pass || root)';
   tokenTestExpected11 =
         '{Token: Identifier; Value: p; (1,0) --> (1,0)}'+sLineBreak+
-        '{Token: Equality; Value: =; (2,0) --> (2,0)}'+sLineBreak+
+        '{Token: Assignment; Value: =; (2,0) --> (2,0)}'+sLineBreak+
         '{Token: Identifier; Value: 35; (3,0) --> (4,0)}'+sLineBreak+
         '{Token: Add; Value: +; (5,0) --> (5,0)}'+sLineBreak+
         '{Token: Identifier; Value: 8; (6,0) --> (6,0)}'+sLineBreak+

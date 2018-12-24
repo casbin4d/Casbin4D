@@ -25,12 +25,22 @@ type
     [Test]
     [TestCase('Simple Statement','r = sub, obj, act'+testSeparator+
                                  'r=sub,obj,act', testSeparator)]
+    ///Use ¦ to enable Respect Spaces in Config
     [TestCase('Keep spaces after Assignment',
                 '¦r = sub, obj, act'+testSeparator+
                                  'r= sub, obj, act', testSeparator)]
     [TestCase('Remove spaces after Assignment',
                 'r = sub, obj, act'+testSeparator+
                                  'r=sub,obj,act', testSeparator)]
+    [TestCase('Remove multi-line ',
+                'r = sub, obj, \'+sLineBreak+' act'+testSeparator+
+                                 'r=sub,obj,act', testSeparator)]
+    [TestCase('Remove double multi-line ',
+                'r = sub, obj, \\'+sLineBreak+' act'+testSeparator+
+                                 'r=sub,obj,act', testSeparator)]
+    [TestCase('Remove multiple multi-line ',
+                'r = \'+sLineBreak+' \'+sLineBreak+'\'+testSeparator+
+                                 'r=', testSeparator)]
 //    [TestCase('Double L Square','[[request_definition]'+testSeparator+
 //                                '[request_definition]', testSeparator)]
 //    [TestCase('Double L Square random',

@@ -91,11 +91,13 @@ var
   secToken: PToken;
   numAssignments: Integer;
   insideComment: Boolean;
+  multiLine: Boolean;
 begin
   fLogger.log('Cleaning white space...');
 
   numAssignments:=0;
   insideComment:=False;
+  multiLine:=False;
   for token in fTokenList do
   begin
     //Clean comments;
@@ -115,9 +117,21 @@ begin
           token^.IsDeleted:= False;
     end;
 
+    //Multi-line
+    if (token^.&Type=ttBackslash) or (token^.&Type=ttDoubleSlash) then
+    begin
+      token^.IsDeleted:=True;
+      multiLine:=True;
+    end;
+
     //Reset counters
     if token^.&Type=ttEOL then
     begin
+      if multiLine then
+      begin
+         token^.IsDeleted:=True;
+         multiLine:=False;
+      end;
       insideComment:=False;
       numAssignments:=0;
     end;
@@ -262,7 +276,8 @@ var
   token: PToken;
 begin
   for token in fTokenList do
-    Result:=Result+token^.Value;
+    if not token^.IsDeleted then
+      Result:=Result+token^.Value;
 end;
 
 end.

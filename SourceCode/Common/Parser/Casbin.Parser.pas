@@ -47,7 +47,7 @@ implementation
 
 uses
   System.SysUtils, Casbin.Parser.Config, Casbin.Core.Logger.Default,
-  Casbin.Lexer.Tokens.Types;
+  Casbin.Lexer.Tokens.Types, Casbin.Model.Sections.Default;
 
 const
   sSyntaxError = 'Syntax Error (%d,%d): Unexpected %s';
@@ -238,50 +238,26 @@ begin
   begin
     fSections.Clear;
 
-    section:=TSection.Create;
-    section.EnforceTag:=True;
-    section.Header:='request_definition';
-    section.Required:=True;
-    section.Tag:='r';
-    section.&Type:=stRequestDefinition;
-    fSections.Add(section);
+    //Request_Definition
+    fSections.Add(createDefaultSection(stRequestDefinition));
 
-    section:=TSection.Create;
-    section.EnforceTag:=True;
-    section.Header:='policy_definition';
-    section.Required:=True;
-    section.Tag:='p';
-    section.&Type:=stPolicyDefinition;
-    fSections.Add(section);
+    //Policy_Definition
+    fSections.Add(createDefaultSection(stPolicyDefinition));
 
-    section:=TSection.Create;
-    section.EnforceTag:=True;
-    section.Header:='role_definition';
-    section.Required:=False;
-    section.Tag:='g';
-    section.&Type:=stRoleDefinition;
-    fSections.Add(section);
+    //Role_Definition(s)
+    fSections.Add(createDefaultSection(stRoleDefinition1));
+    fSections.Add(createDefaultSection(stRoleDefinition2));
 
-    section:=TSection.Create;
-    section.EnforceTag:=True;
-    section.Header:='policy_effect';
-    section.Required:=True;
-    section.Tag:='e';
-    section.&Type:=stPolicyEffect;
-    fSections.Add(section);
+    //Policy_Effect
+    fSections.Add(createDefaultSection(stPolicyEffect));
 
-    section:=TSection.Create;
-    section.EnforceTag:=True;
-    section.Header:='matchers';
-    section.Required:=True;
-    section.Tag:='m';
-    section.&Type:=stMatchers;
-    fSections.Add(section);
+    //Matchers
+    fSections.Add(createDefaultSection(stMatchers));
   end;
 
   fSectionsDictionary.Clear;
   for section in fSections do
-    fSectionsDictionary.Add(section.Header, section);
+    fSectionsDictionary.Add(section.Tag, section);
 
 end;
 

@@ -7,7 +7,9 @@ uses
 
 type
   TSectionType = (stRequestDefinition, stPolicyDefinition,
-                  stRoleDefinition, stPolicyEffect, stMatchers);
+                  stRoleDefinition1, stRoleDefinition2,
+                  stPolicyEffect, stMatchers);
+
   {$REGION 'Determines a section in the configuration files'}
   /// <summary>
   ///   Determines a section in the configuration files

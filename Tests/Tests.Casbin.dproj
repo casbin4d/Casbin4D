@@ -151,6 +151,7 @@
         <DCCReference Include="Test.Parser.Config.pas"/>
         <DCCReference Include="..\SourceCode\Common\Parser\Casbin.Parser.pas"/>
         <DCCReference Include="..\SourceCode\Common\Parser\Casbin.Parser.Config.pas"/>
+        <DCCReference Include="..\SourceCode\Common\Model\Casbin.Model.Sections.Default.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -173,6 +174,11 @@
                 </Source>
             </Delphi.Personality>
             <Deployment Version="3">
+                <DeployFile LocalName="$(BDS)\Redist\osx64\libcgsqlite3.dylib" Class="DependencyModule">
+                    <Platform Name="OSX64">
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="$(BDS)\Redist\osx32\libcgunwind.1.0.dylib" Class="DependencyModule">
                     <Platform Name="OSX32">
                         <Overwrite>true</Overwrite>
@@ -181,11 +187,6 @@
                 <DeployFile LocalName="Win32\Debug\Tests.Casbin.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>Tests_Casbin.exe</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="$(BDS)\Redist\osx64\libcgsqlite3.dylib" Class="DependencyModule">
-                    <Platform Name="OSX64">
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

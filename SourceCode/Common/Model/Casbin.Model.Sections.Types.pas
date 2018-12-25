@@ -3,12 +3,13 @@ unit Casbin.Model.Sections.Types;
 interface
 
 uses
-  Casbin.Core.Base.Types;
+  Casbin.Core.Base.Types, System.Types;
 
 type
   TSectionType = (stRequestDefinition, stPolicyDefinition,
-                  stRoleDefinition1, stRoleDefinition2,
-                  stPolicyEffect, stMatchers);
+                  stRoleDefinition,
+                  stPolicyEffect, stMatchers,
+                  stUnknown);
 
   {$REGION 'Determines a section in the configuration files'}
   /// <summary>
@@ -21,7 +22,7 @@ type
     fEnforceTag: boolean;
     fHeader: string;
     fRequired: boolean;
-    fTag: string;
+    fTag: TStringDynArray;
   public
     {$REGION 'If True, then the assignment of assertions in each section should usethe default ''r,p,g,g2,e,m'''}
     /// <summary>
@@ -53,7 +54,7 @@ type
     ///   The default are: r,p,g,g2,e,m
     /// </remarks>
     {$ENDREGION}
-    property Tag: string read fTag write fTag;
+    property Tag: TStringDynArray read fTag write fTag;
     property &Type: TSectionType read fType write fType;
   end;
 

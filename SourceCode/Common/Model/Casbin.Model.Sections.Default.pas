@@ -3,30 +3,31 @@ unit Casbin.Model.Sections.Default;
 interface
 
 uses
-  Casbin.Model.Sections.Types, System.Generics.Collections;
-                                     
-function createDefaultSection(const aSection: TSectionType): TSection;
-
-implementation
+  Casbin.Model.Sections.Types, System.Generics.Collections, System.Types;
 
 type
   TSectionDefault = record
     Header: string;
-    Tag: array of string;
+    Tag: TStringDynArray;
   end;
-  
+
 const
-  requestDefinition: TSectionDefault = (Header: 'request_definition'; 
+  requestDefinition: TSectionDefault = (Header: 'request_definition';
                                          Tag: ['r']);
-  policyDefinition: TSectionDefault = (Header: 'policy_definition'; 
-                                         Tag: ['p']);                                         
-  roleDefinition: TSectionDefault = (Header: 'role_definition'; 
+  policyDefinition: TSectionDefault = (Header: 'policy_definition';
+                                         Tag: ['p']);
+  roleDefinition: TSectionDefault = (Header: 'role_definition';
                                          Tag: ['g', 'g2']);
-  policyEffectDefinition: TSectionDefault = (Header: 'policy_effect'; 
+  policyEffectDefinition: TSectionDefault = (Header: 'policy_effect';
                                          Tag: ['e']);
-  matchersDefinition: TSectionDefault = (Header: 'matchers'; 
+  matchersDefinition: TSectionDefault = (Header: 'matchers';
                                          Tag: ['m']);
-                                                                                                                              
+
+                                         function createDefaultSection(const aSection: TSectionType): TSection;
+
+implementation
+
+
 function createDefaultSection(const aSection: TSectionType): TSection;
 begin
   case aSection of
@@ -35,7 +36,7 @@ begin
                            result.EnforceTag:=True;
                            result.Header:=requestDefinition.Header;
                            result.Required:=True;
-                           result.Tag:=requestDefinition.Tag[0];
+                           result.Tag:=requestDefinition.Tag;
                            result.&Type:=stRequestDefinition;
                          end;
     stPolicyDefinition: begin
@@ -43,7 +44,7 @@ begin
                           result.EnforceTag:=True;
                           result.Header:=policyDefinition.Header;
                           result.Required:=True;
-                          result.Tag:=policyDefinition.Tag[0];
+                          result.Tag:=policyDefinition.Tag;
                           result.&Type:=stPolicyDefinition;
                         end;
     stPolicyEffect: begin
@@ -51,7 +52,7 @@ begin
                       result.EnforceTag:=True;
                       result.Header:=policyEffectDefinition.Header;
                       result.Required:=True;
-                      result.Tag:=policyEffectDefinition.Tag[0];
+                      result.Tag:=policyEffectDefinition.Tag;
                       result.&Type:=stPolicyEffect;
                     end;
     stMatchers: begin
@@ -59,24 +60,16 @@ begin
                   result.EnforceTag:=True;
                   result.Header:=matchersDefinition.Header;
                   result.Required:=True;
-                  result.Tag:=matchersDefinition.Tag[0];
+                  result.Tag:=matchersDefinition.Tag;
                   result.&Type:=stMatchers;
                 end;
-    stRoleDefinition1: begin
+    stRoleDefinition: begin
                         result:=TSection.Create;
                         result.EnforceTag:=True;
                         result.Header:=roleDefinition.Header;
                         result.Required:=False;
-                        result.Tag:=roleDefinition.Tag[0];
-                        result.&Type:=stRoleDefinition1;    
-                      end;
-    stRoleDefinition2: begin
-                        result:=TSection.Create;
-                        result.EnforceTag:=True;
-                        result.Header:=roleDefinition.Header;
-                        result.Required:=False;
-                        result.Tag:=roleDefinition.Tag[1];
-                        result.&Type:=stRoleDefinition2;    
+                        result.Tag:=roleDefinition.Tag;
+                        result.&Type:=stRoleDefinition;
                       end;
   end;
 

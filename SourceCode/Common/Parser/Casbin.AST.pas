@@ -10,7 +10,7 @@ uses
 type
   TAST = class (TBaseInterfacedObject, IAST)
   private
-    fList: TList<TBaseNode>;
+    fList: THeadNode;
     fTokenList: TTokenList;
     fLogger: ILogger;
     fMessages: TObjectList<TParserMessage>;
@@ -40,7 +40,8 @@ begin
   if not Assigned(aTokenList) then
     raise Exception.Create('TokenList is nil in '+self.ClassName);
   inherited Create;
-  fList:=TList<TBaseNode>.Create;
+  fList:=THeadNode.Create;
+  fList.NodeType:=ntHead;
   fLogger:=TDefaultLogger.Create;
   fMessages:=TObjectList<TParserMessage>.Create;
   fSections:=TObjectList<TSection>.Create;
@@ -51,20 +52,17 @@ end;
 procedure TAST.createAST;
 var
   token: PToken;
-  head: THeadNode;
+  ASTHead: TBaseNode;
   header: THeaderNode;
   insideSquared: Boolean;
   testValue: string;
 begin
   fMessages.Clear;
-  fList.Clear;
+  fList.ChildNodes.Clear;
 
   insideSquared:=False;
 
-  head:=THeadNode.Create;
-  head.NodeType:=ntHead;
-
-  fList.Add(head);
+  ASTHead:=fList;
 
   for token in fTokenList do
   begin
@@ -95,7 +93,7 @@ begin
                           else
                             header.SectionType:=stUnknown;
                           end;
-                          fList.Add(header);
+                          fList.ChildNodes.Add(header);
                         end;
                       end;
         ttLSquareBracket: insideSquared:=True;
@@ -129,11 +127,7 @@ begin
 end;
 
 destructor TAST.Destroy;
-var
-  obj: TObject;
 begin
-  for obj in fList do
-    obj.Free;
   fList.Free;
   fMessages.Free;
   if not fSectionsExternallyAssigned then
@@ -169,10 +163,9 @@ function TAST.toOutputString: string;
 var
   node: TBaseNode;
 begin
-  for node in fList do
+  for node in fList.ChildNodes do
   begin
-    if not (node is THeadNode) then
-      Result:=Result+node.Value+sLineBreak;
+    Result:=Result+node.Value+sLineBreak;
   end;
   Result:=LeftStr(Result, Length(Result)-Length(sLineBreak));
 end;

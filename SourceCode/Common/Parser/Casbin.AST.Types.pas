@@ -22,9 +22,13 @@ type
   TBaseNodeClass = class of TBaseNode;
   TBaseNode = class
   private
+    fChildNodes: TObjectList<TBaseNode>;
     fNodeType: TNodeType;
     fValue: string;
   public
+    constructor Create;
+    destructor Destroy; override;
+    property ChildNodes: TObjectList<TBaseNode> read fChildNodes write fChildNodes;
     property NodeType: TNodeType read fNodeType write fNodeType;
     property Value: string read fValue write fValue;
   end;
@@ -63,5 +67,17 @@ type
   end;
 
 implementation
+
+constructor TBaseNode.Create;
+begin
+  inherited;
+  fChildNodes:=TObjectList<TBaseNode>.Create;
+end;
+
+destructor TBaseNode.Destroy;
+begin
+  fChildNodes.Free;
+  inherited;
+end;
 
 end.

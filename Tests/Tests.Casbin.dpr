@@ -46,7 +46,10 @@ uses
   Test.Parser.Config in 'Test.Parser.Config.pas',
   Casbin.Parser in '..\SourceCode\Common\Parser\Casbin.Parser.pas',
   Casbin.Parser.Config in '..\SourceCode\Common\Parser\Casbin.Parser.Config.pas',
-  Casbin.Model.Sections.Default in '..\SourceCode\Common\Model\Casbin.Model.Sections.Default.pas';
+  Casbin.Model.Sections.Default in '..\SourceCode\Common\Model\Casbin.Model.Sections.Default.pas',
+  Casbin.AST.Types in '..\SourceCode\Common\Parser\Casbin.AST.Types.pas',
+  Casbin.AST in '..\SourceCode\Common\Parser\Casbin.AST.pas',
+  Test.AST in 'Test.AST.pas';
 
 var
   runner : ITestRunner;

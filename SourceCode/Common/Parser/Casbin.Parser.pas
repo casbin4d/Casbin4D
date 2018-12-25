@@ -24,6 +24,7 @@ type
     procedure loadSections;
     procedure checkSyntaxErrors;
     procedure cleanWhiteSpace;
+    procedure refineTokens;
     procedure postError(var errString: string);
   private
 {$REGION 'Interface'}
@@ -269,10 +270,16 @@ begin
 
   cleanWhiteSpace;
 
-  checkSyntaxErrors;
+  if fStatus<>psError then
+    checkSyntaxErrors;
+
+  if fStatus<>psError then
+    refineTokens;
+
 
   fLogger.log('Parsing finished');
-  if fStatus=psRunning then
+
+  if fStatus<>psError then
     fStatus:=psFinished;
 end;
 
@@ -285,6 +292,66 @@ begin
   fMessages.Add(errMes);
   fStatus:=psError;
   fLogger.log(errString);
+end;
+
+procedure TParser.refineTokens;
+var
+  token,
+  refToken: PToken;
+  numOpenSquare: integer;
+  newValue: string;
+  foundUnderscore: Boolean;
+begin
+  fLogger.log('Refining tokens...');
+
+  numOpenSquare:=0;
+  newValue:='';
+  foundUnderscore:=False;
+  for token in fTokenList do
+  begin
+    //Underscore in [] is treated as character
+    case token^.&Type of
+      ttLSquareBracket: Inc(numOpenSquare);
+      ttRSquareBracket: begin
+                          Dec(numOpenSquare);
+                          if Assigned(refToken) then
+                          begin
+                            refToken^.Value:=newValue;
+                            refToken:=nil;
+                            newValue:='';
+                          end;
+                        end;
+      ttIdentifier: if (numOpenSquare=1) then
+                    begin
+                      if Trim(newValue)='' then
+                      begin
+                        newValue:=token^.Value;
+                        refToken:=token;
+                      end
+                      else
+                      begin
+                        newValue:=newValue+token^.Value;
+                        token^.IsDeleted:=True;
+                      end;
+                   end;
+      ttUnderscore: if numOpenSquare=1 then
+                    begin
+                      foundUnderscore:=True;
+                      newValue:=newValue+token^.Value;
+                      token^.IsDeleted:=True;
+                    end
+    end;
+  end;
+
+  //Remove deleted tokens
+  for token in fTokenList do
+    if token^.IsDeleted then
+    begin
+      fTokenList.Remove(token);
+      Dispose(token);
+    end;
+
+  fLogger.log('Refining tokens finished');
 end;
 
 procedure TParser.setConfig(const aValue: IParserConfig);

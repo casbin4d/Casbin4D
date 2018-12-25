@@ -50,6 +50,11 @@ type
     [TestCase('Multiple R Square random', '[requ]est_definition]')]
     [TestCase('Assignment without identifier', '=sub, obj, act')]
     procedure testSyntaxErrors(const aInputString: string);
+
+    [Test]
+    [TestCase ('Underscore in []', '[request_definition],'+
+                                   '[request_definition]')]
+    procedure testSpecialTreatement(const aInputString, expectedValue: string);
   end;
 
 implementation
@@ -109,6 +114,19 @@ begin
   fParser.parse;
 
   Assert.IsTrue(fParser.Status = psFinished, 'Status');
+
+  Assert.AreEqual(expectedValue, fParser.toOutputString);
+end;
+
+procedure TTestParser.testSpecialTreatement(const aInputString, expectedValue:
+    string);
+var
+  list: TTokenList;
+begin
+  fLexer:=nil;
+  fLexer:=TTokeniser.Create(aInputString);
+  fLexer.tokenise;
+  runParser(fLexer.TokenList);
 
   Assert.AreEqual(expectedValue, fParser.toOutputString);
 end;

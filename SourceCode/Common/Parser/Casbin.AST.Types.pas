@@ -19,36 +19,84 @@ type
                ntEffect // allow deny etc
                );
 
-  TBaseNodeClass = class of TBaseNode;
+  TBaseNode = class;
+  THeadNode = class;
+  THeaderNode = class;
+  TStatementNode = class;
+  TIdentifierNode = class;
+  TExpressionNode = class;
+
+  TOperatorNode = class;
+  TObjectNode = class;
+  TFunctionNode = class;
+
   TBaseNode = class
   private
-    fChildNodes: TObjectList<TBaseNode>;
-    fNodeType: TNodeType;
     fValue: string;
   public
-    constructor Create;
-    destructor Destroy; override;
-    property ChildNodes: TObjectList<TBaseNode> read fChildNodes write fChildNodes;
-    property NodeType: TNodeType read fNodeType write fNodeType;
     property Value: string read fValue write fValue;
   end;
 
   THeadNode = class (TBaseNode)
-
+  private
+    fChildNodes: TObjectList<THeaderNode>;
+  public
+    constructor Create;
+    destructor Destroy; override;
+    property ChildNodes: TObjectList<THeaderNode> read fChildNodes write
+        fChildNodes;
   end;
 
-  THeaderNode = class (TBaseNode)
+  THeaderNode = class (THeadNode)
   private
     fSectionType: TSectionType;
   public
     property SectionType: TSectionType read fSectionType write fSectionType;
   end;
 
-  TElementNode = class (TBaseNode)
+  TStatementNode = class (TBaseNode)
   private
-    fType: TTokenType;
+    fExpression: TExpressionNode;
+    fIdentifier: TIdentifierNode;
   public
-    property &Type: TTokenType read fType write fType;
+    property Expression: TExpressionNode read fExpression write fExpression;
+    property Identifier: TIdentifierNode read fIdentifier write fIdentifier;
+  end;
+
+  TIdentifierNode = class (TBaseNode)
+
+  end;
+
+  TExpressionNode = class (TBaseNode)
+
+  end;
+
+  TOperatorNode = class (TExpressionNode)
+  private
+    fAssociation: TAssociationType;
+    fLeft: TExpressionNode;
+    fOperator: TTokenType;
+    fRight: TExpressionNode;
+  public
+    property Association: TAssociationType read fAssociation write fAssociation;
+    property &Operator: TTokenType read fOperator write fOperator;
+    property Left: TExpressionNode read fLeft write fLeft;
+    property Right: TExpressionNode read fRight write fRight;
+  end;
+
+  TObjectNode = class (TExpressionNode)
+  private
+    fChildObject: TObjectNode;
+  public
+    property ChildObject: TObjectNode read fChildObject write fChildObject;
+  end;
+
+  TArgumentsArray = array of TValue;
+  TFunctionNode = class (TExpressionNode)
+  private
+    fArguments: TArgumentsArray;
+  public
+    property Arguments: TArgumentsArray read fArguments write fArguments;
   end;
 
   IAST = interface (IBaseInterface)
@@ -68,13 +116,15 @@ type
 
 implementation
 
-constructor TBaseNode.Create;
+{ THeadNode }
+
+constructor THeadNode.Create;
 begin
   inherited;
-  fChildNodes:=TObjectList<TBaseNode>.Create;
+  fChildNodes:=TObjectList<THeaderNode>.Create;
 end;
 
-destructor TBaseNode.Destroy;
+destructor THeadNode.Destroy;
 begin
   fChildNodes.Free;
   inherited;

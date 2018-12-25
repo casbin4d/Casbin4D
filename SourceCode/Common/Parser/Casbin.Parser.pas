@@ -21,7 +21,6 @@ type
     fTokenList: TTokenList;
     fStatus: TParserStatus;
 
-    fSectionsAST: TList<TBaseNodeClass>;
     // Section HEADER - TSection
     fSectionsDictionary: TDictionary<string, TSection>;
     procedure loadSections;

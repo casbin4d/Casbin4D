@@ -6,7 +6,7 @@ uses
   Casbin.Core.Base.Types, Casbin.Parser.Types, Casbin.Parser.Config.Types,
   Casbin.Core.Logger.Types,
   System.Generics.Collections, Casbin.Parser.Messages, Casbin.Model.Sections.Types,
-  Casbin.Lexer.Tokens.List, System.Rtti;
+  Casbin.Lexer.Tokens.List, System.Rtti, Casbin.AST.Types;
 
 type
   TParser = class (TBaseInterfacedObject, IParser)
@@ -20,6 +20,9 @@ type
 
     fTokenList: TTokenList;
     fStatus: TParserStatus;
+
+    fSectionsAST: TList<TBaseNodeClass>;
+    // Section HEADER - TSection
     fSectionsDictionary: TDictionary<string, TSection>;
     procedure loadSections;
     procedure checkSyntaxErrors;
@@ -48,7 +51,7 @@ implementation
 
 uses
   System.SysUtils, Casbin.Parser.Config, Casbin.Core.Logger.Default,
-  Casbin.Lexer.Tokens.Types, Casbin.Model.Sections.Default;
+  Casbin.Lexer.Tokens.Types, Casbin.Model.Sections.Default, Casbin.AST;
 
 const
   sSyntaxError = 'Syntax Error (%d,%d): Unexpected %s';
@@ -246,8 +249,7 @@ begin
     fSections.Add(createDefaultSection(stPolicyDefinition));
 
     //Role_Definition(s)
-    fSections.Add(createDefaultSection(stRoleDefinition1));
-    fSections.Add(createDefaultSection(stRoleDefinition2));
+    fSections.Add(createDefaultSection(stRoleDefinition));
 
     //Policy_Effect
     fSections.Add(createDefaultSection(stPolicyEffect));
@@ -258,11 +260,13 @@ begin
 
   fSectionsDictionary.Clear;
   for section in fSections do
-    fSectionsDictionary.Add(section.Tag, section);
+    fSectionsDictionary.Add(section.Header, section);
 
 end;
 
 procedure TParser.parse;
+var
+  ast: IAST;
 begin
   fMessages.Clear;
   fLogger.log('Parsing is starting...');
@@ -276,6 +280,16 @@ begin
   if fStatus<>psError then
     refineTokens;
 
+  if fStatus<>psError then
+  begin
+    fLogger.log('Building AST...');
+
+    ast:=TAST.Create(fTokenList);
+    ast.Sections:=fSections;
+    ast.createAST;
+
+    fLogger.log('AST building finished');
+  end;
 
   fLogger.log('Parsing finished');
 

@@ -49,6 +49,7 @@ contains
   Casbin.Parser.Config.Types in '..\Common\Parser\Casbin.Parser.Config.Types.pas',
   Casbin.Parser.Messages in '..\Common\Parser\Casbin.Parser.Messages.pas',
   Casbin.Parser in '..\Common\Parser\Casbin.Parser.pas',
-  Casbin.Parser.Types in '..\Common\Parser\Casbin.Parser.Types.pas';
+  Casbin.Parser.Types in '..\Common\Parser\Casbin.Parser.Types.pas',
+  Casbin.AST.Utilities in '..\Common\Parser\Casbin.AST.Utilities.pas';
 
 end.

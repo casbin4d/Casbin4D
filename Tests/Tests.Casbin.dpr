@@ -49,7 +49,8 @@ uses
   Casbin.Model.Sections.Default in '..\SourceCode\Common\Model\Casbin.Model.Sections.Default.pas',
   Casbin.AST.Types in '..\SourceCode\Common\Parser\Casbin.AST.Types.pas',
   Casbin.AST in '..\SourceCode\Common\Parser\Casbin.AST.pas',
-  Test.AST in 'Test.AST.pas';
+  Test.AST in 'Test.AST.pas',
+  Casbin.AST.Utilities in '..\SourceCode\Common\Parser\Casbin.AST.Utilities.pas';
 
 var
   runner : ITestRunner;

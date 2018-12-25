@@ -155,6 +155,7 @@
         <DCCReference Include="..\SourceCode\Common\Parser\Casbin.AST.Types.pas"/>
         <DCCReference Include="..\SourceCode\Common\Parser\Casbin.AST.pas"/>
         <DCCReference Include="Test.AST.pas"/>
+        <DCCReference Include="..\SourceCode\Common\Parser\Casbin.AST.Utilities.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

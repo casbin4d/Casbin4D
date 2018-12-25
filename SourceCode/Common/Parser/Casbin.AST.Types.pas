@@ -9,6 +9,82 @@ uses
 
 type
   TAssociationType = (naUnary, naBinary);
+//
+//@
+//not
+// first (highest)
+//
+//*
+///
+//div
+//mod
+//and
+//shl
+//shr
+//as
+// second
+//
+//+
+//-
+//or
+//xor
+// third
+//
+//=
+//<>
+//<
+//>
+//<=
+//>=
+//in
+//is
+// fourth (lowest)
+//
+//
+//
+//const
+//  nodeTypes: array [Low(TTokenType)..High(TTokenType)] of TNodeRec =
+//    ((TokenType: ttIdentifier; Priority: 1; Association: naUnary),
+//     (TokenType: ttComment; Priority: 1; Association: naUnary),
+//     (TokenType: ttLSquareBracket; Priority: 1; Association: naUnary)
+//     (TokenType: ttRSquareBracket; Priority: 1; Association: naUnary)
+//     (TokenType: ttAssignment; Priority: 1; Association: naUnary)
+//     (TokenType: ttComma; Priority: 1; Association: naUnary)
+//     (TokenType: ttLParenthesis; Priority: 1; Association: naUnary)
+//     (TokenType: ttRParenthesis; Priority: 1; Association: naUnary)
+//     (TokenType: ttUnderscore; Priority: 1; Association: naUnary)
+//     (TokenType: ttDot; Priority: 1; Association: naUnary)
+//     (TokenType: ttColon; Priority: 1; Association: naUnary)
+//     (TokenType: ttEquality; Priority: 1; Association: naUnary)
+//     (TokenType: ttDoubleSlash; Priority: 1; Association: naUnary)
+//     (TokenType: ttBackslash; Priority: 1; Association: naUnary)
+//     (TokenType: ttAND; Priority: 1; Association: naUnary)
+//     (TokenType: ttOR; Priority: 1; Association: naUnary)
+//     (TokenType: ttNOT; Priority: 1; Association: naUnary)
+//     (TokenType: ttAdd; Priority: 1; Association: naUnary)
+//     (TokenType: ttMinus; Priority: 1; Association: naUnary)
+//     (TokenType: ttMultiply; Priority: 1; Association: naUnary)
+//     (TokenType: ttDivide; Priority: 1; Association: naUnary)
+//     (TokenType: ttModulo; Priority: 1; Association: naUnary)
+//     (TokenType: ttGreaterThan; Priority: 1; Association: naUnary)
+//     (TokenType: ttGreaterEqualThan; Priority: 1; Association: naUnary)
+//     (TokenType: ttLowerThan; Priority: 1; Association: naUnary)
+//     (TokenType: ttLowerEqualThan; Priority: 1; Association: naUnary)                ,
+//     (TokenType: ttAllow; Priority: 1; Association: naUnary)
+//     (TokenType: ttDeny; Priority: 1; Association: naUnary)                ,
+//     (TokenType: ttIndeterminate; Priority: 1; Association: naUnary)
+//     (TokenType: ttSome; Priority: 1; Association: naUnary)                ,
+//     (TokenType: ttAny; Priority: 1; Association: naUnary)
+//     (TokenType: ttWhere; Priority: 1; Association: naUnary)
+//     (TokenType: ttEft; Priority: 1; Association: naUnary)
+//     (TokenType: ttPriority; Priority: 1; Association: naUnary)
+//
+//
+//
+//
+//
+//
+
   TNodeType = (ntHead,
                ntHeader, // request_definition
                ntIdentifier, // r (=)

@@ -33,7 +33,8 @@ type
 implementation
 
 uses
-  System.SysUtils, Casbin.Core.Logger.Default, Casbin.Lexer.Tokens.Types, System.TypInfo, System.StrUtils, Casbin.Model.Sections.Default;
+  System.SysUtils, Casbin.Core.Logger.Default, Casbin.Lexer.Tokens.Types, System.TypInfo, System.StrUtils, Casbin.Model.Sections.Default,
+  Casbin.AST.Utilities, System.Rtti;
 
 constructor TAST.Create(const aTokenList: TTokenList);
 begin
@@ -41,7 +42,6 @@ begin
     raise Exception.Create('TokenList is nil in '+self.ClassName);
   inherited Create;
   fList:=THeadNode.Create;
-  fList.NodeType:=ntHead;
   fLogger:=TDefaultLogger.Create;
   fMessages:=TObjectList<TParserMessage>.Create;
   fSections:=TObjectList<TSection>.Create;
@@ -49,82 +49,127 @@ begin
   fTokenList:=aTokenList;
 end;
 
+type
+  TSectionIndeces = class
+  public
+    Start: integer;
+    Finish: integer;
+  end;
+
 procedure TAST.createAST;
 var
-  token: PToken;
+  token,
+  newToken: PToken;
   ASTHead: TBaseNode;
   header: THeaderNode;
-  insideSquared: Boolean;
+  insideHeader: Boolean;
+  insideSection: Boolean;
   testValue: string;
+  oneLiner: TTokenList;
+  idx: TSectionIndeces;
+  dict: TObjectDictionary<THeaderNode, TSectionIndeces>;
+  currPosition: Integer;
+  currentHeader: THeaderNode;
 begin
   fMessages.Clear;
   fList.ChildNodes.Clear;
 
-  insideSquared:=False;
+  dict:=TObjectDictionary<THeaderNode, TSectionIndeces>.Create([doOwnsKeys, doOwnsValues]);
 
-  ASTHead:=fList;
+  insideHeader:=False;
 
+  currPosition:=0;
+  currentHeader:=nil;
   for token in fTokenList do
   begin
     if not token^.IsDeleted then
     begin
       case token^.&Type of
-        ttIdentifier: begin
-                        //Check if the identifier is the section header
-                        if insideSquared then
-                        begin
-                          header:=THeaderNode.Create;
-                          header.NodeType:=ntHeader;
-                          header.Value:=token^.Value;
-
-                          testValue:= UpperCase(token^.Value);
-                          case IndexStr(testValue,
-                                  [UpperCase(requestDefinition.Header),
-                                   UpperCase(policyDefinition.Header),
-                                   UpperCase(roleDefinition.Header),
-                                   UpperCase(policyEffectDefinition.Header),
-                                   UpperCase(matchersDefinition.Header)
-                                  ]) of
-                            0: header.SectionType:=stRequestDefinition;
-                            1: header.SectionType:=stPolicyDefinition;
-                            2: header.SectionType:=stRoleDefinition;
-                            3: header.SectionType:=stPolicyEffect;
-                            4: header.SectionType:=stMatchers;
-                          else
-                            header.SectionType:=stUnknown;
+        ttLSquareBracket: begin
+                            insideHeader:=True;
+                            insideSection:=False;
+                            if Assigned(currentHeader) then
+                            begin
+                              idx:=dict.Items[currentHeader];
+                              idx.Finish:=currPosition - 1;
+                              dict.AddOrSetValue(currentHeader, idx);
+                            end;
                           end;
-                          fList.ChildNodes.Add(header);
-                        end;
-                      end;
-        ttLSquareBracket: insideSquared:=True;
-        ttRSquareBracket: insideSquared:=False;
-        ttAssignment: ;
-        ttComma: ;
-        ttLParenthesis: ;
-        ttRParenthesis: ;
-        ttUnderscore: ;
-        ttDot: ;
-        ttColon: ;
-        ttEquality: ;
-        ttDoubleSlash: ;
-        ttBackslash: ;
-        //Operations
-        ttAND: ;
-        ttOR: ;
-        ttNOT: ;
-        ttAdd: ;
-        ttMinus: ;
-        ttMultiply: ;
-        ttDivide: ;
-        ttModulo: ;
-        ttGreaterThan: ;
-        ttGreaterEqualThan: ;
-        ttLowerThan: ;
-        ttLowerEqualThan: ;
+        ttRSquareBracket: begin
+                            insideHeader:=false;
+                            insideSection:=true;
+                            if Assigned(currentHeader) then
+                            begin
+                              idx:=dict.Items[currentHeader];
+                              idx.Start:=currPosition + 1;
+                              dict.AddOrSetValue(currentHeader, idx);
+                            end;
+                          end;
+      else
+        begin
+          if (token^.&Type = ttIdentifier) and insideHeader then
+          begin
+            header:=THeaderNode.Create;
+            header.Value:=token^.Value;
+
+            case IndexStr(UpperCase(token^.Value),
+                    [UpperCase(requestDefinition.Header),
+                     UpperCase(policyDefinition.Header),
+                     UpperCase(roleDefinition.Header),
+                     UpperCase(policyEffectDefinition.Header),
+                     UpperCase(matchersDefinition.Header)
+                    ]) of
+              0: header.SectionType:=stRequestDefinition;
+              1: header.SectionType:=stPolicyDefinition;
+              2: header.SectionType:=stRoleDefinition;
+              3: header.SectionType:=stPolicyEffect;
+              4: header.SectionType:=stMatchers;
+            else
+              header.SectionType:=stUnknown;
+            end;
+            dict.Add(header, TSectionIndeces.Create);
+            currentHeader:=header;
+          end;
+        end;
       end;
     end;
+    Inc(currPosition);
   end;
+
+  dict.Free;
+
+//
+//
+//
+//
+//
+//  ASTHead:=fList;
+//
+//  oneLiner:=TTokenList.Create;
+//  for token in fTokenList do
+//  begin
+//    if token^.&Type<>ttEOL then
+//    begin
+//      New(newToken);
+//      FillChar(newToken^, SizeOf(TToken), 0);
+//      newToken^.&Type:=token.&Type;
+//      newToken^.Value:=token.Value;
+//      newToken^.StartPosition:=token.StartPosition;
+//      newToken^.EndPosition:=token.EndPosition;
+//      newToken^.IsDeleted:=token.IsDeleted;
+//      oneLiner.Add(newToken);
+//    end
+//    else
+//    begin
+//      addAssertion(oneLiner, ASTHead);
+//      for newToken in oneLiner do
+//        Dispose(newToken);
+//      oneLiner.Clear;
+//    end;
+//  end;
+//  oneLiner.Free;
 end;
+
 
 destructor TAST.Destroy;
 begin

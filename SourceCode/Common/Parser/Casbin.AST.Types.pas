@@ -3,10 +3,12 @@ unit Casbin.AST.Types;
 interface
 
 uses
-  Casbin.Model.Sections.Types, Casbin.Lexer.Tokens.Types, Casbin.Core.Base.Types, Casbin.Core.Logger.Types, System.Generics.Collections,
-  Casbin.Parser.Messages;
+  Casbin.Model.Sections.Types, Casbin.Lexer.Tokens.Types,
+  Casbin.Core.Base.Types, Casbin.Core.Logger.Types,
+  System.Generics.Collections, Casbin.Parser.Messages, System.Rtti;
 
 type
+  TAssociationType = (naUnary, naBinary);
   TNodeType = (ntHead,
                ntHeader, // request_definition
                ntIdentifier, // r (=)

@@ -72,6 +72,7 @@ begin
     begin
       case token^.&Type of
         ttIdentifier: begin
+                        //Check if the identifier is the section header
                         if insideSquared then
                         begin
                           header:=THeaderNode.Create;

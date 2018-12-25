@@ -115,16 +115,24 @@
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
         <DCCReference Include="rtl.dcp"/>
-        <DCCReference Include="..\Common\Core\Casbin.Core.Logger.Types.pas"/>
         <DCCReference Include="..\Common\Core\Casbin.Core.Base.Types.pas"/>
         <DCCReference Include="..\Common\Core\Casbin.Core.Logger.Base.pas"/>
         <DCCReference Include="..\Common\Core\Casbin.Core.Logger.Default.pas"/>
-        <DCCReference Include="..\Common\Lexer\Casbin.Lexer.Tokens.Types.pas"/>
-        <DCCReference Include="..\Common\Lexer\Casbin.Lexer.Tokens.Messages.pas"/>
+        <DCCReference Include="..\Common\Core\Casbin.Core.Logger.Types.pas"/>
+        <DCCReference Include="..\Common\Lexer\Casbin.Lexer.Tokeniser.pas"/>
         <DCCReference Include="..\Common\Lexer\Casbin.Lexer.Tokeniser.Types.pas"/>
         <DCCReference Include="..\Common\Lexer\Casbin.Lexer.Tokens.List.pas"/>
+        <DCCReference Include="..\Common\Lexer\Casbin.Lexer.Tokens.Messages.pas"/>
+        <DCCReference Include="..\Common\Lexer\Casbin.Lexer.Tokens.Types.pas"/>
         <DCCReference Include="..\Common\Lexer\Casbin.Lexer.Utilities.pas"/>
-        <DCCReference Include="..\Common\Lexer\Casbin.Lexer.Tokeniser.pas"/>
+        <DCCReference Include="..\Common\Model\Casbin.Model.Sections.Default.pas"/>
+        <DCCReference Include="..\Common\Model\Casbin.Model.Sections.Types.pas"/>
+        <DCCReference Include="..\Common\Parser\Casbin.AST.pas"/>
+        <DCCReference Include="..\Common\Parser\Casbin.AST.Types.pas"/>
+        <DCCReference Include="..\Common\Parser\Casbin.Parser.Config.pas"/>
+        <DCCReference Include="..\Common\Parser\Casbin.Parser.Config.Types.pas"/>
+        <DCCReference Include="..\Common\Parser\Casbin.Parser.Messages.pas"/>
+        <DCCReference Include="..\Common\Parser\Casbin.Parser.pas"/>
         <DCCReference Include="..\Common\Parser\Casbin.Parser.Types.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>

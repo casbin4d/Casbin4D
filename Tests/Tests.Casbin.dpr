@@ -28,29 +28,8 @@ uses
   Casbin.Core.Logger.Default in '..\SourceCode\Common\Core\Casbin.Core.Logger.Default.pas',
   Casbin.Core.Logger.Base in '..\SourceCode\Common\Core\Casbin.Core.Logger.Base.pas',
   Casbin.Core.Base.Types in '..\SourceCode\Common\Core\Casbin.Core.Base.Types.pas',
-  Test.TokenList in 'Test.TokenList.pas',
-  Casbin.Lexer.Tokens.Types in '..\SourceCode\Common\Lexer\Casbin.Lexer.Tokens.Types.pas',
-  Casbin.Lexer.Tokens.Messages in '..\SourceCode\Common\Lexer\Casbin.Lexer.Tokens.Messages.pas',
-  Casbin.Lexer.Tokens.List in '..\SourceCode\Common\Lexer\Casbin.Lexer.Tokens.List.pas',
-  Casbin.Lexer.Tokeniser.Types in '..\SourceCode\Common\Lexer\Casbin.Lexer.Tokeniser.Types.pas',
-  Casbin.Lexer.Utilities in '..\SourceCode\Common\Lexer\Casbin.Lexer.Utilities.pas',
-  Test.Tokeniser in 'Test.Tokeniser.pas',
-  Casbin.Lexer.Tokeniser in '..\SourceCode\Common\Lexer\Casbin.Lexer.Tokeniser.pas',
-  Test.TokenMessage in 'Test.TokenMessage.pas',
-  Test.Tokeniser.Tokens in 'Test.Tokeniser.Tokens.pas',
-  Casbin.Parser.Types in '..\SourceCode\Common\Parser\Casbin.Parser.Types.pas',
-  Casbin.Parser.Config.Types in '..\SourceCode\Common\Parser\Casbin.Parser.Config.Types.pas',
   Casbin.Model.Sections.Types in '..\SourceCode\Common\Model\Casbin.Model.Sections.Types.pas',
-  Casbin.Parser.Messages in '..\SourceCode\Common\Parser\Casbin.Parser.Messages.pas',
-  Test.Parser in 'Test.Parser.pas',
-  Test.Parser.Config in 'Test.Parser.Config.pas',
-  Casbin.Parser in '..\SourceCode\Common\Parser\Casbin.Parser.pas',
-  Casbin.Parser.Config in '..\SourceCode\Common\Parser\Casbin.Parser.Config.pas',
-  Casbin.Model.Sections.Default in '..\SourceCode\Common\Model\Casbin.Model.Sections.Default.pas',
-  Casbin.AST.Types in '..\SourceCode\Common\Parser\Casbin.AST.Types.pas',
-  Casbin.AST in '..\SourceCode\Common\Parser\Casbin.AST.pas',
-  Test.AST in 'Test.AST.pas',
-  Casbin.AST.Utilities in '..\SourceCode\Common\Parser\Casbin.AST.Utilities.pas';
+  Casbin.Model.Sections.Default in '..\SourceCode\Common\Model\Casbin.Model.Sections.Default.pas';
 
 var
   runner : ITestRunner;

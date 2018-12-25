@@ -35,21 +35,7 @@ contains
   Casbin.Core.Logger.Base in '..\Common\Core\Casbin.Core.Logger.Base.pas',
   Casbin.Core.Logger.Default in '..\Common\Core\Casbin.Core.Logger.Default.pas',
   Casbin.Core.Logger.Types in '..\Common\Core\Casbin.Core.Logger.Types.pas',
-  Casbin.Lexer.Tokeniser in '..\Common\Lexer\Casbin.Lexer.Tokeniser.pas',
-  Casbin.Lexer.Tokeniser.Types in '..\Common\Lexer\Casbin.Lexer.Tokeniser.Types.pas',
-  Casbin.Lexer.Tokens.List in '..\Common\Lexer\Casbin.Lexer.Tokens.List.pas',
-  Casbin.Lexer.Tokens.Messages in '..\Common\Lexer\Casbin.Lexer.Tokens.Messages.pas',
-  Casbin.Lexer.Tokens.Types in '..\Common\Lexer\Casbin.Lexer.Tokens.Types.pas',
-  Casbin.Lexer.Utilities in '..\Common\Lexer\Casbin.Lexer.Utilities.pas',
   Casbin.Model.Sections.Default in '..\Common\Model\Casbin.Model.Sections.Default.pas',
-  Casbin.Model.Sections.Types in '..\Common\Model\Casbin.Model.Sections.Types.pas',
-  Casbin.AST in '..\Common\Parser\Casbin.AST.pas',
-  Casbin.AST.Types in '..\Common\Parser\Casbin.AST.Types.pas',
-  Casbin.Parser.Config in '..\Common\Parser\Casbin.Parser.Config.pas',
-  Casbin.Parser.Config.Types in '..\Common\Parser\Casbin.Parser.Config.Types.pas',
-  Casbin.Parser.Messages in '..\Common\Parser\Casbin.Parser.Messages.pas',
-  Casbin.Parser in '..\Common\Parser\Casbin.Parser.pas',
-  Casbin.Parser.Types in '..\Common\Parser\Casbin.Parser.Types.pas',
-  Casbin.AST.Utilities in '..\Common\Parser\Casbin.AST.Utilities.pas';
+  Casbin.Model.Sections.Types in '..\Common\Model\Casbin.Model.Sections.Types.pas';
 
 end.

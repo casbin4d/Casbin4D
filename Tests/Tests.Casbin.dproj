@@ -133,29 +133,8 @@
         <DCCReference Include="..\SourceCode\Common\Core\Casbin.Core.Logger.Default.pas"/>
         <DCCReference Include="..\SourceCode\Common\Core\Casbin.Core.Logger.Base.pas"/>
         <DCCReference Include="..\SourceCode\Common\Core\Casbin.Core.Base.Types.pas"/>
-        <DCCReference Include="Test.TokenList.pas"/>
-        <DCCReference Include="..\SourceCode\Common\Lexer\Casbin.Lexer.Tokens.Types.pas"/>
-        <DCCReference Include="..\SourceCode\Common\Lexer\Casbin.Lexer.Tokens.Messages.pas"/>
-        <DCCReference Include="..\SourceCode\Common\Lexer\Casbin.Lexer.Tokens.List.pas"/>
-        <DCCReference Include="..\SourceCode\Common\Lexer\Casbin.Lexer.Tokeniser.Types.pas"/>
-        <DCCReference Include="..\SourceCode\Common\Lexer\Casbin.Lexer.Utilities.pas"/>
-        <DCCReference Include="Test.Tokeniser.pas"/>
-        <DCCReference Include="..\SourceCode\Common\Lexer\Casbin.Lexer.Tokeniser.pas"/>
-        <DCCReference Include="Test.TokenMessage.pas"/>
-        <DCCReference Include="Test.Tokeniser.Tokens.pas"/>
-        <DCCReference Include="..\SourceCode\Common\Parser\Casbin.Parser.Types.pas"/>
-        <DCCReference Include="..\SourceCode\Common\Parser\Casbin.Parser.Config.Types.pas"/>
         <DCCReference Include="..\SourceCode\Common\Model\Casbin.Model.Sections.Types.pas"/>
-        <DCCReference Include="..\SourceCode\Common\Parser\Casbin.Parser.Messages.pas"/>
-        <DCCReference Include="Test.Parser.pas"/>
-        <DCCReference Include="Test.Parser.Config.pas"/>
-        <DCCReference Include="..\SourceCode\Common\Parser\Casbin.Parser.pas"/>
-        <DCCReference Include="..\SourceCode\Common\Parser\Casbin.Parser.Config.pas"/>
         <DCCReference Include="..\SourceCode\Common\Model\Casbin.Model.Sections.Default.pas"/>
-        <DCCReference Include="..\SourceCode\Common\Parser\Casbin.AST.Types.pas"/>
-        <DCCReference Include="..\SourceCode\Common\Parser\Casbin.AST.pas"/>
-        <DCCReference Include="Test.AST.pas"/>
-        <DCCReference Include="..\SourceCode\Common\Parser\Casbin.AST.Utilities.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

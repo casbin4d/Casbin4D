@@ -23,7 +23,7 @@ const
   matchersDefinition: TSectionDefault = (Header: 'matchers';
                                          Tag: ['m']);
 
-                                         function createDefaultSection(const aSection: TSectionType): TSection;
+function createDefaultSection(const aSection: TSectionType): TSection;
 
 implementation
 

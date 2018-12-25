@@ -300,13 +300,15 @@ var
   refToken: PToken;
   numOpenSquare: integer;
   newValue: string;
-  foundUnderscore: Boolean;
+  tokenIndex,
+  fixIndex: Integer;
 begin
   fLogger.log('Refining tokens...');
 
   numOpenSquare:=0;
   newValue:='';
-  foundUnderscore:=False;
+  tokenIndex:=0;
+
   for token in fTokenList do
   begin
     //Underscore in [] is treated as character
@@ -314,10 +316,9 @@ begin
       ttLSquareBracket: Inc(numOpenSquare);
       ttRSquareBracket: begin
                           Dec(numOpenSquare);
-                          if Assigned(refToken) then
+                          if (fixIndex>=0) and (fixIndex<=fTokenList.Count-1) then
                           begin
-                            refToken^.Value:=newValue;
-                            refToken:=nil;
+                            fTokenList.Items[fixIndex].Value:=newValue;
                             newValue:='';
                           end;
                         end;
@@ -326,7 +327,7 @@ begin
                       if Trim(newValue)='' then
                       begin
                         newValue:=token^.Value;
-                        refToken:=token;
+                        fixIndex:=tokenIndex;
                       end
                       else
                       begin
@@ -336,11 +337,11 @@ begin
                    end;
       ttUnderscore: if numOpenSquare=1 then
                     begin
-                      foundUnderscore:=True;
                       newValue:=newValue+token^.Value;
                       token^.IsDeleted:=True;
                     end
     end;
+    Inc(tokenIndex);
   end;
 
   //Remove deleted tokens

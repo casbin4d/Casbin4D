@@ -24,12 +24,18 @@ uses
   DUnitX.Loggers.Xml.NUnit,
   DUnitX.TestFramework,
   Tests.Logger in 'Tests.Logger.pas',
+  Casbin.Model.Sections.Types in '..\SourceCode\Common\Model\Casbin.Model.Sections.Types.pas',
+  Casbin.Model.Sections.Default in '..\SourceCode\Common\Model\Casbin.Model.Sections.Default.pas',
+  Casbin.Parser.Types in '..\SourceCode\Common\Parser\Casbin.Parser.Types.pas',
+  Casbin.Parser.AST.Types in '..\SourceCode\Common\Parser\Casbin.Parser.AST.Types.pas',
+  Casbin.Parser in '..\SourceCode\Common\Parser\Casbin.Parser.pas',
+  Tests.Parser in 'Tests.Parser.pas',
   Casbin.Core.Logger.Types in '..\SourceCode\Common\Core\Casbin.Core.Logger.Types.pas',
   Casbin.Core.Logger.Default in '..\SourceCode\Common\Core\Casbin.Core.Logger.Default.pas',
   Casbin.Core.Logger.Base in '..\SourceCode\Common\Core\Casbin.Core.Logger.Base.pas',
+  Casbin.Core.Defaults in '..\SourceCode\Common\Core\Casbin.Core.Defaults.pas',
   Casbin.Core.Base.Types in '..\SourceCode\Common\Core\Casbin.Core.Base.Types.pas',
-  Casbin.Model.Sections.Types in '..\SourceCode\Common\Model\Casbin.Model.Sections.Types.pas',
-  Casbin.Model.Sections.Default in '..\SourceCode\Common\Model\Casbin.Model.Sections.Default.pas';
+  Casbin.Core.Strings in '..\SourceCode\Common\Core\Casbin.Core.Strings.pas';
 
 var
   runner : ITestRunner;

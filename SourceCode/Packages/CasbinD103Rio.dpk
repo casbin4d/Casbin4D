@@ -36,6 +36,7 @@ contains
   Casbin.Core.Logger.Default in '..\Common\Core\Casbin.Core.Logger.Default.pas',
   Casbin.Core.Logger.Types in '..\Common\Core\Casbin.Core.Logger.Types.pas',
   Casbin.Model.Sections.Default in '..\Common\Model\Casbin.Model.Sections.Default.pas',
-  Casbin.Model.Sections.Types in '..\Common\Model\Casbin.Model.Sections.Types.pas';
+  Casbin.Model.Sections.Types in '..\Common\Model\Casbin.Model.Sections.Types.pas',
+  Casbin.Core.Defaults in '..\Common\Core\Casbin.Core.Defaults.pas';
 
 end.

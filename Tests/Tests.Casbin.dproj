@@ -129,12 +129,18 @@
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
         <DCCReference Include="Tests.Logger.pas"/>
+        <DCCReference Include="..\SourceCode\Common\Model\Casbin.Model.Sections.Types.pas"/>
+        <DCCReference Include="..\SourceCode\Common\Model\Casbin.Model.Sections.Default.pas"/>
+        <DCCReference Include="..\SourceCode\Common\Parser\Casbin.Parser.Types.pas"/>
+        <DCCReference Include="..\SourceCode\Common\Parser\Casbin.Parser.AST.Types.pas"/>
+        <DCCReference Include="..\SourceCode\Common\Parser\Casbin.Parser.pas"/>
+        <DCCReference Include="Tests.Parser.pas"/>
         <DCCReference Include="..\SourceCode\Common\Core\Casbin.Core.Logger.Types.pas"/>
         <DCCReference Include="..\SourceCode\Common\Core\Casbin.Core.Logger.Default.pas"/>
         <DCCReference Include="..\SourceCode\Common\Core\Casbin.Core.Logger.Base.pas"/>
+        <DCCReference Include="..\SourceCode\Common\Core\Casbin.Core.Defaults.pas"/>
         <DCCReference Include="..\SourceCode\Common\Core\Casbin.Core.Base.Types.pas"/>
-        <DCCReference Include="..\SourceCode\Common\Model\Casbin.Model.Sections.Types.pas"/>
-        <DCCReference Include="..\SourceCode\Common\Model\Casbin.Model.Sections.Default.pas"/>
+        <DCCReference Include="..\SourceCode\Common\Core\Casbin.Core.Strings.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

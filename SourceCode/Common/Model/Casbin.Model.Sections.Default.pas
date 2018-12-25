@@ -12,6 +12,8 @@ type
   end;
 
 const
+  defaultSection: TSectionDefault = (Header: 'default'; Tag: []);
+
   requestDefinition: TSectionDefault = (Header: 'request_definition';
                                          Tag: ['r']);
   policyDefinition: TSectionDefault = (Header: 'policy_definition';
@@ -26,7 +28,6 @@ const
 function createDefaultSection(const aSection: TSectionType): TSection;
 
 implementation
-
 
 function createDefaultSection(const aSection: TSectionType): TSection;
 begin

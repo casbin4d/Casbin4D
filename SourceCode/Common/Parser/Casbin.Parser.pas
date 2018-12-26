@@ -16,6 +16,7 @@ type
     fNodes: TNodeCollection;
     procedure cleanWhiteSpace;
     procedure checkSyntaxErrors;
+    procedure checkHeaders;
   private
 {$REGION 'Interface'}
     function getErrorMessage: string;
@@ -34,7 +35,7 @@ implementation
 
 uses
   Casbin.Core.Logger.Default, System.IniFiles, System.Classes,
-  Casbin.Core.Defaults, Casbin.Core.Strings, System.StrUtils, System.AnsiStrings;
+  Casbin.Core.Defaults, Casbin.Core.Strings, System.StrUtils, System.AnsiStrings, Casbin.Model.Sections.Types, Casbin.Model.Sections.Default;
 
 constructor TParser.Create(const aParseString: string; const aParseType:
     TParseType);
@@ -51,6 +52,49 @@ destructor TParser.Destroy;
 begin
   fNodes.Free;
   inherited;
+end;
+
+procedure TParser.checkHeaders;
+var
+  headers: array of Boolean;
+  headerSet: TSectionTypeSet;
+  section: TSectionType;
+  sectionObj: TSection;
+  fileString: string;
+begin
+  if fParseType=ptConfig then
+    Exit;
+
+  case fParseType of
+    ptModel: begin
+               headerSet:= modelSections;
+               fileString:=modelFileString;
+             end;
+    ptPolicy: begin
+                headerSet:= policySections;
+                fileString:=policyFileString;
+              end;
+    ptConfig: begin
+                headerSet:= congigSections;
+                fileString:=configFileString;
+              end;
+  end;
+
+  for section in headerSet do
+  begin
+    sectionObj:=createDefaultSection(section);
+    if Pos(UpperCase(sectionObj.Header), UpperCase(fParseString)) = 0 then
+    begin
+      fErrorMessage:=Format(errorSectionNotFound,
+                            [sectionObj.Header, fileString]);
+      fStatus:=psError;
+    end;
+    sectionObj.Free;
+    if fStatus=psError then
+      Exit;
+  end;
+
+
 end;
 
 procedure TParser.checkSyntaxErrors;
@@ -112,7 +156,7 @@ begin
   try
     strList.Text:=fParseString;
     if (strList.Count>0) and (strList.Strings[0][Low(string)]<>'[') then
-      fParseString:='['+DefaultSection+']'+EOL+fParseString;
+      fParseString:='['+DefaultSection.Header+']'+EOL+fParseString;
   finally
     strList.Free;
   end;
@@ -210,7 +254,9 @@ begin
 
     if fStatus<>psError then
     begin
-      fLogger.log('????');
+      fLogger.log('Checking headers...');
+      checkHeaders;
+      fLogger.log('Check of headers completed');
 
     end;
   end;

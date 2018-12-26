@@ -6,10 +6,12 @@ uses
   Casbin.Core.Base.Types, System.Types;
 
 type
-  TSectionType = (stRequestDefinition, stPolicyDefinition,
+  TSectionType = (stDefault,
+                  stRequestDefinition, stPolicyDefinition,
                   stRoleDefinition,
                   stPolicyEffect, stMatchers,
                   stUnknown);
+  TSectionTypeSet = set of TSectionType;
 
   {$REGION 'Determines a section in the configuration files'}
   /// <summary>
@@ -57,6 +59,14 @@ type
     property Tag: TStringDynArray read fTag write fTag;
     property &Type: TSectionType read fType write fType;
   end;
+
+const
+  modelSections : TSectionTypeSet = [stRequestDefinition, stPolicyDefinition,
+                                     stPolicyEffect, stRoleDefinition,
+                                     stMatchers];
+
+  policySections: TSectionTypeSet = [stDefault];
+  congigSections: TSectionTypeSet = [];
 
 implementation
 

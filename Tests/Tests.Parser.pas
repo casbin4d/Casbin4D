@@ -33,13 +33,17 @@ type
     [Test]
     [TestCase('Double [ in header', '[req[]')]
     [TestCase('Missed [ in header', 'req]')]
-    procedure testSyntaxError(const aInput: String);
+    [TestCase('Missing section', '[request_definition]'+EOL+
+                                 'r=sub, obj, act'+EOL+
+                                 '[policy_definition]')]
+    procedure testErrors(const aInput: String);
 
     [Test]
     [TestCase('Missing Header', 'r = sub, obj, act'+sLineBreak+'p=sub'+
                         '#'+'[default]'+sLineBreak+'r = sub, obj, act'+
                             sLineBreak+'p=sub','#')]
     procedure testFix(const aInput: String; const aExpected: String);
+
   end;
 
 implementation
@@ -61,7 +65,7 @@ begin
   Assert.IsNotNull(fParser.Logger);
 end;
 
-procedure TTestParser.testSyntaxError(const aInput: String);
+procedure TTestParser.testErrors(const aInput: String);
 begin
   fParser:=TParser.Create(aInput, ptModel);
   fParser.parse;

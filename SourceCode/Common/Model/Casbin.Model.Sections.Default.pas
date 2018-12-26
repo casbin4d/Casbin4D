@@ -32,6 +32,14 @@ implementation
 function createDefaultSection(const aSection: TSectionType): TSection;
 begin
   case aSection of
+    stDefault: begin
+                 result:=TSection.Create;
+                 result.EnforceTag:=True;
+                 result.Header:=defaultSection.Header;
+                 result.Required:=True;
+                 result.Tag:=defaultSection.Tag;
+                 result.&Type:=stDefault;
+               end;
     stRequestDefinition: begin
                            result:=TSection.Create;
                            result.EnforceTag:=True;

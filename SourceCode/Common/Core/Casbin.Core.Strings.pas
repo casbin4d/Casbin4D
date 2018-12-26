@@ -9,6 +9,7 @@ const
 
   errorWrongHeaderFormat = 'Syntax Error: Wrong Header Format in (%d, %d) '+
                             ' in %s';
+  errorSectionNotFound = 'Error: %s section not found in %s';
 
 implementation
 

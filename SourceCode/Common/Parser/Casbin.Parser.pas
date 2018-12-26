@@ -37,7 +37,9 @@ implementation
 
 uses
   Casbin.Core.Logger.Default, System.IniFiles, System.Classes,
-  Casbin.Core.Defaults, Casbin.Core.Strings, System.StrUtils, System.AnsiStrings, Casbin.Model.Sections.Types, Casbin.Model.Sections.Default;
+  Casbin.Core.Defaults, Casbin.Core.Strings, System.StrUtils,
+  System.AnsiStrings, Casbin.Model.Sections.Types,
+  Casbin.Model.Sections.Default, Casbin.Parser.AST;
 
 constructor TParser.Create(const aParseString: string; const aParseType:
     TParseType);
@@ -310,10 +312,12 @@ begin
         else
           header.SectionType:=stUnknown;
         end;
-        fNodes. Headers.Add(header);
-      end;
+        fNodes.Headers.Add(header);
+      end
+      else
+        if Trim(line)<>'' then
+          header.ChildNodes.Add(addAssertion(line));
     end;
-
   finally
     mainLines.Free;
   end;

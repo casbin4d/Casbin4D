@@ -17,6 +17,7 @@ type
     procedure cleanWhiteSpace;
     procedure checkSyntaxErrors;
     procedure checkHeaders;
+    procedure parseContent;
   private
 {$REGION 'Interface'}
     function getErrorMessage: string;
@@ -31,6 +32,7 @@ type
     constructor Create(const aParseString: string; const aParseType: TParseType);
     destructor Destroy; override;
   end;
+
 implementation
 
 uses
@@ -62,9 +64,6 @@ var
   sectionObj: TSection;
   fileString: string;
 begin
-  if fParseType=ptConfig then
-    Exit;
-
   case fParseType of
     ptModel: begin
                headerSet:= modelSections;
@@ -83,7 +82,8 @@ begin
   for section in headerSet do
   begin
     sectionObj:=createDefaultSection(section);
-    if Pos(UpperCase(sectionObj.Header), UpperCase(fParseString)) = 0 then
+    if (Pos(UpperCase(sectionObj.Header), UpperCase(fParseString)) = 0) and
+                                              sectionObj.Required then
     begin
       fErrorMessage:=Format(errorSectionNotFound,
                             [sectionObj.Header, fileString]);
@@ -93,8 +93,6 @@ begin
     if fStatus=psError then
       Exit;
   end;
-
-
 end;
 
 procedure TParser.checkSyntaxErrors;
@@ -251,15 +249,22 @@ begin
     fLogger.log('Checking for Syntax Errors...');
     checkSyntaxErrors;
     fLogger.log('Syntax error check completed');
-
-    if fStatus<>psError then
-    begin
-      fLogger.log('Checking headers...');
-      checkHeaders;
-      fLogger.log('Check of headers completed');
-
-    end;
   end;
+
+  if fStatus<>psError then
+  begin
+    fLogger.log('Checking headers...');
+    checkHeaders;
+    fLogger.log('Check of headers completed');
+  end;
+
+  if fStatus<>psError then
+  begin
+    fLogger.log('Parsing content...');
+    parseContent;
+    fLogger.log('Content parse completed');
+  end;
+
   if fStatus=psError then
   begin
     fLogger.log('Error while parsing: '+fErrorMessage+EOL+'Parsing faield');
@@ -268,6 +273,50 @@ begin
     fStatus:=psIdle;
 
   fLogger.log('Parser finished');
+end;
+
+procedure TParser.parseContent;
+var
+  mainLines: TStringList;
+  line: string;
+  tmpStr: string;
+  header: THeaderNode;
+begin
+  mainLines:=TStringList.Create;
+  try
+    mainLines.Text:=fParseString;
+
+    for line in mainLines do
+    begin
+      if (line[Low(string)]='[') and (line[Length(line)]=']') then
+      begin
+        tmpStr:=Copy(Copy(line, Low(string), Length(line)-1), Low(string)+1,
+                                                          Length(line)-1);
+        header:=THeaderNode.Create;
+        header.Value:=tmpStr;
+        case IndexStr(UpperCase(tmpStr),
+                      [UpperCase(defaultSection.Header),
+                       UpperCase(requestDefinition.Header),
+                       UpperCase(policyDefinition.Header),
+                       UpperCase(roleDefinition.Header),
+                       UpperCase(policyEffectDefinition.Header),
+                       UpperCase(matchersDefinition.Header)]) of
+          0: header.SectionType:=stDefault;
+          1: header.SectionType:=stRequestDefinition;
+          2: header.SectionType:=stPolicyDefinition;
+          3: header.SectionType:=stRoleDefinition;
+          4: header.SectionType:=stPolicyEffect;
+          5: header.SectionType:=stMatchers;
+        else
+          header.SectionType:=stUnknown;
+        end;
+        fNodes. Headers.Add(header);
+      end;
+    end;
+
+  finally
+    mainLines.Free;
+  end;
 end;
 
 procedure TParser.setLogger(const aValue: ILogger);

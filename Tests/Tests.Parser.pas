@@ -27,7 +27,7 @@ type
     procedure testHeadersInModel(const aInput, aExpected: String);
 
     [Test]
-    [TestCase('Space before assignment', 'na me = 123, name=123')]
+    [TestCase('Space before assignment', 'na me = 123'+'#'+'default','#')]
     procedure testHeadersInConfig(const aInput, aExpected: String);
 
     [Test]
@@ -39,9 +39,9 @@ type
     procedure testErrors(const aInput: String);
 
     [Test]
+    //This should be for Policy or Config file only
     [TestCase('Missing Header', 'r = sub, obj, act'+sLineBreak+'p=sub'+
-                        '#'+'[default]'+sLineBreak+'r = sub, obj, act'+
-                            sLineBreak+'p=sub','#')]
+                        '#'+'default','#')]
     procedure testFix(const aInput: String; const aExpected: String);
 
   end;
@@ -75,9 +75,9 @@ end;
 
 procedure TTestParser.testFix(const aInput: String; const aExpected: String);
 begin
-  fParser:=TParser.Create(aInput, ptModel);
+  fParser:=TParser.Create(aInput, ptPolicy);
   fParser.parse;
-  Assert.IsTrue(fParser.Nodes.Headers.Count > 1);
+  Assert.IsTrue(fParser.Nodes.Headers.Count >= 1);
   Assert.AreEqual(aExpected, fParser.Nodes.Headers.Items[0].Value);
   fParser:=nil;
 end;

@@ -14,6 +14,8 @@ type
   private
     fValue: string;
   public
+    function toOutputString: string; virtual; abstract;
+
     property Value: string read fValue write fValue;
   end;
 

@@ -66,7 +66,7 @@ const
                                      stMatchers];
 
   policySections: TSectionTypeSet = [stDefault];
-  congigSections: TSectionTypeSet = [];
+  congigSections: TSectionTypeSet = [stDefault];
 
 implementation
 

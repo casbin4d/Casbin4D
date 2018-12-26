@@ -40,6 +40,9 @@ type
     //This should be for Policy or Config file only
     [TestCase('Missing Header', 'r = sub, obj, act'+sLineBreak+'p=sub'+
                         '#'+'default','#')]
+    [TestCase('Start with EOL', sLineBreak+'r = sub, obj, act#default','#')]
+    [TestCase('Start with multiple EOL',
+             sLineBreak+sLineBreak+sLineBreak+'r = sub, obj, act#default','#')]
     procedure testFix(const aInput: String; const aExpected: String);
 
   end;
@@ -47,7 +50,12 @@ type
 implementation
 
 uses
-  Casbin.Parser;
+  Casbin.Parser, System.SysUtils, Casbin.Parser.AST.Types;
+
+procedure TTestParser.checkParserError;
+begin
+  Assert.IsFalse(fParser.Status = psError,'Parsing Error: '+fParser.ErrorMessage);
+end;
 
 procedure TTestParser.Setup;
 begin

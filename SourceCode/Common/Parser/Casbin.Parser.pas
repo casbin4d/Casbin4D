@@ -168,6 +168,11 @@ var
   assignmentIndex: integer;
   testStr: string;
 begin
+  // Clean EOL in front of the string
+  while (Length(fParseString)>0) and (Length(fParseString)>=Length(EOL)) and
+    (Copy(fParseString, Low(string), Length(EOL)) = EOL) do
+    fParseString:=Copy(fParseString, Length(EOL)+1, Length(fParseString));
+
   // Clean multiline chars
   index:= Pos(DefaultMultilineCharacters, fParseString, Low(string));
   while index<>0 do

@@ -7,9 +7,12 @@ uses
 
 type
   TSectionType = (stDefault,
-                  stRequestDefinition, stPolicyDefinition,
+                  stRequestDefinition,
+                  stPolicyDefinition,
                   stRoleDefinition,
-                  stPolicyEffect, stMatchers,
+                  stPolicyEffect,
+                  stMatchers,
+                  stPolicyRules,
                   stUnknown);
   TSectionTypeSet = set of TSectionType;
 

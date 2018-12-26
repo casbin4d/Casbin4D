@@ -320,8 +320,12 @@ begin
         fNodes.Headers.Add(header);
       end
       else
+      begin
+        if fParseType=ptPolicy then
+          header.SectionType:=stPolicyRules;
         if Trim(line)<>'' then
-          header.ChildNodes.Add(addAssertion(line));
+          addAssertion(header, line);
+      end;
     end;
   finally
     mainLines.Free;

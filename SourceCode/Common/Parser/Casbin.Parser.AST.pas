@@ -5,76 +5,93 @@ interface
 uses
   Casbin.Parser.AST.Types;
 
-function addAssertion(const aLine: string): TExpressionNode;
+procedure addAssertion(const aHeader: THeaderNode; const aLine: string);
 
 implementation
 
 uses
-  Casbin.Parser.AST.Operators.Types, System.Generics.Collections, System.Generics.Defaults;
+  System.SysUtils, Casbin.Model.Sections.Types, System.Classes,
+  System.StrUtils, Casbin.Effect.Types;
 
-function sortOperators:  TArray<TOperatorRec>;
+procedure addAssertion(const aHeader: THeaderNode; const aLine: string);
 var
-  opArray: TArray<TOperatorRec>;
-  opRec: TOperatorRec;
-  comparer: IComparer<TOperatorRec>;
+  child: TChildNode;
+  effect: TEffectNode;
+  index: Integer;
+  sep: Char;
+  key: string;
+  objStr: string;
+  strList: TstringList;
+  value: string;
 begin
-  for opRec in operatorsArray do
-  begin
-    SetLength(opArray, Length(opArray)+1);
-    opArray[Length(opArray)-1]:=opRec;
+  if not Assigned(aHeader) then
+    raise Exception.Create('Header is nil');
+
+  sep:='=';
+  if aHeader.SectionType=stPolicyRules then
+    sep:=',';
+
+  index:=Pos(sep, aLine, Low(string));
+  if index=0 then
+    Exit;
+
+  key:=Copy(aLine, Low(string), index-1);
+  value:=Copy(aLine, index+1, Length(aLine));
+
+
+  case aHeader.SectionType of
+    stMatchers,
+    stDefault,
+    stUnknown: begin
+                  child:=TChildNode.Create;
+                  child.Key:=key;
+                  child.Value:=value;
+                  aHeader.ChildNodes.Add(child);
+                end;
+
+    stRequestDefinition,
+    stPolicyDefinition,
+    stPolicyRules: begin
+                     strList:=TstringList.Create;
+                     try
+                       strList.Delimiter:=',';
+                       strList.DelimitedText:=value;
+                       strList.StrictDelimiter:=True;
+                       for objStr in strList do
+                       begin
+                         child:=TChildNode.Create;
+                         child.Key:=key;
+                         child.Value:=objStr;
+                         aHeader.ChildNodes.Add(child);
+                       end;
+                     finally
+                       strList.Free;
+                     end;
+                   end;
+
+    stPolicyEffect: begin
+                      effect:=TEffectNode.Create;
+                      effect.Key:=key;
+                      effect.Value:=value;
+
+                      case IndexStr(UpperCase(value),
+                                      [UpperCase(effectConditions[0]),
+                                       UpperCase(effectConditions[1]),
+                                       UpperCase(effectConditions[2]),
+                                       UpperCase(effectConditions[3])]) of
+                        0: effect.EffectCondition:=ecSomeAllow;
+                        1: effect.EffectCondition:=ecNotSomeDeny;
+                        2: effect.EffectCondition:=ecSomeAllowANDNotDeny;
+                        3: effect.EffectCondition:=ecPriorityORDeny;
+                      else
+                        effect.EffectCondition:=ecUnknown;
+                      end;
+                      aHeader.ChildNodes.Add(effect);
+                    end;
+    {TODO -oOwner -cGeneral : stRoleDefinition}
+    stRoleDefinition: ;
+
   end;
-  comparer:=TDelegatedComparer<TOperatorRec>.Create(
-                function (const left, right: TOperatorRec): Integer
-                begin
-                  Result:=left.Priority - right.Priority;
-                end);
-
-  TArray.Sort<TOperatorRec>(opArray, comparer);
-  Result:=opArray;
-end;
-
-function addAssertion(const aLine: string): TExpressionNode;
-var
-  assertStr: string;
-  opArray: TArray<TOperatorRec>;
-  opRec: TOperatorRec;
-  litFound: boolean;
-  litStr: string;
-  litPosition: Integer;
-  expNode: TExpressionNode;
-  opIndex: Integer;
-begin
-  assertStr:=aLine;
-
-  //Check Assignment
-  opRec:= operatorsArray[opAssignment];
-  opIndex:=-1;
-  for litStr in opRec.Literal do
-  begin
-    if not litFound then
-    begin
-      litPosition:=Pos(litStr, assertStr, Low(string));
-      litFound:= litPosition<>0;
-      Inc(opIndex);
-    end;
-  end;
-
-  if litFound then
-  begin
-    expNode:=TExpressionNode.Create(opAssignment);
-    expNode.Identifier:=Copy(assertStr, Low(string), litPosition-1);
-
-    Result:=expNode;
-    assertStr:=Copy(assertStr, litPosition+Length(opRec.Literal[opIndex]), Length(assertStr));
-    expNode.LeftChild:=addAssertion(assertStr);
-  end
-  else
-  begin
-    expNode:=TExpressionNode.Create(opAssignment);
-    expNode.Identifier:=assertStr;
-    Result:=expNode;
-  end;
-
 end;
 
 

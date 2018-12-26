@@ -10,6 +10,7 @@ type
   TTestParser = class(TObject)
   private
     fParser: IParser;
+    procedure checkParserError;
   public
     [Setup]
     procedure Setup;
@@ -23,6 +24,15 @@ type
     [TestCase('EOL in heading', '[def \\'+EOL+'ault],default')]
     [TestCase('Tab','[def'+#9+'ault],default')]
     procedure testHeadersInPolicy(const aInput, aExpected: String);
+
+    [Test]
+    [TestCase('Header 1', '[default],default')]
+    procedure testHeaderAssignment(const aInput, aExpected: string);
+
+    //We use Policy parser for this test
+    [Test]
+    [TestCase('Header 1', 'p,sub, obj, act#p.sub','#')]
+    procedure testStatementOutputString(const aInput, aExpected: string);
 
     [Test]
     [TestCase('Space before assignment', 'na me = 123'+'#'+'default','#')]
@@ -45,12 +55,19 @@ type
              sLineBreak+sLineBreak+sLineBreak+'r = sub, obj, act#default','#')]
     procedure testFix(const aInput: String; const aExpected: String);
 
+    //We use Policy parser for this test
+    [Test]
+    [TestCase('Header Only', '[default],[default]')]
+    [TestCase('Header With Statement', '[default]'+sLineBreak+'p,sub,obj,act'+
+                              '#[default]'+sLineBreak+'p,sub,obj,act','#')]
+    procedure testHeaderOutputString(const aInput, aExpected: String);
+
   end;
 
 implementation
 
 uses
-  Casbin.Parser, System.SysUtils, Casbin.Parser.AST.Types;
+  Casbin.Parser, System.SysUtils, Casbin.Parser.AST.Types, System.Generics.Collections;
 
 procedure TTestParser.checkParserError;
 begin
@@ -71,6 +88,21 @@ begin
   Assert.IsNotNull(fParser.Logger);
 end;
 
+procedure TTestParser.testStatementOutputString(const aInput, aExpected:
+    string);
+begin
+  fParser:=TParser.Create(aInput, ptPolicy);
+  fParser.parse;
+  checkParserError;
+  Assert.IsTrue(fParser.Nodes.Headers.Count = 1, 'Header count');
+
+  Assert.IsTrue(fParser.Nodes.Headers.Items[0].ChildNodes.Count = 3,
+                                                              'Child count');
+  Assert.AreEqual(aExpected,
+            fParser.Nodes.Headers.Items[0].ChildNodes.Items[0].toOutputString);
+  fParser:=nil;
+end;
+
 procedure TTestParser.testErrors(const aInput: String);
 begin
   fParser:=TParser.Create(aInput, ptModel);
@@ -85,6 +117,25 @@ begin
   fParser.parse;
   Assert.IsTrue(fParser.Nodes.Headers.Count >= 1);
   Assert.AreEqual(aExpected, fParser.Nodes.Headers.Items[0].Value);
+  fParser:=nil;
+end;
+
+procedure TTestParser.testHeaderAssignment(const aInput, aExpected: string);
+begin
+  fParser:=TParser.Create(aInput, ptPolicy);
+  fParser.parse;
+  checkParserError;
+  Assert.IsTrue(fParser.Nodes.Headers.Count = 1);
+  Assert.AreEqual(aExpected, fParser.Nodes.Headers.Items[0].Value);
+  fParser:=nil;
+end;
+
+procedure TTestParser.testHeaderOutputString(const aInput, aExpected: String);
+begin
+  fParser:=TParser.Create(aInput, ptPolicy);
+  fParser.parse;
+  checkParserError;
+  Assert.AreEqual(trim(aExpected), Trim(fParser.Nodes.toOutputString));
   fParser:=nil;
 end;
 

@@ -3,21 +3,22 @@ unit Casbin.Parser.AST.Types;
 interface
 
 uses
-  Casbin.Model.Sections.Types, System.Generics.Collections,
-  Casbin.Parser.AST.Operators.Types;
+  Casbin.Model.Sections.Types, System.Generics.Collections, Casbin.Effect.Types;
 
 type
   TBaseNode = class;
   TNodeCollection = class;
   THeaderNode = class;
-  TExpressionNode = class;
+  TChildNode = class;
 
   TBaseNode = class
   private
+    fKey: string;
     fValue: string;
   public
-    function toOutputString: string; virtual; abstract;
+    function toOutputString: string; virtual;
 
+    property Key: string read fKey write fKey;
     property Value: string read fValue write fValue;
   end;
 
@@ -27,41 +28,42 @@ type
   public
     constructor Create;
     destructor Destroy; override;
+    function toOutputString: string; virtual;
+
     property Headers: TObjectList<THeaderNode> read fHeaders write fHeaders;
   end;
 
   THeaderNode = class (TBaseNode)
   private
     fSectionType: TSectionType;
-    fStatementNode: TObjectList<TExpressionNode>;
+    fStatementNode: TObjectList<TChildNode>;
   public
     constructor Create;
     destructor Destroy; override;
     function toOutputString: string; override;
 
     property SectionType: TSectionType read fSectionType write fSectionType;
-    property ChildNodes: TObjectList<TExpressionNode> read fStatementNode
+    property ChildNodes: TObjectList<TChildNode> read fStatementNode
                                                         write fStatementNode;
   end;
 
-  TExpressionNode = class (TBaseNode)
-  private
-    fIdentifier: string;
-    fLeftChild: TExpressionNode;
-    fOperator: TOperators;
-    fRightChild: TExpressionNode;
+  TChildNode = class (TBaseNode)
   public
-    constructor Create(const aOperator: TOperators);
-    destructor Destroy; override;
     function toOutputString: string; override;
+  end;
 
-    property &Operator: TOperators read fOperator;
-    property Identifier: string read fIdentifier write fIdentifier;
-    property LeftChild: TExpressionNode read fLeftChild write fLeftChild;
-    property RightChild: TExpressionNode read fRightChild write fRightChild;
+  TEffectNode = class (TChildNode)
+  private
+    fEffectCondition: TEffectCondition;
+  public
+    property EffectCondition: TEffectCondition read fEffectCondition write
+        fEffectCondition;
   end;
 
 implementation
+
+uses
+  System.SysUtils;
 
 constructor TNodeCollection.Create;
 begin
@@ -75,10 +77,18 @@ begin
   inherited;
 end;
 
+function TNodeCollection.toOutputString: string;
+var
+  header: THeaderNode;
+begin
+  for header in fHeaders do
+    Result:=Result+header.toOutputString+sLineBreak;
+end;
+
 constructor THeaderNode.Create;
 begin
   inherited;
-  fStatementNode:=TObjectList<TExpressionNode>.Create;
+  fStatementNode:=TObjectList<TChildNode>.Create;
 end;
 
 destructor THeaderNode.Destroy;
@@ -89,37 +99,34 @@ end;
 
 function THeaderNode.toOutputString: string;
 var
-  expNode: TExpressionNode;
+  i: Integer;
+  sep: string;
 begin
-  Result:='{HEADER: '+fValue+sLineBreak;
-  for expNode in fStatementNode do
-    result:=result+expNode.toOutputString+sLineBreak;
-  Result:=Result+sLineBreak+'}';
+  if fSectionType=stPolicyRules then
+    sep:=','
+  else
+    sep:='=';
+  Result:='['+Value+']'+sLineBreak;
+  if fStatementNode.Count>=1 then
+  begin
+    result:=Result+fStatementNode.Items[0].Key+sep+fStatementNode.Items[0].Value;
+    for i:=1 to fStatementNode.Count-1 do
+      result:=result+','+fStatementNode.Items[i].Value;
+  end;
 end;
 
-constructor TExpressionNode.Create(const aOperator: TOperators);
+{ TBaseNode }
+
+function TBaseNode.toOutputString: string;
 begin
-  inherited Create;
-  fOperator:=aOperator;
+  Result:=fValue;
 end;
 
-destructor TExpressionNode.Destroy;
-begin
-  fLeftChild.Free;
-  fRightChild.Free;
-  inherited;
-end;
+{ TChildNode }
 
-function TExpressionNode.toOutputString: string;
-var
-  expNode: TExpressionNode;
+function TChildNode.toOutputString: string;
 begin
-  Result:='{EXPRESSION: '+fIdentifier+sLineBreak;
-  if Assigned(LeftChild) then
-    result:=Result+'{LEFT: '+LeftChild.toOutputString+sLineBreak+'}';
-  if Assigned(RightChild) then
-    result:=Result+'{RIGHT: '+RightChild.toOutputString+sLineBreak+'}';
-  Result:=Result+sLineBreak+'}';
+  Result:=fKey+'.'+fValue;
 end;
 
 end.

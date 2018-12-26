@@ -36,9 +36,9 @@ uses
   Casbin.Core.Defaults in '..\SourceCode\Common\Core\Casbin.Core.Defaults.pas',
   Casbin.Core.Base.Types in '..\SourceCode\Common\Core\Casbin.Core.Base.Types.pas',
   Casbin.Core.Strings in '..\SourceCode\Common\Core\Casbin.Core.Strings.pas',
-  Casbin.Parser.AST.Operators.Types in '..\SourceCode\Common\Parser\Casbin.Parser.AST.Operators.Types.pas',
   Casbin.Parser.AST in '..\SourceCode\Common\Parser\Casbin.Parser.AST.pas',
-  Tests.Parser.AST in 'Tests.Parser.AST.pas';
+  Tests.Parser.AST in 'Tests.Parser.AST.pas',
+  Casbin.Effect.Types in '..\SourceCode\Common\Effect\Casbin.Effect.Types.pas';
 
 var
   runner : ITestRunner;

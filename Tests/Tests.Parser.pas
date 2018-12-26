@@ -18,13 +18,11 @@ type
 
     [Test]
     procedure testLogger;
-    // Test with TestCase Attribute to supply parameters.
     [Test]
-    [TestCase('Simple Header', '[request],request')]
-    [TestCase('Underscore in heading', '[req_def],req_def')]
-    [TestCase('EOL in heading', '[req_ \\'+EOL+'def],req_def')]
-    [TestCase('Tab','[req'+#9+'uest],request')]
-    procedure testHeadersInModel(const aInput, aExpected: String);
+    [TestCase('Simple Header', '[default],default')]
+    [TestCase('EOL in heading', '[def \\'+EOL+'ault],default')]
+    [TestCase('Tab','[def'+#9+'ault],default')]
+    procedure testHeadersInPolicy(const aInput, aExpected: String);
 
     [Test]
     [TestCase('Space before assignment', 'na me = 123'+'#'+'default','#')]
@@ -91,9 +89,9 @@ begin
   fParser:=nil;
 end;
 
-procedure TTestParser.testHeadersInModel(const aInput, aExpected: String);
+procedure TTestParser.testHeadersInPolicy(const aInput, aExpected: String);
 begin
-  fParser:=TParser.Create(aInput, ptModel);
+  fParser:=TParser.Create(aInput, ptPolicy);
   fParser.parse;
   Assert.IsTrue(fParser.Nodes.Headers.Count = 1);
   Assert.AreEqual(aExpected, fParser.Nodes.Headers.Items[0].Value);

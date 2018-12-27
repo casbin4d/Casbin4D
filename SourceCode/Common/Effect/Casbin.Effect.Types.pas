@@ -6,6 +6,7 @@ type
   TEffectResult = (erAllow, erIndeterminate, erDeny);
   TEffectCondition = (ecSomeAllow, ecNotSomeDeny, ecSomeAllowANDNotDeny,
                       ecPriorityORDeny, ecUnknown);
+  TEffectArray = array of TEffectResult;
 
 const
   effectConditions: array [0..3] of string =

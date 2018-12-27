@@ -29,6 +29,7 @@ type
 
     [Test]
     [TestCase('ecSomeAllow','e=some(where(p.eft==allow))#ecSomeAllow','#')]
+    [TestCase('ecSomeAllow With Underscore','e=some(where(p_eft==allow))#ecSomeAllow','#')]
     [TestCase('ecNotSomeDeny','e=!some(where(p.eft==deny))#ecNotSomeDeny','#')]
     [TestCase('ecSomeAllowANDNotDeny','e=some(where(p.eft==allow))&&!some(where(p.eft==deny))#'+
                                   'ecSomeAllowANDNotDeny','#')]

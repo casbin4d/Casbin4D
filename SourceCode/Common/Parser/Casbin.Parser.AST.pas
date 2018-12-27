@@ -80,6 +80,7 @@ begin
                       effect.Key:=key;
                       effect.Value:=value;
 
+                      value:=ReplaceStr(value, '_', '.');
                       case IndexStr(UpperCase(value),
                                       [UpperCase(effectConditions[0]),
                                        UpperCase(effectConditions[1]),

@@ -85,11 +85,15 @@ begin
                                       [UpperCase(effectConditions[0]),
                                        UpperCase(effectConditions[1]),
                                        UpperCase(effectConditions[2]),
-                                       UpperCase(effectConditions[3])]) of
-                        0: effect.EffectCondition:=ecSomeAllow;
-                        1: effect.EffectCondition:=ecNotSomeDeny;
-                        2: effect.EffectCondition:=ecSomeAllowANDNotDeny;
-                        3: effect.EffectCondition:=ecPriorityORDeny;
+                                       UpperCase(effectConditions[3]),
+                                       UpperCase(effectConditions[4]),
+                                       UpperCase(effectConditions[5]),
+                                       UpperCase(effectConditions[6]),
+                                       UpperCase(effectConditions[7])]) of
+                        0, 1: effect.EffectCondition:=ecSomeAllow;
+                        2, 3: effect.EffectCondition:=ecNotSomeDeny;
+                        4, 5: effect.EffectCondition:=ecSomeAllowANDNotDeny;
+                        6, 7: effect.EffectCondition:=ecPriorityORDeny;
                       else
                         effect.EffectCondition:=ecUnknown;
                       end;

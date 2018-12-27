@@ -28,12 +28,18 @@ type
     procedure testMatchers;
 
     [Test]
-    [TestCase('ecSomeAllow','e=some(where(p.eft==allow))#ecSomeAllow','#')]
-    [TestCase('ecSomeAllow With Underscore','e=some(where(p_eft==allow))#ecSomeAllow','#')]
-    [TestCase('ecNotSomeDeny','e=!some(where(p.eft==deny))#ecNotSomeDeny','#')]
-    [TestCase('ecSomeAllowANDNotDeny','e=some(where(p.eft==allow))&&!some(where(p.eft==deny))#'+
+    [TestCase('ecSomeAllow-Go','e=some(where(p.eft==allow))#ecSomeAllow','#')]
+    [TestCase('ecSomeAllow-Delphi','e=some(where(p.eft=allow))#ecSomeAllow','#')]
+    [TestCase('ecSomeAllow With Underscore-Go','e=some(where(p_eft==allow))#ecSomeAllow','#')]
+    [TestCase('ecSomeAllow With Underscore-Delphi','e=some(where(p_eft=allow))#ecSomeAllow','#')]
+    [TestCase('ecNotSomeDeny-Go','e=!some(where(p.eft==deny))#ecNotSomeDeny','#')]
+    [TestCase('ecNotSomeDeny-Delphi','e=not(some(where(p.eft=deny)))#ecNotSomeDeny','#')]
+    [TestCase('ecSomeAllowANDNotDeny-Go','e=some(where(p.eft==allow))&&!some(where(p.eft==deny))#'+
                                   'ecSomeAllowANDNotDeny','#')]
-    [TestCase('ecPriorityORDeny','e=priority(p.eft)||deny#ecPriorityORDeny','#')]
+    [TestCase('ecSomeAllowANDNotDeny-Delphi','e=some(where(p.eft=allow))and(not(some(where(p.eft=deny))))#'+
+                                  'ecSomeAllowANDNotDeny','#')]
+    [TestCase('ecPriorityORDeny-Go','e=priority(p.eft)||deny#ecPriorityORDeny','#')]
+    [TestCase('ecPriorityORDeny-Delphi','e=priority(p.eft)ordeny#ecPriorityORDeny','#')]
     [TestCase('ecUnknown','e=a new type#ecUnknown','#')]
     procedure testEffects(const aInput: string; const aResult: TEffectCondition);
   end;

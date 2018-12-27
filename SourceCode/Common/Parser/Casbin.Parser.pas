@@ -39,7 +39,7 @@ uses
   Casbin.Core.Logger.Default, System.IniFiles, System.Classes,
   Casbin.Core.Defaults, Casbin.Core.Strings, System.StrUtils,
   System.AnsiStrings, Casbin.Model.Sections.Types,
-  Casbin.Model.Sections.Default, Casbin.Parser.AST;
+  Casbin.Model.Sections.Default, Casbin.Parser.AST, Casbin.Effect.Types;
 
 constructor TParser.Create(const aParseString: string; const aParseType:
     TParseType);
@@ -324,7 +324,18 @@ begin
         if fParseType=ptPolicy then
           header.SectionType:=stPolicyRules;
         if Trim(line)<>'' then
+        begin
           addAssertion(header, line);
+          if (header.SectionType=stPolicyEffect) and
+            ((header.ChildNodes.Items
+                [header.ChildNodes.Count-1] as TEffectNode)
+                                            .EffectCondition=ecUnknown) then
+          begin
+            fErrorMessage:=format(errorUnknownAssertion, [line]);
+            fStatus:=psError;
+            Exit;
+          end;
+        end;
       end;
     end;
   finally

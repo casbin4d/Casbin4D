@@ -16,6 +16,7 @@ uses
 procedure addAssertion(const aHeader: THeaderNode; const aLine: string);
 var
   child: TChildNode;
+  assertion: TAssertionNode;
   effect: TEffectNode;
   index: Integer;
   sep: Char;
@@ -57,12 +58,17 @@ begin
                        strList.Delimiter:=',';
                        strList.DelimitedText:=value;
                        strList.StrictDelimiter:=True;
+
+                       child:=TChildNode.Create;
+                       child.Key:=key;
+                       child.Value:=value;
+                       aHeader.ChildNodes.Add(child);
                        for objStr in strList do
                        begin
-                         child:=TChildNode.Create;
-                         child.Key:=key;
-                         child.Value:=objStr;
-                         aHeader.ChildNodes.Add(child);
+                         assertion:=TAssertionNode.Create;
+                         assertion.Key:=key;
+                         assertion.Value:=objStr;
+                         child.AssertionList.Add(assertion);
                        end;
                      finally
                        strList.Free;

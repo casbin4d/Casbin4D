@@ -10,6 +10,7 @@ type
   TNodeCollection = class;
   THeaderNode = class;
   TChildNode = class;
+  TAssertionNode = class;
 
   TBaseNode = class
   private
@@ -48,6 +49,18 @@ type
   end;
 
   TChildNode = class (TBaseNode)
+  private
+    fAssertionList: TObjectList<TAssertionNode>;
+  public
+    constructor Create;
+    destructor Destroy; override;
+    function toOutputString: string; override;
+
+    property AssertionList: TObjectList<TAssertionNode> read fAssertionList write
+        fAssertionList;
+  end;
+
+  TAssertionNode = class (TChildNode)
   public
     function toOutputString: string; override;
   end;
@@ -107,11 +120,13 @@ begin
   else
     sep:='=';
   Result:='['+Value+']'+sLineBreak;
-  if fStatementNode.Count>=1 then
+  for i:=0 to fStatementNode.Count-1 do
   begin
-    result:=Result+fStatementNode.Items[0].Key+sep+fStatementNode.Items[0].Value;
-    for i:=1 to fStatementNode.Count-1 do
-      result:=result+','+fStatementNode.Items[i].Value;
+    if i=0 then
+//      result:=Result+fStatementNode.Items[i].Key+sep+
+//        fStatementNode.Items[0].Value else
+//      result:=result+','+fStatementNode.Items[i].Value;
+      Result:=Result+fStatementNode.Items[i].toOutputString+sLineBreak;
   end;
 end;
 
@@ -122,9 +137,28 @@ begin
   Result:=fValue;
 end;
 
+constructor TChildNode.Create;
+begin
+  inherited;
+  fAssertionList:=TObjectList<TAssertionNode>.Create;
+end;
+
+destructor TChildNode.Destroy;
+begin
+  fAssertionList.Free;
+  inherited;
+end;
+
 { TChildNode }
 
 function TChildNode.toOutputString: string;
+begin
+  Result:=fKey+'='+fValue;
+end;
+
+{ TAssertionNode }
+
+function TAssertionNode.toOutputString: string;
 begin
   Result:=fKey+'.'+fValue;
 end;

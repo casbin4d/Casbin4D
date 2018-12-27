@@ -60,6 +60,14 @@ type
     [TestCase('Header Only', '[default],[default]')]
     [TestCase('Header With Statement', '[default]'+sLineBreak+'p,sub,obj,act'+
                               '#[default]'+sLineBreak+'p,sub,obj,act','#')]
+    [TestCase('Header With Multipl Statement and Sections',
+        '[default]'+sLineBreak+'p,sub,obj,act'+sLineBreak+
+        '[default]'+sLineBreak+'p,alice,files,delete'+sLineBreak+
+                               'p,alice,files,read'+sLineBreak+
+        '#[default]'+sLineBreak+'p,sub,obj,act'+sLineBreak+
+        '[default]'+sLineBreak+'p,alice,files,delete'+sLineBreak+
+                               'p,alice,files,read'+sLineBreak
+        ,'#')]
     procedure testHeaderOutputString(const aInput, aExpected: String);
 
   end;

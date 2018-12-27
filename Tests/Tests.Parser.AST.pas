@@ -72,16 +72,17 @@ begin
   header:=THeaderNode.Create;
   header.SectionType:=stPolicyDefinition;
   addAssertion(header, 'p=sub,obj,act');
-  Assert.IsTrue(header.ChildNodes.Count = 3);
+  Assert.IsTrue(header.ChildNodes.Count = 1);
+  Assert.IsTrue(header.ChildNodes.Items[0].AssertionList.Count=3);
 
-  Assert.AreEqual('p', header.ChildNodes.Items[0].Key);
-  Assert.AreEqual('sub', header.ChildNodes.Items[0].Value);
+  Assert.AreEqual('p', header.ChildNodes.Items[0].AssertionList.Items[0].Key);
+  Assert.AreEqual('sub', header.ChildNodes.Items[0].AssertionList.Items[0].Value);
 
-  Assert.AreEqual('p', header.ChildNodes.Items[1].Key);
-  Assert.AreEqual('obj', header.ChildNodes.Items[1].Value);
+  Assert.AreEqual('p', header.ChildNodes.Items[0].AssertionList.Items[1].Key);
+  Assert.AreEqual('obj', header.ChildNodes.Items[0].AssertionList.Items[1].Value);
 
-  Assert.AreEqual('p', header.ChildNodes.Items[2].Key);
-  Assert.AreEqual('act', header.ChildNodes.Items[2].Value);
+  Assert.AreEqual('p', header.ChildNodes.Items[0].AssertionList.Items[2].Key);
+  Assert.AreEqual('act', header.ChildNodes.Items[0].AssertionList.Items[2].Value);
 
   header.Free;
 end;
@@ -92,17 +93,21 @@ var
 begin
   header:=THeaderNode.Create;
   header.SectionType:=stPolicyRules;
-  addAssertion(header, 'p,alice,data1,read');
-  Assert.IsTrue(header.ChildNodes.Count = 3);
+  addAssertion(header, 'p,alice,data1, domain, read');
+  Assert.IsTrue(header.ChildNodes.Count = 1);
+  Assert.IsTrue(header.ChildNodes.Items[0].AssertionList.Count=4);
 
-  Assert.AreEqual('p', header.ChildNodes.Items[0].Key);
-  Assert.AreEqual('alice', header.ChildNodes.Items[0].Value);
+  Assert.AreEqual('p', header.ChildNodes.Items[0].AssertionList.Items[0].Key);
+  Assert.AreEqual('alice', header.ChildNodes.Items[0].AssertionList.Items[0].Value);
 
-  Assert.AreEqual('p', header.ChildNodes.Items[1].Key);
-  Assert.AreEqual('data1', header.ChildNodes.Items[1].Value);
+  Assert.AreEqual('p', header.ChildNodes.Items[0].AssertionList.Items[1].Key);
+  Assert.AreEqual('data1', header.ChildNodes.Items[0].AssertionList.Items[1].Value);
 
-  Assert.AreEqual('p', header.ChildNodes.Items[2].Key);
-  Assert.AreEqual('read', header.ChildNodes.Items[2].Value);
+  Assert.AreEqual('p', header.ChildNodes.Items[0].AssertionList.Items[2].Key);
+  Assert.AreEqual('domain', header.ChildNodes.Items[0].AssertionList.Items[2].Value);
+
+  Assert.AreEqual('p', header.ChildNodes.Items[0].AssertionList.Items[3].Key);
+  Assert.AreEqual('read', header.ChildNodes.Items[0].AssertionList.Items[3].Value);
 
   header.Free;
 end;
@@ -114,16 +119,17 @@ begin
   header:=THeaderNode.Create;
   header.SectionType:=stRequestDefinition;
   addAssertion(header, 'r=sub,obj,act');
-  Assert.IsTrue(header.ChildNodes.Count = 3);
+  Assert.IsTrue(header.ChildNodes.Count = 1);
+  Assert.IsTrue(header.ChildNodes.Items[0].AssertionList.Count = 3);
 
-  Assert.AreEqual('r', header.ChildNodes.Items[0].Key);
-  Assert.AreEqual('sub', header.ChildNodes.Items[0].Value);
+  Assert.AreEqual('r', header.ChildNodes.Items[0].AssertionList.Items[0].Key);
+  Assert.AreEqual('sub', header.ChildNodes.Items[0].AssertionList.Items[0].Value);
 
-  Assert.AreEqual('r', header.ChildNodes.Items[1].Key);
-  Assert.AreEqual('obj', header.ChildNodes.Items[1].Value);
+  Assert.AreEqual('r', header.ChildNodes.Items[0].AssertionList.Items[1].Key);
+  Assert.AreEqual('obj', header.ChildNodes.Items[0].AssertionList.Items[1].Value);
 
-  Assert.AreEqual('r', header.ChildNodes.Items[2].Key);
-  Assert.AreEqual('act', header.ChildNodes.Items[2].Value);
+  Assert.AreEqual('r', header.ChildNodes.Items[0].AssertionList.Items[2].Key);
+  Assert.AreEqual('act', header.ChildNodes.Items[0].AssertionList.Items[2].Value);
 
 {$IFDEF DEBUG}
   OutputDebugString(PChar(header.toOutputString));

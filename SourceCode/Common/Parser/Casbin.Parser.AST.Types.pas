@@ -76,7 +76,7 @@ type
 implementation
 
 uses
-  System.SysUtils;
+  System.SysUtils, System.StrUtils;
 
 constructor TNodeCollection.Create;
 begin
@@ -122,12 +122,10 @@ begin
   Result:='['+Value+']'+sLineBreak;
   for i:=0 to fStatementNode.Count-1 do
   begin
-    if i=0 then
-//      result:=Result+fStatementNode.Items[i].Key+sep+
-//        fStatementNode.Items[0].Value else
-//      result:=result+','+fStatementNode.Items[i].Value;
       Result:=Result+fStatementNode.Items[i].toOutputString+sLineBreak;
   end;
+  if fSectionType=stPolicyRules then
+    Result:=ReplaceStr(Result, '=', ',');
 end;
 
 { TBaseNode }
@@ -153,6 +151,7 @@ end;
 
 function TChildNode.toOutputString: string;
 begin
+
   Result:=fKey+'='+fValue;
 end;
 

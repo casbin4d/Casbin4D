@@ -60,13 +60,13 @@ type
     [TestCase('Header Only', '[default],[default]')]
     [TestCase('Header With Statement', '[default]'+sLineBreak+'p,sub,obj,act'+
                               '#[default]'+sLineBreak+'p,sub,obj,act','#')]
-    [TestCase('Header With Multipl Statement and Sections',
+    [TestCase('Header With Multiple Statement and Sections',
         '[default]'+sLineBreak+'p,sub,obj,act'+sLineBreak+
         '[default]'+sLineBreak+'p,alice,files,delete'+sLineBreak+
                                'p,alice,files,read'+sLineBreak+
-        '#[default]'+sLineBreak+'p,sub,obj,act'+sLineBreak+
+        '#[default]'+sLineBreak+'p,sub,obj,act'+sLineBreak+sLineBreak+
         '[default]'+sLineBreak+'p,alice,files,delete'+sLineBreak+
-                               'p,alice,files,read'+sLineBreak
+                               'p,alice,files,read'
         ,'#')]
     procedure testHeaderOutputString(const aInput, aExpected: String);
 
@@ -104,10 +104,12 @@ begin
   checkParserError;
   Assert.IsTrue(fParser.Nodes.Headers.Count = 1, 'Header count');
 
-  Assert.IsTrue(fParser.Nodes.Headers.Items[0].ChildNodes.Count = 3,
+  Assert.IsTrue(fParser.Nodes.Headers.Items[0].ChildNodes.Count = 1,
                                                               'Child count');
   Assert.AreEqual(aExpected,
-            fParser.Nodes.Headers.Items[0].ChildNodes.Items[0].toOutputString);
+            fParser.Nodes.Headers.Items[0].ChildNodes.Items[0].
+                  AssertionList.Items[0].toOutputString,
+                                      'Output String');
   fParser:=nil;
 end;
 

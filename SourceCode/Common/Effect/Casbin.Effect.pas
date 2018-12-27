@@ -15,9 +15,10 @@ function mergeEffects(const aEffectCondition: TEffectCondition;
 var
   effect: TEffectResult;
 begin
-  Result:=False;
+  Result:=True;
   case aEffectCondition of
     ecSomeAllow: begin
+                   Result:=False;
                    for effect in aEffects do
                    begin
                      if effect = erAllow then
@@ -30,29 +31,40 @@ begin
 
     ecNotSomeDeny: begin
                      Result:=True;
-                     if effect = erDeny then
+                     for effect in aEffects do
                      begin
-                       Result:=false;
-                       Exit;
+                       if effect = erDeny then
+                       begin
+                         Result:=false;
+                         Exit;
+                       end;
                      end;
                    end;
 
     ecSomeAllowANDNotDeny: begin
-                             if effect = erAllow then
-                              Result:=True
-                             else
-                             if effect = erDeny then
+                             Result:=False;
+                             for effect in aEffects do
                              begin
-                               Result:=false;
-                               Exit;
+                               if effect = erAllow then
+                                 Result:=True
+                               else
+                               if effect = erDeny then
+                               begin
+                                 Result:=false;
+                                 Exit;
+                               end;
                              end;
                            end;
 
     ecPriorityORDeny: begin
-                        if effect <> erIndeterminate then
+                        Result:=False;
+                        for effect in aEffects do
                         begin
-                          Result:= effect = erAllow;
-                          Exit;
+                          if effect <> erIndeterminate then
+                          begin
+                            Result:= effect = erAllow;
+                            Exit;
+                          end;
                         end;
                       end;
 

@@ -40,7 +40,7 @@ uses
   Tests.Parser.AST in 'Tests.Parser.AST.pas',
   Casbin.Effect.Types in '..\SourceCode\Common\Effect\Casbin.Effect.Types.pas',
   Casbin.Effect in '..\SourceCode\Common\Effect\Casbin.Effect.pas',
-  Tests.Effect in 'Tests.Effect.pas';
+  Tests.Effect in 'Tests.Effect.pas',
 
 var
   runner : ITestRunner;

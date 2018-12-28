@@ -29,6 +29,18 @@ type
     [TestCase('Header 1', '[default],default')]
     procedure testHeaderAssignment(const aInput, aExpected: string);
 
+    [Test]
+    [TestCase('Matchers respect spaces',
+                '[matchers]'+sLineBreak+
+                'm = r.sub == p.sub'+sLineBreak+
+                '[request_definition]'+sLineBreak+
+                '[policy_definition]'+sLineBreak+
+                '[policy_effect]'+'#'+
+
+                'm = r.sub == p.sub',
+                '#')]
+    procedure testMatchersSection(const aInput, aExpected: string);
+
     //We use Policy parser for this test
     [Test]
     [TestCase('Header 1', 'p,sub, obj, act#p.sub','#')]
@@ -94,6 +106,19 @@ procedure TTestParser.testLogger;
 begin
   fParser:=TParser.Create('', ptModel);
   Assert.IsNotNull(fParser.Logger);
+end;
+
+procedure TTestParser.testMatchersSection(const aInput, aExpected: string);
+begin
+  fParser:=TParser.Create(aInput, ptModel);
+  fParser.parse;
+  Assert.AreEqual(4, fParser.Nodes.Headers.Count,
+                                      'Header count: '+fParser.ErrorMessage);
+  Assert.AreEqual(1, fParser.Nodes.Headers.Items[0].ChildNodes.Count,
+                                          'Child count'+fParser.ErrorMessage);
+  Assert.AreEqual(aExpected,
+    fParser.Nodes.Headers.Items[0].ChildNodes.Items[0].toOutputString,
+                                        'Assertion'+fParser.ErrorMessage);
 end;
 
 procedure TTestParser.testStatementOutputString(const aInput, aExpected:

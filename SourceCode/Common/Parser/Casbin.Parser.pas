@@ -39,7 +39,7 @@ uses
   Casbin.Core.Logger.Default, System.IniFiles, System.Classes,
   Casbin.Core.Defaults, Casbin.Core.Strings, System.StrUtils,
   System.AnsiStrings, Casbin.Model.Sections.Types,
-  Casbin.Model.Sections.Default, Casbin.Parser.AST, Casbin.Effect.Types;
+  Casbin.Model.Sections.Default, Casbin.Parser.AST, Casbin.Effect.Types, System.Math;
 
 constructor TParser.Create(const aParseString: string; const aParseType:
     TParseType);
@@ -166,6 +166,12 @@ procedure TParser.cleanWhiteSpace;
 var
   index: integer;
   assignmentIndex: integer;
+  i: Integer;
+  lenPosition: Integer;
+  matchersPosEnd: Integer;
+  nextSectionPos: Integer;
+  section: TSection;
+  tag: string;
   testStr: string;
 begin
   // Clean EOL in front of the string
@@ -194,9 +200,12 @@ begin
     index:= Pos(#9, fParseString, Low(string));
   end;
 
-  // Clean spaces (not in Config file if spaces are in values
+  // Clean spaces
+  // Except in Config file if spaces are in values
+  // Except in Matchers section
+  lenPosition:=0;
   index:= Pos(#32, fParseString, Low(string));
-  while index<>0 do
+  while (index<>0) and (lenPosition<=Length(fParseString)) do
   begin
     if fParseType=ptConfig then
     begin
@@ -207,8 +216,33 @@ begin
         Break;
     end
     else
-      Delete(fParseString, index, 1);
+    begin
+      section:=createDefaultSection(stMatchers);
+      matchersPosEnd:=Pos(UpperCase(section.Header), UpperCase(fParseString),
+                                                low(string));
+      if matchersPosEnd>0 then
+        matchersPosEnd:=matchersPosEnd+Length(section.Header+']');
+      section.Free;
+      nextSectionPos:=0;
+      for i:=matchersPosEnd to Length(fParseString)-1 do
+      begin
+        if fParseString[i]='[' then
+        begin
+          nextSectionPos:=i;
+          Break;
+        end;
+      end;
+      if (index<matchersPosEnd) then
+        Delete(fParseString, index, 1)
+      else
+        if (nextSectionPos=0) then
+          Exit
+        else
+          if index>nextSectionPos then
+            Delete(fParseString, index, 1);
+    end;
     index:= Pos(#32, fParseString, Low(string));
+    Inc(lenPosition);
   end;
 end;
 

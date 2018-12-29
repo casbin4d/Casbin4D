@@ -146,6 +146,15 @@
         <DCCReference Include="..\SourceCode\Common\Effect\Casbin.Effect.Types.pas"/>
         <DCCReference Include="..\SourceCode\Common\Effect\Casbin.Effect.pas"/>
         <DCCReference Include="Tests.Effect.pas"/>
+        <DCCReference Include="..\SourceCode\Common\Matcher\Casbin.Matcher.Types.pas"/>
+        <DCCReference Include="..\SourceCode\Common\Matcher\Casbin.Matcher.pas"/>
+        <DCCReference Include="..\SourceCode\Common\Third Party\TExpressionParser\oObjects.pas"/>
+        <DCCReference Include="..\SourceCode\Common\Third Party\TExpressionParser\ParseClass.pas"/>
+        <DCCReference Include="..\SourceCode\Common\Third Party\TExpressionParser\ParseExpr.pas"/>
+        <DCCReference Include="Tests.Matcher.pas"/>
+        <DCCReference Include="..\SourceCode\Common\Functions\Casbin.Functions.Types.pas"/>
+        <DCCReference Include="..\SourceCode\Common\Functions\Casbin.Functions.pas"/>
+        <DCCReference Include="Tests.Functions.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

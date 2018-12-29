@@ -1,0 +1,92 @@
+unit Casbin.Functions;
+
+interface
+
+uses
+  Casbin.Core.Base.Types, Casbin.Functions.Types,
+  System.Generics.Collections;
+
+type
+  TFunctions = class (TBaseInterfacedObject, IFunctions)
+  private
+    fDictionary: TDictionary<string, TCasbinFunc>;
+    procedure loadBuiltInFunctions;
+    procedure loadCustomFunctions;
+  private
+{$REGION 'Interface'}
+    procedure registerFunction(const aName: string;
+      const aFunc: TCasbinFunc);
+    function retrieveFunction(const aName: string): TCasbinFunc;
+{$ENDREGION}
+  public
+    constructor Create;
+    destructor Destroy; override;
+  end;
+
+implementation
+
+uses
+  System.SysUtils;
+
+constructor TFunctions.Create;
+begin
+  inherited;
+  fDictionary:=TDictionary<string, TCasbinFunc>.Create;
+  loadBuiltInFunctions;
+  loadCustomFunctions;
+end;
+
+destructor TFunctions.Destroy;
+var
+  func,
+  tmpFunc: TCasbinFunc;
+begin
+  for func in fDictionary.Values do
+  begin
+    tmpFunc:=func;
+    tmpFunc:=nil;
+  end;
+  fDictionary.Free;
+  inherited;
+end;
+
+procedure TFunctions.registerFunction(const aName: string;
+  const aFunc: TCasbinFunc);
+begin
+  if Trim(aName)='' then
+    raise Exception.Create('Function to register must have a name');
+  if not Assigned(aFunc) then
+    raise Exception.Create('Function to register is nil');
+  if Assigned(aFunc) then
+    fDictionary.AddOrSetValue(Trim(aName), aFunc);
+end;
+
+function TFunctions.retrieveFunction(const aName: string): TCasbinFunc;
+begin
+  if not fDictionary.ContainsKey(Trim(aName)) then
+    raise Exception.Create('Function '+aName+' is not registered');
+  Result:=fDictionary.Items[Trim(aName)];
+end;
+
+// Built-in functions
+// In this section, built-in functions are imported
+{$I ..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch.pas}
+
+procedure TFunctions.loadBuiltInFunctions;
+begin
+  fDictionary.Add('KeyMatch', KeyMatch);
+end;
+
+// Custom functions
+// If you want to add more functions include the files here
+// Then register it in loadCustomFunctions
+// (see loadBuiltInFunctions for examples)
+
+{ $I ..\SourceCode\Common\Functions\NewCustomFunction.pas}
+
+procedure TFunctions.loadCustomFunctions;
+begin
+
+end;
+
+end.

@@ -41,6 +41,15 @@ uses
   Casbin.Effect.Types in '..\SourceCode\Common\Effect\Casbin.Effect.Types.pas',
   Casbin.Effect in '..\SourceCode\Common\Effect\Casbin.Effect.pas',
   Tests.Effect in 'Tests.Effect.pas',
+  Casbin.Matcher.Types in '..\SourceCode\Common\Matcher\Casbin.Matcher.Types.pas',
+  Casbin.Matcher in '..\SourceCode\Common\Matcher\Casbin.Matcher.pas',
+  oObjects in '..\SourceCode\Common\Third Party\TExpressionParser\oObjects.pas',
+  ParseClass in '..\SourceCode\Common\Third Party\TExpressionParser\ParseClass.pas',
+  ParseExpr in '..\SourceCode\Common\Third Party\TExpressionParser\ParseExpr.pas',
+  Tests.Matcher in 'Tests.Matcher.pas',
+  Casbin.Functions.Types in '..\SourceCode\Common\Functions\Casbin.Functions.Types.pas',
+  Casbin.Functions in '..\SourceCode\Common\Functions\Casbin.Functions.pas',
+  Tests.Functions in 'Tests.Functions.pas';
 
 var
   runner : ITestRunner;

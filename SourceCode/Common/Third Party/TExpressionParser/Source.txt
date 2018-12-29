@@ -1,0 +1,3 @@
+Source Code downloaded from http://www.sparcs-center.org/expression-parser
+
+Adapted for Delphi 10.3 Rio by John Kouraklis

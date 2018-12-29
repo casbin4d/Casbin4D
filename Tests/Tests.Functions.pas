@@ -66,6 +66,30 @@ type
     procedure testKeyMatch2(const aKey1, aKey2: string; const aResult: boolean);
 
     [Test]
+    [TestCase('KeyMatch3-1', '/foo,/foo,true')]
+    [TestCase('KeyMatch3-2', '/foo,/foo*,true')]
+    [TestCase('KeyMatch3-3', '/foo,/foo/*,false')]
+    [TestCase('KeyMatch3-4', '/foo/bar,/foo,true')] // different with KeyMatch.
+    [TestCase('KeyMatch3-5', '/foo/bar,/foo*,true')]
+    [TestCase('KeyMatch3-6', '/foo/bar,/foo/*,true')]
+    [TestCase('KeyMatch3-7', '/foobar,/foo,true')] // different with KeyMatch.
+    [TestCase('KeyMatch3-8', '/foobar,/foo*,true')]
+    [TestCase('KeyMatch3-9', '/foobar,/foo/*,false')]
+
+    [TestCase('KeyMatch3-10', '/,/{resource},false')]
+    [TestCase('KeyMatch3-11', '/resource1,/{resource},true')]
+    [TestCase('KeyMatch3-12', '/myid,/{id}/using/{resId},false')]
+    [TestCase('KeyMatch3-13', '/myid/using/myresid,/{id}/using/{resId},true')]
+
+    [TestCase('KeyMatch3-14', '/proxy/myid,/proxy/{id}/*,false')]
+    [TestCase('KeyMatch3-15', '/proxy/myid/,/proxy/{id}/*,true')]
+    [TestCase('KeyMatch3-16', '/proxy/myid/res,/proxy/{id}/*,true')]
+    [TestCase('KeyMatch3-17', '/proxy/myid/res/res2,/proxy/{id}/*,true')]
+    [TestCase('KeyMatch3-18', '/proxy/myid/res/res2/res3,/proxy/{id}/*,true')]
+    [TestCase('KeyMatch3-19', '/proxy/,/proxy/{id}/*,false')]
+    procedure testKeyMatch3(const aKey1, aKey2: string; const aResult: boolean);
+
+    [Test]
     [TestCase('RegExMatch-1', '/topic/create,/topic/create,true')]
     [TestCase('RegExMatch-2', '/topic/create/123,/topic/create,true')]
     [TestCase('RegExMatch-3', '/topic/delete,/topic/create,false')]
@@ -88,6 +112,7 @@ uses
 // In this section, built-in functions are imported
 {$I ..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch.pas}
 {$I ..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch2.pas}
+{$I ..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch3.pas}
 {$I ..\SourceCode\Common\Functions\Casbin.Functions.RegExMatch.pas}
 
 procedure TTestFunctions.Setup;
@@ -131,6 +156,12 @@ procedure TTestFunctions.testKeyMatch2(const aKey1, aKey2: string;
   const aResult: boolean);
 begin
   Assert.AreEqual(aResult, KeyMatch2([aKey1, aKey2]));
+end;
+
+procedure TTestFunctions.testKeyMatch3(const aKey1, aKey2: string;
+  const aResult: boolean);
+begin
+  Assert.AreEqual(aResult, KeyMatch3([aKey1, aKey2]));
 end;
 
 procedure TTestFunctions.testLoadBuiltInFunctions(const aName: string);

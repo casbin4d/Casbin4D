@@ -49,7 +49,9 @@ uses
   Tests.Matcher in 'Tests.Matcher.pas',
   Casbin.Functions.Types in '..\SourceCode\Common\Functions\Casbin.Functions.Types.pas',
   Casbin.Functions in '..\SourceCode\Common\Functions\Casbin.Functions.pas',
-  Tests.Functions in 'Tests.Functions.pas';
+  Tests.Functions in 'Tests.Functions.pas',
+  Casbin.Adapter.Types in '..\SourceCode\Common\Adapters\Casbin.Adapter.Types.pas',
+  Casbin.Adapter.Base in '..\SourceCode\Common\Adapters\Casbin.Adapter.Base.pas';
 
 var
   runner : ITestRunner;

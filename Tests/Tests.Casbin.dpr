@@ -51,7 +51,9 @@ uses
   Casbin.Functions in '..\SourceCode\Common\Functions\Casbin.Functions.pas',
   Tests.Functions in 'Tests.Functions.pas',
   Casbin.Adapter.Types in '..\SourceCode\Common\Adapters\Casbin.Adapter.Types.pas',
-  Casbin.Adapter.Base in '..\SourceCode\Common\Adapters\Casbin.Adapter.Base.pas';
+  Casbin.Adapter.Base in '..\SourceCode\Common\Adapters\Casbin.Adapter.Base.pas',
+  Casbin.Adapter.Filesystem in '..\SourceCode\Common\Adapters\Casbin.Adapter.Filesystem.pas',
+  Tests.Adapter.FileSystem in 'Tests.Adapter.FileSystem.pas';
 
 var
   runner : ITestRunner;

@@ -24,7 +24,7 @@ type
   private
     fLogger: ILogger;
     fAssertions: TList<string>;
-  private
+  protected
 {$REGION 'Interface'}
     function getAssertions: TList<string>;
     function getLogger: ILogger; virtual;
@@ -37,7 +37,6 @@ type
   public
     constructor Create;
     destructor Destroy; override;
-
   end;
 
 implementation

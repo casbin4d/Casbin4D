@@ -51,6 +51,9 @@ contains
   ParseExpr in '..\Common\Third Party\TExpressionParser\ParseExpr.pas',
   ParseClass in '..\Common\Third Party\TExpressionParser\ParseClass.pas',
   oObjects in '..\Common\Third Party\TExpressionParser\oObjects.pas',
-  Casbin.Core.Strings in '..\Common\Core\Casbin.Core.Strings.pas';
+  Casbin.Core.Strings in '..\Common\Core\Casbin.Core.Strings.pas',
+  Casbin.Adapter.Types in '..\Common\Adapters\Casbin.Adapter.Types.pas',
+  Casbin.Adapter.Filesystem in '..\Common\Adapters\Casbin.Adapter.Filesystem.pas',
+  Casbin.Adapter.Base in '..\Common\Adapters\Casbin.Adapter.Base.pas';
 
 end.

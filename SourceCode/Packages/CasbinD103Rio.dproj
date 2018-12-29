@@ -136,6 +136,9 @@
         <DCCReference Include="..\Common\Third Party\TExpressionParser\ParseClass.pas"/>
         <DCCReference Include="..\Common\Third Party\TExpressionParser\oObjects.pas"/>
         <DCCReference Include="..\Common\Core\Casbin.Core.Strings.pas"/>
+        <DCCReference Include="..\Common\Adapters\Casbin.Adapter.Types.pas"/>
+        <DCCReference Include="..\Common\Adapters\Casbin.Adapter.Filesystem.pas"/>
+        <DCCReference Include="..\Common\Adapters\Casbin.Adapter.Base.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

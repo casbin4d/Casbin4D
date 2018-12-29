@@ -11,7 +11,7 @@ type
     function getAssertions: TList<string>;
     function getLogger: ILogger;
     procedure setLogger(const aValue: ILogger);
-    procedure load (const aFilter: string);
+    procedure load (const aFilter: string = '');
     procedure save;
     procedure setAssertions(const aValue: TList<string>);
     function toOutputString: string;

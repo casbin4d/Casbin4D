@@ -115,13 +115,16 @@ type
     [TestCase('InvalidIP','192.168.2.456')]
     [TestCase('InvalidIP','192.-168.2.123')]
     procedure testInvalidIP (const aIP: string);
+
+    [Test]
+    procedure testFunctionsList;
   end;
 
 implementation
 
 uses
   Casbin.Functions, System.SysUtils, System.RegularExpressions, System.Types,
-  System.StrUtils;
+  System.StrUtils, System.Classes;
 
 // Built-in functions
 // In this section, built-in functions are imported
@@ -160,6 +163,21 @@ begin
           fFunctions.registerFunction('Null', nil);
         end;
   Assert.WillRaise(proc);
+end;
+
+procedure TTestFunctions.testFunctionsList;
+var
+  list:TStringList;
+begin
+  list:=fFunctions.list;
+  Assert.IsNotNull(list);
+  //The list is sorted
+  Assert.AreEqual('IPMatch', list.Strings[0]);
+  Assert.AreEqual('KeyMatch', list.Strings[1]);
+  Assert.AreEqual('KeyMatch2', list.Strings[2]);
+  Assert.AreEqual('KeyMatch3', list.Strings[3]);
+  Assert.AreEqual('RegExMatch', list.Strings[4]);
+  list.Free;
 end;
 
 procedure TTestFunctions.testInvalidIP(const aIP: string);

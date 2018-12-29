@@ -4,7 +4,7 @@ interface
 
 uses
   Casbin.Core.Base.Types, Casbin.Functions.Types,
-  System.Generics.Collections;
+  System.Generics.Collections, System.Classes;
 
 type
   TFunctions = class (TBaseInterfacedObject, IFunctions)
@@ -17,6 +17,8 @@ type
     procedure registerFunction(const aName: string;
       const aFunc: TCasbinFunc);
     function retrieveFunction(const aName: string): TCasbinFunc;
+    function list: TStringList;
+    procedure refreshFunctions;
 {$ENDREGION}
   public
     constructor Create;
@@ -48,6 +50,13 @@ begin
   end;
   fDictionary.Free;
   inherited;
+end;
+
+procedure TFunctions.refreshFunctions;
+begin
+  fDictionary.Clear;
+  loadBuiltInFunctions;
+  loadCustomFunctions;
 end;
 
 procedure TFunctions.registerFunction(const aName: string;
@@ -83,6 +92,16 @@ end;
   {$I ..\..\SourceCode\Common\Functions\Casbin.Functions.RegExMatch.pas}
   {$I ..\..\SourceCode\Common\Functions\Casbin.Functions.IPMatch.pas}
 {$ENDIF}
+
+function TFunctions.list: TStringList;
+var
+  name: string;
+begin
+  result:=TStringList.Create;
+  Result.Sorted:=true;
+  for name in fDictionary.Keys do
+    result.add(name);
+end;
 
 procedure TFunctions.loadBuiltInFunctions;
 begin

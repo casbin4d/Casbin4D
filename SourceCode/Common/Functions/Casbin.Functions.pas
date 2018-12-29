@@ -72,6 +72,7 @@ end;
 // Built-in functions
 // In this section, built-in functions are imported
 {$I ..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch.pas}
+{$I ..\SourceCode\Common\Functions\Casbin.Functions.RegExMatch.pas}
 
 procedure TFunctions.loadBuiltInFunctions;
 begin

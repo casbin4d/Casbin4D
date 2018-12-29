@@ -50,6 +50,7 @@ contains
   Casbin.Parser.AST in '..\Common\Parser\Casbin.Parser.AST.pas',
   ParseExpr in '..\Common\Third Party\TExpressionParser\ParseExpr.pas',
   ParseClass in '..\Common\Third Party\TExpressionParser\ParseClass.pas',
-  oObjects in '..\Common\Third Party\TExpressionParser\oObjects.pas';
+  oObjects in '..\Common\Third Party\TExpressionParser\oObjects.pas',
+  Casbin.Core.Strings in '..\Common\Core\Casbin.Core.Strings.pas';
 
 end.

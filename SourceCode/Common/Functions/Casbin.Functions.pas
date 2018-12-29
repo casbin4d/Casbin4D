@@ -71,10 +71,17 @@ end;
 
 // Built-in functions
 // In this section, built-in functions are imported
-{$I ..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch.pas}
-{$I ..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch2.pas}
-{$I ..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch3.pas}
-{$I ..\SourceCode\Common\Functions\Casbin.Functions.RegExMatch.pas}
+{$IFDEF TESTINSIGHT}
+  {$I ..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch.pas}
+  {$I ..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch2.pas}
+  {$I ..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch3.pas}
+  {$I ..\SourceCode\Common\Functions\Casbin.Functions.RegExMatch.pas}
+{$ELSE}
+  {$I ..\..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch.pas}
+  {$I ..\..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch2.pas}
+  {$I ..\..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch3.pas}
+  {$I ..\..\SourceCode\Common\Functions\Casbin.Functions.RegExMatch.pas}
+{$ENDIF}
 
 procedure TFunctions.loadBuiltInFunctions;
 begin

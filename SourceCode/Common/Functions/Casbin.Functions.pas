@@ -26,7 +26,8 @@ type
 implementation
 
 uses
-  System.SysUtils;
+  System.SysUtils,
+  System.RegularExpressions;
 
 constructor TFunctions.Create;
 begin
@@ -75,6 +76,7 @@ end;
 procedure TFunctions.loadBuiltInFunctions;
 begin
   fDictionary.Add('KeyMatch', KeyMatch);
+  fDictionary.Add('RegExMatch', regexMatch);
 end;
 
 // Custom functions

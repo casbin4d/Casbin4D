@@ -36,16 +36,29 @@ type
     [TestCase('KeyMatch-9', '/foobar,/foo/*,false')]
     procedure testKeyMatch(const aKey1, aKey2: string; const aResult: boolean);
 
+    [Test]
+    [TestCase('RegExMatch-1', '/topic/create,/topic/create,true')]
+    [TestCase('RegExMatch-2', '/topic/create/123,/topic/create,true')]
+    [TestCase('RegExMatch-3', '/topic/delete,/topic/create,false')]
+    [TestCase('RegExMatch-4', '/topic/edit,/topic/edit/[0-9]+,false')]
+    [TestCase('RegExMatch-5', '/topic/edit/123,/topic/edit/[0-9]+,true')]
+    [TestCase('RegExMatch-6', '/topic/edit/abc,/topic/edit/[0-9]+,false')]
+    [TestCase('RegExMatch-7', '/foo/delete/123,/topic/delete/[0-9]+,false')]
+    [TestCase('RegExMatch-8', '/topic/delete/0,/topic/delete/[0-9]+,true')]
+    [TestCase('RegExMatch-9', '/topic/edit/123s,/topic/delete/[0-9]+,false')]
+    procedure testRegExMatch(const aKey1, aKey2: string; const aResult: boolean);
   end;
 
 implementation
 
 uses
-  Casbin.Functions, System.SysUtils;
+  Casbin.Functions, System.SysUtils,
+  System.RegularExpressions;
 
 // Built-in functions
 // In this section, built-in functions are imported
 {$I ..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch.pas}
+{$I ..\SourceCode\Common\Functions\Casbin.Functions.RegExMatch.pas}
 
 procedure TTestFunctions.Setup;
 begin
@@ -87,6 +100,12 @@ end;
 procedure TTestFunctions.testLoadBuiltInFunctions(const aName: string);
 begin
   Assert.IsTrue(Assigned(fFunctions.retrieveFunction(aName)));
+end;
+
+procedure TTestFunctions.testRegExMatch(const aKey1, aKey2: string;
+  const aResult: boolean);
+begin
+  Assert.AreEqual(aResult, RegExMatch([aKey1, aKey2]));
 end;
 
 initialization

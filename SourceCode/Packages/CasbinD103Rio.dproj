@@ -119,9 +119,22 @@
         <DCCReference Include="..\Common\Core\Casbin.Core.Logger.Base.pas"/>
         <DCCReference Include="..\Common\Core\Casbin.Core.Logger.Default.pas"/>
         <DCCReference Include="..\Common\Core\Casbin.Core.Logger.Types.pas"/>
-        <DCCReference Include="..\Common\Model\Casbin.Model.Sections.Default.pas"/>
-        <DCCReference Include="..\Common\Model\Casbin.Model.Sections.Types.pas"/>
         <DCCReference Include="..\Common\Core\Casbin.Core.Defaults.pas"/>
+        <DCCReference Include="..\Common\Effect\Casbin.Effect.Types.pas"/>
+        <DCCReference Include="..\Common\Effect\Casbin.Effect.pas"/>
+        <DCCReference Include="..\Common\Functions\Casbin.Functions.Types.pas"/>
+        <DCCReference Include="..\Common\Functions\Casbin.Functions.pas"/>
+        <DCCReference Include="..\Common\Matcher\Casbin.Matcher.Types.pas"/>
+        <DCCReference Include="..\Common\Matcher\Casbin.Matcher.pas"/>
+        <DCCReference Include="..\Common\Model\Casbin.Model.Sections.Types.pas"/>
+        <DCCReference Include="..\Common\Model\Casbin.Model.Sections.Default.pas"/>
+        <DCCReference Include="..\Common\Parser\Casbin.Parser.Types.pas"/>
+        <DCCReference Include="..\Common\Parser\Casbin.Parser.pas"/>
+        <DCCReference Include="..\Common\Parser\Casbin.Parser.AST.Types.pas"/>
+        <DCCReference Include="..\Common\Parser\Casbin.Parser.AST.pas"/>
+        <DCCReference Include="..\Common\Third Party\TExpressionParser\ParseExpr.pas"/>
+        <DCCReference Include="..\Common\Third Party\TExpressionParser\ParseClass.pas"/>
+        <DCCReference Include="..\Common\Third Party\TExpressionParser\oObjects.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

@@ -37,6 +37,35 @@ type
     procedure testKeyMatch(const aKey1, aKey2: string; const aResult: boolean);
 
     [Test]
+    [TestCase('KeyMatch2-1', '/foo,/foo,true')]
+    [TestCase('KeyMatch2-2', '/foo,/foo*,true')]
+    [TestCase('KeyMatch2-3', '/foo,/foo/*,false')]
+    [TestCase('KeyMatch2-4', '/foo/bar,/foo,true')] // different with KeyMatch.
+    [TestCase('KeyMatch2-5', '/foo/bar,/foo*,true')]
+    [TestCase('KeyMatch2-6', '/foo/bar,/foo/*,true')]
+    [TestCase('KeyMatch2-7', '/foobar,/foo,true')] // different with KeyMatch.
+    [TestCase('KeyMatch2-8', '/foobar,/foo*,true')]
+    [TestCase('KeyMatch2-9', '/foobar,/foo/*,false')]
+
+    [TestCase('KeyMatch2-10', '/,/:resource,false')]
+    [TestCase('KeyMatch2-11', '/resource1,/:resource,true')]
+    [TestCase('KeyMatch2-12', '/myid,/:id/using/:resId,false')]
+    [TestCase('KeyMatch2-13', '/myid/using/myresid,/:id/using/:resId,true')]
+
+    [TestCase('KeyMatch2-14', '/proxy/myid,/proxy/:id/*,false')]
+    [TestCase('KeyMatch2-15', '/proxy/myid/,/proxy/:id/*,true')]
+    [TestCase('KeyMatch2-16', '/proxy/myid/res,/proxy/:id/*,true')]
+    [TestCase('KeyMatch2-17', '/proxy/myid/res/res2,/proxy/:id/*,true')]
+    [TestCase('KeyMatch2-18', '/proxy/myid/res/res2/res3,/proxy/:id/*,true')]
+    [TestCase('KeyMatch2-19', '/proxy/,/proxy/:id/*,false')]
+
+    [TestCase('KeyMatch2-20', '/alice,/:id,true')]
+    [TestCase('KeyMatch2-21', '/alice/all,/:id/all,true')]
+    [TestCase('KeyMatch2-22', '/alice,/:id/all,false')]
+    [TestCase('KeyMatch2-23', '/alice/all,/:id,false')]
+    procedure testKeyMatch2(const aKey1, aKey2: string; const aResult: boolean);
+
+    [Test]
     [TestCase('RegExMatch-1', '/topic/create,/topic/create,true')]
     [TestCase('RegExMatch-2', '/topic/create/123,/topic/create,true')]
     [TestCase('RegExMatch-3', '/topic/delete,/topic/create,false')]
@@ -58,6 +87,7 @@ uses
 // Built-in functions
 // In this section, built-in functions are imported
 {$I ..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch.pas}
+{$I ..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch2.pas}
 {$I ..\SourceCode\Common\Functions\Casbin.Functions.RegExMatch.pas}
 
 procedure TTestFunctions.Setup;
@@ -95,6 +125,12 @@ procedure TTestFunctions.testKeyMatch(const aKey1, aKey2: string; const
     aResult: boolean);
 begin
   Assert.AreEqual(aResult, KeyMatch([aKey1, aKey2]));
+end;
+
+procedure TTestFunctions.testKeyMatch2(const aKey1, aKey2: string;
+  const aResult: boolean);
+begin
+  Assert.AreEqual(aResult, KeyMatch2([aKey1, aKey2]));
 end;
 
 procedure TTestFunctions.testLoadBuiltInFunctions(const aName: string);

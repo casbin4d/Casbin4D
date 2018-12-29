@@ -72,11 +72,13 @@ end;
 // Built-in functions
 // In this section, built-in functions are imported
 {$I ..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch.pas}
+{$I ..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch2.pas}
 {$I ..\SourceCode\Common\Functions\Casbin.Functions.RegExMatch.pas}
 
 procedure TFunctions.loadBuiltInFunctions;
 begin
   fDictionary.Add('KeyMatch', KeyMatch);
+  fDictionary.Add('KeyMatch2', KeyMatch2);
   fDictionary.Add('RegExMatch', regexMatch);
 end;
 
@@ -89,7 +91,7 @@ end;
 
 procedure TFunctions.loadCustomFunctions;
 begin
-
+// Add call to fDictionary.Add to register a customn function
 end;
 
 end.

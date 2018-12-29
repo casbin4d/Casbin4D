@@ -24,5 +24,6 @@ begin
     Exit(Copy(key1, low(string), index-1) = Copy(key2, low(string), index-1));
 
   Exit(key1 = Copy(key2, low(string), index-1));
+
 end;
 

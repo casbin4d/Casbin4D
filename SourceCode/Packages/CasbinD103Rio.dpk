@@ -35,8 +35,21 @@ contains
   Casbin.Core.Logger.Base in '..\Common\Core\Casbin.Core.Logger.Base.pas',
   Casbin.Core.Logger.Default in '..\Common\Core\Casbin.Core.Logger.Default.pas',
   Casbin.Core.Logger.Types in '..\Common\Core\Casbin.Core.Logger.Types.pas',
-  Casbin.Model.Sections.Default in '..\Common\Model\Casbin.Model.Sections.Default.pas',
+  Casbin.Core.Defaults in '..\Common\Core\Casbin.Core.Defaults.pas',
+  Casbin.Effect.Types in '..\Common\Effect\Casbin.Effect.Types.pas',
+  Casbin.Effect in '..\Common\Effect\Casbin.Effect.pas',
+  Casbin.Functions.Types in '..\Common\Functions\Casbin.Functions.Types.pas',
+  Casbin.Functions in '..\Common\Functions\Casbin.Functions.pas',
+  Casbin.Matcher.Types in '..\Common\Matcher\Casbin.Matcher.Types.pas',
+  Casbin.Matcher in '..\Common\Matcher\Casbin.Matcher.pas',
   Casbin.Model.Sections.Types in '..\Common\Model\Casbin.Model.Sections.Types.pas',
-  Casbin.Core.Defaults in '..\Common\Core\Casbin.Core.Defaults.pas';
+  Casbin.Model.Sections.Default in '..\Common\Model\Casbin.Model.Sections.Default.pas',
+  Casbin.Parser.Types in '..\Common\Parser\Casbin.Parser.Types.pas',
+  Casbin.Parser in '..\Common\Parser\Casbin.Parser.pas',
+  Casbin.Parser.AST.Types in '..\Common\Parser\Casbin.Parser.AST.Types.pas',
+  Casbin.Parser.AST in '..\Common\Parser\Casbin.Parser.AST.pas',
+  ParseExpr in '..\Common\Third Party\TExpressionParser\ParseExpr.pas',
+  ParseClass in '..\Common\Third Party\TExpressionParser\ParseClass.pas',
+  oObjects in '..\Common\Third Party\TExpressionParser\oObjects.pas';
 
 end.

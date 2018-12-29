@@ -26,8 +26,7 @@ type
 implementation
 
 uses
-  System.SysUtils,
-  System.RegularExpressions;
+  System.SysUtils, System.RegularExpressions, System.Types, System.StrUtils;
 
 constructor TFunctions.Create;
 begin
@@ -76,11 +75,13 @@ end;
   {$I ..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch2.pas}
   {$I ..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch3.pas}
   {$I ..\SourceCode\Common\Functions\Casbin.Functions.RegExMatch.pas}
+  {$I ..\SourceCode\Common\Functions\Casbin.Functions.IPMatch.pas}
 {$ELSE}
   {$I ..\..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch.pas}
   {$I ..\..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch2.pas}
   {$I ..\..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch3.pas}
   {$I ..\..\SourceCode\Common\Functions\Casbin.Functions.RegExMatch.pas}
+  {$I ..\..\SourceCode\Common\Functions\Casbin.Functions.IPMatch.pas}
 {$ENDIF}
 
 procedure TFunctions.loadBuiltInFunctions;
@@ -89,6 +90,7 @@ begin
   fDictionary.Add('KeyMatch2', KeyMatch2);
   fDictionary.Add('KeyMatch3', KeyMatch2);
   fDictionary.Add('RegExMatch', regexMatch);
+  fDictionary.Add('IPMatch', IPMatch);
 end;
 
 // Custom functions

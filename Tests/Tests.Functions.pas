@@ -100,13 +100,28 @@ type
     [TestCase('RegExMatch-8', '/topic/delete/0,/topic/delete/[0-9]+,true')]
     [TestCase('RegExMatch-9', '/topic/edit/123s,/topic/delete/[0-9]+,false')]
     procedure testRegExMatch(const aKey1, aKey2: string; const aResult: boolean);
+
+    [Test]
+    [TestCase('IPMatch-1','192.168.2.123,192.168.2.0/24,true')]
+    [TestCase('IPMatch-2','192.168.2.123,192.168.3.0/24,false')]
+    [TestCase('IPMatch-3','192.168.2.123,192.168.2.0/16,true')]
+    [TestCase('IPMatch-4','192.168.2.123,192.168.2.123,true')]
+    [TestCase('IPMatch-5','192.168.2.123,192.168.2.123/32,true')]
+    [TestCase('IPMatch-6','10.0.0.11,10.0.0.0/8,true')]
+    [TestCase('IPMatch-7','11.0.0.123,10.0.0.0/8,false')]
+    procedure testIPMatch(const aIP1, aIP2: string; const aResult: boolean);
+
+    [Test]
+    [TestCase('InvalidIP','192.168.2.456')]
+    [TestCase('InvalidIP','192.-168.2.123')]
+    procedure testInvalidIP (const aIP: string);
   end;
 
 implementation
 
 uses
-  Casbin.Functions, System.SysUtils,
-  System.RegularExpressions;
+  Casbin.Functions, System.SysUtils, System.RegularExpressions, System.Types,
+  System.StrUtils;
 
 // Built-in functions
 // In this section, built-in functions are imported
@@ -114,6 +129,7 @@ uses
 {$I ..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch2.pas}
 {$I ..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch3.pas}
 {$I ..\SourceCode\Common\Functions\Casbin.Functions.RegExMatch.pas}
+{$I ..\SourceCode\Common\Functions\Casbin.Functions.IPMatch.pas}
 
 procedure TTestFunctions.Setup;
 begin
@@ -144,6 +160,23 @@ begin
           fFunctions.registerFunction('Null', nil);
         end;
   Assert.WillRaise(proc);
+end;
+
+procedure TTestFunctions.testInvalidIP(const aIP: string);
+var
+  proc: TProc;
+begin
+  proc:=procedure
+        begin
+          IPMatch([aIP, aIP]);
+        end;
+  Assert.WillRaise(proc);
+end;
+
+procedure TTestFunctions.testIPMatch(const aIP1, aIP2: string;
+  const aResult: boolean);
+begin
+  Assert.AreEqual(aResult, IPMatch([aIP1, aIP2]));
 end;
 
 procedure TTestFunctions.testKeyMatch(const aKey1, aKey2: string; const

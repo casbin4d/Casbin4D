@@ -6,7 +6,7 @@ uses
   Casbin.Core.Base.Types, Casbin.Model.Sections.Types, System.Generics.Collections;
 
 type
-  IPolicy = interface (IBaseInterface)
+  IPolicyManager = interface (IBaseInterface)
     ['{B983A830-6107-4283-A45D-D74CDBB5E2EA}']
     function section (const aSlim: Boolean = true): string;
 

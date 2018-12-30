@@ -9,7 +9,7 @@ type
   [TestFixture]
   TTestPolicyManager = class(TObject)
   private
-    fPolicy: IPolicy;
+    fPolicy: IPolicyManager;
   public
     [Setup]
     procedure Setup;

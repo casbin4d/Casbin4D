@@ -8,7 +8,7 @@ uses
   Casbin.Adapter.Policy.Types;
 
 type
-  TPolicyManager = class(TBaseInterfacedObject, IPolicy)
+  TPolicyManager = class(TBaseInterfacedObject, IPolicyManager)
   private
     fAdapter: IPolicyAdapter;
     fParser: IParser;

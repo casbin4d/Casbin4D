@@ -33,7 +33,7 @@ end;
 procedure TFileAdapter.load(const aFilter: TFilterArray);
 begin
   inherited;
-  getAssertions.Clear;
+  Clear;
   getAssertions.AddRange(TFile.ReadAllLines(fFilename));
 end;
 

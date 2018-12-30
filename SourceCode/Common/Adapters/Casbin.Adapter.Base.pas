@@ -29,6 +29,7 @@ type
     procedure setAssertions(const aValue: TList<string>); virtual;
     procedure setLogger(const aValue: ILogger);
     function toOutputString: string; virtual;
+    procedure clear;
 {$ENDREGION}
   public
     constructor Create;
@@ -39,6 +40,11 @@ implementation
 
 uses
   Casbin.Core.Logger.Default;
+
+procedure TBaseAdapter.clear;
+begin
+  fAssertions.Clear;
+end;
 
 constructor TBaseAdapter.Create;
 begin

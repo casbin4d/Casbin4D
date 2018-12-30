@@ -24,6 +24,12 @@ type
 
     [Test]
     procedure testPolicyExists;
+
+    [Test]
+    [TestCase ('Alice', 'p, alice, data1#read', '#')]
+    [TestCase ('Bob', 'p, BOB, data2#write', '#')]
+    [TestCase ('Non-existant', 'p, 123, aaaa#undefined', '#')]
+    procedure testPolicy(const aFilter: string; const aExpected: string);
   end;
 
 implementation
@@ -50,6 +56,11 @@ begin
   Assert.AreEqual('p, alice, data1, read', list.Items[0], 'Line 1');
   Assert.AreEqual('p, bob, data2, write', list.Items[1], 'Line 2');
   list.Free;
+end;
+
+procedure TTestPolicyManager.testPolicy(const aFilter, aExpected: string);
+begin
+  Assert.AreEqual(aExpected, fPolicy.policy(aFilter.Split([','])));
 end;
 
 procedure TTestPolicyManager.testPolicyExists;

@@ -19,6 +19,7 @@ type
     function policies: TList<string>;
 
     procedure add (const aTag: string);
+    function policy (const aFilter: TFilterArray = []): string;
     procedure clear;
     function policyExists (const aFilter: TFilterArray = []): Boolean;
     {$REGION 'Removes a policy rule from the adapter'}

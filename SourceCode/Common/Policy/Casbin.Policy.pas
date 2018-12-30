@@ -17,6 +17,7 @@ type
     function section (const aSlim: Boolean = true): string;
     function policies: TList<string>;
     procedure add(const aTag: string);
+    function policy(const aFilter: TFilterArray = []): string;
     procedure clear;
     function policyExists(const aFilter: TFilterArray = []): Boolean;
     procedure remove(const aPolicyDefinition: string); overload;
@@ -82,6 +83,48 @@ begin
     end;
 end;
 
+function TPolicyManager.policy(const aFilter: TFilterArray = []): string;
+var
+  i: Integer;
+  list: TList<string>;
+  policy: string;
+  test: string;
+  testPolicy: string;
+  strArray: TFilterArray;
+begin
+  Result:='undefined';
+
+  //Clean aFilter
+  strArray:=aFilter;
+  for i:=0 to Length(strArray)-1 do
+  begin
+    strArray[i]:=trim(strArray[i]);
+  end;
+  testPolicy:=String.Join(',', strArray);
+
+  list:=policies;
+  for policy in list do
+  begin
+    strArray:=policy.Split([',']);
+    for i:=0 to Length(strArray)-1 do
+    begin
+      strArray[i]:=trim(strArray[i]);
+    end;
+    if Length(strArray)>=1 then
+    begin
+      test:=String.Join(',', strArray);
+      if UpperCase(Copy(Trim(test), findStartPos,
+                    findEndPos(testPolicy)))=UpperCase(Trim(testPolicy)) then
+      begin
+        Result:=Trim(strArray[Length(strArray)-1]);
+        list.Free;
+        exit;
+      end;
+    end;
+  end;
+  list.Free;
+end;
+
 function TPolicyManager.policyExists(const aFilter: TFilterArray): Boolean;
 var
   i: Integer;
@@ -97,7 +140,7 @@ begin
   for policy in list do
   begin
     strArray:=policy.Split([',']);
-    for i:=0 to Length(strArray) do
+    for i:=0 to Length(strArray)-1 do
       strArray[i]:=trim(strArray[i]);
     if Length(strArray)>=1 then
     begin

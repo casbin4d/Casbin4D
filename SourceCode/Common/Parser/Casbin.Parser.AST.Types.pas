@@ -151,7 +151,6 @@ end;
 
 function TChildNode.toOutputString: string;
 begin
-
   Result:=fKey+'='+fValue;
 end;
 

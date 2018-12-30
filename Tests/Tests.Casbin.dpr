@@ -63,7 +63,8 @@ uses
   Casbin.Adapter.Filesystem.Policy in '..\SourceCode\Common\Adapters\Casbin.Adapter.Filesystem.Policy.pas',
   Tests.Adapter.Filesystem.Policy in 'Tests.Adapter.Filesystem.Policy.pas',
   Casbin.Policy.Types in '..\SourceCode\Common\Policy\Casbin.Policy.Types.pas',
-  Casbin.Policy in '..\SourceCode\Common\Policy\Casbin.Policy.pas';
+  Casbin.Policy in '..\SourceCode\Common\Policy\Casbin.Policy.pas',
+  Tests.Policy in 'Tests.Policy.pas';
 
 var
   runner : ITestRunner;

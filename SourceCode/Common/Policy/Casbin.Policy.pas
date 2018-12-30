@@ -25,7 +25,7 @@ implementation
 
 uses
   Casbin.Adapter.Filesystem.Policy, Casbin.Exception.Types,
-  System.Classes, Casbin.Parser, Casbin.Core.Utilities, Casbin.Model.Sections.Types;
+  System.Classes, Casbin.Parser, Casbin.Core.Utilities, Casbin.Model.Sections.Types, Casbin.Core.Defaults;
 
 { TPolicy }
 
@@ -61,7 +61,7 @@ begin
     begin
       for node in headerNode.ChildNodes do
       begin
-        Result.add(node.Value)
+        Result.add(node.Key+AssignmentCharForPolicies+node.Value)
       end;
       Exit;
     end;

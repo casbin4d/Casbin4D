@@ -56,6 +56,7 @@ contains
   Casbin.Model in '..\Common\Model\Casbin.Model.pas',
   Casbin.Model.Types in '..\Common\Model\Casbin.Model.Types.pas',
   Casbin.Model.Sections.Types in '..\Common\Model\Casbin.Model.Sections.Types.pas',
-  Casbin.Model.Sections.Default in '..\Common\Model\Casbin.Model.Sections.Default.pas';
+  Casbin.Model.Sections.Default in '..\Common\Model\Casbin.Model.Sections.Default.pas',
+  Casbin.Core.Utilities in '..\Common\Core\Casbin.Core.Utilities.pas';
 
 end.

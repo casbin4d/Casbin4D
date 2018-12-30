@@ -131,7 +131,6 @@ begin
             if test[findEndPos(test)] = ',' then
               test:=Copy(test, findStartPos, findEndPos(test)-1);
 
-            var ss:=Copy(test, findStartPos, findEndPos(filter));
             if Trim(UpperCase(Copy(test, findStartPos, findEndPos(filter)))) <>
                                             Trim(UpperCase(filter)) then
               getAssertions.Delete(i);

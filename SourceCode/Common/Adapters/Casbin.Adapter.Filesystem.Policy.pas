@@ -44,7 +44,7 @@ uses
 
 procedure TPolicyFileAdapter.add(const aTag: string);
 begin
-
+  {TODO -oOwner -cGeneral : PolicyFilterAdapter.Add}
 end;
 
 constructor TPolicyFileAdapter.Create(const aFilename: string);
@@ -146,18 +146,18 @@ end;
 
 procedure TPolicyFileAdapter.remove(const aPolicyDefinition, aFilter: string);
 begin
-
+  {TODO -oOwner -cGeneral : PolicyFilterAdapter.remove}
 end;
 
 procedure TPolicyFileAdapter.remove(const aPolicyDefinition: string);
 begin
-
+  {TODO -oOwner -cGeneral : PolicyFilterAdapter.remove}
 end;
 
 procedure TPolicyFileAdapter.save;
 begin
   inherited;
-
+   {TODO -oOwner -cGeneral : PolicyFilterAdapter.save}
 end;
 
 procedure TPolicyFileAdapter.setAutoSave(const aValue: Boolean);

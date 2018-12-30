@@ -58,7 +58,10 @@ uses
   Casbin.Exception.Types in '..\SourceCode\Common\Core\Casbin.Exception.Types.pas',
   Tests.Model in 'Tests.Model.pas',
   Casbin.Core.Utilities in '..\SourceCode\Common\Core\Casbin.Core.Utilities.pas',
-  Casbin.Adapter.Filesystem in '..\SourceCode\Common\Adapters\Casbin.Adapter.Filesystem.pas';
+  Casbin.Adapter.Filesystem in '..\SourceCode\Common\Adapters\Casbin.Adapter.Filesystem.pas',
+  Casbin.Adapter.Policy.Types in '..\SourceCode\Common\Adapters\Casbin.Adapter.Policy.Types.pas',
+  Casbin.Adapter.Filesystem.Policy in '..\SourceCode\Common\Adapters\Casbin.Adapter.Filesystem.Policy.pas',
+  Tests.Adapter.Filesystem.Policy in 'Tests.Adapter.Filesystem.Policy.pas';
 
 var
   runner : ITestRunner;

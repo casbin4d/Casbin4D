@@ -34,7 +34,7 @@ implementation
 uses
   Casbin.Adapter.Filesystem.Policy, Casbin.Exception.Types, System.Classes,
   Casbin.Parser, Casbin.Core.Utilities, Casbin.Model.Sections.Types,
-  Casbin.Core.Defaults, System.SysUtils;
+  Casbin.Core.Defaults, System.SysUtils, System.StrUtils;
 
 { TPolicyManager }
 
@@ -143,11 +143,21 @@ var
   policy: string;
   test: string;
   testPolicy: string;
+  modArray: TFilterArray;
   strArray: TFilterArray;
 begin
   Result:=False;
+  if Length(aFilter)=0 then
+    Exit;
   loadPolicies;
-  testPolicy:=testPolicy.Join(',', aFilter);
+
+  if IndexStr(UpperCase(aFilter[0]), ['P', 'G']) = -1 then
+    testPolicy:='p,';
+  for policy in aFilter do
+    testPolicy:=testPolicy+policy+',';
+  if testPolicy[findEndPos(testPolicy)]=',' then
+    testPolicy:=Copy(testPolicy, findStartPos, findEndPos(testPolicy)-1);
+
   list:=policies;
   for policy in list do
   begin
@@ -156,7 +166,7 @@ begin
       strArray[i]:=trim(strArray[i]);
     if Length(strArray)>=1 then
     begin
-      test:=''.Join(',', strArray);
+      test:=String.Join(',', strArray);
       if UpperCase(Trim(test))=UpperCase(Trim(testPolicy)) then
       begin
         Result:=true;

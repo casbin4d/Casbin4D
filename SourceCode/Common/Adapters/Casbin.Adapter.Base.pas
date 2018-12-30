@@ -21,15 +21,18 @@ type
     fLogger: ILogger;
     fAssertions: TList<string>;
   protected
+    fFiltered: Boolean;
+  protected
 {$REGION 'Interface'}
     function getAssertions: TList<string>;
     function getLogger: ILogger; virtual;
-    procedure load(const aFilter: TFilterArray); virtual; abstract;
+    procedure load(const aFilter: TFilterArray); virtual;
     procedure save; virtual; abstract;
     procedure setAssertions(const aValue: TList<string>); virtual;
     procedure setLogger(const aValue: ILogger);
     function toOutputString: string; virtual;
     procedure clear;
+    function getFiltered: boolean;
 {$ENDREGION}
   public
     constructor Create;
@@ -51,6 +54,7 @@ begin
   inherited;
   fAssertions:=TList<string>.Create;
   fLogger:=TDefaultLogger.Create;
+  fFiltered:=False;
 end;
 
 destructor TBaseAdapter.Destroy;
@@ -64,9 +68,19 @@ begin
   Result:=fAssertions;
 end;
 
+function TBaseAdapter.getFiltered: boolean;
+begin
+  Result:=fFiltered;
+end;
+
 function TBaseAdapter.getLogger: ILogger;
 begin
   Result:=fLogger;
+end;
+
+procedure TBaseAdapter.load(const aFilter: TFilterArray);
+begin
+  fFiltered:= Length(aFilter) <> 0;
 end;
 
 procedure TBaseAdapter.setAssertions(const aValue: TList<string>);

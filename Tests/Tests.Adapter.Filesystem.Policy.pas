@@ -22,6 +22,8 @@ type
     procedure testAutoSave;
     [Test]
     procedure testCachSize;
+    [Test]
+    procedure testFiltered;
 
     [Test]
     [TestCase ('Without Filter', ' #p, alice, data1, read, allow'+sLineBreak+
@@ -85,6 +87,15 @@ begin
   Assert.AreEqual(15, fFilesystem.CacheSize, 'default');
   fFilesystem.CacheSize:=100;
   Assert.AreEqual(100, fFilesystem.CacheSize, 'changed');
+end;
+
+procedure TTestPolicyFileAdapter.testFiltered;
+begin
+  Assert.IsFalse(fFilesystem.Filtered, 'Default');
+  fFilesystem.load(['alice']);
+  Assert.IsTrue(fFilesystem.Filtered, 'Filtered');
+  fFilesystem.load;
+  Assert.IsFalse(fFilesystem.Filtered, 'Back to Default');
 end;
 
 procedure TTestPolicyFileAdapter.testload(const aFilter, aExpected: string);

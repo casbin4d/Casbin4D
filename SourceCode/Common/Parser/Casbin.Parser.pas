@@ -39,7 +39,8 @@ uses
   Casbin.Core.Logger.Default, System.IniFiles, System.Classes,
   Casbin.Core.Defaults, Casbin.Core.Strings, System.StrUtils,
   System.AnsiStrings, Casbin.Model.Sections.Types,
-  Casbin.Model.Sections.Default, Casbin.Parser.AST, Casbin.Effect.Types, System.Math;
+  Casbin.Model.Sections.Default, Casbin.Parser.AST, Casbin.Effect.Types,
+  System.Math, Casbin.Core.Utilities;
 
 constructor TParser.Create(const aParseString: string; const aParseType:
     TParseType);
@@ -322,17 +323,21 @@ var
   line: string;
   tmpStr: string;
   header: THeaderNode;
+  startPos: Integer;
+  endPos: Integer;
 begin
   mainLines:=TStringList.Create;
   try
     mainLines.Text:=fParseString;
 
+    startPos:=findStartPos;
     for line in mainLines do
     begin
-      if (line[Low(string)]='[') and (line[Length(line)]=']') then
+      endPos:=findEndPos(line);
+      if (Trim(line)<>'') and (line[Low(string)]='[') and (line[endPos]=']') then
       begin
-        tmpStr:=Copy(Copy(line, Low(string), Length(line)-1), Low(string)+1,
-                                                          Length(line)-1);
+        tmpStr:=Copy(Copy(line, startPos, endPos-1), startPos+1,
+                                                          endPos-1);
         header:=THeaderNode.Create;
         header.Value:=tmpStr;
         case IndexStr(UpperCase(tmpStr),

@@ -14,10 +14,6 @@ type
   ///   <para>
   ///     Subclass this if you want to create a generic adapter.
   ///   </para>
-  ///   <para>
-  ///     Typically you subclass TAdapterModel and TAdapterPolicy to retrieve
-  ///     CONF and POLICIES from different sources <br />
-  ///   </para>
   /// </remarks>
   {$ENDREGION}
   TBaseAdapter = class (TBaseInterfacedObject, IAdapter)

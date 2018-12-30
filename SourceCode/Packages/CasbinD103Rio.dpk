@@ -60,8 +60,8 @@ contains
   Casbin.Exception.Types in '..\Common\Core\Casbin.Exception.Types.pas',
   Casbin.Adapter.Filesystem.Policy in '..\Common\Adapters\Casbin.Adapter.Filesystem.Policy.pas',
   Casbin.Adapter.Filesystem in '..\Common\Adapters\Casbin.Adapter.Filesystem.pas',
-  Casbin.Policy in '..\Common\Policy\Casbin.Policy.pas',
+  Casbin.Adapter.Policy.Types in '..\Common\Adapters\Casbin.Adapter.Policy.Types.pas',
   Casbin.Policy.Types in '..\Common\Policy\Casbin.Policy.Types.pas',
-  Casbin.Adapter.Policy.Types in '..\Common\Adapters\Casbin.Adapter.Policy.Types.pas';
+  Casbin.Policy in '..\Common\Policy\Casbin.Policy.pas';
 
 end.

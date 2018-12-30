@@ -24,7 +24,7 @@ type
 {$REGION 'Interface'}
     function getAssertions: TList<string>;
     function getLogger: ILogger; virtual;
-    procedure load(const aFilter: string); virtual; abstract;
+    procedure load(const aFilter: TFilterArray); virtual; abstract;
     procedure save; virtual; abstract;
     procedure setAssertions(const aValue: TList<string>); virtual;
     procedure setLogger(const aValue: ILogger);

@@ -3,7 +3,7 @@ unit Casbin.Adapter.Filesystem;
 interface
 
 uses
-  Casbin.Adapter.Base;
+  Casbin.Adapter.Base, Casbin.Core.Base.Types;
 
 type
   TFileAdapter = class(TBaseAdapter)
@@ -11,7 +11,7 @@ type
     fFilename: string;
   public
     constructor Create(const aFilename: string);
-    procedure load(const aFilter: string = ''); override;
+    procedure load(const aFilter: TFilterArray); override;
     procedure save; override;
   end;
 
@@ -30,7 +30,7 @@ end;
 
 { TFileAdapter }
 
-procedure TFileAdapter.load(const aFilter: string);
+procedure TFileAdapter.load(const aFilter: TFilterArray);
 begin
   inherited;
   getAssertions.AddRange(TFile.ReadAllLines(fFilename));

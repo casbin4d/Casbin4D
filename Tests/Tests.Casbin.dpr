@@ -52,13 +52,13 @@ uses
   Tests.Functions in 'Tests.Functions.pas',
   Casbin.Adapter.Types in '..\SourceCode\Common\Adapters\Casbin.Adapter.Types.pas',
   Casbin.Adapter.Base in '..\SourceCode\Common\Adapters\Casbin.Adapter.Base.pas',
-  Casbin.Adapter.Filesystem in '..\SourceCode\Common\Adapters\Casbin.Adapter.Filesystem.pas',
   Tests.Adapter.FileSystem in 'Tests.Adapter.FileSystem.pas',
   Casbin.Model.Types in '..\SourceCode\Common\Model\Casbin.Model.Types.pas',
   Casbin.Model in '..\SourceCode\Common\Model\Casbin.Model.pas',
   Casbin.Exception.Types in '..\SourceCode\Common\Core\Casbin.Exception.Types.pas',
   Tests.Model in 'Tests.Model.pas',
-  Casbin.Core.Utilities in '..\SourceCode\Common\Core\Casbin.Core.Utilities.pas';
+  Casbin.Core.Utilities in '..\SourceCode\Common\Core\Casbin.Core.Utilities.pas',
+  Casbin.Adapter.Filesystem in '..\SourceCode\Common\Adapters\Casbin.Adapter.Filesystem.pas';
 
 var
   runner : ITestRunner;

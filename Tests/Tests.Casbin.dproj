@@ -157,13 +157,13 @@
         <DCCReference Include="Tests.Functions.pas"/>
         <DCCReference Include="..\SourceCode\Common\Adapters\Casbin.Adapter.Types.pas"/>
         <DCCReference Include="..\SourceCode\Common\Adapters\Casbin.Adapter.Base.pas"/>
-        <DCCReference Include="..\SourceCode\Common\Adapters\Casbin.Adapter.Filesystem.pas"/>
         <DCCReference Include="Tests.Adapter.FileSystem.pas"/>
         <DCCReference Include="..\SourceCode\Common\Model\Casbin.Model.Types.pas"/>
         <DCCReference Include="..\SourceCode\Common\Model\Casbin.Model.pas"/>
         <DCCReference Include="..\SourceCode\Common\Core\Casbin.Exception.Types.pas"/>
         <DCCReference Include="Tests.Model.pas"/>
         <DCCReference Include="..\SourceCode\Common\Core\Casbin.Core.Utilities.pas"/>
+        <DCCReference Include="..\SourceCode\Common\Adapters\Casbin.Adapter.Filesystem.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

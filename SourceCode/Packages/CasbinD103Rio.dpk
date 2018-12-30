@@ -42,8 +42,6 @@ contains
   Casbin.Functions in '..\Common\Functions\Casbin.Functions.pas',
   Casbin.Matcher.Types in '..\Common\Matcher\Casbin.Matcher.Types.pas',
   Casbin.Matcher in '..\Common\Matcher\Casbin.Matcher.pas',
-  Casbin.Model.Sections.Types in '..\Common\Model\Casbin.Model.Sections.Types.pas',
-  Casbin.Model.Sections.Default in '..\Common\Model\Casbin.Model.Sections.Default.pas',
   Casbin.Parser.Types in '..\Common\Parser\Casbin.Parser.Types.pas',
   Casbin.Parser in '..\Common\Parser\Casbin.Parser.pas',
   Casbin.Parser.AST.Types in '..\Common\Parser\Casbin.Parser.AST.Types.pas',
@@ -54,6 +52,10 @@ contains
   Casbin.Core.Strings in '..\Common\Core\Casbin.Core.Strings.pas',
   Casbin.Adapter.Types in '..\Common\Adapters\Casbin.Adapter.Types.pas',
   Casbin.Adapter.Filesystem in '..\Common\Adapters\Casbin.Adapter.Filesystem.pas',
-  Casbin.Adapter.Base in '..\Common\Adapters\Casbin.Adapter.Base.pas';
+  Casbin.Adapter.Base in '..\Common\Adapters\Casbin.Adapter.Base.pas',
+  Casbin.Model in '..\Common\Model\Casbin.Model.pas',
+  Casbin.Model.Types in '..\Common\Model\Casbin.Model.Types.pas',
+  Casbin.Model.Sections.Types in '..\Common\Model\Casbin.Model.Sections.Types.pas',
+  Casbin.Model.Sections.Default in '..\Common\Model\Casbin.Model.Sections.Default.pas';
 
 end.

@@ -126,8 +126,6 @@
         <DCCReference Include="..\Common\Functions\Casbin.Functions.pas"/>
         <DCCReference Include="..\Common\Matcher\Casbin.Matcher.Types.pas"/>
         <DCCReference Include="..\Common\Matcher\Casbin.Matcher.pas"/>
-        <DCCReference Include="..\Common\Model\Casbin.Model.Sections.Types.pas"/>
-        <DCCReference Include="..\Common\Model\Casbin.Model.Sections.Default.pas"/>
         <DCCReference Include="..\Common\Parser\Casbin.Parser.Types.pas"/>
         <DCCReference Include="..\Common\Parser\Casbin.Parser.pas"/>
         <DCCReference Include="..\Common\Parser\Casbin.Parser.AST.Types.pas"/>
@@ -139,6 +137,10 @@
         <DCCReference Include="..\Common\Adapters\Casbin.Adapter.Types.pas"/>
         <DCCReference Include="..\Common\Adapters\Casbin.Adapter.Filesystem.pas"/>
         <DCCReference Include="..\Common\Adapters\Casbin.Adapter.Base.pas"/>
+        <DCCReference Include="..\Common\Model\Casbin.Model.pas"/>
+        <DCCReference Include="..\Common\Model\Casbin.Model.Types.pas"/>
+        <DCCReference Include="..\Common\Model\Casbin.Model.Sections.Types.pas"/>
+        <DCCReference Include="..\Common\Model\Casbin.Model.Sections.Default.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

@@ -19,6 +19,7 @@ type
     procedure add(const aTag: string);
     function policy(const aFilter: TFilterArray = []): string;
     procedure clear;
+    procedure loadPolicies;
     function policyExists(const aFilter: TFilterArray = []): Boolean;
     procedure remove(const aPolicyDefinition: string); overload;
     procedure remove (const aPolicyDefinition: string; const aFilter: string); overload;
@@ -58,6 +59,13 @@ begin
     raise ECasbinException.Create('Adapter is nil in '+Self.ClassName);
   inherited Create;
   fAdapter:=aAdapter;
+end;
+
+procedure TPolicyManager.loadPolicies;
+begin
+  if (Assigned(fNodes)) then
+    Exit;
+  fAdapter.clear;
   fAdapter.load;
   fParser:=TParser.Create(fAdapter.toOutputString, ptPolicy);
   fParser.parse;
@@ -72,6 +80,7 @@ var
   headerNode: THeaderNode;
 begin
   Result:=TList<string>.Create;
+  loadPolicies;
   for headerNode in fNodes.Headers do
     if headerNode.SectionType=stPolicyRules then
     begin
@@ -93,6 +102,8 @@ var
   strArray: TFilterArray;
 begin
   Result:='undefined';
+
+  loadPolicies;
 
   //Clean aFilter
   strArray:=aFilter;
@@ -135,6 +146,7 @@ var
   strArray: TFilterArray;
 begin
   Result:=False;
+  loadPolicies;
   testPolicy:=testPolicy.Join(',', aFilter);
   list:=policies;
   for policy in list do
@@ -172,6 +184,7 @@ var
   policy: string;
 begin
   Result:='';
+  loadPolicies;
   for headerNode in fNodes.Headers do
     if headerNode.SectionType=stPolicyRules then
     begin

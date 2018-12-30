@@ -18,6 +18,7 @@ type
     {$ENDREGION}
     function policies: TList<string>;
 
+    procedure add (const aTag: string);
     procedure clear;
     function policyExists (const aFilter: TFilterArray = []): Boolean;
     {$REGION 'Removes a policy rule from the adapter'}

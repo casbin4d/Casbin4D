@@ -8,7 +8,7 @@ uses
   Casbin.Adapter.Policy.Types;
 
 type
-  TPolicy = class (TBaseInterfacedObject, IPolicy)
+  TPolicyManager = class(TBaseInterfacedObject, IPolicy)
   private
     fAdapter: IPolicyAdapter;
     fParser: IParser;
@@ -16,6 +16,7 @@ type
 {$REGION 'Interface'}
     function section (const aSlim: Boolean = true): string;
     function policies: TList<string>;
+    procedure add(const aTag: string);
     procedure clear;
     function policyExists(const aFilter: TFilterArray = []): Boolean;
     procedure remove(const aPolicyDefinition: string); overload;
@@ -33,19 +34,24 @@ uses
   Casbin.Parser, Casbin.Core.Utilities, Casbin.Model.Sections.Types,
   Casbin.Core.Defaults, System.SysUtils;
 
-{ TPolicy }
+{ TPolicyManager }
 
-constructor TPolicy.Create(const aModel: string);
+constructor TPolicyManager.Create(const aModel: string);
 begin
   Create(TPolicyFileAdapter.Create(aModel));
 end;
 
-procedure TPolicy.clear;
+procedure TPolicyManager.add(const aTag: string);
+begin
+  fAdapter.add(aTag);
+end;
+
+procedure TPolicyManager.clear;
 begin
   fAdapter.clear;
 end;
 
-constructor TPolicy.Create(const aAdapter: IPolicyAdapter);
+constructor TPolicyManager.Create(const aAdapter: IPolicyAdapter);
 begin
   if not Assigned(aAdapter) then
     raise ECasbinException.Create('Adapter is nil in '+Self.ClassName);
@@ -59,7 +65,7 @@ begin
   fNodes:=fParser.Nodes;
 end;
 
-function TPolicy.policies: TList<string>;
+function TPolicyManager.policies: TList<string>;
 var
   node: TChildNode;
   headerNode: THeaderNode;
@@ -76,7 +82,7 @@ begin
     end;
 end;
 
-function TPolicy.policyExists(const aFilter: TFilterArray): Boolean;
+function TPolicyManager.policyExists(const aFilter: TFilterArray): Boolean;
 var
   i: Integer;
   list: TList<string>;
@@ -106,17 +112,17 @@ begin
   list.Free;
 end;
 
-procedure TPolicy.remove(const aPolicyDefinition: string);
+procedure TPolicyManager.remove(const aPolicyDefinition: string);
 begin
   fAdapter.remove(aPolicyDefinition);
 end;
 
-procedure TPolicy.remove(const aPolicyDefinition, aFilter: string);
+procedure TPolicyManager.remove(const aPolicyDefinition, aFilter: string);
 begin
   fAdapter.remove(aPolicyDefinition, aFilter);
 end;
 
-function TPolicy.section(const aSlim: Boolean): string;
+function TPolicyManager.section(const aSlim: Boolean): string;
 var
   headerNode: THeaderNode;
   strList: TStringList;

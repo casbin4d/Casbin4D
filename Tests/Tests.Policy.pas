@@ -7,7 +7,7 @@ uses
 type
 
   [TestFixture]
-  TTestPolicy = class(TObject)
+  TTestPolicyManager = class(TObject)
   private
     fPolicy: IPolicy;
   public
@@ -31,17 +31,17 @@ implementation
 uses
   Casbin.Policy, System.Generics.Collections, System.SysUtils;
 
-procedure TTestPolicy.Setup;
+procedure TTestPolicyManager.Setup;
 begin
-  fPolicy:=TPolicy.Create('..\..\..\Examples\Default\basic_policy.csv')
+  fPolicy:=TPolicyManager.Create('..\..\..\Examples\Default\basic_policy.csv')
 end;
 
-procedure TTestPolicy.TearDown;
+procedure TTestPolicyManager.TearDown;
 begin
 end;
 
 
-procedure TTestPolicy.testPolicies;
+procedure TTestPolicyManager.testPolicies;
 var
   list: TList<string>;
 begin
@@ -52,13 +52,13 @@ begin
   list.Free;
 end;
 
-procedure TTestPolicy.testPolicyExists;
+procedure TTestPolicyManager.testPolicyExists;
 begin
   Assert.AreEqual(True, fPolicy.policyExists(['p','bob','DATA2','write']));
   Assert.AreEqual(false, fPolicy.policyExists(['p','bob','DATA100','write']));
 end;
 
-procedure TTestPolicy.testSection;
+procedure TTestPolicyManager.testSection;
 var
   expected: string;
 begin
@@ -67,5 +67,5 @@ begin
 end;
 
 initialization
-  TDUnitX.RegisterTestFixture(TTestPolicy);
+  TDUnitX.RegisterTestFixture(TTestPolicyManager);
 end.

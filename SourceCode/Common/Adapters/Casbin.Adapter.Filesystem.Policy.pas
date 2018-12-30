@@ -73,44 +73,74 @@ end;
 procedure TPolicyFileAdapter.load(const aFilter: TFilterArray);
 var
   policy: string;
-  filter: string;
+  filter,
+  test: string;
   index: Integer;
+  i: Integer;
   filteredArray: TStringList;
-  match: Boolean;
   modifiedFilter: TList<string>;
 begin
   // DO NOT CALL inherited
   // WE NEED TO MANAGE THE CACHE
   {TODO -oOwner -cGeneral : Implement Cache}
-  inherited;
+  inherited; // <-- This should be removed when Cache is implemented
   if Length(aFilter)<>0 then
   begin
     modifiedFilter:=TList<string>.Create;
     for policy in aFilter do
-      modifiedFilter.Add(Trim(policy));
+      if trim(policy)='' then
+        modifiedFilter.add('*')
+      else
+        modifiedFilter.Add(Trim(policy));
 
-    for policy in getAssertions do
+    filter:='';
+    for policy in modifiedFilter do
+      filter:=filter+policy+',';
+    if filter[findEndPos(filter)] = ',' then
+      filter:=Copy(filter, findStartPos, findEndPos(filter)-1);
+    filter:=Trim(filter);
+
+    for i:=getAssertions.Count-1 downto 0 do
     begin
+      policy:=getAssertions.Items[i];
+
       filteredArray:=TStringList.Create;
       filteredArray.Delimiter:=',';
       filteredArray.StrictDelimiter:=True;
-      filteredArray.DelimitedText:=policy;
+      filteredArray.DelimitedText:=Trim(policy);
 
-      if modifiedFilter.Count<=filteredArray.Count then
+      if filteredArray.Count>=1 then
       begin
-        match:= false;
-        for index:=0 to modifiedFilter.Count-1 do
+        // Here we need to get the role tags from TSectionHeaders
+        if (UpperCase(filteredArray.Strings[0])<>'G') and
+          (UpperCase(filteredArray.Strings[0])<>'G2') then
         begin
-          match:=match and ((UpperCase(Trim(modifiedFilter[index])) =
-                                (UpperCase(Trim(filteredArray[index])))));
+          filteredArray.Delete(0);
+          if modifiedFilter.Count<=filteredArray.Count then
+          begin
+            for index:=0 to modifiedFilter.Count-1 do
+            begin
+              if modifiedFilter.Items[index] = '*' then
+                filteredArray.Strings[index]:='*';
+            end;
+
+            test:='';
+            for index:=0 to filteredArray.Count-1 do
+              test:=test+Trim(filteredArray[index])+',';
+            test:=Trim(test);
+            if test[findEndPos(test)] = ',' then
+              test:=Copy(test, findStartPos, findEndPos(test)-1);
+
+            var ss:=Copy(test, findStartPos, findEndPos(filter));
+            if Trim(UpperCase(Copy(test, findStartPos, findEndPos(filter)))) <>
+                                            Trim(UpperCase(filter)) then
+              getAssertions.Delete(i);
+          end;
         end;
-
-        if match then
-          getAssertions.Remove(policy);
       end;
-
       filteredArray.Free;
     end;
+    modifiedFilter.Free;
   end;
 end;
 

@@ -71,6 +71,7 @@ function TPolicy.section(const aSlim: Boolean): string;
 var
   headerNode: THeaderNode;
   strList: TStringList;
+  policy: string;
 begin
   Result:='';
   for headerNode in fNodes.Headers do
@@ -79,8 +80,14 @@ begin
       Result:=headerNode.toOutputString;
       strList:=TStringList.Create;
       strList.Text:=Result;
-      if (strList.Count>1) and (strList.Strings[0][findStartPos]='[') then
-        Result:=strList.Strings[1];
+      if (strList.Count>1) then
+      begin
+        Result:='';
+        if aSlim and (strList.Strings[0][findStartPos]='[') then
+          strList.Delete(0);
+        for policy in strList do
+          Result:=Result+policy+sLineBreak;
+      end;
       strList.Free;
       Exit;
     end;

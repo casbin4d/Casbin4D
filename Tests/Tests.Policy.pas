@@ -18,12 +18,15 @@ type
 
     [Test]
     procedure testPolicies;
+
+    [Test]
+    procedure testSection;
   end;
 
 implementation
 
 uses
-  Casbin.Policy, System.Generics.Collections;
+  Casbin.Policy, System.Generics.Collections, System.SysUtils;
 
 procedure TTestPolicy.Setup;
 begin
@@ -44,6 +47,14 @@ begin
   Assert.AreEqual('p, alice, data1, read', list.Items[0], 'Line 1');
   Assert.AreEqual('p, bob, data2, write', list.Items[1], 'Line 2');
   list.Free;
+end;
+
+procedure TTestPolicy.testSection;
+var
+  expected: string;
+begin
+  expected:='p, alice, data1, read'+sLineBreak+'p, bob, data2, write';
+  Assert.AreEqual(expected, trim(fPolicy.section));
 end;
 
 initialization

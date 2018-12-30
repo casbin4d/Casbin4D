@@ -7,10 +7,10 @@ uses
 
 type
   TFileAdapter = class(TBaseAdapter)
-  private
+  protected
     fFilename: string;
-  public
-    constructor Create(const aFilename: string);
+   public
+    constructor Create(const aFilename: string); virtual;
     procedure load(const aFilter: TFilterArray); override;
     procedure save; override;
   end;

@@ -61,6 +61,7 @@ contains
   Casbin.Adapter.Filesystem.Policy in '..\Common\Adapters\Casbin.Adapter.Filesystem.Policy.pas',
   Casbin.Adapter.Filesystem in '..\Common\Adapters\Casbin.Adapter.Filesystem.pas',
   Casbin.Policy in '..\Common\Policy\Casbin.Policy.pas',
-  Casbin.Policy.Types in '..\Common\Policy\Casbin.Policy.Types.pas';
+  Casbin.Policy.Types in '..\Common\Policy\Casbin.Policy.Types.pas',
+  Casbin.Adapter.Policy.Types in '..\Common\Adapters\Casbin.Adapter.Policy.Types.pas';
 
 end.

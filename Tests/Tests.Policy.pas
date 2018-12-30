@@ -21,6 +21,9 @@ type
 
     [Test]
     procedure testSection;
+
+    [Test]
+    procedure testPolicyExists;
   end;
 
 implementation
@@ -47,6 +50,12 @@ begin
   Assert.AreEqual('p, alice, data1, read', list.Items[0], 'Line 1');
   Assert.AreEqual('p, bob, data2, write', list.Items[1], 'Line 2');
   list.Free;
+end;
+
+procedure TTestPolicy.testPolicyExists;
+begin
+  Assert.AreEqual(True, fPolicy.policyExists(['p','bob','DATA2','write']));
+  Assert.AreEqual(false, fPolicy.policyExists(['p','bob','DATA100','write']));
 end;
 
 procedure TTestPolicy.testSection;

@@ -32,11 +32,8 @@ uses
   System.IOUtils, System.Classes, Casbin.Parser, Casbin.Core.Utilities;
 
 constructor TModel.Create(const aModel: string);
-var
-  adapter: IAdapter;
 begin
-  adapter:=TFileAdapter.Create(aModel);
-  Create(adapter);
+  Create(TFileAdapter.Create(aModel));
 end;
 
 function TModel.assertions(const aSection: TSectionType): TList<System.string>;
@@ -104,8 +101,9 @@ begin
       Result:=headerNode.toOutputString;
       strList:=TStringList.Create;
       strList.Text:=Result;
-      if (strList.Count>1) and (strList.Strings[0][findStartPos]='[') then
-        Result:=strList.Strings[1];
+      if (strList.Count>1) then
+        if aSlim and (strList.Strings[0][findStartPos]='[') then
+          Result:=strList.Strings[1];
       strList.Free;
       Exit;
     end;

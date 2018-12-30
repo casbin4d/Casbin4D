@@ -44,7 +44,8 @@ uses
 
 procedure TPolicyFileAdapter.add(const aTag: string);
 begin
-  {TODO -oOwner -cGeneral : PolicyFilterAdapter.Add}
+  {TODO -oOwner -cGeneral : Add PolicyFilterAdapter.Add}
+  raise Exception.Create('Not Implemented Yet');
 end;
 
 constructor TPolicyFileAdapter.Create(const aFilename: string);
@@ -146,18 +147,21 @@ end;
 
 procedure TPolicyFileAdapter.remove(const aPolicyDefinition, aFilter: string);
 begin
-  {TODO -oOwner -cGeneral : PolicyFilterAdapter.remove}
+  {TODO -oOwner -cGeneral : Add PolicyFilterAdapter.remove}
+  raise Exception.Create('Not Implemented Yet');
 end;
 
 procedure TPolicyFileAdapter.remove(const aPolicyDefinition: string);
 begin
-  {TODO -oOwner -cGeneral : PolicyFilterAdapter.remove}
+  {TODO -oOwner -cGeneral : Add PolicyFilterAdapter.remove}
+  raise Exception.Create('Not Implemented Yet');
 end;
 
 procedure TPolicyFileAdapter.save;
 begin
   inherited;
-   {TODO -oOwner -cGeneral : PolicyFilterAdapter.save}
+   {TODO -oOwner -cGeneral : Add PolicyFilterAdapter.save}
+  raise Exception.Create('Not Implemented Yet');
 end;
 
 procedure TPolicyFileAdapter.setAutoSave(const aValue: Boolean);

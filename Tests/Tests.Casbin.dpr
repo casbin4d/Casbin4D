@@ -61,7 +61,7 @@ uses
   Casbin.Adapter.Filesystem in '..\SourceCode\Common\Adapters\Casbin.Adapter.Filesystem.pas',
   Casbin.Adapter.Policy.Types in '..\SourceCode\Common\Adapters\Casbin.Adapter.Policy.Types.pas',
   Casbin.Adapter.Filesystem.Policy in '..\SourceCode\Common\Adapters\Casbin.Adapter.Filesystem.Policy.pas',
-  Tests.Adapter.Filesystem.Policy in 'Tests.Adapter.Filesystem.Policy.pas',
+  Tests.Adapter.Filesystem.Policy.RbacWithDenyPolicy in 'Tests.Adapter.Filesystem.Policy.RbacWithDenyPolicy.pas',
   Casbin.Policy.Types in '..\SourceCode\Common\Policy\Casbin.Policy.Types.pas',
   Casbin.Policy in '..\SourceCode\Common\Policy\Casbin.Policy.pas',
   Tests.Policy in 'Tests.Policy.pas';

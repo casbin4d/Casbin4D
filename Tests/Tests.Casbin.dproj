@@ -166,7 +166,7 @@
         <DCCReference Include="..\SourceCode\Common\Adapters\Casbin.Adapter.Filesystem.pas"/>
         <DCCReference Include="..\SourceCode\Common\Adapters\Casbin.Adapter.Policy.Types.pas"/>
         <DCCReference Include="..\SourceCode\Common\Adapters\Casbin.Adapter.Filesystem.Policy.pas"/>
-        <DCCReference Include="Tests.Adapter.Filesystem.Policy.pas"/>
+        <DCCReference Include="Tests.Adapter.Filesystem.Policy.RbacWithDenyPolicy.pas"/>
         <DCCReference Include="..\SourceCode\Common\Policy\Casbin.Policy.Types.pas"/>
         <DCCReference Include="..\SourceCode\Common\Policy\Casbin.Policy.pas"/>
         <DCCReference Include="Tests.Policy.pas"/>

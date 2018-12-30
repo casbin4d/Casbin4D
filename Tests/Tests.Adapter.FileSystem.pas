@@ -21,6 +21,8 @@ type
     procedure testSave;
     [Test]
     procedure testOutputString;
+    [Test]
+    procedure testLazyLoad;
   end;
 
 implementation
@@ -35,6 +37,11 @@ end;
 
 procedure TTestAdapterFilesystem.TearDown;
 begin
+end;
+
+procedure TTestAdapterFilesystem.testLazyLoad;
+begin
+  Assert.IsTrue(fFilesystem.Assertions.Count = 0);
 end;
 
 procedure TTestAdapterFilesystem.testLoad;

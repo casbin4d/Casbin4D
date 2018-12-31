@@ -13,13 +13,15 @@ type
     fAdapter: IPolicyAdapter;
     fParser: IParser;
     fNodes: TNodeCollection;
+    procedure loadPolicies;
+  private
 {$REGION 'Interface'}
     function section (const aSlim: Boolean = true): string;
     function policies: TList<string>;
     procedure add(const aTag: string);
+    procedure load (const aFilter: TFilterArray = []);
     function policy(const aFilter: TFilterArray = []): string;
     procedure clear;
-    procedure loadPolicies;
     function policyExists(const aFilter: TFilterArray = []): Boolean;
     procedure remove(const aPolicyDefinition: string); overload;
     procedure remove (const aPolicyDefinition: string; const aFilter: string); overload;
@@ -61,12 +63,18 @@ begin
   fAdapter:=aAdapter;
 end;
 
+procedure TPolicyManager.load(const aFilter: TFilterArray);
+begin
+  fAdapter.clear;
+  fAdapter.load(aFilter);
+end;
+
 procedure TPolicyManager.loadPolicies;
 begin
   if (Assigned(fNodes)) then
     Exit;
   fAdapter.clear;
-  fAdapter.load;
+  fAdapter.load(fAdapter.Filter);
   fParser:=TParser.Create(fAdapter.toOutputString, ptPolicy);
   fParser.parse;
   if fParser.Status=psError then

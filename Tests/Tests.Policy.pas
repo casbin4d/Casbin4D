@@ -67,6 +67,7 @@ procedure TTestPolicyManager.testPolicyExists;
 begin
   Assert.AreEqual(True, fPolicy.policyExists(['p','bob','DATA2','write']));
   Assert.AreEqual(false, fPolicy.policyExists(['p','bob','DATA100','write']));
+  Assert.AreEqual(false, fPolicy.policyExists(['bob','DATA100','write']));
 end;
 
 procedure TTestPolicyManager.testSection;

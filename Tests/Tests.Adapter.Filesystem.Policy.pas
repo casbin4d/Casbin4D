@@ -1,4 +1,4 @@
-unit Tests.Adapter.Filesystem.Policy.RbacWithDenyPolicy;
+unit Tests.Adapter.Filesystem.Policy;
 
 interface
 uses
@@ -7,7 +7,7 @@ uses
 type
 
   [TestFixture]
-  TTestPolicyFileAdapterRBACWithDenyPolicy = class(TObject)
+  TTestPolicyFileAdapter = class(TObject)
   private
     fFilesystem: IPolicyAdapter;
   public
@@ -58,38 +58,38 @@ implementation
 uses
   Casbin.Adapter.Filesystem.Policy, System.SysUtils, System.Classes, System.Types;
 
-procedure TTestPolicyFileAdapterRBACWithDenyPolicy.Setup;
+procedure TTestPolicyFileAdapter.Setup;
 begin
   fFilesystem:=TPolicyFileAdapter.Create('..\..\..\Examples\Default\rbac_with_deny_policy.csv');
 end;
 
-procedure TTestPolicyFileAdapterRBACWithDenyPolicy.TearDown;
+procedure TTestPolicyFileAdapter.TearDown;
 begin
 end;
 
 
-procedure TTestPolicyFileAdapterRBACWithDenyPolicy.testAutoSave;
+procedure TTestPolicyFileAdapter.testAutoSave;
 begin
   Assert.AreEqual(true, fFilesystem.AutoSave, 'default');
   fFilesystem.AutoSave:=not fFilesystem.AutoSave;
   Assert.AreEqual(false, fFilesystem.AutoSave, 'changed');
 end;
 
-procedure TTestPolicyFileAdapterRBACWithDenyPolicy.testCached;
+procedure TTestPolicyFileAdapter.testCached;
 begin
   Assert.AreEqual(False, fFilesystem.Cached, 'default');
   fFilesystem.Cached:=not fFilesystem.Cached;
   Assert.AreEqual(true, fFilesystem.Cached, 'changed');
 end;
 
-procedure TTestPolicyFileAdapterRBACWithDenyPolicy.testCachSize;
+procedure TTestPolicyFileAdapter.testCachSize;
 begin
   Assert.AreEqual(15, fFilesystem.CacheSize, 'default');
   fFilesystem.CacheSize:=100;
   Assert.AreEqual(100, fFilesystem.CacheSize, 'changed');
 end;
 
-procedure TTestPolicyFileAdapterRBACWithDenyPolicy.testFiltered;
+procedure TTestPolicyFileAdapter.testFiltered;
 begin
   Assert.IsFalse(fFilesystem.Filtered, 'Default');
   fFilesystem.load(['alice']);
@@ -98,7 +98,7 @@ begin
   Assert.IsFalse(fFilesystem.Filtered, 'Back to Default');
 end;
 
-procedure TTestPolicyFileAdapterRBACWithDenyPolicy.testload(const aFilter, aExpected: string);
+procedure TTestPolicyFileAdapter.testload(const aFilter, aExpected: string);
 var
   strArray: TStringDynArray;
   strList: TStringList;
@@ -116,5 +116,5 @@ begin
 end;
 
 initialization
-  TDUnitX.RegisterTestFixture(TTestPolicyFileAdapterRBACWithDenyPolicy);
+  TDUnitX.RegisterTestFixture(TTestPolicyFileAdapter);
 end.

@@ -86,6 +86,8 @@ begin
   {TODO -oOwner -cGeneral : Implement Cache}
   inherited; // <-- This should be removed when Cache is implemented
              //     But the fFiltered should be managed here
+             //     And the fFilter property
+  fFilter:=aFilter;
   if Length(aFilter)<>0 then
   begin
     modifiedFilter:=TList<string>.Create;

@@ -22,10 +22,12 @@ type
     fAssertions: TList<string>;
   protected
     fFiltered: Boolean;
+    fFilter: TFilterArray;
   protected
 {$REGION 'Interface'}
     function getAssertions: TList<string>;
     function getLogger: ILogger; virtual;
+    function getFilter: TFilterArray;
     procedure load(const aFilter: TFilterArray); virtual;
     procedure save; virtual; abstract;
     procedure setAssertions(const aValue: TList<string>); virtual;
@@ -68,6 +70,11 @@ begin
   Result:=fAssertions;
 end;
 
+function TBaseAdapter.getFilter: TFilterArray;
+begin
+  Result:=fFilter;
+end;
+
 function TBaseAdapter.getFiltered: boolean;
 begin
   Result:=fFiltered;
@@ -81,6 +88,7 @@ end;
 procedure TBaseAdapter.load(const aFilter: TFilterArray);
 begin
   fFiltered:= Length(aFilter) <> 0;
+  fFilter:=aFilter;
 end;
 
 procedure TBaseAdapter.setAssertions(const aValue: TList<string>);

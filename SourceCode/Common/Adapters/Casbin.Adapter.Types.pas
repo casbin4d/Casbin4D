@@ -18,9 +18,11 @@ type
 
     function toOutputString: string;
     procedure clear;
+    function getFilter: TFilterArray;
     function getFiltered: boolean;
 
     property Assertions: TList<string> read getAssertions write setAssertions;
+    property Filter: TFilterArray read getFilter;
     property Filtered: boolean read getFiltered;
     property Logger: ILogger read getLogger write setLogger;
   end;

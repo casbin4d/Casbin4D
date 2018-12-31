@@ -27,7 +27,7 @@ type
     procedure remove (const aPolicyDefinition: string; const aFilter: string); overload;
 {$ENDREGION}
   public
-    constructor Create(const aModel: string); overload;
+    constructor Create(const aPolicy: string); overload;
     constructor Create(const aAdapter: IPolicyAdapter); overload;
   end;
 
@@ -40,9 +40,9 @@ uses
 
 { TPolicyManager }
 
-constructor TPolicyManager.Create(const aModel: string);
+constructor TPolicyManager.Create(const aPolicy: string);
 begin
-  Create(TPolicyFileAdapter.Create(aModel));
+  Create(TPolicyFileAdapter.Create(aPolicy));
 end;
 
 procedure TPolicyManager.add(const aTag: string);

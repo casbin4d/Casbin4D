@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project Version="1.0">
+  <Title>Casbin4D</Title>
+  <Summary/>
+  <Author/>
+  <Email/>
+  <Copyright/>
+  <Comment/>
+  <Language>2057</Language>
+  <Charset>1</Charset>
+  <HeaderHtml>&lt;%TopicTitle%&gt;</HeaderHtml>
+  <FooterHtml/>
+  <CustomDefines/>
+  <ShowImplementationSection>true</ShowImplementationSection>
+  <ShowPrivateMembers>true</ShowPrivateMembers>
+  <ShowProtectedMembers>true</ShowProtectedMembers>
+  <ShowInheritedMembers>true</ShowInheritedMembers>
+  <ShowPropertyAccessors>true</ShowPropertyAccessors>
+  <FileNamePolicy>0</FileNamePolicy>
+  <CompilerVersion>24</CompilerVersion>
+  <TargetPlatform>0</TargetPlatform>
+  <Sources>
+    <Source>.\Packages\CasbinD103Rio.dpk</Source>
+  </Sources>
+  <Outputs>
+    <Output Type="HTML">
+      <Active>true</Active>
+      <OutputDirectory>..\Documentation</OutputDirectory>
+    </Output>
+    <Output Type="CHM">
+      <Active>false</Active>
+      <OutputFileName>Doc\CHM\Casbin4D.chm</OutputFileName>
+    </Output>
+    <Output Type="MSHELP2">
+      <Active>false</Active>
+      <OutputFileName>Doc\MSHelp2\Casbin4D.HxS</OutputFileName>
+      <Namespace>Casbin4D</Namespace>
+      <TitleID>library</TitleID>
+    </Output>
+    <Output Type="HelpAndManual">
+      <Active>false</Active>
+      <OutputFileName>Doc\HM\Casbin4D.hmxp</OutputFileName>
+    </Output>
+  </Outputs>
+</Project>

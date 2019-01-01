@@ -27,13 +27,16 @@ type
     [TestCase ('Effect', 'stPolicyEffect')]
     [TestCase ('Matcher', 'stMatchers')]
     procedure testAssertions (const aSection: TSectionType);
+
+    [Test]
+    procedure testEffect;
   end;
 
 implementation
 
 uses
   Casbin.Adapter.Filesystem, Casbin.Model, System.SysUtils,
-  System.Generics.Collections, System.Classes;
+  System.Generics.Collections, System.Classes, Casbin.Effect.Types;
 
 procedure TTestModel.Setup;
 begin
@@ -74,6 +77,11 @@ begin
     end;
   end;
   list.Free;
+end;
+
+procedure TTestModel.testEffect;
+begin
+  Assert.AreEqual(ecSomeAllow, fModel.effectCondition);
 end;
 
 procedure TTestModel.testSections(const aSection: TSectionType);

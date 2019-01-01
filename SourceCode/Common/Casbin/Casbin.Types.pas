@@ -4,9 +4,11 @@ interface
 
 uses
   Casbin.Core.Base.Types, Casbin.Model.Types, Casbin.Policy.Types,
-  Casbin.Core.Logger.Types;
+  Casbin.Core.Logger.Types, System.Types;
 
 type
+  TEnforceParameters = TStringDynArray;
+
   ICasbin = interface (IBaseInterface)
     ['{7DC6F205-0000-40EF-BA8A-BF18018E5674}']
     function getEnabled: Boolean;
@@ -17,6 +19,8 @@ type
     procedure setLogger(const aValue: ILogger);
     procedure setModel(const aValue: IModel);
     procedure setPolicy(const aValue: IPolicyManager);
+
+    function enforce (const aParams: TEnforceParameters): boolean;
 
     property Enabled: Boolean read getEnabled write setEnabled;
     property Logger: ILogger read getLogger write setLogger;

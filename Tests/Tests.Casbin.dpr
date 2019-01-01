@@ -68,7 +68,10 @@ uses
   Tests.Policy.RBACWithDomainsPolicy in 'Tests.Policy.RBACWithDomainsPolicy.pas',
   Casbin.Types in '..\SourceCode\Common\Casbin\Casbin.Types.pas',
   Casbin in '..\SourceCode\Common\Casbin\Casbin.pas',
-  Tests.Casbin.Main in 'Tests.Casbin.Main.pas';
+  Tests.Casbin.Main in 'Tests.Casbin.Main.pas',
+  Casbin.Resolve.Types in '..\SourceCode\Common\Casbin\Casbin.Resolve.Types.pas',
+  Casbin.Resolve in '..\SourceCode\Common\Casbin\Casbin.Resolve.pas',
+  Tests.Casbin.Resolve in 'Tests.Casbin.Resolve.pas';
 
 var
   runner : ITestRunner;

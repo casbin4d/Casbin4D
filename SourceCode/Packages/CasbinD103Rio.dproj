@@ -147,6 +147,10 @@
         <DCCReference Include="..\Common\Adapters\Casbin.Adapter.Policy.Types.pas"/>
         <DCCReference Include="..\Common\Policy\Casbin.Policy.Types.pas"/>
         <DCCReference Include="..\Common\Policy\Casbin.Policy.pas"/>
+        <DCCReference Include="..\Common\Casbin\Casbin.Resolve.pas"/>
+        <DCCReference Include="..\Common\Casbin\Casbin.Resolve.Types.pas"/>
+        <DCCReference Include="..\Common\Casbin\Casbin.Types.pas"/>
+        <DCCReference Include="..\Common\Casbin\Casbin.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

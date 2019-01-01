@@ -23,6 +23,8 @@ type
     procedure setLogger(const aValue: ILogger);
     function getEnabled: Boolean;
     procedure setEnabled(const aValue: Boolean);
+
+    function enforce (const aParams: TEnforceParameters): boolean;
 {$ENDREGION}
   public
     constructor Create(const aModelFile, aPolicyFile: string); overload;
@@ -33,7 +35,9 @@ type
 implementation
 
 uses
-  Casbin.Exception.Types, Casbin.Model, Casbin.Policy, Casbin.Core.Logger.Default;
+  Casbin.Exception.Types, Casbin.Model, Casbin.Policy,
+  Casbin.Core.Logger.Default, System.Generics.Collections, System.SysUtils,
+  Casbin.Resolve, Casbin.Resolve.Types, Casbin.Model.Sections.Types, Casbin.Core.Utilities, System.Rtti;
 
 constructor TCasbin.Create(const aModelFile, aPolicyFile: string);
 begin
@@ -52,6 +56,45 @@ begin
   fPolicy:=aPolicyAdapter;
   fLogger:=TDefaultLogger.Create;
   fEnabled:=True;
+end;
+
+function TCasbin.enforce(const aParams: TEnforceParameters): boolean;
+var
+  i: Integer;
+  index: Integer;
+  item: string;
+  request: TList<string>;
+  requestDict: TDictionary<string, string>;
+  policyDict: TDictionary<string, string>;
+  requestStr: string;
+begin
+  result:=true;
+  if not fEnabled then
+    Exit;
+
+  request:=TList<string>.Create;
+  for item in aParams do
+    request.Add(item);
+
+  for item in aParams do
+    requestStr:=requestStr+item+',';
+  if requestStr[findEndPos(requestStr)]=',' then
+    requestStr:=Copy(requestStr, findStartPos,
+                        findEndPos(requestStr));
+  fLogger.log('Enforcing request '''+requestStr+'''');
+
+  // Resolve Request
+  requestDict:=resolve(request,
+                       rtRequest,
+                       fModel.assertions(stRequestDefinition));
+
+  // Resolve Policy
+  policyDict:=resolve(fPolicy.policies, rtPolicy,
+                      fModel.assertions(stPolicyDefinition));
+
+  request.Free;
+  policyDict.Free;
+  requestDict.Free;
 end;
 
 { TCasbin }

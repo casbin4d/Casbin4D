@@ -37,7 +37,7 @@ implementation
 uses
   Casbin.Exception.Types, Casbin.Model, Casbin.Policy,
   Casbin.Core.Logger.Default, System.Generics.Collections, System.SysUtils,
-  Casbin.Resolve, Casbin.Resolve.Types, Casbin.Model.Sections.Types, Casbin.Core.Utilities, System.Rtti;
+  Casbin.Resolve, Casbin.Resolve.Types, Casbin.Model.Sections.Types, Casbin.Core.Utilities, System.Rtti, Casbin.Effect.Types;
 
 constructor TCasbin.Create(const aModelFile, aPolicyFile: string);
 begin
@@ -64,9 +64,16 @@ var
   index: Integer;
   item: string;
   request: TList<string>;
+  tmpList: TList<string>;
   requestDict: TDictionary<string, string>;
   policyDict: TDictionary<string, string>;
   requestStr: string;
+  matcherResult: TEffectResult;
+  matcher: TList<string>;
+  policyList: TList<string>;
+  policyArray: TArray<string>;
+  policy: string;
+  effectArray: TEffectArray;
 begin
   result:=true;
   if not fEnabled then
@@ -81,20 +88,77 @@ begin
   if requestStr[findEndPos(requestStr)]=',' then
     requestStr:=Copy(requestStr, findStartPos,
                         findEndPos(requestStr));
+
   fLogger.log('Enforcing request '''+requestStr+'''');
 
+  fLogger.log('   Resolving Request...');
   // Resolve Request
+{$IFDEF DEBUG}
+  fLogger.log('   Request: '+requestStr);
+  tmpList:=fModel.assertions(stRequestDefinition);
+  fLogger.log('      Assertions: ');
+  for item in tmpList do
+    fLogger.log('         '+item);
+  tmpList.Free;
+{$ENDIF}
+
   requestDict:=resolve(request,
                        rtRequest,
                        fModel.assertions(stRequestDefinition));
 
-  // Resolve Policy
-  policyDict:=resolve(fPolicy.policies, rtPolicy,
-                      fModel.assertions(stPolicyDefinition));
+  fLogger.log('   Resolving Policies...');
+
+{$IFDEF DEBUG}
+  fLogger.log('   Policies: ');
+  fLogger.log('      Assertions: ');
+  tmpList:=fPolicy.policies;
+  for item in tmpList do
+    fLogger.log('         '+item);
+  tmpList.Free;
+
+  tmpList:=fModel.assertions(stPolicyDefinition);
+  fLogger.log('      Assertions: '+requestStr);
+  for item in tmpList do
+    fLogger.log('         '+item);
+  tmpList.Free;
+{$ENDIF}
+
+  matcher:=fModel.assertions(stMatchers);
+
+  for item in fPolicy.policies do
+  begin
+    // Resolve Policy
+    policyList:=TList<string>.Create;
+    policyList.AddRange(item.Split([',']));
+    policyDict:=resolve(policyList, rtPolicy,
+                        fModel.assertions(stPolicyDefinition));
+
+    fLogger.log('   Resolving Functions...');
+    // Resolve Functions ???
+
+    fLogger.log('   Resolving Matcher...');
+    // Resolve Matcher
+
+    if matcher.Count>0 then
+      matcherResult:=resolve(requestDict, policyDict, '', matcher.Items[0])
+    else
+      matcherResult:=erIndeterminate;
+    SetLength(effectArray, Length(effectArray)+1);
+    effectArray[Length(effectArray)-1]:=matcherResult;
+
+    policyDict.Free;
+    policyList.Free;
+  end;
+
+  matcher.Free;
+
+
+  fLogger.log('   Resolving Effector...');
 
   request.Free;
-  policyDict.Free;
   requestDict.Free;
+
+  fLogger.log('Enforcing Request Finished...');
 end;
 
 { TCasbin }

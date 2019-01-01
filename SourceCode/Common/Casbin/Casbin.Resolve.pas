@@ -4,17 +4,22 @@ interface
 
 uses
   Casbin.Types, Casbin.Resolve.Types,
-  System.Generics.Collections;
+  System.Generics.Collections, Casbin.Effect.Types;
 
 function resolve (const aResolve: TList<string>;
                   const aResolveType: TResolveType;
                   const aAssertions: TList<string>):
-                    TDictionary<string, string>;
+                    TDictionary<string, string>; overload;
+
+function resolve(const aResolvedRequest,
+                       aResolvedPolicy: TDictionary<string, string>;
+                 const aFunctionListList,
+                       aMatcher: string): TEffectResult; overload;
 
 implementation
 
 uses
-  Casbin.Exception.Types, System.SysUtils;
+  Casbin.Exception.Types, SysUtils, Casbin.Matcher.Types, Casbin.Matcher;
 
 function resolve (const aResolve: TList<string>;
                   const aResolveType: TResolveType;
@@ -42,7 +47,34 @@ begin
                   Result.Add(aAssertions.Items[index],
                                 aResolve[index]);
                end;
+  else
+    raise ECasbinException.Create('Resolve Type not correct');
   end;
+end;
+
+function resolve(const aResolvedRequest, aResolvedPolicy: TDictionary<string,
+    string>; const aFunctionListList, aMatcher: string): TEffectResult;
+var
+  matcher: IMatcher;
+  resolvedMatcher: string;
+  item: string;
+begin
+  if not Assigned(aResolvedRequest) then
+    raise ECasbinException.Create('Resolved Request is nil');
+  if not Assigned(aResolvedPolicy) then
+    raise ECasbinException.Create('Policy Request is nil');
+
+  resolvedMatcher:=Trim(aMatcher);
+
+  for item in aResolvedRequest.Keys do
+    resolvedMatcher:=resolvedMatcher.Replace
+                          (item, aResolvedRequest.Items[item], [rfReplaceAll]);
+  for item in aResolvedPolicy.Keys do
+    resolvedMatcher:=resolvedMatcher.Replace
+                          (item, aResolvedPolicy.Items[item], [rfReplaceAll]);
+
+  matcher:=TMatcher.Create;
+  Result:=matcher.evaluateMatcher(resolvedMatcher);
 end;
 
 end.

@@ -17,13 +17,15 @@ type
     procedure testResolveRequest;
     [Test]
     procedure testResolvePolicy;
+    [Test]
+    procedure testResolveMatcherBasicModel;
   end;
 
 implementation
 
 uses
   Casbin.Types, Casbin, System.Generics.Collections, Casbin.Resolve.Types,
-  Casbin.Model.Sections.Types, Casbin.Resolve;
+  Casbin.Model.Sections.Types, Casbin.Resolve, System.Rtti, Casbin.Effect.Types;
 
 procedure TTestCasbinResolve.Setup;
 begin
@@ -33,6 +35,52 @@ procedure TTestCasbinResolve.TearDown;
 begin
 end;
 
+
+procedure TTestCasbinResolve.testResolveMatcherBasicModel;
+var
+  policy: TList<string>;
+  request: TList<string>;
+  casbin: ICasbin;
+  listRequest: TList<string>;
+  listPolicy: TList<string>;
+  listMatcher: TList<string>;
+  requestDict: TDictionary<string, string>;
+  policyDict: TDictionary<string, string>;
+  matcherResult: TEffectResult;
+begin
+  request:=TList<string>.Create;
+  request.Add('alice');
+  request.Add('data1');
+  request.Add('read');
+
+  policy:=TList<string>.Create;
+  policy.Add('alice');
+  policy.Add('data1');
+  policy.Add('read');
+
+  casbin:=TCasbin.Create('..\..\..\Examples\Default\basic_model.conf',
+              '..\..\..\Examples\Default\basic_policy.csv');
+  listRequest:=casbin.Model.assertions(stRequestDefinition);
+  requestDict:=resolve(request, rtRequest, listRequest);
+  listPolicy:=casbin.Model.assertions(stPolicyDefinition);
+  policyDict:=resolve(policy, rtPolicy, listPolicy);
+
+  listMatcher:=casbin.Model.assertions(stMatchers);
+  if listMatcher.Count>0 then
+    matcherResult:=resolve(requestDict, policyDict, '', listMatcher.Items[0])
+  else
+    matcherResult:=erIndeterminate;
+  listMatcher.Free;
+
+  Assert.AreEqual(erAllow, matcherResult);
+
+  requestDict.Free;
+  policyDict.Free;
+  listPolicy.Free;
+  listRequest.Free;
+  policy.Free;
+  request.Free;
+end;
 
 procedure TTestCasbinResolve.testResolvePolicy;
 var

@@ -2,7 +2,7 @@ unit Tests.Casbin.Main;
 
 interface
 uses
-  DUnitX.TestFramework;
+  DUnitX.TestFramework, Casbin.Types;
 
 type
 
@@ -19,13 +19,19 @@ type
     procedure testAdapterConstructor;
     [Test]
     procedure testEnabled;
+    [Test]
+    [TestCase ('Basic Model','..\..\..\Examples\Default\basic_model.conf#'+
+                            '..\..\..\Examples\Default\basic_policy.csv#'+
+                            'alice,data1,read#true', '#')]
+    procedure testEnforce(const aModelFile, aPolicyFile, aEnforceParams: string;
+        const aResult: boolean);
   end;
 
 implementation
 
 uses
   Casbin.Model.Types, Casbin.Policy.Types, Casbin.Model, Casbin.Policy,
-  Casbin.Types, Casbin;
+  Casbin, SysUtils;
 
 procedure TTestCasbin.Setup;
 begin
@@ -60,6 +66,17 @@ begin
   Assert.IsTrue(casbin.Enabled);
   casbin.Enabled:=False;
   Assert.IsFalse(casbin.Enabled);
+end;
+
+procedure TTestCasbin.testEnforce(const aModelFile, aPolicyFile,
+    aEnforceParams: string; const aResult: boolean);
+var
+  params: TEnforceParameters;
+  casbin: ICasbin;
+begin
+  casbin:=TCasbin.Create(aModelFile, aPolicyFile);
+  params:=aEnforceParams.Split([',']);
+  Assert.AreEqual(aResult, casbin.enforce(params));
 end;
 
 procedure TTestCasbin.testFileConstructor;

@@ -4,7 +4,7 @@ interface
 
 uses
   Casbin.Core.Base.Types, Casbin.Model.Sections.Types,
-  System.Generics.Collections;
+  System.Generics.Collections, Casbin.Effect.Types;
 
 type
   IModel = interface (IBaseInterface)
@@ -18,6 +18,7 @@ type
     /// </remarks>
     {$ENDREGION}
     function assertions (const aSection: TSectionType): TList<string>;
+    function effectCondition: TEffectCondition;
   end;
 
 implementation

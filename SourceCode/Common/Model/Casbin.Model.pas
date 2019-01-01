@@ -5,7 +5,7 @@ interface
 uses
   Casbin.Core.Base.Types, Casbin.Model.Types, Casbin.Adapter.Types,
   Casbin.Parser.Types, Casbin.Parser.AST.Types, Casbin.Model.Sections.Types,
-  System.Generics.Collections;
+  System.Generics.Collections, Casbin.Effect.Types;
 
 type
   TModel = class (TBaseInterfacedObject, IModel)
@@ -19,6 +19,7 @@ type
     function section(const aSection: TSectionType; const aSlim: Boolean = true):
         string; virtual;
     function assertions(const aSection: TSectionType): TList<System.string>;
+    function effectCondition: TEffectCondition;
 {$ENDREGION}
   public
     constructor Create(const aModel: string); overload;
@@ -77,6 +78,24 @@ begin
   if fParser.Status=psError then
     raise ECasbinException.Create('Parsing error in Model: '+fParser.ErrorMessage);
   fNodes:=fParser.Nodes;
+end;
+
+function TModel.effectCondition: TEffectCondition;
+var
+  headerNode: THeaderNode;
+begin
+  Result:=ecUnknown;
+  for headerNode in fParser.Nodes.Headers do
+  begin
+    if headerNode.SectionType=stPolicyEffect then
+    begin
+      if (headerNode.ChildNodes.Count>=0) and
+        (headerNode.ChildNodes.Items[0] is TEffectNode) then
+      begin
+        Result:=(headerNode.ChildNodes.Items[0] as TEffectNode).EffectCondition;
+      end;
+    end;
+  end;
 end;
 
 procedure TModel.checkSection(const aSection: TSectionType);

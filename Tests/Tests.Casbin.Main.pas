@@ -20,9 +20,30 @@ type
     [Test]
     procedure testEnabled;
     [Test]
-    [TestCase ('Basic Model','..\..\..\Examples\Default\basic_model.conf#'+
+    [TestCase ('Basic Model.1','..\..\..\Examples\Default\basic_model.conf#'+
                             '..\..\..\Examples\Default\basic_policy.csv#'+
                             'alice,data1,read#true', '#')]
+    [TestCase ('Basic Model.2','..\..\..\Examples\Default\basic_model.conf#'+
+                            '..\..\..\Examples\Default\basic_policy.csv#'+
+                            'alice,data1,write#false', '#')]
+    [TestCase ('Basic Model.3','..\..\..\Examples\Default\basic_model.conf#'+
+                            '..\..\..\Examples\Default\basic_policy.csv#'+
+                            'alice,data2,read#false', '#')]
+    [TestCase ('Basic Model.4','..\..\..\Examples\Default\basic_model.conf#'+
+                            '..\..\..\Examples\Default\basic_policy.csv#'+
+                            'alice,data2,write#false', '#')]
+    [TestCase ('Basic Model.5','..\..\..\Examples\Default\basic_model.conf#'+
+                            '..\..\..\Examples\Default\basic_policy.csv#'+
+                            'bob,data1,read#false', '#')]
+    [TestCase ('Basic Model.6','..\..\..\Examples\Default\basic_model.conf#'+
+                            '..\..\..\Examples\Default\basic_policy.csv#'+
+                            'bob,data1,write#false', '#')]
+    [TestCase ('Basic Model.7','..\..\..\Examples\Default\basic_model.conf#'+
+                            '..\..\..\Examples\Default\basic_policy.csv#'+
+                            'bob,data2,read#false', '#')]
+    [TestCase ('Basic Model.8','..\..\..\Examples\Default\basic_model.conf#'+
+                            '..\..\..\Examples\Default\basic_policy.csv#'+
+                            'bob,data2,write#true', '#')]
     procedure testEnforce(const aModelFile, aPolicyFile, aEnforceParams: string;
         const aResult: boolean);
   end;

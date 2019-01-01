@@ -65,15 +65,21 @@ begin
     raise ECasbinException.Create('Policy Request is nil');
 
   resolvedMatcher:=Trim(aMatcher);
+  matcher:=TMatcher.Create;
 
   for item in aResolvedRequest.Keys do
+  begin
     resolvedMatcher:=resolvedMatcher.Replace
                           (item, aResolvedRequest.Items[item], [rfReplaceAll]);
+    matcher.addIdentifier(aResolvedRequest.Items[item]);
+  end;
   for item in aResolvedPolicy.Keys do
+  begin
     resolvedMatcher:=resolvedMatcher.Replace
                           (item, aResolvedPolicy.Items[item], [rfReplaceAll]);
+    matcher.addIdentifier(aResolvedPolicy.Items[item]);
+  end;
 
-  matcher:=TMatcher.Create;
   Result:=matcher.evaluateMatcher(resolvedMatcher);
 end;
 

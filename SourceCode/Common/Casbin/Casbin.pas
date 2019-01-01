@@ -37,7 +37,8 @@ implementation
 uses
   Casbin.Exception.Types, Casbin.Model, Casbin.Policy,
   Casbin.Core.Logger.Default, System.Generics.Collections, System.SysUtils,
-  Casbin.Resolve, Casbin.Resolve.Types, Casbin.Model.Sections.Types, Casbin.Core.Utilities, System.Rtti, Casbin.Effect.Types;
+  Casbin.Resolve, Casbin.Resolve.Types, Casbin.Model.Sections.Types, Casbin.Core.Utilities, System.Rtti, Casbin.Effect.Types,
+  Casbin.Effect;
 
 constructor TCasbin.Create(const aModelFile, aPolicyFile: string);
 begin
@@ -130,6 +131,10 @@ begin
     // Resolve Policy
     policyList:=TList<string>.Create;
     policyList.AddRange(item.Split([',']));
+
+    //Item 0 has p,g, etc
+    policyList.Delete(0);
+
     policyDict:=resolve(policyList, rtPolicy,
                         fModel.assertions(stPolicyDefinition));
 
@@ -148,17 +153,21 @@ begin
 
     policyDict.Free;
     policyList.Free;
+
   end;
 
   matcher.Free;
 
+  //Resolve Effector
+  fLogger.log('   Merging effects...');
 
-  fLogger.log('   Resolving Effector...');
+  Result:=mergeEffects(fModel.effectCondition, effectArray);
+
+  fLogger.log('Enforcement completed (Result: '+BoolToStr(Result)+')');
 
   request.Free;
   requestDict.Free;
 
-  fLogger.log('Enforcing Request Finished...');
 end;
 
 { TCasbin }

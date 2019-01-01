@@ -17,9 +17,16 @@ type
     procedure TearDown;
     // Test with TestCase Attribute to supply parameters.
     [Test]
-    [TestCase('Common-Go','john==john && kour==kour && m==m#erAllow', '#')]
-    [TestCase('Common-Delphi','john==john and kour=kour and m=m#erAllow', '#')]
+    [TestCase('Common-Go.1','john==john && kour==kour && m==m#erAllow', '#')]
+    [TestCase('Common-Go.2','john==alice && kour==kour && m==m#erDeny', '#')]
+    [TestCase('Common-Delphi.1','john==john and kour=kour and m=m#erAllow', '#')]
+    [TestCase('Common-Delphi.2','kour=kour or !(root=root)#erAllow', '#')]
     [TestCase('Remove apostrophe','john==john and ''kour''=''kour'' and m=m#erAllow', '#')]
+    [TestCase('Expression With Spaces','john ==john   and ''kour''= ''kour'' and m=m#erAllow', '#')]
+    [TestCase('1 part.1-Allow','john==john#erAllow', '#')]
+    [TestCase('1 part.2-Deny','john==alice#erDeny', '#')]
+    [TestCase('1 part.3-Deny','john==kour#erDeny', '#')]
+    [TestCase('2 part.1-Deny','alice==kour and john=john#erDeny', '#')]
     procedure testMatcher(const aExpression: string; const aExpected:
         TEffectResult);
   end;
@@ -32,6 +39,10 @@ uses
 procedure TTestMatcher.Setup;
 begin
   fMatcher:=TMatcher.Create;
+  fMatcher.addIdentifier('john');
+  fMatcher.addIdentifier('alice');
+  fMatcher.addIdentifier('kour');
+  fMatcher.addIdentifier('mu');
 end;
 
 procedure TTestMatcher.TearDown;

@@ -25,8 +25,7 @@ type
     [TestCase('Expression With Spaces','john ==john   and ''kour''= ''kour'' and m=m#erAllow', '#')]
     [TestCase('1 part.1-Allow','john==john#erAllow', '#')]
     [TestCase('1 part.2-Deny','john==alice#erDeny', '#')]
-    [TestCase('1 part.3-Deny','john==kour#erDeny', '#')]
-    [TestCase('2 part.1-Deny','alice==kour and john=john#erDeny', '#')]
+    [TestCase('2 parts.1-Deny','alice==kour and john=john#erDeny', '#')]
     procedure testMatcher(const aExpression: string; const aExpected:
         TEffectResult);
   end;

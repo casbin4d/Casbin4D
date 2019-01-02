@@ -45,6 +45,9 @@ begin
   fIdentifiers:=TDictionary<string, integer>.Create;
   addIdentifier('true');
   addIdentifier('false');
+  addIdentifier('root');
+  addIdentifier('guest');
+  addIdentifier('superuser');
 end;
 
 destructor TMatcher.Destroy;

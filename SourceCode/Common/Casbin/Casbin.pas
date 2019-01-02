@@ -77,6 +77,8 @@ var
   effectArray: TEffectArray;
   matchString: string;
   func: IFunctions;
+  reqDefinitions: TList<string>;
+  polDefinitions: TList<string>;
 begin
   result:=true;
   if not fEnabled then
@@ -104,10 +106,8 @@ begin
     fLogger.log('         '+item);
   tmpList.Free;
 {$ENDIF}
-
-  requestDict:=resolve(request,
-                       rtRequest,
-                       fModel.assertions(stRequestDefinition));
+  reqDefinitions:=fModel.assertions(stRequestDefinition);
+  requestDict:=resolve(request, rtRequest, reqDefinitions);
 
   fLogger.log('   Resolving Policies...');
 
@@ -137,9 +137,8 @@ begin
 
     //Item 0 has p,g, etc
     policyList.Delete(0);
-
-    policyDict:=resolve(policyList, rtPolicy,
-                        fModel.assertions(stPolicyDefinition));
+    polDefinitions:= fModel.assertions(stPolicyDefinition);
+    policyDict:=resolve(policyList, rtPolicy, polDefinitions);
 
     fLogger.log('   Resolving Functions and Matcher...');
     // Resolve Matcher
@@ -150,6 +149,7 @@ begin
     SetLength(effectArray, Length(effectArray)+1);
     effectArray[Length(effectArray)-1]:=matcherResult;
 
+    polDefinitions.Free;
     policyDict.Free;
     policyList.Free;
 
@@ -164,9 +164,10 @@ begin
 
   fLogger.log('Enforcement completed (Result: '+BoolToStr(Result, true)+')');
 
+  reqDefinitions.Free;
   request.Free;
   requestDict.Free;
-
+  func:=nil;
 end;
 
 { TCasbin }

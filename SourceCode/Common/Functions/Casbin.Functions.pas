@@ -40,14 +40,10 @@ end;
 
 destructor TFunctions.Destroy;
 var
-  func,
-  tmpFunc: TCasbinFunc;
+  item: string;
 begin
-  for func in fDictionary.Values do
-  begin
-    tmpFunc:=func;
-    tmpFunc:=nil;
-  end;
+  for item in fDictionary.Keys do
+    fDictionary.AddOrSetValue(item, nil);
   fDictionary.Free;
   inherited;
 end;

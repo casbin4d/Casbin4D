@@ -25,7 +25,7 @@ type
     rectanglePolicies: TRectangle;
     labelValidatePolicies: TLabel;
     Label1: TLabel;
-    Edit1: TEdit;
+    editParams: TEdit;
     Button1: TButton;
     Layout3: TLayout;
     rectangleEnforced: TRectangle;
@@ -33,12 +33,12 @@ type
     procedure Button1Click(Sender: TObject);
     procedure buttonValidateModelClick(Sender: TObject);
     procedure buttonValidatePoliciesClick(Sender: TObject);
-    procedure Edit1ChangeTracking(Sender: TObject);
+    procedure editParamsChangeTracking(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure popupModelChange(Sender: TObject);
     procedure popupPoliciesChange(Sender: TObject);
   private
-    { Private declarations }
+    fFolder: string;
   public
     { Public declarations }
   end;
@@ -49,21 +49,31 @@ var
 implementation
 
 uses
-  System.IOUtils, Casbin.Parser.Types, Casbin.Parser;
+  System.IOUtils, Casbin.Parser.Types, Casbin.Parser, Casbin.Types, Casbin;
 
 {$R *.fmx}
 
 procedure TForm1.Button1Click(Sender: TObject);
+var
+  casbin: ICasbin;
+  params: TStringDynArray;
 begin
-  if Random(100) mod 3 = 0 then
+  if Trim(editParams.Text)='' then
   begin
-    rectangleEnforced.Fill.Color:=TAlphaColorRec.Red;
-    labelEnforced.Text:='DENY';
-  end
-  else
+    ShowMessage('The parameters are empty');
+    Exit;
+  end;
+  params:=editParams.Text.Split([',']);
+  casbin:=TCasbin.Create(fFolder+popupModel.Text, fFolder+popupPolicies.Text);
+  if casbin.enforce(params) then
   begin
     rectangleEnforced.Fill.Color:=TAlphaColorRec.Green;
     labelEnforced.Text:='ALLOW';
+  end
+  else
+  begin
+    rectangleEnforced.Fill.Color:=TAlphaColorRec.Red;
+    labelEnforced.Text:='DENY';
   end;
   labelEnforced.FontColor:=TAlphaColorRec.White;
 end;
@@ -106,7 +116,7 @@ begin
   labelValidatePolicies.FontColor:=TAlphaColorRec.White;
 end;
 
-procedure TForm1.Edit1ChangeTracking(Sender: TObject);
+procedure TForm1.editParamsChangeTracking(Sender: TObject);
 begin
   labelEnforced.Text:='Not Enforced Yet';
   labelEnforced.FontColor:=TAlphaColorRec.Black;
@@ -118,14 +128,13 @@ var
   SRec: TSearchRec;
   Res: Integer;
 begin
-  Res := FindFirst('..\..\..\..\Examples\Default\*.conf', faAnyfile, SRec );
+  fFolder:='..\..\..\..\Examples\Default\';
+  Res := FindFirst(fFolder+'*.conf', faAnyfile, SRec );
   if Res = 0 then
   try
     while res = 0 do
     begin
       if (SRec.Attr and faDirectory <> faDirectory) then
-        // If you want filename only, remove "StartDir +"
-        // from next line
         popupModel.Items.Add(SRec.Name);
       Res := FindNext(SRec);
     end;
@@ -136,14 +145,12 @@ begin
     popupModel.ItemIndex:=0;
 
   //Policies
-  Res := FindFirst('..\..\..\..\Examples\Default\*.csv', faAnyfile, SRec );
+  Res := FindFirst(fFolder+'*.csv', faAnyfile, SRec );
   if Res = 0 then
   try
     while res = 0 do
     begin
       if (SRec.Attr and faDirectory <> faDirectory) then
-        // If you want filename only, remove "StartDir +"
-        // from next line
         popupPolicies.Items.Add(SRec.Name);
       Res := FindNext(SRec);
     end;

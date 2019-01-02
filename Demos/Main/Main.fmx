@@ -187,7 +187,7 @@ object Form1: TForm1
     Text = 'Enforce these parameters:'
     TabOrder = 4
   end
-  object Edit1: TEdit
+  object editParams: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
     TabOrder = 5
     TextSettings.Font.Size = 16.000000000000000000
@@ -198,7 +198,7 @@ object Form1: TForm1
     Size.PlatformDefault = False
     TextPrompt = 'Enter enforcement parameters'
     StyledSettings = [Family, Style, FontColor]
-    OnChangeTracking = Edit1ChangeTracking
+    OnChangeTracking = editParamsChangeTracking
   end
   object Button1: TButton
     Margins.Left = 10.000000000000000000

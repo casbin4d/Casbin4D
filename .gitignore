@@ -74,3 +74,4 @@ Thumbs.db
 *.res
 *.$manifest
 Tests/Win32/
+Support/

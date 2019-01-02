@@ -81,6 +81,8 @@ var
   polDefinitions: TList<string>;
 begin
   result:=true;
+  if Length(aParams) = 0 then
+    Exit;
   if not fEnabled then
     Exit;
 
@@ -102,8 +104,11 @@ begin
   fLogger.log('   Request: '+requestStr);
   tmpList:=fModel.assertions(stRequestDefinition);
   fLogger.log('      Assertions: ');
-  for item in tmpList do
-    fLogger.log('         '+item);
+  if tmpList.Count=0 then
+    fLogger.log('         No Request Assertions found')
+  else
+    for item in tmpList do
+      fLogger.log('         '+item);
   tmpList.Free;
 {$ENDIF}
   reqDefinitions:=fModel.assertions(stRequestDefinition);
@@ -115,8 +120,11 @@ begin
   fLogger.log('   Policies: ');
   fLogger.log('      Assertions: ');
   tmpList:=fPolicy.policies;
-  for item in tmpList do
-    fLogger.log('         '+item);
+  if tmpList.Count=0 then
+    fLogger.log('         No Policy Assertions found')
+  else
+    for item in tmpList do
+      fLogger.log('         '+item);
   tmpList.Free;
 
   tmpList:=fModel.assertions(stPolicyDefinition);

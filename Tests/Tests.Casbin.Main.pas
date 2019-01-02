@@ -20,6 +20,7 @@ type
     [Test]
     procedure testEnabled;
     [Test]
+{$REGION 'Basic Model'}
     [TestCase ('Basic Model.1','..\..\..\Examples\Default\basic_model.conf#'+
                             '..\..\..\Examples\Default\basic_policy.csv#'+
                             'alice,data1,read#true', '#')]
@@ -44,8 +45,9 @@ type
     [TestCase ('Basic Model.8','..\..\..\Examples\Default\basic_model.conf#'+
                             '..\..\..\Examples\Default\basic_policy.csv#'+
                             'bob,data2,write#true', '#')]
-
-    // From enforce_test.go - TestKeytMatchModelInMemory
+{$ENDREGION}
+{$REGION 'TestKeyMatchModel'}
+    // From enforce_test.go - TestKeyMatchModelInMemory
     [TestCase ('KeyMatch.Allow.1','..\..\..\Examples\Tests\keymatch_model_Allow.conf#'+
                             '..\..\..\Examples\Tests\keymatch_policy.csv#'+
                             'alice,/alice_data/resource1,GET#true', '#')]
@@ -107,14 +109,31 @@ type
     [TestCase ('KeyMatch.Allow.19','..\..\..\Examples\Tests\keymatch_model_Allow.conf#'+
                             '..\..\..\Examples\Tests\keymatch_policy.csv#'+
                             'cathy,/cathy_data,DELETE#false', '#')]
-
+{$ENDREGION}
+{$REGION 'TestKeytMatch2Model'}
+    // From enforce_test.go - TestKeyMatch2Model
+    [TestCase ('KeyMatch2.1','..\..\..\Examples\Default\keymatch2_model.conf#'+
+                            '..\..\..\Examples\Default\keymatch2_policy.csv#'+
+                            'alice,/alice_data,GET#false', '#')]
+    [TestCase ('KeyMatch2.2','..\..\..\Examples\Default\keymatch2_model.conf#'+
+                            '..\..\..\Examples\Default\keymatch2_policy.csv#'+
+                            'alice,/alice_data/resource1,GET#true', '#')]
+    [TestCase ('KeyMatch2.3','..\..\..\Examples\Default\keymatch2_model.conf#'+
+                            '..\..\..\Examples\Default\keymatch2_policy.csv#'+
+                            'alice,/alice_data2/myid,GET#false', '#')]
+    [TestCase ('KeyMatch2.4','..\..\..\Examples\Default\keymatch2_model.conf#'+
+                            '..\..\..\Examples\Default\keymatch2_policy.csv#'+
+                            'alice,/alice_data2/myid/using/res_id,GET#true', '#')]
+{$ENDREGION}
+{$REGION 'TestKeyMatchModelDeny'}
     // From enforce_test.go - TestKeyMatchModelInMemoryDeny
     // In the original GO test, it reports the expected value should be true
     // but it must be wrong????? This returns false
     [TestCase ('KeyMatchDeny.1','..\..\..\Examples\Tests\keymatch_model_Deny.conf#'+
                             '..\..\..\Examples\Tests\keymatch_policy.csv#'+
                             'alice,/alice_data/resource2,POST#false', '#')]
-
+{$ENDREGION}
+{$REGION 'TestBasicModelWithRoot'}
     // From model_test.go - TestBasicModelWithRoot
     [TestCase ('Basic Model.Root.1','..\..\..\Examples\Default\basic_with_root_model.conf#'+
                             '..\..\..\Examples\Default\basic_policy.csv#'+
@@ -152,7 +171,121 @@ type
     [TestCase ('Basic Model.Root.12','..\..\..\Examples\Default\basic_with_root_model.conf#'+
                             '..\..\..\Examples\Default\basic_policy.csv#'+
                             'root,data2,write#true', '#')]
+{$ENDREGION}
+{$REGION 'TestBasicModelWithoutUsers'}
+    // From model_test.go - TestBasicModelWithoutUsers
+    [TestCase ('Basic Model.NoUsers.1','..\..\..\Examples\Default\basic_without_users_model.conf#'+
+                            '..\..\..\Examples\Default\basic_without_users_policy.csv#'+
+                            'data1,read#true', '#')]
+    [TestCase ('Basic Model.NoUsers.2','..\..\..\Examples\Default\basic_without_users_model.conf#'+
+                            '..\..\..\Examples\Default\basic_without_users_policy.csv#'+
+                            'data1,write#false', '#')]
+    [TestCase ('Basic Model.NoUsers.3','..\..\..\Examples\Default\basic_without_users_model.conf#'+
+                            '..\..\..\Examples\Default\basic_without_users_policy.csv#'+
+                            'data2,read#false', '#')]
+    [TestCase ('Basic Model.NoUsers.4','..\..\..\Examples\Default\basic_without_users_model.conf#'+
+                            '..\..\..\Examples\Default\basic_without_users_policy.csv#'+
+                            'data2,write#true', '#')]
+{$ENDREGION}
+{$REGION 'TestBasicModelWithoutResources'}
+    // From model_test.go - TestBasicModelWithoutResources
+    [TestCase ('Basic Model.NoResources.1','..\..\..\Examples\Default\basic_without_resources_model.conf#'+
+                            '..\..\..\Examples\Default\basic_without_resources_policy.csv#'+
+                            'alice,read#true', '#')]
+    [TestCase ('Basic Model.NoResources.2','..\..\..\Examples\Default\basic_without_resources_model.conf#'+
+                            '..\..\..\Examples\Default\basic_without_resources_policy.csv#'+
+                            'alice,write#false', '#')]
+    [TestCase ('Basic Model.NoResources.3','..\..\..\Examples\Default\basic_without_resources_model.conf#'+
+                            '..\..\..\Examples\Default\basic_without_resources_policy.csv#'+
+                            'bob,read#false', '#')]
+    [TestCase ('Basic Model.NoResources.4','..\..\..\Examples\Default\basic_without_resources_model.conf#'+
+                            '..\..\..\Examples\Default\basic_without_resources_policy.csv#'+
+                            'bob,write#true', '#')]
+{$ENDREGION}
+{$REGION 'TestIPMatchModel'}
+    // From model_test.go - TestIPMatchModel
+    [TestCase ('IPMatchModel.1','..\..\..\Examples\Default\ipmatch_model.conf#'+
+                            '..\..\..\Examples\Default\ipmatch_policy.csv#'+
+                            '192.168.2.123,data1,read#true', '#')]
+    [TestCase ('IPMatchModel.2','..\..\..\Examples\Default\ipmatch_model.conf#'+
+                            '..\..\..\Examples\Default\ipmatch_policy.csv#'+
+                            '192.168.2.123,data1,write#false', '#')]
+    [TestCase ('IPMatchModel.3','..\..\..\Examples\Default\ipmatch_model.conf#'+
+                            '..\..\..\Examples\Default\ipmatch_policy.csv#'+
+                            '192.168.2.123,data2,read#false', '#')]
+    [TestCase ('IPMatchModel.4','..\..\..\Examples\Default\ipmatch_model.conf#'+
+                            '..\..\..\Examples\Default\ipmatch_policy.csv#'+
+                            '192.168.2.123,data2,write#false', '#')]
+    [TestCase ('IPMatchModel.5','..\..\..\Examples\Default\ipmatch_model.conf#'+
+                            '..\..\..\Examples\Default\ipmatch_policy.csv#'+
+                            '192.168.0.123,data1,read#false', '#')]
+    [TestCase ('IPMatchModel.6','..\..\..\Examples\Default\ipmatch_model.conf#'+
+                            '..\..\..\Examples\Default\ipmatch_policy.csv#'+
+                            '192.168.0.123,data1,write#false', '#')]
+    [TestCase ('IPMatchModel.7','..\..\..\Examples\Default\ipmatch_model.conf#'+
+                            '..\..\..\Examples\Default\ipmatch_policy.csv#'+
+                            '192.168.0.123,data2,read#false', '#')]
+    [TestCase ('IPMatchModel.8','..\..\..\Examples\Default\ipmatch_model.conf#'+
+                            '..\..\..\Examples\Default\ipmatch_policy.csv#'+
+                            '192.168.0.123,data2,write#false', '#')]
+    [TestCase ('IPMatchModel.9','..\..\..\Examples\Default\ipmatch_model.conf#'+
+                            '..\..\..\Examples\Default\ipmatch_policy.csv#'+
+                            '10.0.0.5,data1,read#false', '#')]
+    [TestCase ('IPMatchModel.10','..\..\..\Examples\Default\ipmatch_model.conf#'+
+                            '..\..\..\Examples\Default\ipmatch_policy.csv#'+
+                            '10.0.0.5,data1,write#false', '#')]
+    [TestCase ('IPMatchModel.11','..\..\..\Examples\Default\ipmatch_model.conf#'+
+                            '..\..\..\Examples\Default\ipmatch_policy.csv#'+
+                            '10.0.0.5,data2,read#false', '#')]
+    [TestCase ('IPMatchModel.12','..\..\..\Examples\Default\ipmatch_model.conf#'+
+                            '..\..\..\Examples\Default\ipmatch_policy.csv#'+
+                            '10.0.0.5,data2,write#true', '#')]
+    [TestCase ('IPMatchModel.13','..\..\..\Examples\Default\ipmatch_model.conf#'+
+                            '..\..\..\Examples\Default\ipmatch_policy.csv#'+
+                            '192.168.0.1,data1,read#false', '#')]
+    [TestCase ('IPMatchModel.14','..\..\..\Examples\Default\ipmatch_model.conf#'+
+                            '..\..\..\Examples\Default\ipmatch_policy.csv#'+
+                            '192.168.0.1,data1,write#false', '#')]
+    [TestCase ('IPMatchModel.15','..\..\..\Examples\Default\ipmatch_model.conf#'+
+                            '..\..\..\Examples\Default\ipmatch_policy.csv#'+
+                            '192.168.0.1,data2,read#false', '#')]
+    [TestCase ('IPMatchModel.16','..\..\..\Examples\Default\ipmatch_model.conf#'+
+                            '..\..\..\Examples\Default\ipmatch_policy.csv#'+
+                            '192.168.0.1,data2,write#false', '#')]
+{$ENDREGION}
+{$REGION 'TestPriorityModel'}
+    // From model_test.go - TestPriorityModel
+    [TestCase ('PriorityModel.1','..\..\..\Examples\Default\priority_model.conf#'+
+                            '..\..\..\Examples\Default\priority_policy.csv#'+
+                            'alice,data1,read#true', '#')]
+    [TestCase ('PriorityModel.2','..\..\..\Examples\Default\priority_model.conf#'+
+                            '..\..\..\Examples\Default\priority_policy.csv#'+
+                            'alice,data1,write#false', '#')]
+    [TestCase ('PriorityModel.3','..\..\..\Examples\Default\priority_model.conf#'+
+                            '..\..\..\Examples\Default\priority_policy.csv#'+
+                            'alice,data2,read#false', '#')]
+    [TestCase ('PriorityModel.4','..\..\..\Examples\Default\priority_model.conf#'+
+                            '..\..\..\Examples\Default\priority_policy.csv#'+
+                            'alice,data2,write#false', '#')]
+    [TestCase ('PriorityModel.5','..\..\..\Examples\Default\priority_model.conf#'+
+                            '..\..\..\Examples\Default\priority_policy.csv#'+
+                            'bob,data1,read#false', '#')]
+    [TestCase ('PriorityModel.6','..\..\..\Examples\Default\priority_model.conf#'+
+                            '..\..\..\Examples\Default\priority_policy.csv#'+
+                            'bob,data1,write#false', '#')]
+    [TestCase ('PriorityModel.7','..\..\..\Examples\Default\priority_model.conf#'+
+                            '..\..\..\Examples\Default\priority_policy.csv#'+
+                            'bob,data2,read#true', '#')]
+    [TestCase ('PriorityModel.8','..\..\..\Examples\Default\priority_model.conf#'+
+                            '..\..\..\Examples\Default\priority_policy.csv#'+
+                            'bob,data2,write#false', '#')]
+{$ENDREGION}
+    // From model_test.go - TestABACModel
+//    [TestCase ('ABAC.1','..\..\..\Examples\Default\abac_model.conf#'+
+//                            '..\..\..\Examples\Default\basic_without_resources_policy.csv#'+
+//                            'alice,read#true', '#')]
 
+    ///////////////////////////////////////////////
     procedure testEnforce(const aModelFile, aPolicyFile, aEnforceParams: string;
         const aResult: boolean);
   end;

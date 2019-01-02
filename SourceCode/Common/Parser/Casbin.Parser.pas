@@ -236,10 +236,7 @@ begin
       if (index<matchersPosEnd) then
         Delete(fParseString, index, 1)
       else
-        if (nextSectionPos=0) then
-          Exit
-        else
-          if index>nextSectionPos then
+        if (nextSectionPos<>0) and (index>nextSectionPos) then
             Delete(fParseString, index, 1);
     end;
     index:= Pos(#32, fParseString, Low(string));
@@ -328,7 +325,7 @@ begin
 
   if fStatus=psError then
   begin
-    fLogger.log('Error while parsing: '+fErrorMessage+EOL+'Parsing faield');
+    fLogger.log('Error while parsing: '+fErrorMessage+EOL+'Parsing failed');
   end
   else
     fStatus:=psIdle;

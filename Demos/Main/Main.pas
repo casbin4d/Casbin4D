@@ -30,6 +30,7 @@ type
     Layout3: TLayout;
     rectangleEnforced: TRectangle;
     labelEnforced: TLabel;
+    labelVersion: TLabel;
     procedure Button1Click(Sender: TObject);
     procedure buttonValidateModelClick(Sender: TObject);
     procedure buttonValidatePoliciesClick(Sender: TObject);
@@ -49,7 +50,7 @@ var
 implementation
 
 uses
-  System.IOUtils, Casbin.Parser.Types, Casbin.Parser, Casbin.Types, Casbin;
+  System.IOUtils, Casbin.Parser.Types, Casbin.Parser, Casbin.Types, Casbin, Casbin.Core.Utilities;
 
 {$R *.fmx}
 
@@ -128,6 +129,7 @@ var
   SRec: TSearchRec;
   Res: Integer;
 begin
+  labelVersion.Text:=version;
   fFolder:='..\..\..\..\Examples\Default\';
   Res := FindFirst(fFolder+'*.conf', faAnyfile, SRec );
   if Res = 0 then

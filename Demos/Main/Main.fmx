@@ -241,4 +241,18 @@ object Form1: TForm1
       end
     end
   end
+  object labelVersion: TLabel
+    Align = Bottom
+    Margins.Left = 20.000000000000000000
+    Margins.Top = 10.000000000000000000
+    Margins.Right = 20.000000000000000000
+    Margins.Bottom = 10.000000000000000000
+    Position.X = 20.000000000000000000
+    Position.Y = 623.000000000000000000
+    Size.Width = 714.000000000000000000
+    Size.Height = 17.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'labelVersion'
+    TabOrder = 7
+  end
 end

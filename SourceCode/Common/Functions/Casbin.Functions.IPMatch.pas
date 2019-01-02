@@ -38,8 +38,8 @@ var
 begin
   if Length(aArgs)<>2 then
     raise Exception.Create('Wrong number of arguments in IPMatch');
-  ip1:=aArgs[0];
-  ip2:=aArgs[1];
+  ip1:=trim(aArgs[0]);
+  ip2:=trim(aArgs[1]);
 
   index:=Pos('/', ip1, low(string));
   if index<>0 then

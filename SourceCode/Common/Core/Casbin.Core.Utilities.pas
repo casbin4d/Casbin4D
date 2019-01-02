@@ -5,10 +5,14 @@ interface
 function findStartPos: Integer;
 function findEndPos (const aLine: string): Integer;
 
+function version: string;
+
 implementation
 
 uses
   System.SysUtils;
+
+{$I ..\Version.inc}
 
 function findStartPos: Integer;
 begin
@@ -25,4 +29,11 @@ begin
       result:=Length(aLine);
 end;
 
+
+function version: string;
+begin
+  result:=MajorVersion+'.'+MinorVersion+'.'+BugVersion;
+  if TypeVersion<>'' then
+    Result:=Result+' ('+TypeVersion+')'
+end;
 end.

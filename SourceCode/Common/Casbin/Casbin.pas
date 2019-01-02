@@ -37,8 +37,9 @@ implementation
 uses
   Casbin.Exception.Types, Casbin.Model, Casbin.Policy,
   Casbin.Core.Logger.Default, System.Generics.Collections, System.SysUtils,
-  Casbin.Resolve, Casbin.Resolve.Types, Casbin.Model.Sections.Types, Casbin.Core.Utilities, System.Rtti, Casbin.Effect.Types,
-  Casbin.Effect, Casbin.Functions.Types, Casbin.Functions;
+  Casbin.Resolve, Casbin.Resolve.Types, Casbin.Model.Sections.Types,
+  Casbin.Core.Utilities, System.Rtti, Casbin.Effect.Types, Casbin.Effect,
+  Casbin.Functions.Types, Casbin.Functions;
 
 constructor TCasbin.Create(const aModelFile, aPolicyFile: string);
 begin

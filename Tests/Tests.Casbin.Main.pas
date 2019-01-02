@@ -114,6 +114,45 @@ type
     [TestCase ('KeyMatchDeny.1','..\..\..\Examples\Tests\keymatch_model_Deny.conf#'+
                             '..\..\..\Examples\Tests\keymatch_policy.csv#'+
                             'alice,/alice_data/resource2,POST#false', '#')]
+
+    // From model_test.go - TestBasicModelWithRoot
+    [TestCase ('Basic Model.Root.1','..\..\..\Examples\Default\basic_with_root_model.conf#'+
+                            '..\..\..\Examples\Default\basic_policy.csv#'+
+                            'alice,data1,read#true', '#')]
+    [TestCase ('Basic Model.Root.2','..\..\..\Examples\Default\basic_with_root_model.conf#'+
+                            '..\..\..\Examples\Default\basic_policy.csv#'+
+                            'alice,data1,write#false', '#')]
+    [TestCase ('Basic Model.Root.3','..\..\..\Examples\Default\basic_with_root_model.conf#'+
+                            '..\..\..\Examples\Default\basic_policy.csv#'+
+                            'alice,data2,read#false', '#')]
+    [TestCase ('Basic Model.Root.4','..\..\..\Examples\Default\basic_with_root_model.conf#'+
+                            '..\..\..\Examples\Default\basic_policy.csv#'+
+                            'alice,data2,write#false', '#')]
+    [TestCase ('Basic Model.Root.5','..\..\..\Examples\Default\basic_with_root_model.conf#'+
+                            '..\..\..\Examples\Default\basic_policy.csv#'+
+                            'bob, data1, read#false', '#')]
+    [TestCase ('Basic Model.Root.6','..\..\..\Examples\Default\basic_with_root_model.conf#'+
+                            '..\..\..\Examples\Default\basic_policy.csv#'+
+                            'bob,data1,write#false', '#')]
+    [TestCase ('Basic Model.Root.7','..\..\..\Examples\Default\basic_with_root_model.conf#'+
+                            '..\..\..\Examples\Default\basic_policy.csv#'+
+                            'bob,data2,read#false', '#')]
+    [TestCase ('Basic Model.Root.8','..\..\..\Examples\Default\basic_with_root_model.conf#'+
+                            '..\..\..\Examples\Default\basic_policy.csv#'+
+                            'bob,data2,write#true', '#')]
+    [TestCase ('Basic Model.Root.9','..\..\..\Examples\Default\basic_with_root_model.conf#'+
+                            '..\..\..\Examples\Default\basic_policy.csv#'+
+                            'root, data1, read#true', '#')]
+    [TestCase ('Basic Model.Root.10','..\..\..\Examples\Default\basic_with_root_model.conf#'+
+                            '..\..\..\Examples\Default\basic_policy.csv#'+
+                            'root,data1,write#true', '#')]
+    [TestCase ('Basic Model.Root.11','..\..\..\Examples\Default\basic_with_root_model.conf#'+
+                            '..\..\..\Examples\Default\basic_policy.csv#'+
+                            'root,data2,read#true', '#')]
+    [TestCase ('Basic Model.Root.12','..\..\..\Examples\Default\basic_with_root_model.conf#'+
+                            '..\..\..\Examples\Default\basic_policy.csv#'+
+                            'root,data2,write#true', '#')]
+
     procedure testEnforce(const aModelFile, aPolicyFile, aEnforceParams: string;
         const aResult: boolean);
   end;

@@ -67,6 +67,15 @@ type
              sLineBreak+sLineBreak+sLineBreak+'r = sub, obj, act#default','#')]
     procedure testFix(const aInput: String; const aExpected: String);
 
+    [Test]
+    // We use Policy parser for this test
+    // We pass the string as a policy rule (which is in the wrong format)
+    // because we ONLY want to check that the quotes are removed correctly
+    [TestCase ('Has double and single quotes',
+          'p,r.sub=p.sub||r.sub=''root''||r.sub=""guest"#'+
+            'r.sub=p.sub||r.sub=root||r.sub=guest','#')]
+    procedure testFixParseString(const aInput: String; const aExpected: String);
+
     //We use Policy parser for this test
     [Test]
     [TestCase('Header Only', '[default],[default]')]
@@ -152,6 +161,17 @@ begin
   fParser.parse;
   Assert.IsTrue(fParser.Nodes.Headers.Count >= 1);
   Assert.AreEqual(aExpected, fParser.Nodes.Headers.Items[0].Value);
+  fParser:=nil;
+end;
+
+procedure TTestParser.testFixParseString(const aInput, aExpected: String);
+begin
+  fParser:=TParser.Create(aInput, ptPolicy);
+  fParser.parse;
+  Assert.IsTrue(fParser.Nodes.Headers.Count >= 1);
+  Assert.IsTrue(fParser.Nodes.Headers.Items[0].ChildNodes.Count >= 1);
+  Assert.AreEqual(aExpected, fParser.Nodes.Headers.Items[0].
+                                      ChildNodes.Items[0].Value);
   fParser:=nil;
 end;
 

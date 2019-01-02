@@ -40,7 +40,7 @@ uses
   Casbin.Core.Defaults, Casbin.Core.Strings, System.StrUtils,
   System.AnsiStrings, Casbin.Model.Sections.Types,
   Casbin.Model.Sections.Default, Casbin.Parser.AST, Casbin.Effect.Types,
-  System.Math, Casbin.Core.Utilities;
+  System.Math, Casbin.Core.Utilities, System.SysUtils;
 
 constructor TParser.Create(const aParseString: string; const aParseType:
     TParseType);
@@ -245,6 +245,25 @@ begin
     index:= Pos(#32, fParseString, Low(string));
     Inc(lenPosition);
   end;
+
+  // Clean quotes
+  // Single Quote
+  index:= Pos(#39, fParseString, Low(string));
+  while index<>0 do
+  begin
+    Delete(fParseString, index, 1);
+    index:= Pos(#39, fParseString, Low(string));
+  end;
+
+  // Double Quote
+  index:= Pos(#34, fParseString, Low(string));
+  while index<>0 do
+  begin
+    Delete(fParseString, index, 1);
+    index:= Pos(#34, fParseString, Low(string));
+  end;
+
+
 end;
 
 { TParser }

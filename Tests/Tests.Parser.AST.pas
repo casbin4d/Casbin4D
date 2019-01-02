@@ -26,20 +26,19 @@ type
 
     [Test]
     procedure testMatchers;
-
     [Test]
-    [TestCase('ecSomeAllow-Go','e=some(where(p.eft==allow))#ecSomeAllow','#')]
-    [TestCase('ecSomeAllow-Delphi','e=some(where(p.eft=allow))#ecSomeAllow','#')]
-    [TestCase('ecSomeAllow With Underscore-Go','e=some(where(p_eft==allow))#ecSomeAllow','#')]
-    [TestCase('ecSomeAllow With Underscore-Delphi','e=some(where(p_eft=allow))#ecSomeAllow','#')]
-    [TestCase('ecNotSomeDeny-Go','e=!some(where(p.eft==deny))#ecNotSomeDeny','#')]
-    [TestCase('ecNotSomeDeny-Delphi','e=not(some(where(p.eft=deny)))#ecNotSomeDeny','#')]
-    [TestCase('ecSomeAllowANDNotDeny-Go','e=some(where(p.eft==allow))&&!some(where(p.eft==deny))#'+
+    [TestCase('ecSomeAllow.Go','e=some(where(p.eft==allow))#ecSomeAllow','#')]
+    [TestCase('ecSomeAllow.Delphi','e=some(where(p.eft=allow))#ecSomeAllow','#')]
+    [TestCase('ecSomeAllow With Underscore.Go','e=some(where(p_eft==allow))#ecSomeAllow','#')]
+    [TestCase('ecSomeAllow With Underscore.Delphi','e=some(where(p_eft=allow))#ecSomeAllow','#')]
+    [TestCase('ecNotSomeDeny.Go','e=!some(where(p.eft==deny))#ecNotSomeDeny','#')]
+    [TestCase('ecNotSomeDeny.Delphi','e=not(some(where(p.eft=deny)))#ecNotSomeDeny','#')]
+    [TestCase('ecSomeAllowANDNotDeny.Go','e=some(where(p.eft==allow))&&!some(where(p.eft==deny))#'+
                                   'ecSomeAllowANDNotDeny','#')]
-    [TestCase('ecSomeAllowANDNotDeny-Delphi','e=some(where(p.eft=allow))and(not(some(where(p.eft=deny))))#'+
+    [TestCase('ecSomeAllowANDNotDeny.Delphi','e=some(where(p.eft=allow))and(not(some(where(p.eft=deny))))#'+
                                   'ecSomeAllowANDNotDeny','#')]
-    [TestCase('ecPriorityORDeny-Go','e=priority(p.eft)||deny#ecPriorityORDeny','#')]
-    [TestCase('ecPriorityORDeny-Delphi','e=priority(p.eft)ordeny#ecPriorityORDeny','#')]
+    [TestCase('ecPriorityORDeny.Go','e=priority(p.eft)||deny#ecPriorityORDeny','#')]
+    [TestCase('ecPriorityORDeny.Delphi','e=priority(p.eft)ordeny#ecPriorityORDeny','#')]
     [TestCase('ecUnknown','e=a new type#ecUnknown','#')]
     procedure testEffects(const aInput: string; const aResult: TEffectCondition);
   end;
@@ -71,6 +70,7 @@ var
 
   header.Free;
 end;
+
 
 procedure TTestParserAST.testPolicyDefinition;
 var

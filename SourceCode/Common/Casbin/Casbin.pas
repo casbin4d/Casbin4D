@@ -38,7 +38,7 @@ uses
   Casbin.Exception.Types, Casbin.Model, Casbin.Policy,
   Casbin.Core.Logger.Default, System.Generics.Collections, System.SysUtils,
   Casbin.Resolve, Casbin.Resolve.Types, Casbin.Model.Sections.Types, Casbin.Core.Utilities, System.Rtti, Casbin.Effect.Types,
-  Casbin.Effect;
+  Casbin.Effect, Casbin.Functions.Types, Casbin.Functions;
 
 constructor TCasbin.Create(const aModelFile, aPolicyFile: string);
 begin
@@ -75,6 +75,8 @@ var
   policyArray: TArray<string>;
   policy: string;
   effectArray: TEffectArray;
+  matchString: string;
+  func: IFunctions;
 begin
   result:=true;
   if not fEnabled then
@@ -125,6 +127,7 @@ begin
 {$ENDIF}
 
   matcher:=fModel.assertions(stMatchers);
+  func:=TFunctions.Create;
 
   for item in fPolicy.policies do
   begin
@@ -138,14 +141,10 @@ begin
     policyDict:=resolve(policyList, rtPolicy,
                         fModel.assertions(stPolicyDefinition));
 
-    fLogger.log('   Resolving Functions...');
-    // Resolve Functions ???
-
-    fLogger.log('   Resolving Matcher...');
+    fLogger.log('   Resolving Functions and Matcher...');
     // Resolve Matcher
-
     if matcher.Count>0 then
-      matcherResult:=resolve(requestDict, policyDict, '', matcher.Items[0])
+      matcherResult:=resolve(requestDict, policyDict, func, matcher.Items[0])
     else
       matcherResult:=erIndeterminate;
     SetLength(effectArray, Length(effectArray)+1);
@@ -163,7 +162,7 @@ begin
 
   Result:=mergeEffects(fModel.effectCondition, effectArray);
 
-  fLogger.log('Enforcement completed (Result: '+BoolToStr(Result)+')');
+  fLogger.log('Enforcement completed (Result: '+BoolToStr(Result, true)+')');
 
   request.Free;
   requestDict.Free;

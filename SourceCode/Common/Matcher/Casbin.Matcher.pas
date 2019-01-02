@@ -43,6 +43,8 @@ begin
   fMathsParser:=TCStyleParser.Create;
   TCStyleParser(fMathsParser).CStyle:=False;
   fIdentifiers:=TDictionary<string, integer>.Create;
+  addIdentifier('true');
+  addIdentifier('false');
 end;
 
 destructor TMatcher.Destroy;

@@ -18,7 +18,7 @@ function resolve(const aResolvedRequest, aResolvedPolicy: TDictionary<string,
 implementation
 
 uses
-  Casbin.Exception.Types, SysUtils, Casbin.Matcher.Types, Casbin.Matcher;
+  Casbin.Exception.Types, SysUtils, Casbin.Matcher.Types, Casbin.Matcher, Casbin.Core.Utilities;
 
 function resolve (const aResolve: TList<string>;
                   const aResolveType: TResolveType;
@@ -58,7 +58,18 @@ var
   matcher: IMatcher;
   resolvedMatcher: string;
   item: string;
+  item2: string;
   func: TCasbinFunc;
+  args: string;
+  argsArray: TArray<string>;
+  endArgsPos: Integer;
+  resolvedList: TArray<string>;
+  replacedList: TArray<string>;
+  startArgsPos: Integer;
+  startFunPos: Integer;
+  funcResult: Boolean;
+  replaceStr: string;
+  boolReplacseStr: string;
 begin
   if not Assigned(aResolvedRequest) then
     raise ECasbinException.Create('Resolved Request is nil');
@@ -89,14 +100,42 @@ begin
   //Functions
   for item in aFunctions.list do
   begin
-    if resolvedMatcher.Contains(item) then
+    if resolvedMatcher.Contains(UpperCase(item)) then
     begin
       //We need to find the arguments
+      startFunPos:=resolvedMatcher.IndexOf(UpperCase(item));
+      startArgsPos:=startArgsPos+Length(item)+1;
+      endArgsPos:=resolvedMatcher.IndexOfAny([')'], startArgsPos);
+      args:= Copy(resolvedMatcher, startArgsPos, endArgsPos-startArgsPos+1);
+      argsArray:=args.Split([',']);
+      if Length(argsArray)>=1 then
+      begin
+        if (Trim(argsArray[0])<>'') and (argsArray[0].Chars[0]='(') then
+          argsArray[0]:=Copy(argsArray[0], findStartPos+1);
+        if (Trim(argsArray[Length(argsArray)-1])<>'') and 
+                (argsArray[Length(argsArray)-1].Chars
+                          [findEndPos(argsArray[Length(argsArray)-1])]=')') then
+          argsArray[Length(argsArray)-1]:=Copy(argsArray[Length(argsArray)-1], 
+                            findEndPos(argsArray[Length(argsArray)-1])-11);        
+      end;
+      
+      funcResult:=aFunctions.retrieveFunction(item)(argsArray);
+      replaceStr:=UpperCase(item);
+      if args[findStartPos]<>'(' then
+        replaceStr:=replaceStr+'(';
+      replaceStr:=replaceStr+args;
+      if args[findEndPos(args)]<>')' then 
+        replaceStr:=replaceStr+')';
 
+      if funcResult then 
+        boolReplacseStr:='100 = 100'
+      else
+        boolReplacseStr:='100 = 90';
+        
+      resolvedMatcher:=resolvedMatcher.Replace(replaceStr, boolReplacseStr, 
+                                                          [rfReplaceAll]);
     end;
   end;
-
-
   // Evaluation
   Result:=matcher.evaluateMatcher(resolvedMatcher);
 end;

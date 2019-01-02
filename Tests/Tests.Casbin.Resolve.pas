@@ -7,7 +7,7 @@ uses
 type
 
   [TestFixture]
-  TTestCasbinResolve = class(TObject) 
+  TTestCasbinResolve = class(TObject)
   public
     [Setup]
     procedure Setup;
@@ -19,13 +19,16 @@ type
     procedure testResolvePolicy;
     [Test]
     procedure testResolveMatcherBasicModel;
+    [Test]
+    procedure testResolveFunctionIPMatch;
   end;
 
 implementation
 
 uses
   Casbin.Types, Casbin, System.Generics.Collections, Casbin.Resolve.Types,
-  Casbin.Model.Sections.Types, Casbin.Resolve, System.Rtti, Casbin.Effect.Types;
+  Casbin.Model.Sections.Types, Casbin.Resolve, System.Rtti,
+  Casbin.Effect.Types, Casbin.Functions.Types, Casbin.Functions;
 
 procedure TTestCasbinResolve.Setup;
 begin
@@ -35,6 +38,55 @@ procedure TTestCasbinResolve.TearDown;
 begin
 end;
 
+
+procedure TTestCasbinResolve.testResolveFunctionIPMatch;
+var
+  casbin: ICasbin;
+  func: IFunctions;
+  policy: TList<string>;
+  request: TList<string>;
+  listRequest: TList<string>;
+  listPolicy: TList<string>;
+  listMatcher: TList<string>;
+  requestDict: TDictionary<string, string>;
+  policyDict: TDictionary<string, string>;
+  matcherResult: TEffectResult;
+begin
+  func:=TFunctions.Create;
+  request:=TList<string>.Create;
+  request.Add('10.0.0.0/16');
+  request.Add('data2');
+  request.Add('write');
+
+  policy:=TList<string>.Create;
+  policy.Add('10.0.0.0/16');
+  policy.Add('data2');
+  policy.Add('write');
+
+  casbin:=TCasbin.Create('..\..\..\Examples\Default\ipmatch_model.conf',
+              '..\..\..\Examples\Default\ipmatch_policy.csv');
+  listRequest:=casbin.Model.assertions(stRequestDefinition);
+  requestDict:=resolve(request, rtRequest, listRequest);
+  listPolicy:=casbin.Model.assertions(stPolicyDefinition);
+  policyDict:=resolve(policy, rtPolicy, listPolicy);
+
+  listMatcher:=casbin.Model.assertions(stMatchers);
+  if listMatcher.Count>0 then
+    matcherResult:=resolve(requestDict, policyDict, func, listMatcher.Items[0])
+  else
+    matcherResult:=erIndeterminate;
+  listMatcher.Free;
+
+  Assert.AreEqual(erAllow, matcherResult);
+
+  requestDict.Free;
+  policyDict.Free;
+  listPolicy.Free;
+  listRequest.Free;
+  policy.Free;
+  request.Free;
+
+end;
 
 procedure TTestCasbinResolve.testResolveMatcherBasicModel;
 var
@@ -47,7 +99,9 @@ var
   requestDict: TDictionary<string, string>;
   policyDict: TDictionary<string, string>;
   matcherResult: TEffectResult;
+  func: IFunctions;
 begin
+  func:=TFunctions.Create;
   request:=TList<string>.Create;
   request.Add('alice');
   request.Add('data1');
@@ -67,7 +121,7 @@ begin
 
   listMatcher:=casbin.Model.assertions(stMatchers);
   if listMatcher.Count>0 then
-    matcherResult:=resolve(requestDict, policyDict, '', listMatcher.Items[0])
+    matcherResult:=resolve(requestDict, policyDict, func, listMatcher.Items[0])
   else
     matcherResult:=erIndeterminate;
   listMatcher.Free;
@@ -98,14 +152,14 @@ begin
   policy.Add('GET');
   dict:=resolve(policy, rtPolicy, list);
   Assert.AreEqual(3, dict.Count);
-  Assert.IsTrue(dict.ContainsKey('p.sub'));
-  Assert.AreEqual('alice', dict.Items['p.sub']);
+  Assert.IsTrue(dict.ContainsKey('P.SUB'));
+  Assert.AreEqual('ALICE', dict.Items['P.SUB']);
 
-  Assert.IsTrue(dict.ContainsKey('p.obj'));
-  Assert.AreEqual('/alice_data/:resource', dict.Items['p.obj']);
+  Assert.IsTrue(dict.ContainsKey('P.OBJ'));
+  Assert.AreEqual('/ALICE_DATA/:RESOURCE', dict.Items['P.OBJ']);
 
-  Assert.IsTrue(dict.ContainsKey('p.act'));
-  Assert.AreEqual('GET', dict.Items['p.act']);
+  Assert.IsTrue(dict.ContainsKey('P.ACT'));
+  Assert.AreEqual('GET', dict.Items['P.ACT']);
 
   policy.Free;
   list.Free;
@@ -123,19 +177,19 @@ begin
               '..\..\..\Examples\Default\basic_policy.csv');
   list:=casbin.Model.assertions(stRequestDefinition);
   request:=TList<string>.Create;
-  request.Add('alice');
-  request.Add('data1');
-  request.Add('read');
+  request.Add('ALICE');
+  request.Add('DATA1');
+  request.Add('READ');
   dict:=resolve(request, rtRequest, list);
   Assert.AreEqual(3, dict.Count);
-  Assert.IsTrue(dict.ContainsKey('r.sub'));
-  Assert.AreEqual('alice', dict.Items['r.sub']);
+  Assert.IsTrue(dict.ContainsKey('R.SUB'));
+  Assert.AreEqual('ALICE', dict.Items['R.SUB']);
 
-  Assert.IsTrue(dict.ContainsKey('r.obj'));
-  Assert.AreEqual('data1', dict.Items['r.obj']);
+  Assert.IsTrue(dict.ContainsKey('R.OBJ'));
+  Assert.AreEqual('DATA1', dict.Items['R.OBJ']);
 
-  Assert.IsTrue(dict.ContainsKey('r.act'));
-  Assert.AreEqual('read', dict.Items['r.act']);
+  Assert.IsTrue(dict.ContainsKey('R.ACT'));
+  Assert.AreEqual('READ', dict.Items['R.ACT']);
 
   request.Free;
   list.Free;

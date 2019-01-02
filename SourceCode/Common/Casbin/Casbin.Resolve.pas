@@ -70,6 +70,7 @@ var
   funcResult: Boolean;
   replaceStr: string;
   boolReplacseStr: string;
+  i: Integer;
 begin
   if not Assigned(aResolvedRequest) then
     raise ECasbinException.Create('Resolved Request is nil');
@@ -104,19 +105,18 @@ begin
     begin
       //We need to find the arguments
       startFunPos:=resolvedMatcher.IndexOf(UpperCase(item));
-      startArgsPos:=startArgsPos+Length(item)+1;
+      startArgsPos:=startFunPos+Length(item)+1;
       endArgsPos:=resolvedMatcher.IndexOfAny([')'], startArgsPos);
       args:= Copy(resolvedMatcher, startArgsPos, endArgsPos-startArgsPos+1);
       argsArray:=args.Split([',']);
-      if Length(argsArray)>=1 then
+
+      for i:=0 to Length(argsArray)-1 do
       begin
-        if (Trim(argsArray[0])<>'') and (argsArray[0].Chars[0]='(') then
-          argsArray[0]:=Copy(argsArray[0], findStartPos+1);
-        if (Trim(argsArray[Length(argsArray)-1])<>'') and 
-                (argsArray[Length(argsArray)-1].Chars
-                          [findEndPos(argsArray[Length(argsArray)-1])]=')') then
-          argsArray[Length(argsArray)-1]:=Copy(argsArray[Length(argsArray)-1], 
-                            findEndPos(argsArray[Length(argsArray)-1])-11);        
+        argsArray[i]:=Trim(argsArray[i]);
+        if argsArray[i][findStartPos]='(' then
+          argsArray[i]:=Copy(argsArray[i],findStartPos+1, Length(argsArray[i]));
+        if argsArray[i][findEndPos(argsArray[i])]=')' then
+          argsArray[i]:=Copy(argsArray[i], findStartPos, Length(argsArray[i])-1);
       end;
       
       funcResult:=aFunctions.retrieveFunction(item)(argsArray);

@@ -53,7 +53,10 @@ uses
   Casbin.Core.Logger.Default, System.Generics.Collections, System.SysUtils,
   Casbin.Resolve, Casbin.Resolve.Types, Casbin.Model.Sections.Types,
   Casbin.Core.Utilities, System.Rtti, Casbin.Effect.Types, Casbin.Effect,
-  Casbin.Functions.Types, Casbin.Functions, Casbin.Adapter.Memory, Casbin.Adapter.Memory.Policy;
+  Casbin.Functions.Types, Casbin.Functions, Casbin.Adapter.Memory, Casbin.Adapter.Memory.Policy, System.SyncObjs;
+
+var
+  criticalSection: TCriticalSection;
 
 constructor TCasbin.Create(const aModelFile, aPolicyFile: string);
 begin
@@ -107,96 +110,102 @@ begin
   if not fEnabled then
     Exit;
 
-  request:=TList<string>.Create;
-  for item in aParams do
-    request.Add(item);
+  criticalSection.Acquire;
+  try
+    request:=TList<string>.Create;
+    for item in aParams do
+      request.Add(item);
 
-  for item in aParams do
-    requestStr:=requestStr+item+',';
-  if requestStr[findEndPos(requestStr)]=',' then
-    requestStr:=Copy(requestStr, findStartPos,
-                        findEndPos(requestStr));
+    for item in aParams do
+      requestStr:=requestStr+item+',';
+    if requestStr[findEndPos(requestStr)]=',' then
+      requestStr:=Copy(requestStr, findStartPos,
+                          findEndPos(requestStr));
 
-  fLogger.log('Enforcing request '''+requestStr+'''');
+    fLogger.log('Enforcing request '''+requestStr+'''');
 
-  fLogger.log('   Resolving Request...');
-  // Resolve Request
-{$IFDEF DEBUG}
-  fLogger.log('   Request: '+requestStr);
-  tmpList:=fModel.assertions(stRequestDefinition);
-  fLogger.log('      Assertions: ');
-  if tmpList.Count=0 then
-    fLogger.log('         No Request Assertions found')
-  else
-    for item in tmpList do
-      fLogger.log('         '+item);
-  tmpList.Free;
-{$ENDIF}
-  reqDefinitions:=fModel.assertions(stRequestDefinition);
-  requestDict:=resolve(request, rtRequest, reqDefinitions);
-
-  fLogger.log('   Resolving Policies...');
-
-{$IFDEF DEBUG}
-  fLogger.log('   Policies: ');
-  fLogger.log('      Assertions: ');
-  tmpList:=fPolicy.policies;
-  if tmpList.Count=0 then
-    fLogger.log('         No Policy Assertions found')
-  else
-    for item in tmpList do
-      fLogger.log('         '+item);
-  tmpList.Free;
-
-  tmpList:=fModel.assertions(stPolicyDefinition);
-  fLogger.log('      Assertions: '+requestStr);
-  for item in tmpList do
-    fLogger.log('         '+item);
-  tmpList.Free;
-{$ENDIF}
-
-  matcher:=fModel.assertions(stMatchers);
-  func:=TFunctions.Create;
-
-  for item in fPolicy.policies do
-  begin
-    // Resolve Policy
-    policyList:=TList<string>.Create;
-    policyList.AddRange(item.Split([',']));
-
-    //Item 0 has p,g, etc
-    policyList.Delete(0);
-    polDefinitions:= fModel.assertions(stPolicyDefinition);
-    policyDict:=resolve(policyList, rtPolicy, polDefinitions);
-
-    fLogger.log('   Resolving Functions and Matcher...');
-    // Resolve Matcher
-    if matcher.Count>0 then
-      matcherResult:=resolve(requestDict, policyDict, func, matcher.Items[0])
+    fLogger.log('   Resolving Request...');
+    // Resolve Request
+  {$IFDEF DEBUG}
+    fLogger.log('   Request: '+requestStr);
+    tmpList:=fModel.assertions(stRequestDefinition);
+    fLogger.log('      Assertions: ');
+    if tmpList.Count=0 then
+      fLogger.log('         No Request Assertions found')
     else
-      matcherResult:=erIndeterminate;
-    SetLength(effectArray, Length(effectArray)+1);
-    effectArray[Length(effectArray)-1]:=matcherResult;
+      for item in tmpList do
+        fLogger.log('         '+item);
+    tmpList.Free;
+  {$ENDIF}
+    reqDefinitions:=fModel.assertions(stRequestDefinition);
+    requestDict:=resolve(request, rtRequest, reqDefinitions);
 
-    polDefinitions.Free;
-    policyDict.Free;
-    policyList.Free;
+    fLogger.log('   Resolving Policies...');
 
+  {$IFDEF DEBUG}
+    fLogger.log('   Policies: ');
+    fLogger.log('      Assertions: ');
+    tmpList:=fPolicy.policies;
+    if tmpList.Count=0 then
+      fLogger.log('         No Policy Assertions found')
+    else
+      for item in tmpList do
+        fLogger.log('         '+item);
+    tmpList.Free;
+
+    tmpList:=fModel.assertions(stPolicyDefinition);
+    fLogger.log('      Assertions: '+requestStr);
+    for item in tmpList do
+      fLogger.log('         '+item);
+    tmpList.Free;
+  {$ENDIF}
+
+    matcher:=fModel.assertions(stMatchers);
+    func:=TFunctions.Create;
+
+    for item in fPolicy.policies do
+    begin
+      // Resolve Policy
+      policyList:=TList<string>.Create;
+      policyList.AddRange(item.Split([',']));
+
+      //Item 0 has p,g, etc
+      policyList.Delete(0);
+      polDefinitions:= fModel.assertions(stPolicyDefinition);
+      policyDict:=resolve(policyList, rtPolicy, polDefinitions);
+
+      fLogger.log('   Resolving Functions and Matcher...');
+      // Resolve Matcher
+      if matcher.Count>0 then
+        matcherResult:=resolve(requestDict, policyDict, func, matcher.Items[0])
+      else
+        matcherResult:=erIndeterminate;
+      SetLength(effectArray, Length(effectArray)+1);
+      effectArray[Length(effectArray)-1]:=matcherResult;
+
+      polDefinitions.Free;
+      policyDict.Free;
+      policyList.Free;
+
+    end;
+
+    matcher.Free;
+
+    //Resolve Effector
+    fLogger.log('   Merging effects...');
+
+    Result:=mergeEffects(fModel.effectCondition, effectArray);
+
+    fLogger.log('Enforcement completed (Result: '+BoolToStr(Result, true)+')');
+
+    reqDefinitions.Free;
+    request.Free;
+    requestDict.Free;
+    func:=nil;
+
+  finally
+    criticalSection.Release;
   end;
-
-  matcher.Free;
-
-  //Resolve Effector
-  fLogger.log('   Merging effects...');
-
-  Result:=mergeEffects(fModel.effectCondition, effectArray);
-
-  fLogger.log('Enforcement completed (Result: '+BoolToStr(Result, true)+')');
-
-  reqDefinitions.Free;
-  request.Free;
-  requestDict.Free;
-  func:=nil;
 end;
 
 { TCasbin }
@@ -248,5 +257,11 @@ begin
     raise ECasbinException.Create('Policy Manager in nil');
   fPolicy:=aValue;
 end;
+
+initialization
+  criticalSection:=TCriticalSection.Create;
+
+finalization
+  criticalSection.Free;
 
 end.

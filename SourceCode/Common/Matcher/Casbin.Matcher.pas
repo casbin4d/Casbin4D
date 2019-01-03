@@ -49,8 +49,6 @@ begin
 end;
 
 constructor TMatcher.Create;
-var
-  index: Integer;
 begin
   inherited;
   fMathsParser:=TCStyleParser.Create;
@@ -74,10 +72,7 @@ end;
 
 procedure TMatcher.addIdentifier(const aTag: string);
 var
-  value: Double;
   tag: string;
-  pair: TPair<Double, string>;
-  stored: Boolean;
 begin
   tag:=UpperCase(Trim(aTag));
   if not fIdentifiers.ContainsKey(tag) then
@@ -103,7 +98,6 @@ end;
 function TMatcher.evaluateMatcher(const aMatcherString: string): TEffectResult;
 var
   eval: string;
-  i: Integer;
 begin
   fMatcherString:=UpperCase(aMatcherString);
   if Trim(fMatcherString)='' then
@@ -116,8 +110,7 @@ begin
 
   {TODO -oOwner -cGeneral : ReplaceStr(functions in expressions)}
   fMathsParser.Optimize := true;
-  i := fMathsParser.AddExpression(trim(fMatcherString));
-  eval:=fMathsParser.AsString[i];
+  eval:=fMathsParser.AsString[fMathsParser.AddExpression(trim(fMatcherString))];
   if upperCase(eval)='TRUE' then
     Result:=erAllow
   else

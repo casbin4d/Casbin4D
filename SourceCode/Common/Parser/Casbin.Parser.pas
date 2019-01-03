@@ -351,7 +351,7 @@ var
   mainLines: TStringList;
   line: string;
   tmpStr: string;
-  header: THeaderNode;
+  header: THeaderNode;   //PALOFF
   startPos: Integer;
   endPos: Integer;
 begin
@@ -367,7 +367,7 @@ begin
       begin
         tmpStr:=Copy(Copy(line, startPos, endPos-1), startPos+1,
                                                           endPos-1);
-        header:=THeaderNode.Create;
+        header:=THeaderNode.Create;  //PALOFF
         header.Value:=tmpStr;
         case IndexStr(UpperCase(tmpStr),
                       [UpperCase(defaultSection.Header),

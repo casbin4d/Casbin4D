@@ -126,12 +126,7 @@ end;
 function THeaderNode.toOutputString: string;
 var
   i: Integer;
-  sep: string;
 begin
-  if fSectionType=stPolicyRules then
-    sep:=','
-  else
-    sep:='=';
   Result:='['+Value+']'+sLineBreak;
   for i:=0 to fStatementNode.Count-1 do
   begin

@@ -24,7 +24,7 @@ type
   private
     fDictionary: TDictionary<string, TCasbinFunc>;
     procedure loadBuiltInFunctions;
-    procedure loadCustomFunctions;
+    procedure loadCustomFunctions;  //PALOFF
   private
 {$REGION 'Interface'}
     procedure registerFunction(const aName: string;
@@ -130,7 +130,7 @@ end;
 
 procedure TFunctions.loadCustomFunctions;
 begin
-// Add call to fDictionary.Add to register a customn function
+// Add call to fDictionary.Add to register a custom function
 end;
 
 end.

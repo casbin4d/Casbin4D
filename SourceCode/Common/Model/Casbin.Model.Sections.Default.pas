@@ -20,8 +20,8 @@ uses
 
 type
   TSectionDefault = record
-    Header: string;
-    Tag: TStringDynArray;
+    Header: string;   //PALOFF
+    Tag: TStringDynArray;     //PALOFF
   end;
 
 const

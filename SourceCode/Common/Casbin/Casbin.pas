@@ -41,7 +41,7 @@ type
 {$ENDREGION}
   public
     constructor Create; overload;
-    constructor Create(const aModelFile, aPolicyFile: string); overload;
+    constructor Create(const aModelFile, aPolicyFile: string); overload;  //PALOFF
     constructor Create(const aModel: IModel; const aPolicyAdapter: IPolicyManager);
         overload;
   end;
@@ -85,8 +85,6 @@ end;
 
 function TCasbin.enforce(const aParams: TEnforceParameters): boolean;
 var
-  i: Integer;
-  index: Integer;
   item: string;
   request: TList<string>;
   tmpList: TList<string>;
@@ -100,7 +98,6 @@ var
   policy: string;
   effectArray: TEffectArray;
   matchString: string;
-  func: IFunctions;
   reqDefinitions: TList<string>;
   polDefinitions: TList<string>;
 begin
@@ -112,7 +109,7 @@ begin
 
   criticalSection.Acquire;
   try
-    request:=TList<string>.Create;
+    request:=TList<string>.Create;  //PALOFF
     for item in aParams do
       request.Add(item);
 
@@ -161,12 +158,11 @@ begin
   {$ENDIF}
 
     matcher:=fModel.assertions(stMatchers);
-    func:=TFunctions.Create;
 
     for item in fPolicy.policies do
     begin
       // Resolve Policy
-      policyList:=TList<string>.Create;
+      policyList:=TList<string>.Create;   //PALOFF
       policyList.AddRange(item.Split([',']));
 
       //Item 0 has p,g, etc
@@ -177,11 +173,11 @@ begin
       fLogger.log('   Resolving Functions and Matcher...');
       // Resolve Matcher
       if matcher.Count>0 then
-        matcherResult:=resolve(requestDict, policyDict, func, matcher.Items[0])
+        matcherResult:=resolve(requestDict, policyDict, TFunctions.Create, matcher.Items[0])
       else
         matcherResult:=erIndeterminate;
       SetLength(effectArray, Length(effectArray)+1);
-      effectArray[Length(effectArray)-1]:=matcherResult;
+      effectArray[Length(effectArray)-1]:=matcherResult; //PALOFF
 
       polDefinitions.Free;
       policyDict.Free;
@@ -201,7 +197,6 @@ begin
     reqDefinitions.Free;
     request.Free;
     requestDict.Free;
-    func:=nil;
 
   finally
     criticalSection.Release;

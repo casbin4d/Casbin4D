@@ -110,7 +110,7 @@ begin
       else
         modifiedFilter.Add(Trim(policy));
 
-    filter:='';
+    filter:=''; //PALOFF
     for policy in modifiedFilter do
       filter:=filter+policy+',';
     if filter[findEndPos(filter)] = ',' then

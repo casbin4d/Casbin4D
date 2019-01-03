@@ -28,9 +28,9 @@ uses
 
 procedure addAssertion(const aHeader: THeaderNode; const aLine: string);
 var
-  child: TChildNode;
-  assertion: TAssertionNode;
-  effect: TEffectNode;
+  child: TChildNode;     //PALOFF
+  assertion: TAssertionNode;  //PALOFF
+  effect: TEffectNode;       //PALOFF
   index: Integer;
   sep: Char;
   key: string;
@@ -57,7 +57,7 @@ begin
     stMatchers,
     stDefault,
     stUnknown: begin
-                  child:=TChildNode.Create;
+                  child:=TChildNode.Create;     //PALOFF
                   child.Key:=key;
                   child.Value:=value;
                   aHeader.ChildNodes.Add(child);
@@ -72,13 +72,13 @@ begin
                        strList.DelimitedText:=value;
                        strList.StrictDelimiter:=True;
 
-                       child:=TChildNode.Create;
+                       child:=TChildNode.Create;    //PALOFF
                        child.Key:=key;
                        child.Value:=value;
                        aHeader.ChildNodes.Add(child);
                        for objStr in strList do
                        begin
-                         assertion:=TAssertionNode.Create;
+                         assertion:=TAssertionNode.Create;  //PALOFF
                          assertion.Key:=key;
                          assertion.Value:=objStr;
                          child.AssertionList.Add(assertion);
@@ -89,7 +89,7 @@ begin
                    end;
 
     stPolicyEffect: begin
-                      effect:=TEffectNode.Create;
+                      effect:=TEffectNode.Create;  //PALOFF
                       effect.Key:=key;
                       effect.Value:=value;
 

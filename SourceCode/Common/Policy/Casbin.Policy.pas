@@ -31,6 +31,7 @@ type
 {$REGION 'Interface'}
     function section (const aSlim: Boolean = true): string;
     function policies: TList<string>;
+    function roles: TList<string>;
     procedure add(const aTag: string);
     procedure load (const aFilter: TFilterArray = []);
     function policy(const aFilter: TFilterArray = []): string;
@@ -49,7 +50,7 @@ implementation
 uses
   Casbin.Adapter.Filesystem.Policy, Casbin.Exception.Types, System.Classes,
   Casbin.Parser, Casbin.Core.Utilities, Casbin.Model.Sections.Types,
-  Casbin.Core.Defaults, System.SysUtils, System.StrUtils;
+  Casbin.Core.Defaults, System.SysUtils, System.StrUtils, Casbin.Model.Sections.Default, System.Types;
 
 { TPolicyManager }
 
@@ -206,6 +207,37 @@ end;
 procedure TPolicyManager.remove(const aPolicyDefinition, aFilter: string);
 begin
   fAdapter.remove(aPolicyDefinition, aFilter);
+end;
+
+function TPolicyManager.roles: TList<string>;
+var
+  node: TChildNode;
+  headerNode: THeaderNode;
+  section: TSection;
+  tag: string;
+  foundTag: Boolean;
+begin
+  foundTag:=False;
+  Result:=TList<string>.Create;
+  loadPolicies;
+  section:=createDefaultSection(stRoleRules);
+  for headerNode in fNodes.Headers do
+    if (headerNode.SectionType=stPolicyRules) then
+    begin
+      for tag in section.Tag do
+        if headerNode.Key=tag then
+        begin
+          foundTag:=True;
+          Break;
+        end;
+      if foundTag then
+        for node in headerNode.ChildNodes do
+        begin
+          Result.add(node.Key+AssignmentCharForRoles+node.Value)
+        end;
+    end;
+
+  section.Free;
 end;
 
 function TPolicyManager.section(const aSlim: Boolean): string;

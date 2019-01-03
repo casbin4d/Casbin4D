@@ -25,6 +25,7 @@ const
   EOL = sLineBreak;
   AssignmentCharForModel = '=';
   AssignmentCharForPolicies = ',';
+  AssignmentCharForRoles = ',';
   AssignmentCharForConfig = '=';
 
 implementation

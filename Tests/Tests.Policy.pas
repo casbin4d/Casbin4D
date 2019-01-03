@@ -33,6 +33,9 @@ type
     procedure testPolicies;
 
     [Test]
+    procedure testRoles;
+
+    [Test]
     procedure testSection;
 
     [Test]
@@ -81,6 +84,20 @@ begin
   Assert.AreEqual(True, fPolicy.policyExists(['p','bob','DATA2','write']));
   Assert.AreEqual(false, fPolicy.policyExists(['p','bob','DATA100','write']));
   Assert.AreEqual(false, fPolicy.policyExists(['bob','DATA100','write']));
+end;
+
+procedure TTestPolicyManager.testRoles;
+var
+  policyManager: IPolicyManager;
+  list: TList<string>;
+begin
+  policyManager:=TPolicyManager.Create
+                  ('..\..\..\Examples\Default\rbac_with_domains_policy.csv');
+  list:=policyManager.roles;
+  Assert.AreEqual(2, list.Count, 'Count');
+  Assert.AreEqual('g, alice, admin, domain1', list.Items[0], 'Line 1');
+  Assert.AreEqual('g, bob, admin, domain2', list.Items[1], 'Line 2');
+  list.Free;
 end;
 
 procedure TTestPolicyManager.testSection;

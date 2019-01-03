@@ -42,7 +42,8 @@ begin
     raise Exception.Create('Header is nil');
 
   sep:='=';
-  if aHeader.SectionType=stPolicyRules then
+  if (aHeader.SectionType=stPolicyRules) or
+      (aHeader.SectionType=stRoleRules) then
     sep:=',';
 
   index:=Pos(sep, aLine, Low(string));
@@ -52,10 +53,10 @@ begin
   key:=Copy(aLine, Low(string), index-1);
   value:=Copy(aLine, index+1, Length(aLine));
 
-
   case aHeader.SectionType of
     stMatchers,
     stDefault,
+    stRoleDefinition,
     stUnknown: begin
                   child:=TChildNode.Create;     //PALOFF
                   child.Key:=key;
@@ -65,7 +66,8 @@ begin
 
     stRequestDefinition,
     stPolicyDefinition,
-    stPolicyRules: begin
+    stPolicyRules,
+    stRoleRules: begin
                      strList:=TstringList.Create;
                      try
                        strList.Delimiter:=',';
@@ -112,9 +114,6 @@ begin
                       end;
                       aHeader.ChildNodes.Add(effect);
                     end;
-    {TODO -oOwner -cGeneral : stRoleDefinition}
-    stRoleDefinition: ;
-
   end;
 end;
 

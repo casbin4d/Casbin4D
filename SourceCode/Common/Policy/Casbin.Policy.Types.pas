@@ -31,6 +31,14 @@ type
     {$ENDREGION}
     function policies: TList<string>;
 
+    {$REGION ''}
+    /// <remarks>
+    ///   The function instantiates the list
+    ///   The consumer is responsible to free the list
+    /// </remarks>
+    {$ENDREGION}
+    function roles: TList<string>;
+
     procedure add (const aTag: string);
     procedure load (const aFilter: TFilterArray = []);
     function policy (const aFilter: TFilterArray = []): string;

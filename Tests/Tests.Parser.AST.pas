@@ -38,6 +38,9 @@ type
     procedure testPolicyRules;
 
     [Test]
+    procedure testRoleDefinition;
+
+    [Test]
     procedure testMatchers;
     [Test]
     [TestCase('ecSomeAllow.Go','e=some(where(p.eft==allow))#ecSomeAllow','#')]
@@ -157,6 +160,31 @@ begin
 
   header.Free;
 
+end;
+
+procedure TTestParserAST.testRoleDefinition;
+var
+  header: THeaderNode;
+ begin
+  header:=THeaderNode.Create;
+  header.SectionType:=stRoleDefinition;
+  addAssertion(header, 'g=_,_');
+  Assert.IsTrue(header.ChildNodes.Count = 1);
+
+  Assert.AreEqual('g', header.ChildNodes.Items[0].Key);
+  Assert.AreEqual('_,_', header.ChildNodes.Items[0].Value);
+
+  header.Free;
+
+  header:=THeaderNode.Create;
+  header.SectionType:=stRoleDefinition;
+  addAssertion(header, 'g2=_,_,_');
+  Assert.IsTrue(header.ChildNodes.Count = 1);
+
+  Assert.AreEqual('g2', header.ChildNodes.Items[0].Key);
+  Assert.AreEqual('_,_,_', header.ChildNodes.Items[0].Value);
+
+  header.Free;
 end;
 
 procedure TTestParserAST.testEffects(const aInput: string; const aResult:

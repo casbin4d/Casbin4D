@@ -102,6 +102,9 @@ type
         '[default]'+sLineBreak+'p,alice,files,delete'+sLineBreak+
                                'p,alice,files,read'
         ,'#')]
+    [TestCase('Roles Rules','[default]'+sLineBreak+'g,_,_'+sLineBreak+
+                'g2,_,_,_'+
+               '#[default]'+sLineBreak+'g,_,_'+sLineBreak+'g2,_,_,_','#')]
     procedure testHeaderOutputString(const aInput, aExpected: String);
 
   end;

@@ -90,7 +90,7 @@ begin
                 fileString:=policyFileString;
               end;
     ptConfig: begin
-                headerSet:= congigSections;
+                headerSet:= configSections;
                 fileString:=configFileString;
               end;
   end;

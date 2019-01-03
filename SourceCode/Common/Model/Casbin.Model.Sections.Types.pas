@@ -26,6 +26,7 @@ type
                   stPolicyEffect,
                   stMatchers,
                   stPolicyRules,
+                  stRoleRules,
                   stUnknown);
   TSectionTypeSet = set of TSectionType;
 
@@ -82,7 +83,7 @@ const
                                      stMatchers];
 
   policySections: TSectionTypeSet = [stDefault];
-  congigSections: TSectionTypeSet = [stDefault];
+  configSections: TSectionTypeSet = [stDefault];
 
 implementation
 

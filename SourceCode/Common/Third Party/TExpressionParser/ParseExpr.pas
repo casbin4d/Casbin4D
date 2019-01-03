@@ -114,10 +114,10 @@ interface
 instead NAN is returned.
 Note that using this directive is less efficient}
 
-uses OObjects, Classes, ParseClass;
+uses
+  OObjects, Classes, ParseClass;
+
 type
-
-
   TCustomExpressionParser = class
   private
     FHexChar: Char;
@@ -228,6 +228,24 @@ uses
 
 const
   errorPrefix='Error in math expression: ';
+
+
+function findStartPos: Integer;
+begin
+  Result:=Low(string);
+end;
+
+function findEndPos (const aLine: string): Integer;
+begin
+  Result:=0;
+  if trim(aLine)<>'' then
+    if findStartPos=0 then
+     result:=Length(aLine)-1
+    else
+      result:=Length(aLine);
+end;
+
+
 
 procedure _Power(Param: PExpressionRec);
 begin
@@ -851,7 +869,6 @@ var
   Expr2: TExprCollection;
   Rec: PExpressionRec;
 begin
-  FirstOper := nil;
   IStart := 0;
   try
     Result := nil;
@@ -963,23 +980,23 @@ var
   procedure ReadConstant(AnExpr: string; isHex: Boolean);
   begin
     isConstant := True;
-    while (I2 <= Len) and ((AnExpr[I2] in ['0'..'9']) or
-      (isHex and (AnExpr[I2] in ['a'..'f']))) do
+    while (I2 <= Len) and (CharInSet(AnExpr.Chars[I2 - findStartPos], ['0'..'9']) or
+      (isHex and CharInSet(AnExpr.Chars[I2 - findStartPos], ['a'..'f']))) do
       Inc(I2);
     if I2 <= Len then
     begin
       if AnExpr[I2] = DecimSeparator then
       begin
         Inc(I2);
-        while (I2 <= Len) and (AnExpr[I2] in ['0'..'9']) do
+        while (I2 <= Len) and CharInSet(AnExpr.Chars[I2 - findStartPos], ['0'..'9']) do
           Inc(I2);
       end;
-      if (I2 <= Len) and (AnExpr[I2] = 'e') then
+      if (I2 <= Len) and (AnExpr.Chars[I2 - findStartPos] = 'e') then
       begin
         Inc(I2);
-        if (I2 <= Len) and (AnExpr[I2] in ['+', '-']) then
+        if (I2 <= Len) and CharInSet(AnExpr.Chars[I2 - findStartPos], ['+','-']) then
           Inc(I2);
-        while (I2 <= Len) and (AnExpr[I2] in ['0'..'9']) do
+        while (I2 <= Len) and CharInSet(AnExpr.Chars[I2 - findStartPos], ['0'..'9']) do
           Inc(I2);
       end;
     end;
@@ -990,7 +1007,7 @@ var
   begin
     isConstant := False;
     I1 := I2;
-    while (I1 < Len) and (AnExpr[I1] = ' ') do
+    while (I1 < Len) and (AnExpr.Chars[I1 - findStartPos] = ' ') do
       Inc(I1);
     I2 := I1;
     if I1 <= Len then
@@ -1003,7 +1020,9 @@ var
         if I2 = OldI2 then
         begin
           isConstant := False;
-          while (I2 <= Len) and (AnExpr[I2] in ['a'..'z', '_', '0'..'9']) do
+          while (I2 <= Len) and CharInSet(AnExpr.Chars[I2 - findStartPos],
+                                                ['a'..'z', '_',
+                                                             '0'..'9']) do
             Inc(I2);
         end;
       end
@@ -1022,61 +1041,65 @@ var
             end;
           'a'..'z', '_':
             begin
-              while (I2 <= Len) and (AnExpr[I2] in ['a'..'z', '_', '0'..'9']) do
+              while (I2 <= Len) and CharInSet(AnExpr.Chars[I2 - findStartPos],
+                                                  ['a'..'z', '_',
+                                                             '0'..'9']) do
                 Inc(I2);
             end;
           '>', '<':
             begin
               if (I2 <= Len) then
                 Inc(I2);
-              if AnExpr[I2] in ['=', '<', '>'] then
+              if CharInSet(AnExpr.Chars[I2 - findStartPos], ['=','<','>']) then
                 Inc(I2);
             end;
           '=':
             begin
               if (I2 <= Len) then
                 Inc(I2);
-              if AnExpr[I2] in ['<', '>', '='] then
+              if CharInSet(AnExpr.Chars[I2 - findStartPos], ['=','<','>']) then
                 Inc(I2);
             end;
           '&':
             begin
               if (I2 <= Len) then
                 Inc(I2);
-              if AnExpr[I2] in ['&'] then
+              if CharInSet(AnExpr.Chars[I2 - findStartPos], ['&']) then
                 Inc(I2);
             end;
           '|':
             begin
               if (I2 <= Len) then
                 Inc(I2);
-              if AnExpr[I2] in ['|'] then
+              if CharInSet(AnExpr.Chars[I2 - findStartPos], ['|']) then
                 Inc(I2);
             end;
           ':':
             begin
               if (I2 <= Len) then
                 Inc(I2);
-              if AnExpr[I2] = '=' then
+              if AnExpr.Chars[I2 - findStartPos] = '=' then
                 Inc(I2);
             end;
           '!':
             begin
               if (I2 <= Len) then
                 Inc(I2);
-              if AnExpr[I2] = '=' then //support for !=
+              if AnExpr.Chars[I2 - findStartPos] = '=' then //support for !=
                 Inc(I2);
             end;
           '+':
             begin
               Inc(I2);
-              if (I2 <= Len)and(AnExpr[I2] = '+') and WordsList.Search(pchar('++'), I) then
+              if (I2 <= Len)and(AnExpr.Chars[I2 - findStartPos] = '+') and
+                                    WordsList.Search(pchar('++'), I) then
                 Inc(I2);
             end;
           '-':
             begin
               Inc(I2);
-              if (I2 <= Len) and (AnExpr[I2] = '-') and WordsList.Search(pchar('--'), I) then
+              if (I2 <= Len) and (AnExpr.Chars[I2 - findStartPos] = '-') and
+                                              WordsList.Search(pchar('--'), I) then
                 Inc(I2);
             end;
           '^', '/', '\', '*', '(', ')', '%', '~', '$':
@@ -1095,7 +1118,8 @@ begin
   OldDecim := format.DecimalSeparator;
   format.DecimalSeparator := DecimSeparator;
   Result := TExprCollection.Create(10);
-  I2 := 1;
+//  I2 := 1;
+  I2:=findStartPos;
   S := Trim(LowerCase(AnExpression));
   Len := Length(S);
   repeat

@@ -113,6 +113,8 @@ var
   strList: TStringList;
 begin
   Result:='';
+  if fNodes.Headers.Count=0 then
+    Exit;
   checkSection(aSection);
   for headerNode in fNodes.Headers do
     if headerNode.SectionType=aSection then

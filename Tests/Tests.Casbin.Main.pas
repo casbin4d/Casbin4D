@@ -16,6 +16,8 @@ type
     [Test]
     procedure testFileConstructor;
     [Test]
+    procedure testMemoryConstructor;
+    [Test]
     procedure testAdapterConstructor;
     [Test]
     procedure testEnabled;
@@ -348,6 +350,17 @@ var
 begin
   casbin:=TCasbin.Create('..\..\..\Examples\Default\basic_model.conf',
               '..\..\..\Examples\Default\basic_policy.csv');
+  Assert.IsNotNull(casbin.Logger);
+  Assert.IsNotNull(casbin.Model);
+  Assert.IsNotNull(casbin.Policy);
+  Assert.IsTrue(casbin.Enabled);
+end;
+
+procedure TTestCasbin.testMemoryConstructor;
+var
+  casbin: ICasbin;
+begin
+  casbin:=TCasbin.Create;
   Assert.IsNotNull(casbin.Logger);
   Assert.IsNotNull(casbin.Model);
   Assert.IsNotNull(casbin.Policy);

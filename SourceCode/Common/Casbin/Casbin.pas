@@ -27,6 +27,7 @@ type
     function enforce (const aParams: TEnforceParameters): boolean;
 {$ENDREGION}
   public
+    constructor Create; overload;
     constructor Create(const aModelFile, aPolicyFile: string); overload;
     constructor Create(const aModel: IModel; const aPolicyAdapter: IPolicyManager);
         overload;
@@ -39,7 +40,7 @@ uses
   Casbin.Core.Logger.Default, System.Generics.Collections, System.SysUtils,
   Casbin.Resolve, Casbin.Resolve.Types, Casbin.Model.Sections.Types,
   Casbin.Core.Utilities, System.Rtti, Casbin.Effect.Types, Casbin.Effect,
-  Casbin.Functions.Types, Casbin.Functions;
+  Casbin.Functions.Types, Casbin.Functions, Casbin.Adapter.Memory, Casbin.Adapter.Memory.Policy;
 
 constructor TCasbin.Create(const aModelFile, aPolicyFile: string);
 begin
@@ -58,6 +59,12 @@ begin
   fPolicy:=aPolicyAdapter;
   fLogger:=TDefaultLogger.Create;
   fEnabled:=True;
+end;
+
+constructor TCasbin.Create;
+begin
+  Create(TModel.Create(TMemoryAdapter.Create), TPolicyManager.Create(
+                                                  TPolicyMemoryAdapter.Create));
 end;
 
 function TCasbin.enforce(const aParams: TEnforceParameters): boolean;

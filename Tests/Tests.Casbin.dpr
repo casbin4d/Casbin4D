@@ -71,7 +71,11 @@ uses
   Tests.Casbin.Main in 'Tests.Casbin.Main.pas',
   Casbin.Resolve.Types in '..\SourceCode\Common\Casbin\Casbin.Resolve.Types.pas',
   Casbin.Resolve in '..\SourceCode\Common\Casbin\Casbin.Resolve.pas',
-  Tests.Casbin.Resolve in 'Tests.Casbin.Resolve.pas';
+  Tests.Casbin.Resolve in 'Tests.Casbin.Resolve.pas',
+  Casbin.Adapter.Memory in '..\SourceCode\Common\Adapters\Casbin.Adapter.Memory.pas',
+  Casbin.Adapter.Memory.Policy in '..\SourceCode\Common\Adapters\Casbin.Adapter.Memory.Policy.pas',
+  Tests.Adapter.MemorySystem in 'Tests.Adapter.MemorySystem.pas',
+  Tests.Adapter.MemorySystem.Policy in 'Tests.Adapter.MemorySystem.Policy.pas';
 
 var
   runner : ITestRunner;

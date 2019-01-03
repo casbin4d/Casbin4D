@@ -66,6 +66,8 @@ contains
   Casbin.Types in '..\Common\Casbin\Casbin.Types.pas',
   Casbin.Resolve.Types in '..\Common\Casbin\Casbin.Resolve.Types.pas',
   Casbin.Resolve in '..\Common\Casbin\Casbin.Resolve.pas',
-  Casbin in '..\Common\Casbin\Casbin.pas';
+  Casbin in '..\Common\Casbin\Casbin.pas',
+  Casbin.Adapter.Memory.Policy in '..\Common\Adapters\Casbin.Adapter.Memory.Policy.pas',
+  Casbin.Adapter.Memory in '..\Common\Adapters\Casbin.Adapter.Memory.pas';
 
 end.

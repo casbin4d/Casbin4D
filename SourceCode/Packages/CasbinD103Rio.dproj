@@ -151,6 +151,8 @@
         <DCCReference Include="..\Common\Casbin\Casbin.Resolve.Types.pas"/>
         <DCCReference Include="..\Common\Casbin\Casbin.Resolve.pas"/>
         <DCCReference Include="..\Common\Casbin\Casbin.pas"/>
+        <DCCReference Include="..\Common\Adapters\Casbin.Adapter.Memory.Policy.pas"/>
+        <DCCReference Include="..\Common\Adapters\Casbin.Adapter.Memory.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

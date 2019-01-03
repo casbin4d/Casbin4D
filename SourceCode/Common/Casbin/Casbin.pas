@@ -125,49 +125,43 @@ begin
     // Resolve Request
   {$IFDEF DEBUG}
     fLogger.log('   Request: '+requestStr);
-    tmpList:=fModel.assertions(stRequestDefinition);
     fLogger.log('      Assertions: ');
-    if tmpList.Count=0 then
+    if fModel.assertions(stRequestDefinition).Count=0 then
       fLogger.log('         No Request Assertions found')
     else
-      for item in tmpList do
+      for item in fModel.assertions(stRequestDefinition) do
         fLogger.log('         '+item);
-    tmpList.Free;
   {$ENDIF}
-    reqDefinitions:=fModel.assertions(stRequestDefinition);
-    requestDict:=resolve(request, rtRequest, reqDefinitions);
+    requestDict:=resolve(request, rtRequest,
+                            fModel.assertions(stRequestDefinition));
 
     fLogger.log('   Resolving Policies...');
 
   {$IFDEF DEBUG}
     fLogger.log('   Policies: ');
     fLogger.log('      Assertions: ');
-    tmpList:=fPolicy.policies;
-    if tmpList.Count=0 then
+    if fPolicy.policies.Count=0 then
       fLogger.log('         No Policy Assertions found')
     else
-      for item in tmpList do
+      for item in fPolicy.policies do
         fLogger.log('         '+item);
 
-    tmpList:=fModel.assertions(stPolicyDefinition);
     fLogger.log('      Assertions: '+requestStr);
-    for item in tmpList do
+    for item in fModel.assertions(stPolicyDefinition) do
       fLogger.log('         '+item);
-    tmpList.Free;
   {$ENDIF}
 
-    matcher:=fModel.assertions(stMatchers);
   {$IFDEF DEBUG}
     fLogger.log('   Matchers: '+requestStr);
     fLogger.log('      Assertions: ');
-    if matcher.Count=0 then
+    if fModel.assertions(stMatchers).Count=0 then
       fLogger.log('         No Matcher Assertions found')
     else
-      for item in matcher do
+      for item in fModel.assertions(stMatchers) do
         fLogger.log('         '+item);
   {$ENDIF}
-    if matcher.Count>0 then
-      matchString:=matcher.Items[0]
+    if fModel.assertions(stMatchers).Count>0 then
+      matchString:=fModel.assertions(stMatchers).Items[0]
     else
       matchString:='';
     for item in fPolicy.policies do
@@ -178,8 +172,8 @@ begin
 
       //Item 0 has p,g, etc
       policyList.Delete(0);
-      polDefinitions:= fModel.assertions(stPolicyDefinition);
-      policyDict:=resolve(policyList, rtPolicy, polDefinitions);
+      policyDict:=resolve(policyList, rtPolicy,
+                                      fModel.assertions(stPolicyDefinition));
 
       fLogger.log('   Resolving Functions and Matcher...');
       // Resolve Matcher
@@ -190,7 +184,6 @@ begin
       SetLength(effectArray, Length(effectArray)+1);
       effectArray[Length(effectArray)-1]:=matcherResult; //PALOFF
 
-      polDefinitions.Free;
       policyDict.Free;
       policyList.Free;
 
@@ -204,7 +197,6 @@ begin
 
     fLogger.log('Enforcement completed (Result: '+BoolToStr(Result, true)+')');
 
-    reqDefinitions.Free;
     request.Free;
     requestDict.Free;
 

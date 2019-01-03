@@ -26,6 +26,7 @@ type
     fAdapter: IAdapter;
     fParser: IParser;
     fNodes: TNodeCollection;
+    fAssertions: TList<string>;
     procedure checkSection(const aSection: TSectionType);
   protected
 {$REGION 'Interface'}
@@ -37,6 +38,7 @@ type
   public
     constructor Create(const aModel: string); overload;
     constructor Create(const aAdapter: IAdapter); overload;
+    destructor Destroy; override;
   end;
 
 implementation
@@ -57,7 +59,7 @@ var
   assertionNode: TAssertionNode;
   assertion: string;
 begin
-  Result:=TList<string>.Create;
+  fAssertions.Clear;
   checkSection(aSection);
   for headerNode in fNodes.Headers do
     if headerNode.SectionType=aSection then
@@ -65,18 +67,19 @@ begin
       for node in headerNode.ChildNodes do
       begin
         if node.AssertionList.Count=0 then
-          Result.add(node.Value)
+          fAssertions.add(node.Value)
         else
         begin
           for assertionNode in node.AssertionList do
           begin
             assertion:=node.Key+'.'+assertionNode.Value;
-            Result.Add(assertion);
+            fAssertions.Add(assertion);
           end;
         end;
       end;
-      Exit;
+      Break;
     end;
+  Result:=fAssertions;
 end;
 
 constructor TModel.Create(const aAdapter: IAdapter);
@@ -91,6 +94,13 @@ begin
   if fParser.Status=psError then
     raise ECasbinException.Create('Parsing error in Model: '+fParser.ErrorMessage);
   fNodes:=fParser.Nodes;
+  fAssertions:=TList<string>.Create;
+end;
+
+destructor TModel.Destroy;
+begin
+  fAssertions.Free;
+  inherited;
 end;
 
 function TModel.effectCondition: TEffectCondition;

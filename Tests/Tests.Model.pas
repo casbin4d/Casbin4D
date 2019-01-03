@@ -89,7 +89,6 @@ begin
                                       Trim(list.Items[0]));
     end;
   end;
-  list.Free;
 end;
 
 procedure TTestModel.testEffect;

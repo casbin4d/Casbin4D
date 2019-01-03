@@ -88,14 +88,11 @@ begin
     matcherResult:=resolve(requestDict, policyDict, func, listMatcher.Items[0])
   else
     matcherResult:=erIndeterminate;
-  listMatcher.Free;
 
   Assert.AreEqual(erAllow, matcherResult);
 
   requestDict.Free;
   policyDict.Free;
-  listPolicy.Free;
-  listRequest.Free;
   policy.Free;
   request.Free;
 
@@ -137,14 +134,11 @@ begin
     matcherResult:=resolve(requestDict, policyDict, func, listMatcher.Items[0])
   else
     matcherResult:=erIndeterminate;
-  listMatcher.Free;
 
   Assert.AreEqual(erAllow, matcherResult);
 
   requestDict.Free;
   policyDict.Free;
-  listPolicy.Free;
-  listRequest.Free;
   policy.Free;
   request.Free;
 end;
@@ -175,7 +169,6 @@ begin
   Assert.AreEqual('GET', dict.Items['P.ACT']);
 
   policy.Free;
-  list.Free;
   dict.Free;
 end;
 
@@ -205,7 +198,6 @@ begin
   Assert.AreEqual('READ', dict.Items['R.ACT']);
 
   request.Free;
-  list.Free;
   dict.Free;
 end;
 

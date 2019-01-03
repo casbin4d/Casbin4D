@@ -135,9 +135,9 @@
         <DCCReference Include="..\SourceCode\Common\Parser\Casbin.Parser.AST.Types.pas"/>
         <DCCReference Include="..\SourceCode\Common\Parser\Casbin.Parser.pas"/>
         <DCCReference Include="Tests.Parser.pas"/>
-        <DCCReference Include="..\SourceCode\Common\Core\Casbin.Core.Logger.Types.pas"/>
-        <DCCReference Include="..\SourceCode\Common\Core\Casbin.Core.Logger.Default.pas"/>
-        <DCCReference Include="..\SourceCode\Common\Core\Casbin.Core.Logger.Base.pas"/>
+        <DCCReference Include="..\SourceCode\Common\Loggers\Casbin.Core.Logger.Types.pas"/>
+        <DCCReference Include="..\SourceCode\Common\Loggers\Casbin.Core.Logger.Default.pas"/>
+        <DCCReference Include="..\SourceCode\Common\Loggers\Casbin.Core.Logger.Base.pas"/>
         <DCCReference Include="..\SourceCode\Common\Core\Casbin.Core.Defaults.pas"/>
         <DCCReference Include="..\SourceCode\Common\Core\Casbin.Core.Base.Types.pas"/>
         <DCCReference Include="..\SourceCode\Common\Core\Casbin.Core.Strings.pas"/>

@@ -116,9 +116,9 @@
         </DelphiCompile>
         <DCCReference Include="rtl.dcp"/>
         <DCCReference Include="..\Common\Core\Casbin.Core.Base.Types.pas"/>
-        <DCCReference Include="..\Common\Core\Casbin.Core.Logger.Base.pas"/>
-        <DCCReference Include="..\Common\Core\Casbin.Core.Logger.Default.pas"/>
-        <DCCReference Include="..\Common\Core\Casbin.Core.Logger.Types.pas"/>
+        <DCCReference Include="..\Common\Loggers\Casbin.Core.Logger.Base.pas"/>
+        <DCCReference Include="..\Common\Loggers\Casbin.Core.Logger.Default.pas"/>
+        <DCCReference Include="..\Common\Loggers\Casbin.Core.Logger.Types.pas"/>
         <DCCReference Include="..\Common\Core\Casbin.Core.Defaults.pas"/>
         <DCCReference Include="..\Common\Effect\Casbin.Effect.Types.pas"/>
         <DCCReference Include="..\Common\Effect\Casbin.Effect.pas"/>

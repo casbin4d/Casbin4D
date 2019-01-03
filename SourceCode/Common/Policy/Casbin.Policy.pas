@@ -100,18 +100,33 @@ function TPolicyManager.policies: TList<string>;
 var
   node: TChildNode;
   headerNode: THeaderNode;
+  section: TSection;
+  tag: string;
+  foundTag: Boolean;
 begin
+  foundTag:=False;
   Result:=TList<string>.Create;
   loadPolicies;
+  section:=createDefaultSection(stPolicyDefinition);
   for headerNode in fNodes.Headers do
-    if headerNode.SectionType=stPolicyRules then
+    if (headerNode.SectionType=stPolicyRules) then
     begin
       for node in headerNode.ChildNodes do
       begin
-        Result.add(node.Key+AssignmentCharForPolicies+node.Value)
+        for tag in section.Tag do
+          if node.Key=tag then
+          begin
+            foundTag:=True;
+            Break;
+          end
+          else
+            foundTag:=False;
+        if foundTag then
+          Result.add(node.Key+AssignmentCharForPolicies+node.Value)
       end;
-      Exit;
     end;
+
+  section.Free;
 end;
 
 function TPolicyManager.policy(const aFilter: TFilterArray = []): string;
@@ -220,21 +235,23 @@ begin
   foundTag:=False;
   Result:=TList<string>.Create;
   loadPolicies;
-  section:=createDefaultSection(stRoleRules);
+  section:=createDefaultSection(stRoleDefinition);
   for headerNode in fNodes.Headers do
     if (headerNode.SectionType=stPolicyRules) then
     begin
-      for tag in section.Tag do
-        if headerNode.Key=tag then
-        begin
-          foundTag:=True;
-          Break;
-        end;
-      if foundTag then
-        for node in headerNode.ChildNodes do
-        begin
+      for node in headerNode.ChildNodes do
+      begin
+        for tag in section.Tag do
+          if node.Key=tag then
+          begin
+            foundTag:=True;
+            Break;
+          end
+          else
+            foundTag:=False;
+        if foundTag then
           Result.add(node.Key+AssignmentCharForRoles+node.Value)
-        end;
+      end;
     end;
 
   section.Free;

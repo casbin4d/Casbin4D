@@ -51,7 +51,7 @@ implementation
 uses
   Casbin.Core.Logger.Default, System.IniFiles, System.Classes,
   Casbin.Core.Defaults, Casbin.Core.Strings, System.StrUtils,
-  System.AnsiStrings, Casbin.Model.Sections.Types,
+  Casbin.Model.Sections.Types,
   Casbin.Model.Sections.Default, Casbin.Parser.AST, Casbin.Effect.Types,
   System.Math, Casbin.Core.Utilities, System.SysUtils;
 

@@ -23,20 +23,7 @@ type
     ['{B983A830-6107-4283-A45D-D74CDBB5E2EA}']
     function section (const aSlim: Boolean = true): string;
 
-    {$REGION ''}
-    /// <remarks>
-    ///   The function instantiates the list
-    ///   The consumer is responsible to free the list
-    /// </remarks>
-    {$ENDREGION}
     function policies: TList<string>;
-
-    {$REGION ''}
-    /// <remarks>
-    ///   The function instantiates the list
-    ///   The consumer is responsible to free the list
-    /// </remarks>
-    {$ENDREGION}
     function roles: TList<string>;
 
     procedure add (const aTag: string);

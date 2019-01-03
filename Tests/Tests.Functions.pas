@@ -190,7 +190,6 @@ begin
   Assert.AreEqual('KeyMatch2', list.Strings[2]);
   Assert.AreEqual('KeyMatch3', list.Strings[3]);
   Assert.AreEqual('RegExMatch', list.Strings[4]);
-  list.Free;
 end;
 
 procedure TTestFunctions.testInvalidIP(const aIP: string);

@@ -71,7 +71,6 @@ begin
   Assert.AreEqual(2, list.Count, 'Count');
   Assert.AreEqual('p, alice, data1, read', list.Items[0], 'Line 1');
   Assert.AreEqual('p, bob, data2, write', list.Items[1], 'Line 2');
-  list.Free;
 end;
 
 procedure TTestPolicyManager.testPolicy(const aFilter, aExpected: string);
@@ -97,7 +96,6 @@ begin
   Assert.AreEqual(2, list.Count, 'Count');
   Assert.AreEqual('g, alice, admin, domain1', list.Items[0], 'Line 1');
   Assert.AreEqual('g, bob, admin, domain2', list.Items[1], 'Line 2');
-  list.Free;
 end;
 
 procedure TTestPolicyManager.testSection;

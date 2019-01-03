@@ -23,6 +23,7 @@ type
   TFunctions = class (TBaseInterfacedObject, IFunctions)
   private
     fDictionary: TDictionary<string, TCasbinFunc>;
+    fList: TStringList;
     procedure loadBuiltInFunctions;
     procedure loadCustomFunctions;  //PALOFF
   private
@@ -47,6 +48,8 @@ constructor TFunctions.Create;
 begin
   inherited;
   fDictionary:=TDictionary<string, TCasbinFunc>.Create;
+  fList:=TStringList.Create;
+  fList.Sorted:=true;
   loadBuiltInFunctions;
   loadCustomFunctions;
 end;
@@ -58,6 +61,7 @@ begin
   for item in fDictionary.Keys do
     fDictionary.AddOrSetValue(item, nil);
   fDictionary.Free;
+  fList.Free;
   inherited;
 end;
 
@@ -106,10 +110,10 @@ function TFunctions.list: TStringList;
 var
   name: string;
 begin
-  result:=TStringList.Create;
-  Result.Sorted:=true;
+  fList.Clear;
   for name in fDictionary.Keys do
-    result.add(name);
+    fList.add(name);
+  Result:=fList;
 end;
 
 procedure TFunctions.loadBuiltInFunctions;

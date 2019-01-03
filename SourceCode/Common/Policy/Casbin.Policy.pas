@@ -26,6 +26,8 @@ type
     fAdapter: IPolicyAdapter;
     fParser: IParser;
     fNodes: TNodeCollection;
+    fPoliciesList: TList<string>;
+    fRolesList: TList<string>;
     procedure loadPolicies;
   private
 {$REGION 'Interface'}
@@ -43,6 +45,7 @@ type
   public
     constructor Create(const aPolicy: string); overload;
     constructor Create(const aAdapter: IPolicyAdapter); overload;
+    destructor Destroy; override;
   end;
 
 implementation
@@ -75,6 +78,15 @@ begin
     raise ECasbinException.Create('Adapter is nil in '+Self.ClassName);
   inherited Create;
   fAdapter:=aAdapter;
+  fPoliciesList:=TList<string>.Create;
+  fRolesList:=TList<string>.Create;
+end;
+
+destructor TPolicyManager.Destroy;
+begin
+  fPoliciesList.Free;
+  fRolesList.Free;
+  inherited;
 end;
 
 procedure TPolicyManager.load(const aFilter: TFilterArray);
@@ -105,7 +117,7 @@ var
   foundTag: Boolean;
 begin
   foundTag:=False;
-  Result:=TList<string>.Create;
+  fPoliciesList.Clear;
   loadPolicies;
   section:=createDefaultSection(stPolicyDefinition);
   for headerNode in fNodes.Headers do
@@ -122,11 +134,11 @@ begin
           else
             foundTag:=False;
         if foundTag then
-          Result.add(node.Key+AssignmentCharForPolicies+node.Value)
+          fPoliciesList.add(node.Key+AssignmentCharForPolicies+node.Value)
       end;
     end;
-
   section.Free;
+  Result:=fPoliciesList;
 end;
 
 function TPolicyManager.policy(const aFilter: TFilterArray = []): string;
@@ -150,8 +162,7 @@ begin
   end;
   testPolicy:=String.Join(',', strArray);
 
-  list:=policies;
-  for policy in list do
+  for policy in policies do
   begin
     strArray:=policy.Split([',']);
     for i:=0 to Length(strArray)-1 do
@@ -170,7 +181,6 @@ begin
       end;
     end;
   end;
-  list.Free;
 end;
 
 function TPolicyManager.policyExists(const aFilter: TFilterArray): Boolean;
@@ -195,8 +205,7 @@ begin
   if testPolicy[findEndPos(testPolicy)]=',' then
     testPolicy:=Copy(testPolicy, findStartPos, findEndPos(testPolicy)-1);
 
-  list:=policies;
-  for policy in list do
+  for policy in policies do
   begin
     strArray:=policy.Split([',']);
     for i:=0 to Length(strArray)-1 do
@@ -211,7 +220,6 @@ begin
       end;
     end;
   end;
-  list.Free;
 end;
 
 procedure TPolicyManager.remove(const aPolicyDefinition: string);
@@ -233,7 +241,7 @@ var
   foundTag: Boolean;
 begin
   foundTag:=False;
-  Result:=TList<string>.Create;
+  fRolesList.Clear;
   loadPolicies;
   section:=createDefaultSection(stRoleDefinition);
   for headerNode in fNodes.Headers do
@@ -250,11 +258,11 @@ begin
           else
             foundTag:=False;
         if foundTag then
-          Result.add(node.Key+AssignmentCharForRoles+node.Value)
+          fRolesList.add(node.Key+AssignmentCharForRoles+node.Value)
       end;
     end;
-
   section.Free;
+  Result:=fRolesList;
 end;
 
 function TPolicyManager.section(const aSlim: Boolean): string;

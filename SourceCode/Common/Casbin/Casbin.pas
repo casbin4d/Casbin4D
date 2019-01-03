@@ -148,7 +148,6 @@ begin
     else
       for item in tmpList do
         fLogger.log('         '+item);
-    tmpList.Free;
 
     tmpList:=fModel.assertions(stPolicyDefinition);
     fLogger.log('      Assertions: '+requestStr);
@@ -158,7 +157,19 @@ begin
   {$ENDIF}
 
     matcher:=fModel.assertions(stMatchers);
-
+  {$IFDEF DEBUG}
+    fLogger.log('   Matchers: '+requestStr);
+    fLogger.log('      Assertions: ');
+    if matcher.Count=0 then
+      fLogger.log('         No Matcher Assertions found')
+    else
+      for item in matcher do
+        fLogger.log('         '+item);
+  {$ENDIF}
+    if matcher.Count>0 then
+      matchString:=matcher.Items[0]
+    else
+      matchString:='';
     for item in fPolicy.policies do
     begin
       // Resolve Policy
@@ -172,8 +183,8 @@ begin
 
       fLogger.log('   Resolving Functions and Matcher...');
       // Resolve Matcher
-      if matcher.Count>0 then
-        matcherResult:=resolve(requestDict, policyDict, TFunctions.Create, matcher.Items[0])
+      if matchString<>'' then
+        matcherResult:=resolve(requestDict, policyDict, TFunctions.Create, matchString)
       else
         matcherResult:=erIndeterminate;
       SetLength(effectArray, Length(effectArray)+1);
@@ -184,7 +195,6 @@ begin
       policyList.Free;
 
     end;
-
     matcher.Free;
 
     //Resolve Effector

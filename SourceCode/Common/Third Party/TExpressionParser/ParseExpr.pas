@@ -115,7 +115,7 @@ instead NAN is returned.
 Note that using this directive is less efficient}
 
 uses
-  OObjects, Classes, ParseClass;
+  OObjects, ParseClass, System.Generics.Collections, System.Classes;
 
 type
   TCustomExpressionParser = class
@@ -164,7 +164,7 @@ type
     function EvaluateCurrent: Double; //fastest
     function AddExpression(AnExpression: string): Integer; virtual;
     procedure ClearExpressions; virtual;
-    procedure GetGeneratedVars(AList: TList);
+    procedure GetGeneratedVars(AList: TList<Pointer>);
     procedure GetFunctionNames(AList: TStrings);
     function GetFunctionDescription(AFunction: string): string;
     property HexChar: Char read FHexChar write FHexChar;
@@ -224,7 +224,7 @@ type
 implementation
 
 uses
-  System.SysUtils, Math;
+  System.SysUtils, Math, System.Character;
 
 const
   errorPrefix='Error in math expression: ';
@@ -980,23 +980,23 @@ var
   procedure ReadConstant(AnExpr: string; isHex: Boolean);
   begin
     isConstant := True;
-    while (I2 <= Len) and (CharInSet(AnExpr.Chars[I2 - findStartPos], ['0'..'9']) or
-      (isHex and CharInSet(AnExpr.Chars[I2 - findStartPos], ['a'..'f']))) do
+    while (I2 <= Len) and (AnExpr[I2].IsDigit or
+      (isHex and (AnExpr[I2].IsInArray(['a','b','c','d','e','f'])))) do
       Inc(I2);
     if I2 <= Len then
     begin
       if AnExpr[I2] = DecimSeparator then
       begin
         Inc(I2);
-        while (I2 <= Len) and CharInSet(AnExpr.Chars[I2 - findStartPos], ['0'..'9']) do
+        while (I2 <= Len) and AnExpr[I2].IsDigit do
           Inc(I2);
       end;
-      if (I2 <= Len) and (AnExpr.Chars[I2 - findStartPos] = 'e') then
+      if (I2 <= Len) and (AnExpr[I2] = 'e') then
       begin
         Inc(I2);
-        if (I2 <= Len) and CharInSet(AnExpr.Chars[I2 - findStartPos], ['+','-']) then
+        if (I2 <= Len) and AnExpr[I2].IsInArray(['+', '-']) then
           Inc(I2);
-        while (I2 <= Len) and CharInSet(AnExpr.Chars[I2 - findStartPos], ['0'..'9']) do
+        while (I2 <= Len) and AnExpr[I2].IsDigit do
           Inc(I2);
       end;
     end;
@@ -1007,7 +1007,7 @@ var
   begin
     isConstant := False;
     I1 := I2;
-    while (I1 < Len) and (AnExpr.Chars[I1 - findStartPos] = ' ') do
+    while (I1 < Len) and (AnExpr[I1] = ' ') do
       Inc(I1);
     I2 := I1;
     if I1 <= Len then
@@ -1020,9 +1020,8 @@ var
         if I2 = OldI2 then
         begin
           isConstant := False;
-          while (I2 <= Len) and CharInSet(AnExpr.Chars[I2 - findStartPos],
-                                                ['a'..'z', '_',
-                                                             '0'..'9']) do
+          while (I2 <= Len) and (AnExpr[I2].IsLetterOrDigit or
+                                   AnExpr[I2].IsInArray(['_'])) do
             Inc(I2);
         end;
       end
@@ -1041,65 +1040,62 @@ var
             end;
           'a'..'z', '_':
             begin
-              while (I2 <= Len) and CharInSet(AnExpr.Chars[I2 - findStartPos],
-                                                  ['a'..'z', '_',
-                                                             '0'..'9']) do
+              while (I2 <= Len) and (AnExpr[I2].IsLetterOrDigit or
+                                   AnExpr[I2].IsInArray(['_'])) do
                 Inc(I2);
             end;
           '>', '<':
             begin
               if (I2 <= Len) then
                 Inc(I2);
-              if CharInSet(AnExpr.Chars[I2 - findStartPos], ['=','<','>']) then
+              if AnExpr[I2].IsInArray(['=', '<', '>']) then
                 Inc(I2);
             end;
           '=':
             begin
               if (I2 <= Len) then
                 Inc(I2);
-              if CharInSet(AnExpr.Chars[I2 - findStartPos], ['=','<','>']) then
+              if AnExpr[I2].IsInArray(['<', '>', '=']) then
                 Inc(I2);
             end;
           '&':
             begin
               if (I2 <= Len) then
                 Inc(I2);
-              if CharInSet(AnExpr.Chars[I2 - findStartPos], ['&']) then
+              if AnExpr[I2].IsInArray(['&']) then
                 Inc(I2);
             end;
           '|':
             begin
               if (I2 <= Len) then
                 Inc(I2);
-              if CharInSet(AnExpr.Chars[I2 - findStartPos], ['|']) then
+              if AnExpr[I2].IsInArray(['|']) then
                 Inc(I2);
             end;
           ':':
             begin
               if (I2 <= Len) then
                 Inc(I2);
-              if AnExpr.Chars[I2 - findStartPos] = '=' then
+              if AnExpr[I2] = '=' then
                 Inc(I2);
             end;
           '!':
             begin
               if (I2 <= Len) then
                 Inc(I2);
-              if AnExpr.Chars[I2 - findStartPos] = '=' then //support for !=
+              if AnExpr[I2] = '=' then //support for !=
                 Inc(I2);
             end;
           '+':
             begin
               Inc(I2);
-              if (I2 <= Len)and(AnExpr.Chars[I2 - findStartPos] = '+') and
-                                    WordsList.Search(pchar('++'), I) then
+              if (I2 <= Len)and(AnExpr[I2] = '+') and WordsList.Search(pchar('++'), I) then
                 Inc(I2);
             end;
           '-':
             begin
               Inc(I2);
-              if (I2 <= Len) and (AnExpr.Chars[I2 - findStartPos] = '-') and
-                                              WordsList.Search(pchar('--'), I) then
+              if (I2 <= Len) and (AnExpr[I2] = '-') and WordsList.Search(pchar('--'), I) then
                 Inc(I2);
             end;
           '^', '/', '\', '*', '(', ')', '%', '~', '$':
@@ -1127,12 +1123,12 @@ begin
     W := Trim(Copy(S, I1, I2 - I1));
     if isConstant then
     begin
-      if W[1] = HexChar then
+      if W[findStartPos] = HexChar then
       begin
-        W[1] := '$';
+        W[findStartPos] := '$';
         W := IntToStr(StrToInt(W));
       end;
-      if W[1] = '''' then
+      if W[findStartPos] = '''' then
         Word := TStringConstant.Create(W)
       else
         Word := TDoubleConstant.Create(W, W);
@@ -1401,7 +1397,7 @@ begin
   AddReplaceExprWord(TStringVariable.Create(AVarName, AValue));
 end;
 
-procedure TCustomExpressionParser.GetGeneratedVars(AList: TList);
+procedure TCustomExpressionParser.GetGeneratedVars(AList: TList<Pointer>);
 var
   I: Integer;
 begin

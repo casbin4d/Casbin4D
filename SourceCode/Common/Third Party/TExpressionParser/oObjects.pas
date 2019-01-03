@@ -1,13 +1,17 @@
-unit OObjects;
-interface
-uses Classes;
-const
+unit
+  OObjects;
 
+interface
+
+uses
+  System.Generics.Collections;
+
+const
   {TOCollection interfaces between OWL TCollection and VCL TList}
   MaxCollectionSize = Maxint div (SizeOf(Integer) * 2);
 
 type
-  TOCollection = class(TList)
+  TOCollection = class(TList<Pointer>)
   public
     constructor Create(ACapacity: Integer);
     procedure AtFree(Index: Integer);
@@ -52,7 +56,7 @@ uses SysUtils;
 constructor TOCollection.Create(ACapacity: Integer);
 begin
   inherited Create;
-  SetCapacity(ACapacity);
+  Self.Capacity:=ACapacity;
   {Delta is automatic in TList}
 end;
 

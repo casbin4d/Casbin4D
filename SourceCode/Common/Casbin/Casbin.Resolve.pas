@@ -131,22 +131,23 @@ begin
         if argsArray[i][findEndPos(argsArray[i])]=')' then
           argsArray[i]:=Copy(argsArray[i], findStartPos, Length(argsArray[i])-1);
       end;
-      
+
       funcResult:=aFunctions.retrieveFunction(item)(argsArray);
       replaceStr:=UpperCase(item);
       if args[findStartPos]<>'(' then
         replaceStr:=replaceStr+'(';
       replaceStr:=replaceStr+args;
-      if args[findEndPos(args)]<>')' then 
+      if args[findEndPos(args)]<>')' then
         replaceStr:=replaceStr+')';
 
-      if funcResult then 
+      if funcResult then
         boolReplacseStr:='100 = 100'
       else
         boolReplacseStr:='100 = 90';
-        
-      resolvedMatcher:=resolvedMatcher.Replace(replaceStr, boolReplacseStr, 
+
+      resolvedMatcher:=resolvedMatcher.Replace(replaceStr, boolReplacseStr,
                                                           [rfReplaceAll]);
+
     end;
   end;
   // Evaluation

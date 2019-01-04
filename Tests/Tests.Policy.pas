@@ -46,6 +46,7 @@ type
     [TestCase ('Bob', 'p, BOB, data2#write', '#')]
     [TestCase ('Non-existant', 'p, 123, aaaa#undefined', '#')]
     procedure testPolicy(const aFilter: string; const aExpected: string);
+
   end;
 
 implementation

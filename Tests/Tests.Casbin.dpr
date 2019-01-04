@@ -75,7 +75,8 @@ uses
   Casbin.Adapter.Memory in '..\SourceCode\Common\Adapters\Casbin.Adapter.Memory.pas',
   Casbin.Adapter.Memory.Policy in '..\SourceCode\Common\Adapters\Casbin.Adapter.Memory.Policy.pas',
   Tests.Adapter.MemorySystem in 'Tests.Adapter.MemorySystem.pas',
-  Tests.Adapter.MemorySystem.Policy in 'Tests.Adapter.MemorySystem.Policy.pas';
+  Tests.Adapter.MemorySystem.Policy in 'Tests.Adapter.MemorySystem.Policy.pas',
+  Tests.Policy.Roles in 'Tests.Policy.Roles.pas';
 
 var
   runner : ITestRunner;

@@ -33,6 +33,7 @@ type
     fRolesLinks: TDictionary<string, TStringDynArray>;
     procedure loadPolicies;
     function findRolesNode(const aDomain, aValue: string): TRoleNode;
+    procedure loadRoles;
   private
 {$REGION 'Interface'}
     function section (const aSlim: Boolean = true): string;
@@ -43,7 +44,8 @@ type
     procedure clear;
     function policyExists(const aFilter: TFilterArray = []): Boolean;
     procedure remove(const aPolicyDefinition: string); overload;
-    procedure remove (const aPolicyDefinition: string; const aFilter: string); overload;
+    procedure remove (const aPolicyDefinition: string; const aFilter: string);
+                                                                overload;
 
     procedure clearRoles;
     function roles: TList<string>;
@@ -54,18 +56,21 @@ type
                       const aTopDomain: string; const aTop: string); overload;
     procedure removeLink(const aLeft, aRight: string); overload;
     procedure removeLink(const aLeft: string;
-                      const aRightDomain: string; const aRight: string); overload;
+                      const aRightDomain: string; const aRight: string);
+                                                                       overload;
     procedure removeLink(const aLeftDomain, aLeft, aRightDomain, aRight: string);
         overload;
     function linkExists(const aLeft: string; const aRight: string): Boolean;
         overload;
     function linkExists(const aLeft: string;
-                      const aRightDomain: string; const aRight: string):boolean; overload;
+                      const aRightDomain: string; const aRight: string):boolean;
+                                                                        overload;
     function linkExists(const aLeftDomain: string; const aLeft: string; const
         aRightDomain: string; const aRight: string): boolean; overload;
-    function rolesForEntity (const aEntity: string; const aDomain: string =''): TStringDynArray;
-    function EntitiesForRole (const aEntity: string; const aDomain: string =''):TStringDynArray;
-
+    function rolesForEntity (const aEntity: string; const aDomain: string =''):
+                                                                TStringDynArray;
+    function EntitiesForRole (const aEntity: string; const aDomain: string =''):
+                                                                TStringDynArray;
 {$ENDREGION}
   public
     constructor Create(const aPolicy: string); overload;
@@ -357,6 +362,64 @@ begin
   fNodes:=fParser.Nodes;
 end;
 
+procedure TPolicyManager.loadRoles;
+var
+  role: string;
+  policy: string;
+  roleList: TList<string>;
+  policyList: TList<string>;
+  section: TSection;
+  useDomains: Boolean;
+begin
+  useDomains:=False;
+  clearRoles;
+
+  // We get the Role Rules
+  section:=createDefaultSection(stRoleDefinition);
+  for role in roles do
+  begin
+    roleList:=TList<string>.Create;
+    roleList.AddRange(role.Split([',']));
+    if roleList.Count>=3 then
+    begin
+      case IndexStr(roleList[0], section.Tag) of
+        /// NEED TO REWRITE
+        /// By HUGE and RISKY convention we assume 0 --> g and 1 --> g2
+        0: addLink(roleList[1], roleList[2]);
+        1: if roleList.Count>=4 then
+           begin
+            addLink(roleList[1], roleList[3], roleList[2]);
+            useDomains:=true;
+           end
+      else
+        raise ECasbinException.Create('The Role Rules are not correct.'+sLineBreak+
+                                      'Make sure you use g or g2');
+      end;
+    end;
+    roleList.Free;
+  end;
+
+  section.Free;
+
+  // We now need to transverse the other policy rules to build the links
+  for policy in policies do
+  begin
+    policyList:=TList<string>.Create;
+    policyList.AddRange(policy.Split([',']));
+
+    // Need to filter the policies to load based on the avail links from the g's
+    // Now we load all the policies and have them hanging around although never
+    // being called (enforced)
+    if (policyList.Count>=5) and useDomains then
+      addLink(policyList[1], policyList[3], policyList[2])
+    else
+      if (policyList.Count>=4) and (not useDomains) then
+        addLink(policyList[1], policyList[2]);
+
+    policyList.Free;
+  end;
+end;
+
 function TPolicyManager.policies: TList<string>;
 var
   node: TChildNode;
@@ -367,6 +430,7 @@ var
 begin
   foundTag:=False;
   fPoliciesList.Clear;
+  fRolesList.Clear;
   loadPolicies;
   section:=createDefaultSection(stPolicyDefinition);
   for headerNode in fNodes.Headers do
@@ -393,7 +457,6 @@ end;
 function TPolicyManager.policy(const aFilter: TFilterArray = []): string;
 var
   i: Integer;
-  list: TList<string>;
   policy: string;
   test: string;
   testPolicy: string;
@@ -488,6 +551,7 @@ var
 begin
   foundTag:=False;
   fRolesList.Clear;
+  fPoliciesList.Clear;
   loadPolicies;
   section:=createDefaultSection(stRoleDefinition);
   for headerNode in fNodes.Headers do

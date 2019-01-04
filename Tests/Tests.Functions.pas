@@ -23,6 +23,8 @@ type
   TTestFunctions = class(TObject)
   private
     fFunctions: IFunctions;
+
+    function testFunction(const Args: array of string): Boolean;
   public
     [Setup]
     procedure Setup;
@@ -131,6 +133,9 @@ type
 
     [Test]
     procedure testFunctionsList;
+
+    [Test]
+    procedure testObjectFunction;
   end;
 
 implementation
@@ -161,8 +166,10 @@ var
   proc: TProc;
 begin
   proc:=procedure
+        var
+          func: TCasbinFunc;
         begin
-          fFunctions.registerFunction('', nil);
+          fFunctions.registerFunction('', func);
         end;
   Assert.WillRaise(proc);
 end;
@@ -172,10 +179,18 @@ var
   proc: TProc;
 begin
   proc:=procedure
+        var
+        func: TCasbinFunc;
         begin
-          fFunctions.registerFunction('Null', nil);
+          func:=nil;
+          fFunctions.registerFunction('Null', func);
         end;
   Assert.WillRaise(proc);
+end;
+
+function TTestFunctions.testFunction(const Args: array of string): Boolean;
+begin
+  Result:=True;
 end;
 
 procedure TTestFunctions.testFunctionsList;
@@ -230,6 +245,16 @@ end;
 procedure TTestFunctions.testLoadBuiltInFunctions(const aName: string);
 begin
   Assert.IsTrue(Assigned(fFunctions.retrieveFunction(aName)));
+end;
+
+procedure TTestFunctions.testObjectFunction;
+var
+  func: TCasbinFunc;
+begin
+  fFunctions.registerFunction('Test', testFunction);
+  func:=TCasbinFunc(fFunctions.retrieveFunction('Test'));
+  Assert.IsNotNull(func(['']), 'Retrieval');
+  Assert.IsTrue(func(['']));
 end;
 
 procedure TTestFunctions.testRegExMatch(const aKey1, aKey2: string;

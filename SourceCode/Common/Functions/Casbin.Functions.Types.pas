@@ -20,11 +20,14 @@ uses
 
 type
   TCasbinFunc = function (const Args: array of string): Boolean;
+  TCasbinObjectFunc = function (const Args: array of string): Boolean of object;
 
   IFunctions = interface (IBaseInterface)
     ['{1AF251A3-A0DE-4FB5-B49E-C46E3D8726AE}']
     procedure registerFunction (const aName: string;
-                                  const aFunc: TCasbinFunc);
+                                  const aFunc: TCasbinFunc); overload;
+    procedure registerFunction (const aName: string;
+                                  const aFunc: TCasbinObjectFunc); overload;
     function retrieveFunction(const aName: string): TCasbinFunc;
     function list: TStringList;
     procedure refreshFunctions;

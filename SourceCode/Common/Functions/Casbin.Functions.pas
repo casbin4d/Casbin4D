@@ -29,7 +29,9 @@ type
   private
 {$REGION 'Interface'}
     procedure registerFunction(const aName: string;
-      const aFunc: TCasbinFunc);
+      const aFunc: TCasbinFunc); overload;
+    procedure registerFunction(const aName: string;
+      const aFunc: TCasbinObjectFunc); overload;
     function retrieveFunction(const aName: string): TCasbinFunc;
     function list: TStringList;
     procedure refreshFunctions;
@@ -70,6 +72,12 @@ begin
   fDictionary.Clear;
   loadBuiltInFunctions;
   loadCustomFunctions;
+end;
+
+procedure TFunctions.registerFunction(const aName: string;
+  const aFunc: TCasbinObjectFunc);
+begin
+  registerFunction(aName, @aFunc);
 end;
 
 procedure TFunctions.registerFunction(const aName: string;

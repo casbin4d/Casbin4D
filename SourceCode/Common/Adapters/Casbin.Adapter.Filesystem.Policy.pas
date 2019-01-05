@@ -93,70 +93,26 @@ var
   i: Integer;
   filteredArray: TStringList;
   modifiedFilter: TList<string>;
+  found: Boolean;
 begin
-  // DO NOT CALL inherited
+  // DO NOT CALL inherited when CACHE is implemented
   // WE NEED TO MANAGE THE CACHE
   {TODO -oOwner -cGeneral : Implement Cache}
   inherited; // <-- This should be removed when Cache is implemented
              //     But the fFiltered should be managed here
              //     And the fFilter property
   fFilter:=aFilter;
-  if Length(aFilter)<>0 then
+  if Length(fFilter)<>0 then
   begin
-    modifiedFilter:=TList<string>.Create;
-    for policy in aFilter do
-      if trim(policy)='' then
-        modifiedFilter.add('*')
-      else
-        modifiedFilter.Add(Trim(policy));
-
-    filter:=''; //PALOFF
-    for policy in modifiedFilter do
-      filter:=filter+policy+',';
-    if filter[findEndPos(filter)] = ',' then
-      filter:=Copy(filter, findStartPos, findEndPos(filter)-1);
-    filter:=Trim(filter);
-
     for i:=getAssertions.Count-1 downto 0 do
     begin
+      found:=False;
       policy:=getAssertions.Items[i];
-
-      filteredArray:=TStringList.Create;
-      filteredArray.Delimiter:=',';
-      filteredArray.StrictDelimiter:=True;
-      filteredArray.DelimitedText:=Trim(policy);
-
-      if filteredArray.Count>=1 then
-      begin
-        // Here we need to get the role tags from TSectionHeaders
-        if (UpperCase(filteredArray.Strings[0])<>'G') and
-          (UpperCase(filteredArray.Strings[0])<>'G2') then
-        begin
-          filteredArray.Delete(0);
-          if modifiedFilter.Count<=filteredArray.Count then
-          begin
-            for index:=0 to modifiedFilter.Count-1 do
-            begin
-              if modifiedFilter.Items[index] = '*' then
-                filteredArray.Strings[index]:='*';
-            end;
-
-            test:='';
-            for index:=0 to filteredArray.Count-1 do
-              test:=test+Trim(filteredArray[index])+',';
-            test:=Trim(test);
-            if test[findEndPos(test)] = ',' then
-              test:=Copy(test, findStartPos, findEndPos(test)-1);
-
-            if Trim(UpperCase(Copy(test, findStartPos, findEndPos(filter)))) <>
-                                            Trim(UpperCase(filter)) then
-              getAssertions.Delete(i);
-          end;
-        end;
-      end;
-      filteredArray.Free;
+      for filter in fFilter do
+        found:=found or policy.Contains(Trim(filter));
+      if not found then
+        getAssertions.Delete(i);
     end;
-    modifiedFilter.Free;
   end;
 end;
 

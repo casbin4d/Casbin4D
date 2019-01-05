@@ -177,6 +177,7 @@ begin
   fRolesList:=TList<string>.Create;
   fRolesNodes:=TObjectDictionary<string, TRoleNode>.Create([doOwnsValues]);
   fRolesLinks:=TDictionary<string, TStringDynArray>.Create;
+  loadPolicies;
 end;
 
 constructor TPolicyManager.Create;
@@ -215,6 +216,8 @@ begin
     end;
     fRolesLinks.Items[leftNode.ID]:=newIDArray;
   end;
+
+  loadRoles;
 end;
 
 procedure TPolicyManager.removeLink(const aLeft, aRightDomain, aRight: string);
@@ -301,9 +304,38 @@ var
   leftNode: TRoleNode;
   rightNode: TRoleNode;
   IDArray: TStringDynArray;
+  item: string;
   itemString: string;
 begin
+{$IFDEF DEBUG}
+  fAdapter.Logger.log('   Roles for Left: '+aLeft);
+  fAdapter.Logger.log('      Roles: ');
+  if Length(rolesForEntity(aLeft))=0 then
+    fAdapter.Logger.log('         No Roles found')
+  else
+    for item in rolesForEntity(aLeft) do
+      fAdapter.Logger.log('         '+item);
+
+  fAdapter.Logger.log('   Roles for Right: '+aRight);
+  fAdapter.Logger.log('      Roles: ');
+  if Length(rolesForEntity(aRight))=0 then
+    fAdapter.Logger.log('         No Roles found')
+  else
+    for item in rolesForEntity(aRight) do
+      fAdapter.Logger.log('         '+item);
+
+
+{$ENDIF}
   Result:=False;
+
+  if SameText(UpperCase(aLeftDomain), UpperCase(aRightDomain)) and
+      SameText(UpperCase(aLeft), UpperCase(aRight)) then
+  begin
+    Result:=True;
+    exit;
+  end;
+
+  loadRoles;
 
   leftNode:=findRolesNode(aLeftDomain, aLeft);
   if not Assigned(leftNode) then
@@ -329,9 +361,13 @@ begin
     // We now check itineratively the top links
     for itemString in IDArray do
     begin
-      leftNode:=fRolesNodes.Items[itemString];
-      Result:=linkExists(leftNode.Domain, leftNode.Value,
-                                    rightNode.Domain, rightNode.Value);
+      if fRolesNodes.ContainsKey(itemString) then
+      begin
+        leftNode:=fRolesNodes.Items[itemString];
+        if Assigned(leftNode) and Assigned(rightNode) then
+          Result:=linkExists(leftNode.Domain, leftNode.Value,
+                                      rightNode.Domain, rightNode.Value);
+      end;
     end;
   end;
 
@@ -347,12 +383,15 @@ procedure TPolicyManager.load(const aFilter: TFilterArray);
 begin
   fAdapter.clear;
   fAdapter.load(aFilter);
+  loadPolicies;
+  loadRoles;
 end;
 
 procedure TPolicyManager.loadPolicies;
 begin
   if (Assigned(fNodes)) then
     Exit;
+  fPoliciesList.Clear;
   fAdapter.clear;
   fAdapter.load(fAdapter.Filter);
   fParser:=TParser.Create(fAdapter.toOutputString, ptPolicy);
@@ -431,7 +470,6 @@ begin
   foundTag:=False;
   fPoliciesList.Clear;
   fRolesList.Clear;
-  loadPolicies;
   section:=createDefaultSection(stPolicyDefinition);
   for headerNode in fNodes.Headers do
     if (headerNode.SectionType=stPolicyRules) then
@@ -463,8 +501,6 @@ var
   strArray: TFilterArray;
 begin
   Result:='undefined';
-
-  loadPolicies;
 
   //Clean aFilter
   strArray:=aFilter;
@@ -505,9 +541,8 @@ begin
   Result:=False;
   if Length(aFilter)=0 then
     Exit;
-  loadPolicies;
 
-  if IndexStr(UpperCase(aFilter[0]), ['P', 'G']) = -1 then
+  if IndexStr(UpperCase(aFilter[0]), ['P', 'G', 'G2']) = -1 then
     testPolicy:='p,';
   for policy in aFilter do
     testPolicy:=testPolicy+policy+',';
@@ -551,8 +586,6 @@ var
 begin
   foundTag:=False;
   fRolesList.Clear;
-  fPoliciesList.Clear;
-  loadPolicies;
   section:=createDefaultSection(stRoleDefinition);
   for headerNode in fNodes.Headers do
     if (headerNode.SectionType=stPolicyRules) then
@@ -612,7 +645,6 @@ var
   policy: string;
 begin
   Result:='';
-  loadPolicies;
   for headerNode in fNodes.Headers do
     if headerNode.SectionType=stPolicyRules then
     begin

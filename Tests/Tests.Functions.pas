@@ -249,10 +249,10 @@ end;
 
 procedure TTestFunctions.testObjectFunction;
 var
-  func: TCasbinFunc;
+  func: TCasbinObjectFunc;
 begin
   fFunctions.registerFunction('Test', testFunction);
-  func:=TCasbinFunc(fFunctions.retrieveFunction('Test'));
+  func:=fFunctions.retrieveObjFunction('Test');
   Assert.IsNotNull(func(['']), 'Retrieval');
   Assert.IsTrue(func(['']));
 end;

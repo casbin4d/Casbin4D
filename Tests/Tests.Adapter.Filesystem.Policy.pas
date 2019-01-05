@@ -47,20 +47,20 @@ type
                                  sLineBreak+
                                  'g, alice, data2_admin','#')]
     [TestCase ('First Param', 'alice#p, alice, data1, read, allow'+sLineBreak+
-                                    'p, alice, data2, write, deny'+sLineBreak+
+                                    'p, alice, data2, write, deny'+
                                      sLineBreak+
                                     'g, alice, data2_admin','#')]
     [TestCase ('Two Consecutive Param', 'alice, data1#'+
-                                     'p, alice, data1, read, allow'+sLineBreak+
+                                     'p, alice, data1, read, allow'+
                                      sLineBreak+
                                      'g, alice, data2_admin','#')]
-    [TestCase ('Second Param', ' , data1#p, alice, data1, read, allow'+sLineBreak+
+    [TestCase ('Second Param', ' , data1#p, alice, data1, read, allow'+
                                          sLineBreak+
                                          'g, alice, data2_admin','#')]
     [TestCase ('Third Param', ' , , write#'+
                                  'p, bob, data2, write, allow'+sLineBreak+
                                  'p, data2_admin, data2, write, allow'+sLineBreak+
-                                 'p, alice, data2, write, deny'+sLineBreak+
+                                 'p, alice, data2, write, deny'+
                                  sLineBreak+
                                  'g, alice, data2_admin','#')]
     procedure testload(const aFilter, aExpected: string);

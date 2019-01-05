@@ -18,7 +18,7 @@ interface
 uses
   Casbin.Core.Base.Types, Casbin.Policy.Types, Casbin.Parser.Types,
   Casbin.Parser.AST.Types, System.Generics.Collections,
-  Casbin.Adapter.Policy.Types, System.Rtti, System.Types;
+  Casbin.Adapter.Policy.Types, System.Rtti, System.Types, System.Classes;
 
 type
   TPolicyManager = class(TBaseInterfacedObject, IPolicyManager)
@@ -30,7 +30,7 @@ type
     fRolesList: TList<string>;
 
     fRolesNodes: TObjectDictionary<string, TRoleNode>;
-    fRolesLinks: TDictionary<string, TStringDynArray>;
+    fRolesLinks: TObjectDictionary<string, TStringList>;
     procedure loadPolicies;
     function findRolesNode(const aDomain, aValue: string): TRoleNode;
     procedure loadRoles;
@@ -82,7 +82,7 @@ type
 implementation
 
 uses
-  Casbin.Adapter.Filesystem.Policy, Casbin.Exception.Types, System.Classes,
+  Casbin.Adapter.Filesystem.Policy, Casbin.Exception.Types,
   Casbin.Parser, Casbin.Core.Utilities, Casbin.Model.Sections.Types,
   Casbin.Core.Defaults, System.SysUtils, System.StrUtils,
   Casbin.Model.Sections.Default, Casbin.Adapter.Memory.Policy;
@@ -109,45 +109,36 @@ procedure TPolicyManager.addLink(const aBottomDomain, aBottom, aTopDomain,
 var
   bottomNode: TRoleNode;
   topNode: TRoleNode;
-  IDArray: TStringDynArray;
+  IDList: TStringList;
   itemString: string;
   itemStringExists: Boolean;
 begin
   bottomNode:=findRolesNode(aBottomDomain, aBottom);
   if not Assigned(bottomNode) then
+  begin
     bottomNode:=TRoleNode.Create(aBottom, aBottomDomain);
+    fRolesNodes.Add(bottomNode.ID, bottomNode);
+  end;
 
   topNode:=findRolesNode(aTopDomain, aTop);
   if not Assigned(topNode) then
+  begin
     topNode:=TRoleNode.Create(aTop, aTopDomain);
-
-  if not fRolesNodes.ContainsKey(bottomNode.ID) then
-    fRolesNodes.Add(bottomNode.ID, bottomNode);
-  if not fRolesNodes.ContainsKey(topNode.ID) then
     fRolesNodes.Add(topNode.ID, topNode);
+  end;
 
   if not fRolesLinks.ContainsKey(bottomNode.ID) then
-    SetLength(IDArray, 0)
-  else
-    IDArray:=fRolesLinks.Items[bottomNode.ID];
-
-  itemStringExists:=False;
-  for itemString in IDArray do
   begin
-    if itemString = topNode.ID then
-    begin
-      itemStringExists:=true;
-      Break;
-    end;
+    IDList:=TStringList.Create;
+    IDList.Sorted:=true;
+    IDList.CaseSensitive:=False;
+    fRolesLinks.Add(bottomNode.ID, IDList);
   end;
 
-  if not itemStringExists then
-  begin
-    SetLength(IDArray, Length(IDArray)+1);
-    IDArray[Length(IDArray)-1]:=topNode.ID;
-  end;
+  IDList:=fRolesLinks.Items[bottomNode.ID];
 
-  fRolesLinks.AddOrSetValue(bottomNode.ID, IDArray);
+  if IDList.IndexOf(topNode.id)=-1 then
+    IDList.Add(topNode.ID);
 
 end;
 
@@ -176,7 +167,7 @@ begin
   fPoliciesList:=TList<string>.Create;
   fRolesList:=TList<string>.Create;
   fRolesNodes:=TObjectDictionary<string, TRoleNode>.Create([doOwnsValues]);
-  fRolesLinks:=TDictionary<string, TStringDynArray>.Create;
+  fRolesLinks:=TObjectDictionary<string, TStringList>.Create([doOwnsValues]);
   loadPolicies;
 end;
 
@@ -194,30 +185,30 @@ var
   newIDArray: TStringDynArray;
   itemString: string;
 begin
-  leftNode:=findRolesNode(aLeftDomain, aLeft);
-  if not Assigned(leftNode) then
-    Exit;
-
-  rightNode:=findRolesNode(aRightDomain, aRight);
-  if not Assigned(rightNode) then
-    Exit;
-
-  if fRolesLinks.ContainsKey(leftNode.id) then
-  begin
-    IDArray:=fRolesLinks.Items[leftNode.ID];
-    SetLength(newIDArray, 0);
-    for itemString in IDArray do
-    begin
-      if itemString <> rightNode.ID then
-      begin
-        SetLength(newIDArray, Length(newIDArray)+1);
-        newIDArray[Length(newIDArray)-1]:=itemString;
-      end;
-    end;
-    fRolesLinks.Items[leftNode.ID]:=newIDArray;
-  end;
-
-  loadRoles;
+//  leftNode:=findRolesNode(aLeftDomain, aLeft);
+//  if not Assigned(leftNode) then
+//    Exit;
+//
+//  rightNode:=findRolesNode(aRightDomain, aRight);
+//  if not Assigned(rightNode) then
+//    Exit;
+//
+//  if fRolesLinks.ContainsKey(leftNode.id) then
+//  begin
+//    IDArray:=fRolesLinks.Items[leftNode.ID];
+//    SetLength(newIDArray, 0);
+//    for itemString in IDArray do
+//    begin
+//      if itemString <> rightNode.ID then
+//      begin
+//        SetLength(newIDArray, Length(newIDArray)+1);
+//        newIDArray[Length(newIDArray)-1]:=itemString;
+//      end;
+//    end;
+//    fRolesLinks.Items[leftNode.ID]:=newIDArray;
+//  end;
+//
+//  loadRoles;
 end;
 
 procedure TPolicyManager.removeLink(const aLeft, aRightDomain, aRight: string);
@@ -328,48 +319,49 @@ begin
 {$ENDIF}
   Result:=False;
 
-  if SameText(UpperCase(aLeftDomain), UpperCase(aRightDomain)) and
-      SameText(UpperCase(aLeft), UpperCase(aRight)) then
-  begin
-    Result:=True;
-    exit;
-  end;
-
-  loadRoles;
-
-  leftNode:=findRolesNode(aLeftDomain, aLeft);
-  if not Assigned(leftNode) then
-    Exit;
-
-  rightNode:=findRolesNode(aRightDomain, aRight);
-  if not Assigned(rightNode) then
-    Exit;
-
-  if fRolesLinks.ContainsKey(leftNode.id) then
-  begin
-    IDArray:=fRolesLinks.Items[leftNode.ID];
-    for itemString in IDArray do
-    begin
-      if SameText(itemString, rightNode.ID) and
-          SameText(aRightDomain, rightNode.Domain) then
-      begin
-        result:=true;
-        Exit;
-      end
-    end;
-    // If we are here it means that first level (top) links do not exist
-    // We now check itineratively the top links
-    for itemString in IDArray do
-    begin
-      if fRolesNodes.ContainsKey(itemString) then
-      begin
-        leftNode:=fRolesNodes.Items[itemString];
-        if Assigned(leftNode) and Assigned(rightNode) then
-          Result:=linkExists(leftNode.Domain, leftNode.Value,
-                                      rightNode.Domain, rightNode.Value);
-      end;
-    end;
-  end;
+//  if SameText(UpperCase(aLeftDomain), UpperCase(aRightDomain)) and
+//      SameText(UpperCase(aLeft), UpperCase(aRight)) then
+//  begin
+//    Result:=True;
+//    exit;
+//  end;
+//
+//  loadRoles;
+//
+//  leftNode:=findRolesNode(aLeftDomain, aLeft);
+//  if not Assigned(leftNode) then
+//    Exit;
+//
+//  rightNode:=findRolesNode(aRightDomain, aRight);
+//  if not Assigned(rightNode) then
+//    Exit;
+//
+//  IDArray:=fRolesLinks.Items[leftNode.ID];
+//  for itemString in IDArray do
+//  begin
+//    if SameText(itemString, rightNode.ID) and
+//        SameText(aRightDomain, rightNode.Domain) then
+//    begin
+//      result:=true;
+//      Exit;
+//    end
+//    else
+//    begin
+//      leftNode:=fRolesNodes.Items[itemString];
+//      if Assigned(leftNode) and Assigned(rightNode) then
+//        Result:=linkExists(leftNode.Domain, leftNode.Value,
+//                                    rightNode.Domain, rightNode.Value);
+//    end;
+//  end;
+  // If we are here it means that first level (top) links do not exist
+  // We now check itineratively the top links
+//  for itemString in IDArray do
+//  begin
+//    if fRolesNodes.ContainsKey(itemString) then
+//    begin
+//
+//    end;
+//  end;
 
 end;
 

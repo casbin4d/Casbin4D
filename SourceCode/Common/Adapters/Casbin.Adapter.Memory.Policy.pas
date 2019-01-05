@@ -23,6 +23,7 @@ type
   TPolicyMemoryAdapter = class (TBaseAdapter, IPolicyAdapter)
   private
     fContent: TStringList;
+    procedure resetSections;
   protected
 {$REGION 'IPolicyAdapter'}
     procedure add(const aTag: string);
@@ -60,6 +61,7 @@ constructor TPolicyMemoryAdapter.Create;
 begin
   inherited;
   fContent:=TstringList.Create;
+  resetSections;
 end;
 
 destructor TPolicyMemoryAdapter.Destroy;
@@ -86,7 +88,9 @@ end;
 procedure TPolicyMemoryAdapter.load(const aFilter: TFilterArray);
 begin
   inherited;
-
+  resetSections;
+  clear;
+  getAssertions.AddRange(fContent.ToStringArray);
 end;
 
 procedure TPolicyMemoryAdapter.remove(const aPolicyDefinition: string);
@@ -98,6 +102,14 @@ end;
 procedure TPolicyMemoryAdapter.remove(const aPolicyDefinition, aFilter: string);
 begin
   remove(aPolicyDefinition);
+end;
+
+procedure TPolicyMemoryAdapter.resetSections;
+begin
+  if fContent.Count=0 then
+  begin
+    fContent.Add('[default]');
+  end;
 end;
 
 procedure TPolicyMemoryAdapter.save;

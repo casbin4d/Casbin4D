@@ -21,7 +21,7 @@ uses
 type
   TMemoryAdapter = class(TBaseAdapter)
   private
-    procedure resetSection;
+    procedure resetSections;
   protected
     fContent: TStringList;
    public
@@ -37,7 +37,7 @@ constructor TMemoryAdapter.Create;
 begin
   inherited;
   fContent:=TStringList.Create;
-  resetSection;
+  resetSections;
 end;
 
 destructor TMemoryAdapter.Destroy;
@@ -49,7 +49,7 @@ end;
 procedure TMemoryAdapter.load(const aFilter: TFilterArray);
 begin
   inherited;
-  resetSection;
+  resetSections;
   clear;
   getAssertions.AddRange(fContent.ToStringArray);
 end;
@@ -59,7 +59,7 @@ begin
   inherited;
 end;
 
-procedure TMemoryAdapter.resetSection;
+procedure TMemoryAdapter.resetSections;
 begin
   if fContent.Count=0 then
   begin

@@ -28,10 +28,14 @@ function resolve(const aResolvedRequest, aResolvedPolicy: TDictionary<string,
     string>; const aFunctions: IFunctions; const aMatcher: string):
     TEffectResult; overload;
 
+function resolve(const aResolvedRequest, aResolvedPolicy: TDictionary<string,
+    string>; const aFunctions: Pointer; const aMatcher: string):
+    TEffectResult; overload;
+
 implementation
 
 uses
-  Casbin.Exception.Types, SysUtils, Casbin.Matcher.Types, Casbin.Matcher, Casbin.Core.Utilities;
+  Casbin.Exception.Types, SysUtils, Casbin.Matcher.Types, Casbin.Matcher, Casbin.Core.Utilities, System.StrUtils;
 
 function resolve (const aResolve: TList<string>;
                   const aResolveType: TResolveType;
@@ -73,6 +77,7 @@ var
   item: string;
   item2: string;
   func: TCasbinFunc;
+  funcObj: TCasbinObjectFunc;
   args: string;
   argsArray: TArray<string>;
   endArgsPos: Integer;
@@ -114,7 +119,8 @@ begin
   //Functions
   for item in aFunctions.list do
   begin
-    if resolvedMatcher.Contains(UpperCase(item)) then
+    if resolvedMatcher.Contains(UpperCase(item+'(')) or
+         resolvedMatcher.Contains(UpperCase(item+' (')) then
     begin
       //We need to find the arguments
       startFunPos:=resolvedMatcher.IndexOf(UpperCase(item));
@@ -132,7 +138,10 @@ begin
           argsArray[i]:=Copy(argsArray[i], findStartPos, Length(argsArray[i])-1);
       end;
 
-      funcResult:=aFunctions.retrieveFunction(item)(argsArray);
+      if (UpperCase(item)='G') or (UpperCase(item)='G2') then
+        funcResult:=aFunctions.retrieveObjFunction(item)(argsArray)
+      else
+        funcResult:=aFunctions.retrieveFunction(item)(argsArray);
       replaceStr:=UpperCase(item);
       if args[findStartPos]<>'(' then
         replaceStr:=replaceStr+'(';
@@ -152,6 +161,14 @@ begin
   end;
   // Evaluation
   Result:=matcher.evaluateMatcher(resolvedMatcher);
+end;
+
+function resolve(const aResolvedRequest, aResolvedPolicy: TDictionary<string,
+    string>; const aFunctions: Pointer; const aMatcher: string):
+    TEffectResult; overload;
+begin
+  Result:=
+    resolve(aResolvedRequest, aResolvedPolicy, IFunctions(aFunctions^), aMatcher);
 end;
 
 end.

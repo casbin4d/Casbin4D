@@ -16,7 +16,7 @@ unit Casbin.Functions.Types;
 interface
 
 uses
-  Casbin.Core.Base.Types, System.Classes;
+  Casbin.Core.Base.Types, System.Classes, System.Types;
 
 type
   TCasbinFunc = function (const Args: array of string): Boolean;
@@ -29,6 +29,7 @@ type
     procedure registerFunction (const aName: string;
                                   const aFunc: TCasbinObjectFunc); overload;
     function retrieveFunction(const aName: string): TCasbinFunc;
+    function retrieveObjFunction(const aName: string): TCasbinObjectFunc;
     function list: TStringList;
     procedure refreshFunctions;
   end;

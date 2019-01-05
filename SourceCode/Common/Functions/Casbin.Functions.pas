@@ -17,12 +17,13 @@ interface
 
 uses
   Casbin.Core.Base.Types, Casbin.Functions.Types,
-  System.Generics.Collections, System.Classes;
+  System.Generics.Collections, System.Classes, System.Types, System.Rtti;
 
 type
   TFunctions = class (TBaseInterfacedObject, IFunctions)
   private
     fDictionary: TDictionary<string, TCasbinFunc>;
+    fObjDictionary: TDictionary<string, TCasbinObjectFunc>;
     fList: TStringList;
     procedure loadBuiltInFunctions;
     procedure loadCustomFunctions;  //PALOFF
@@ -33,6 +34,7 @@ type
     procedure registerFunction(const aName: string;
       const aFunc: TCasbinObjectFunc); overload;
     function retrieveFunction(const aName: string): TCasbinFunc;
+    function retrieveObjFunction(const aName: string): TCasbinObjectFunc;
     function list: TStringList;
     procedure refreshFunctions;
 {$ENDREGION}
@@ -44,12 +46,13 @@ type
 implementation
 
 uses
-  System.SysUtils, System.RegularExpressions, System.Types, System.StrUtils;
+  System.SysUtils, System.RegularExpressions, System.StrUtils;
 
 constructor TFunctions.Create;
 begin
   inherited;
   fDictionary:=TDictionary<string, TCasbinFunc>.Create;
+  fObjDictionary:=TDictionary<string, TCasbinObjectFunc>.Create;
   fList:=TStringList.Create;
   fList.Sorted:=true;
   loadBuiltInFunctions;
@@ -62,7 +65,10 @@ var
 begin
   for item in fDictionary.Keys do
     fDictionary.AddOrSetValue(item, nil);
+  for item in fDictionary.Keys do
+    fObjDictionary.AddOrSetValue(item, nil);
   fDictionary.Free;
+  fObjDictionary.Free;
   fList.Free;
   inherited;
 end;
@@ -77,7 +83,19 @@ end;
 procedure TFunctions.registerFunction(const aName: string;
   const aFunc: TCasbinObjectFunc);
 begin
-  registerFunction(aName, @aFunc);
+  if Trim(aName)='' then
+    raise Exception.Create('Obj Function to register must have a name');
+  if not Assigned(aFunc) then
+    raise Exception.Create('Obj Function to register is nil');
+  if Assigned(aFunc) then
+    fObjDictionary.AddOrSetValue(Trim(aName), aFunc);
+end;
+
+function TFunctions.retrieveFunction(const aName: string): TCasbinFunc;
+begin
+  if not fDictionary.ContainsKey(Trim(aName)) then
+    raise Exception.Create('Function '+aName+' is not registered');
+  Result:=fDictionary.Items[Trim(aName)];
 end;
 
 procedure TFunctions.registerFunction(const aName: string;
@@ -91,11 +109,11 @@ begin
     fDictionary.AddOrSetValue(Trim(aName), aFunc);
 end;
 
-function TFunctions.retrieveFunction(const aName: string): TCasbinFunc;
+function TFunctions.retrieveObjFunction(const aName: string): TCasbinObjectFunc;
 begin
-  if not fDictionary.ContainsKey(Trim(aName)) then
+  if not fObjDictionary.ContainsKey(Trim(aName)) then
     raise Exception.Create('Function '+aName+' is not registered');
-  Result:=fDictionary.Items[Trim(aName)];
+  Result:=fObjDictionary.Items[Trim(aName)];
 end;
 
 // Built-in functions
@@ -120,6 +138,8 @@ var
 begin
   fList.Clear;
   for name in fDictionary.Keys do
+    fList.add(name);
+  for name in fObjDictionary.Keys do
     fList.add(name);
   Result:=fList;
 end;

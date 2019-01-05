@@ -17,7 +17,7 @@ interface
 
 uses
   Casbin.Core.Base.Types, Casbin.Types, Casbin.Model.Types,
-  Casbin.Policy.Types, Casbin.Adapter.Types, Casbin.Core.Logger.Types;
+  Casbin.Policy.Types, Casbin.Adapter.Types, Casbin.Core.Logger.Types, Casbin.Functions.Types;
 
 type
   TCasbin = class (TBaseInterfacedObject, ICasbin)
@@ -26,6 +26,10 @@ type
     fPolicy: IPolicyManager;
     fLogger: ILogger;
     fEnabled: boolean;
+    fFunctions: IFunctions;
+
+    function rolesG(const Args: array of string): Boolean;
+    function rolesG2(const Args: array of string): Boolean;
   private
 {$REGION 'Interface'}
     function getModel: IModel;
@@ -53,7 +57,7 @@ uses
   Casbin.Core.Logger.Default, System.Generics.Collections, System.SysUtils,
   Casbin.Resolve, Casbin.Resolve.Types, Casbin.Model.Sections.Types,
   Casbin.Core.Utilities, System.Rtti, Casbin.Effect.Types, Casbin.Effect,
-  Casbin.Functions.Types, Casbin.Functions, Casbin.Adapter.Memory, Casbin.Adapter.Memory.Policy, System.SyncObjs;
+  Casbin.Functions, Casbin.Adapter.Memory, Casbin.Adapter.Memory.Policy, System.SyncObjs, System.Types;
 
 var
   criticalSection: TCriticalSection;
@@ -75,6 +79,9 @@ begin
   fPolicy:=aPolicyAdapter;
   fLogger:=TDefaultLogger.Create;
   fEnabled:=True;
+  fFunctions:=TFunctions.Create;
+  fFunctions.registerFunction('g', rolesG);
+  fFunctions.registerFunction('g2', rolesG2);
 end;
 
 constructor TCasbin.Create;
@@ -178,7 +185,7 @@ begin
       fLogger.log('   Resolving Functions and Matcher...');
       // Resolve Matcher
       if matchString<>'' then
-        matcherResult:=resolve(requestDict, policyDict, TFunctions.Create, matchString)
+        matcherResult:=resolve(requestDict, policyDict, @fFunctions, matchString)
       else
         matcherResult:=erIndeterminate;
       SetLength(effectArray, Length(effectArray)+1);
@@ -225,6 +232,24 @@ end;
 function TCasbin.getPolicy: IPolicyManager;
 begin
   Result:=fPolicy;
+end;
+
+function TCasbin.rolesG(const Args: array of string): Boolean;
+var
+  str: string;
+begin
+  if Length(Args)<>2 then
+    raise ECasbinException.Create('The arguments are different than expected in '+
+                                    'g');
+  Result:=fPolicy.linkExists(Args[0], Args[1]);
+end;
+
+function TCasbin.rolesG2(const Args: array of string): Boolean;
+begin
+  if Length(Args)<>3 then
+    raise ECasbinException.Create('The arguments are different than expected in '+
+                                    'g2');
+  Result:=fPolicy.linkExists(Args[0], Args[2], Args[1]);
 end;
 
 procedure TCasbin.setEnabled(const aValue: Boolean);

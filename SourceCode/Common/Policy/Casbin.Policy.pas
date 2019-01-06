@@ -366,8 +366,6 @@ end;
 
 procedure TPolicyManager.loadPolicies;
 begin
-  if (Assigned(fNodes)) then
-    Exit;
   fPoliciesList.Clear;
   fAdapter.clear;
   fAdapter.load(fAdapter.Filter);

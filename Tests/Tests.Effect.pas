@@ -102,6 +102,16 @@ begin
   effects[1]:=erDeny;
   effects[2]:=erAllow;
   Assert.AreEqual(False, mergeEffects(ecPriorityORDeny, effects), '4');
+
+  effects[0]:=erAllow;
+  effects[1]:=erDeny;
+  effects[2]:=erAllow;
+  Assert.AreEqual(true, mergeEffects(ecPriorityORDeny, effects), '5');
+
+  effects[0]:=erDeny;
+  effects[1]:=erAllow;
+  effects[2]:=erAllow;
+  Assert.AreEqual(false, mergeEffects(ecPriorityORDeny, effects), '6');
 end;
 
 procedure TTestEffect.testSomeAllow;

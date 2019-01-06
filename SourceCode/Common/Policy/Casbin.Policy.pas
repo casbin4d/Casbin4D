@@ -519,27 +519,23 @@ begin
   if Length(aFilter)=0 then
     Exit;
 
-  if IndexStr(UpperCase(aFilter[0]), ['P', 'G', 'G2']) = -1 then
-    testPolicy:='p,';
-  for policy in aFilter do
-    testPolicy:=testPolicy+policy+',';
-  if testPolicy[findEndPos(testPolicy)]=',' then
-    testPolicy:=Copy(testPolicy, findStartPos, findEndPos(testPolicy)-1);
+  testPolicy:=string.Join(',', aFilter);
+
+  while Pos(#32, testPolicy, findStartPos)<>0 do
+    Delete(testPolicy, Pos(#32, testPolicy, findStartPos), 1);
 
   for policy in policies do
   begin
-    strArray:=policy.Split([',']);
-    for i:=0 to Length(strArray)-1 do
-      strArray[i]:=trim(strArray[i]);
-    if Length(strArray)>=1 then
-    begin
-      test:=String.Join(',', strArray);
-      if UpperCase(Trim(test))=UpperCase(Trim(testPolicy)) then
-      begin
-        Result:=true;
-        break;
-      end;
-    end;
+    test:=policy;
+
+    while Pos(#32, test, findStartPos)<>0 do
+      Delete(test, Pos(#32, test, findStartPos), 1);
+
+    Result:=string.Compare(test, testPolicy, [coIgnoreCase]) = 0;
+
+    if Result then
+      Break;
+
   end;
 end;
 

@@ -59,7 +59,7 @@ uses
   Casbin.Core.Logger.Default, System.Generics.Collections, System.SysUtils,
   Casbin.Resolve, Casbin.Resolve.Types, Casbin.Model.Sections.Types,
   Casbin.Core.Utilities, System.Rtti, Casbin.Effect.Types, Casbin.Effect,
-  Casbin.Functions, Casbin.Adapter.Memory, Casbin.Adapter.Memory.Policy, System.SyncObjs, System.Types, System.StrUtils;
+  Casbin.Functions, Casbin.Adapter.Memory, Casbin.Adapter.Memory.Policy, System.SyncObjs, System.Types, System.StrUtils, Casbin.Core.Defaults;
 
 var
   criticalSection: TCriticalSection;
@@ -152,6 +152,12 @@ begin
     fLogger.log('Enforcing request '''+requestStr+'''');
 
     fLogger.log('   Resolving Request...');
+
+    // Check for builtin accounts
+    for item in builtinAccounts do
+      if requestStr.Contains(item) then
+        Exit;
+
     // Resolve Request
   {$IFDEF DEBUG}
     fLogger.log('   Request: '+requestStr);

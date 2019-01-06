@@ -269,7 +269,6 @@ type
                             '..\..\..\Examples\Default\ipmatch_policy.csv#'+
                             '192.168.0.1,data2,write#false', '#')]
 {$ENDREGION}
-
 {$REGION 'TestPriorityModel'}
     // From model_test.go - TestPriorityModel
     [TestCase ('PriorityModel.1','..\..\..\Examples\Default\priority_model.conf#'+
@@ -296,16 +295,171 @@ type
     [TestCase ('PriorityModel.8','..\..\..\Examples\Default\priority_model.conf#'+
                             '..\..\..\Examples\Default\priority_policy.csv#'+
                             'bob,data2,write#false', '#')]
+{$ENDREGION}
+{$REGION 'Indeterminate'}
     [TestCase ('Indeterminate.1','..\..\..\Examples\Default\priority_model.conf#'+
                             '..\..\..\Examples\Default\priority_indeterminate_policy.csv#'+
                             'alice,data1,read#false', '#')]
+{$ENDREGION}
+{$REGION 'TestBasicModelNoPolicy'}
+    // From model_test.go - TestBasicModelNoPolicy
+    [TestCase ('TestBasicModelNoPolicy.1','..\..\..\Examples\Default\basic_model.conf#'+
+                            '#'+
+                            'alice,data1,read#false', '#')]
+    [TestCase ('TestBasicModelNoPolicy.2','..\..\..\Examples\Default\basic_model.conf#'+
+                            '#'+
+                            'alice,data1,write#false', '#')]
+    [TestCase ('TestBasicModelNoPolicy.3','..\..\..\Examples\Default\basic_model.conf#'+
+                            '#'+
+                            'alice,data2,read#false', '#')]
+    [TestCase ('TestBasicModelNoPolicy.4','..\..\..\Examples\Default\basic_model.conf#'+
+                            '#'+
+                            'alice,data2,write#false', '#')]
+    [TestCase ('TestBasicModelNoPolicy.5','..\..\..\Examples\Default\basic_model.conf#'+
+                            '#'+
+                            'bob,data1,read#false', '#')]
+    [TestCase ('TestBasicModelNoPolicy.6','..\..\..\Examples\Default\basic_model.conf#'+
+                            '#'+
+                            'bob,data1,write#false', '#')]
+    [TestCase ('TestBasicModelNoPolicy.7','..\..\..\Examples\Default\basic_model.conf#'+
+                            '#'+
+                            'bob,data2,read#false', '#')]
+    [TestCase ('TestBasicModelNoPolicy.8','..\..\..\Examples\Default\basic_model.conf#'+
+                            '#'+
+                            'bob,data2,write#false', '#')]
+{$ENDREGION}
+{$REGION 'TestBasicModelWithRootNoPolicy'}
+    // From model_test.go - TestBasicModelWithRootNoPolicy
+    [TestCase ('TestBasicModelWithRootNoPolicy.1','..\..\..\Examples\Default\basic_with_root_model.conf#'+
+                            '#'+
+                            'alice,data1,read#false', '#')]
+    [TestCase ('TestBasicModelWithRootNoPolicy.2','..\..\..\Examples\Default\basic_with_root_model.conf#'+
+                            '#'+
+                            'alice,data1,write#false', '#')]
+    [TestCase ('TestBasicModelWithRootNoPolicy.3','..\..\..\Examples\Default\basic_with_root_model.conf#'+
+                            '#'+
+                            'alice,data2,read#false', '#')]
+    [TestCase ('TestBasicModelWithRootNoPolicy.4','..\..\..\Examples\Default\basic_with_root_model.conf#'+
+                            '#'+
+                            'alice,data2,write#false', '#')]
+    [TestCase ('TestBasicModelWithRootNoPolicy.5','..\..\..\Examples\Default\basic_with_root_model.conf#'+
+                            '#'+
+                            'bob,data1,read#false', '#')]
+    [TestCase ('TestBasicModelWithRootNoPolicy.6','..\..\..\Examples\Default\basic_with_root_model.conf#'+
+                            '#'+
+                            'bob,data1,write#false', '#')]
+    [TestCase ('TestBasicModelWithRootNoPolicy.7','..\..\..\Examples\Default\basic_with_root_model.conf#'+
+                            '#'+
+                            'bob,data2,read#false', '#')]
+    [TestCase ('TestBasicModelWithRootNoPolicy.8','..\..\..\Examples\Default\basic_with_root_model.conf#'+
+                            '#'+
+                            'bob,data2,write#false', '#')]
+    [TestCase ('TestBasicModelWithRootNoPolicy.9','..\..\..\Examples\Default\basic_with_root_model.conf#'+
+                            '#'+
+                            'root,data1,read#true', '#')]
+    [TestCase ('TestBasicModelWithRootNoPolicy.10','..\..\..\Examples\Default\basic_with_root_model.conf#'+
+                            '#'+
+                            'root,data1,write#true', '#')]
+    [TestCase ('TestBasicModelWithRootNoPolicy.11','..\..\..\Examples\Default\basic_with_root_model.conf#'+
+                            '#'+
+                            'root,data2,read#true', '#')]
+    [TestCase ('TestBasicModelWithRootNoPolicy.12','..\..\..\Examples\Default\basic_with_root_model.conf#'+
+                            '#'+
+                            'root,data2,write#true', '#')]
+{$ENDREGION}
+//{$REGION 'TestRBACModel'}
+//    // From model_test.go - TestRBACModel
+//    [TestCase ('TestRBACModel.1','..\..\..\Examples\Default\rbac_model.conf#'+
+//                            '..\..\..\Examples\Default\rbac_policy.csv#'+
+//                            'alice,data1,read#true', '#')]
+//    [TestCase ('TestRBACModel.2','..\..\..\Examples\Default\rbac_model.conf#'+
+//                            '..\..\..\Examples\Default\rbac_policy.csv#'+
+//                            'alice,data1,write#false', '#')]
+//    [TestCase ('TestRBACModel.3','..\..\..\Examples\Default\rbac_model.conf#'+
+//                            '..\..\..\Examples\Default\rbac_policy.csv#'+
+//                            'alice,data2,read#true', '#')]
+//    [TestCase ('TestRBACModel.4','..\..\..\Examples\Default\rbac_model.conf#'+
+//                            '..\..\..\Examples\Default\rbac_policy.csv#'+
+//                            'alice,data2,write#true', '#')]
+//    [TestCase ('TestRBACModel.5','..\..\..\Examples\Default\rbac_model.conf#'+
+//                            '..\..\..\Examples\Default\rbac_policy.csv#'+
+//                            'bob,data1,read#false', '#')]
+//    [TestCase ('TestRBACModel.6','..\..\..\Examples\Default\rbac_model.conf#'+
+//                            '..\..\..\Examples\Default\rbac_policy.csv#'+
+//                            'bob,data1,write#false', '#')]
+//    [TestCase ('TestRBACModel.7','..\..\..\Examples\Default\rbac_model.conf#'+
+//                            '..\..\..\Examples\Default\rbac_policy.csv#'+
+//                            'bob,data2,read#false', '#')]
+//    [TestCase ('TestRBACModel.8','..\..\..\Examples\Default\rbac_model.conf#'+
+//                            '..\..\..\Examples\Default\rbac_policy.csv#'+
+//                            'bob,data2,write#true', '#')]
+{$ENDREGION}
+{$REGION 'TestRBACModelWithResourcesRoles'}
+    // From model_test.go - TestRBACModelWithResourcesRoles
+//    [TestCase ('TestRBACModelWithResourcesRoles.1','..\..\..\Examples\Default\rbac_with_resource_roles_model.conf#'+
+//                            '..\..\..\Examples\Default\rbac_with_resource_roles_policy.csv#'+
+//                            'alice,data1,read#true', '#')]
+//    [TestCase ('TestRBACModelWithResourcesRoles.2','..\..\..\Examples\Default\rbac_with_resource_roles_model.conf#'+
+//                            '..\..\..\Examples\Default\rbac_with_resource_roles_policy.csv#'+
+//                            'alice,data1,write#true', '#')]
+//    [TestCase ('TestRBACModelWithResourcesRoles.3','..\..\..\Examples\Default\rbac_with_resource_roles_model.conf#'+
+//                            '..\..\..\Examples\Default\rbac_with_resource_roles_policy.csv#'+
+//                            'alice,data2,read#false', '#')]
+//    [TestCase ('TestRBACModelWithResourcesRoles.4','..\..\..\Examples\Default\rbac_with_resource_roles_model.conf#'+
+//                            '..\..\..\Examples\Default\rbac_with_resource_roles_policy.csv#'+
+//                            'alice,data2,write#true', '#')]
+//    [TestCase ('TestRBACModelWithResourcesRoles.5','..\..\..\Examples\Default\rbac_with_resource_roles_model.conf#'+
+//                            '..\..\..\Examples\Default\rbac_with_resource_roles_policy.csv#'+
+//                            'bob,data1,read#false', '#')]
+//    [TestCase ('TestRBACModelWithResourcesRoles.6','..\..\..\Examples\Default\rbac_with_resource_roles_model.conf#'+
+//                            '..\..\..\Examples\Default\rbac_with_resource_roles_policy.csv#'+
+//                            'bob,data1,write#false', '#')]
+//    [TestCase ('TestRBACModelWithResourcesRoles.7','..\..\..\Examples\Default\rbac_with_resource_roles_model.conf#'+
+//                            '..\..\..\Examples\Default\rbac_with_resource_roles_policy.csv#'+
+//                            'bob,data2,read#false', '#')]
+//    [TestCase ('TestRBACModelWithResourcesRoles.8','..\..\..\Examples\Default\rbac_with_resource_roles_model.conf#'+
+//                            '..\..\..\Examples\Default\rbac_with_resource_roles_policy.csv#'+
+//                            'bob,data2,write#true', '#')]
+{$ENDREGION}
+{$REGION 'RBACModelWithOnlyDeny'}
+    // From model_test.go - RBACModelWithOnlyDeny
+    [TestCase ('TestRBACModelWithOnlyDeny.1','..\..\..\Examples\Default\rbac_with_not_deny_model.conf#'+
+                            '..\..\..\Examples\Default\rbac_with_deny_policy.csv#'+
+                            'alice,data2,write#false', '#')]
+{$ENDREGION}
+{$REGION 'TestRBACModelWithPatern'}
+    // From model_test.go - TestRBACModelWithPatern
+//    [TestCase ('TestRBACModelWithPatern.1','..\..\..\Examples\Default\rbac_with_pattern_model.conf#'+
+//                            '..\..\..\Examples\Default\rbac_with_pattern_policy.csv#'+
+//                            'alice,/book/1,GET#true', '#')]
+//    [TestCase ('TestRBACModelWithPatern.2','..\..\..\Examples\Default\rbac_with_pattern_model.conf#'+
+//                            '..\..\..\Examples\Default\rbac_with_pattern_policy.csv#'+
+//                            'alice,/book/2,GET#true', '#')]
+//    [TestCase ('TestRBACModelWithPatern.3','..\..\..\Examples\Default\rbac_with_pattern_model.conf#'+
+//                            '..\..\..\Examples\Default\rbac_with_pattern_policy.csv#'+
+//                            'alice,/pen/1,GET#true', '#')]
+//    [TestCase ('TestRBACModelWithPatern.4','..\..\..\Examples\Default\rbac_with_pattern_model.conf#'+
+//                            '..\..\..\Examples\Default\rbac_with_pattern_policy.csv#'+
+//                            'alice,/pen/2,GET#false', '#')]
+//    [TestCase ('TestRBACModelWithPatern.5','..\..\..\Examples\Default\rbac_with_pattern_model.conf#'+
+//                            '..\..\..\Examples\Default\rbac_with_pattern_policy.csv#'+
+//                            'bob,/book/1,GET#false', '#')]
+//    [TestCase ('TestRBACModelWithPatern.6','..\..\..\Examples\Default\rbac_with_pattern_model.conf#'+
+//                            '..\..\..\Examples\Default\rbac_with_pattern_policy.csv#'+
+//                            'bob,/book/2,GET#false', '#')]
+//    [TestCase ('TestRBACModelWithPatern.7','..\..\..\Examples\Default\rbac_with_pattern_model.conf#'+
+//                            '..\..\..\Examples\Default\rbac_with_pattern_policy.csv#'+
+//                            'bob,/pen/1,GET#true', '#')]
+//    [TestCase ('TestRBACModelWithPatern.8','..\..\..\Examples\Default\rbac_with_pattern_model.conf#'+
+//                            '..\..\..\Examples\Default\rbac_with_pattern_policy.csv#'+
+//                            'bob,/pen/2,GET#true', '#')]
 {$ENDREGION}
     ///////////////////////////////////////////////
     procedure testEnforce(const aModelFile, aPolicyFile, aEnforceParams: string;
         const aResult: boolean);
 
     [Test]
-{$REGION 'TestPriorityModelIndeterminate'}
+{$REGION 'TestABACModel'}
     // From model_test.go - TestABACModel
     [TestCase ('ABAC.1','..\..\..\Examples\Default\abac_model.conf#'+
                             '..\..\..\Examples\Default\basic_policy.csv#'+
@@ -331,11 +485,12 @@ type
     [TestCase ('ABAC.8','..\..\..\Examples\Default\abac_model.conf#'+
                             '..\..\..\Examples\Default\basic_policy.csv#'+
                             'bob,data2,write#bob#true', '#')]
-
+{$ENDREGION}
     ///////////////////////////////////////////////
     procedure testEnforceABAC(const aModelFile, aPolicyFile, aEnforceParams: string;
         const aOwner: string; const aResult: boolean);
-{$ENDREGION}
+
+
   end;
 
 implementation
@@ -404,6 +559,8 @@ begin
   Assert.AreEqual(aResult, casbin.enforce(params, aOwner));
   casbin:=nil;
 end;
+
+
 
 procedure TTestCasbin.testFileConstructor;
 var

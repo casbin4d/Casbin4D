@@ -181,34 +181,24 @@ procedure TPolicyManager.removeLink(const aLeftDomain, aLeft, aRightDomain,
 var
   leftNode: TRoleNode;
   rightNode: TRoleNode;
-  IDArray: TStringDynArray;
-  newIDArray: TStringDynArray;
-  itemString: string;
+  index: integer;
+  list: TStringList;
 begin
-//  leftNode:=findRolesNode(aLeftDomain, aLeft);
-//  if not Assigned(leftNode) then
-//    Exit;
-//
-//  rightNode:=findRolesNode(aRightDomain, aRight);
-//  if not Assigned(rightNode) then
-//    Exit;
-//
-//  if fRolesLinks.ContainsKey(leftNode.id) then
-//  begin
-//    IDArray:=fRolesLinks.Items[leftNode.ID];
-//    SetLength(newIDArray, 0);
-//    for itemString in IDArray do
-//    begin
-//      if itemString <> rightNode.ID then
-//      begin
-//        SetLength(newIDArray, Length(newIDArray)+1);
-//        newIDArray[Length(newIDArray)-1]:=itemString;
-//      end;
-//    end;
-//    fRolesLinks.Items[leftNode.ID]:=newIDArray;
-//  end;
-//
-//  loadRoles;
+  leftNode:=findRolesNode(aLeftDomain, aLeft);
+  if not Assigned(leftNode) then
+    Exit;
+
+  rightNode:=findRolesNode(aRightDomain, aRight);
+  if not Assigned(rightNode) then
+    Exit;
+
+  list:=fRolesLinks.Items[leftNode.ID];
+  if Assigned(list) then
+  begin
+    index:=list.IndexOf(rightNode.ID);
+    if (index>-1) and (rightNode.Domain=aRightDomain) then
+      list.Delete(index);
+  end;
 end;
 
 procedure TPolicyManager.removeLink(const aLeft, aRightDomain, aRight: string);
@@ -294,7 +284,7 @@ function TPolicyManager.linkExists(const aLeftDomain: string; const aLeft:
 var
   leftNode: TRoleNode;
   rightNode: TRoleNode;
-  IDArray: TStringDynArray;
+  list: TStringList;
   item: string;
   itemString: string;
 begin
@@ -319,50 +309,36 @@ begin
 {$ENDIF}
   Result:=False;
 
-//  if SameText(UpperCase(aLeftDomain), UpperCase(aRightDomain)) and
-//      SameText(UpperCase(aLeft), UpperCase(aRight)) then
-//  begin
-//    Result:=True;
-//    exit;
-//  end;
-//
-//  loadRoles;
-//
-//  leftNode:=findRolesNode(aLeftDomain, aLeft);
-//  if not Assigned(leftNode) then
-//    Exit;
-//
-//  rightNode:=findRolesNode(aRightDomain, aRight);
-//  if not Assigned(rightNode) then
-//    Exit;
-//
-//  IDArray:=fRolesLinks.Items[leftNode.ID];
-//  for itemString in IDArray do
-//  begin
-//    if SameText(itemString, rightNode.ID) and
-//        SameText(aRightDomain, rightNode.Domain) then
-//    begin
-//      result:=true;
-//      Exit;
-//    end
-//    else
-//    begin
-//      leftNode:=fRolesNodes.Items[itemString];
-//      if Assigned(leftNode) and Assigned(rightNode) then
-//        Result:=linkExists(leftNode.Domain, leftNode.Value,
-//                                    rightNode.Domain, rightNode.Value);
-//    end;
-//  end;
-  // If we are here it means that first level (top) links do not exist
-  // We now check itineratively the top links
-//  for itemString in IDArray do
-//  begin
-//    if fRolesNodes.ContainsKey(itemString) then
-//    begin
-//
-//    end;
-//  end;
+  if SameText(UpperCase(aLeftDomain), UpperCase(aRightDomain)) and
+      SameText(UpperCase(aLeft), UpperCase(aRight)) then
+  begin
+    Result:=True;
+    exit;
+  end;
 
+  leftNode:=findRolesNode(aLeftDomain, aLeft);
+  if not Assigned(leftNode) then
+    Exit;
+
+  rightNode:=findRolesNode(aRightDomain, aRight);
+  if not Assigned(rightNode) then
+    Exit;
+
+  if fRolesLinks.Items[leftNode.ID].IndexOf(rightNode.ID)>-1 then
+  begin
+    Result:=True;
+    Exit;
+  end
+  else
+  begin
+    for item in fRolesLinks.Items[leftNode.ID] do
+    begin
+      leftNode:=fRolesNodes.Items[item];
+
+      Result:=linkExists(leftNode.Domain, leftNode.Value,
+                            rightNode.Domain, rightNode.Value);
+    end;
+  end;
 end;
 
 function TPolicyManager.linkExists(const aLeft, aRightDomain,

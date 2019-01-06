@@ -115,6 +115,8 @@ begin
   //Functions
   for item in aFunctions.list do
   begin
+    // We need to match individual words
+    // This is a workaround to avoid matching individual characters (eg. 'g')
     if resolvedMatcher.Contains(UpperCase(item+'(')) or
          resolvedMatcher.Contains(UpperCase(item+' (')) then
     begin

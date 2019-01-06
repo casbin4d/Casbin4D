@@ -524,12 +524,28 @@ begin
   while Pos(#32, testPolicy, findStartPos)<>0 do
     Delete(testPolicy, Pos(#32, testPolicy, findStartPos), 1);
 
+  if UpperCase(testPolicy).StartsWith('P,') or
+       UpperCase(testPolicy).StartsWith('G,') or
+         UpperCase(testPolicy).StartsWith('G2,') then
+  begin
+    i:=Pos(',', testPolicy, findStartPos);
+    Delete(testPolicy, findStartPos, i);
+  end;
+
   for policy in policies do
   begin
     test:=policy;
 
     while Pos(#32, test, findStartPos)<>0 do
       Delete(test, Pos(#32, test, findStartPos), 1);
+
+    if UpperCase(test).StartsWith('P,') or
+         UpperCase(test).StartsWith('G,') or
+           UpperCase(test).StartsWith('G2,') then
+    begin
+      i:=Pos(',', test, findStartPos);
+      Delete(test, findStartPos, i);
+    end;
 
     Result:=string.Compare(test, testPolicy, [coIgnoreCase]) = 0;
 

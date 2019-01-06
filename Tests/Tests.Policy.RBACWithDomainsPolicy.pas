@@ -28,8 +28,12 @@ type
     procedure Setup;
     [TearDown]
     procedure TearDown;
+
     [Test]
-    procedure testInitialConditions;
+    [TestCase ('Initial.1','admin,domain1,data1,read#true', '#')]
+    [TestCase ('Initial.2','admin,domain2,data2,read#true', '#')]
+    procedure testInitialConditions(const aFilter: string; const aResult: boolean);
+
     [Test]
     procedure testFilteredPolicies;
   end;
@@ -37,7 +41,8 @@ type
 implementation
 
 uses
-  Casbin.Adapter.Filesystem.Policy, Casbin.Policy;
+  Casbin.Adapter.Filesystem.Policy, Casbin.Policy, Casbin.Core.Base.Types,
+  System.SysUtils;
 
 procedure TTestPolicyRBACWithDomainsPolicy.Setup;
 begin
@@ -57,10 +62,13 @@ begin
   Assert.IsFalse(fPolicyManager.policyExists(['admin','domain2','data2','read']));
 end;
 
-procedure TTestPolicyRBACWithDomainsPolicy.testInitialConditions;
+procedure TTestPolicyRBACWithDomainsPolicy.testInitialConditions(const aFilter:
+    string; const aResult: boolean);
+var
+  filters: TFilterArray;
 begin
-  Assert.IsTrue(fPolicyManager.policyExists(['admin','domain1','data1','read']));
-  Assert.IsTrue(fPolicyManager.policyExists(['admin','domain2','data2','read']));
+  filters:=aFilter.Split([',']);
+  Assert.AreEqual(aResult, fPolicyManager.policyExists(filters));
 end;
 
 initialization

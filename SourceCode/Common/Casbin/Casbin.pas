@@ -65,8 +65,21 @@ var
   criticalSection: TCriticalSection;
 
 constructor TCasbin.Create(const aModelFile, aPolicyFile: string);
+var
+  model: IModel;
+  policy: IPolicyManager;
 begin
-  Create(TModel.Create(aModelFile), TPolicyManager.Create(aPolicyFile));
+  if trim(aModelFile)='' then
+    model:=TModel.Create(TMemoryAdapter.Create)
+  else
+    model:=TModel.Create(aModelFile);
+
+  if Trim(aPolicyFile)='' then
+    policy:=TPolicyManager.Create(TPolicyMemoryAdapter.Create)
+  else
+    policy:=TPolicyManager.Create(aPolicyFile);
+
+  Create(model, policy);
 end;
 
 constructor TCasbin.Create(const aModel: IModel; const aPolicyAdapter:

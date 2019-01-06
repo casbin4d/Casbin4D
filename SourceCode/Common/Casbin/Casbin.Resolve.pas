@@ -31,7 +31,8 @@ function resolve(const aResolvedRequest, aResolvedPolicy: TDictionary<string,
 implementation
 
 uses
-  Casbin.Exception.Types, SysUtils, Casbin.Matcher.Types, Casbin.Matcher, Casbin.Core.Utilities, System.StrUtils;
+  Casbin.Exception.Types, SysUtils, Casbin.Matcher.Types, Casbin.Matcher,
+  Casbin.Core.Utilities, System.StrUtils, Classes;
 
 function resolve (const aResolve: TList<string>;
                   const aResolveType: TResolveType;
@@ -96,13 +97,28 @@ begin
   resolvedMatcher:=UpperCase(Trim(aMatcher));
   matcher:=TMatcher.Create;
 
+  //Fix Owner first
+  if aResolvedRequest.ContainsKey('R.OBJ.OWNER') then
+    resolvedMatcher:=resolvedMatcher.Replace
+                          ('R.OBJ.OWNER',
+                              UpperCase(aResolvedRequest.Items['R.OBJ.OWNER']),
+                                [rfReplaceAll]);
+
   for item in aResolvedRequest.Keys do
   begin
     resolvedMatcher:=resolvedMatcher.Replace
-                          (UpperCase(item), UpperCase(aResolvedRequest.Items[item])
-                                                  , [rfReplaceAll]);
+                          (UpperCase(item),
+                              UpperCase(aResolvedRequest.Items[item]),
+                                [rfReplaceAll]);
     matcher.addIdentifier(UpperCase(aResolvedRequest.Items[item]));
   end;
+
+  //Fix Owner first
+  if aResolvedPolicy.ContainsKey('P.OBJ.OWNER') then
+    resolvedMatcher:=resolvedMatcher.Replace
+                          ('P.OBJ.OWNER',
+                              UpperCase(aResolvedPolicy.Items['P.OBJ.OWNER']),
+                                [rfReplaceAll]);
   for item in aResolvedPolicy.Keys do
   begin
     resolvedMatcher:=resolvedMatcher.Replace

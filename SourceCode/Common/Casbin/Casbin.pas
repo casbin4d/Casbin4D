@@ -41,7 +41,9 @@ type
     function getEnabled: Boolean;
     procedure setEnabled(const aValue: Boolean);
 
-    function enforce (const aParams: TEnforceParameters): boolean;
+    function enforce (const aParams: TEnforceParameters): boolean; overload;
+    function enforce (const aParams: TEnforceParameters;
+                      const reqOwner: string): boolean; overload;
 {$ENDREGION}
   public
     constructor Create; overload;
@@ -84,13 +86,19 @@ begin
   fFunctions.registerFunction('g2', rolesG2);
 end;
 
+function TCasbin.enforce(const aParams: TEnforceParameters): boolean;
+begin
+  Result:=enforce(aParams, '');
+end;
+
 constructor TCasbin.Create;
 begin
   Create(TModel.Create(TMemoryAdapter.Create), TPolicyManager.Create(
                                                   TPolicyMemoryAdapter.Create));
 end;
 
-function TCasbin.enforce(const aParams: TEnforceParameters): boolean;
+function TCasbin.enforce(const aParams: TEnforceParameters;
+                         const reqOwner: string): boolean;
 var
   item: string;
   request: TList<string>;
@@ -143,6 +151,16 @@ begin
   {$ENDIF}
     requestDict:=resolve(request, rtRequest,
                             fModel.assertions(stRequestDefinition));
+    if Trim(reqOwner)<>'' then
+    begin
+      fLogger.log('Owner identified');
+      // This assumes the request uses the letter 'r'
+      if requestDict.ContainsKey('R.OBJ') then
+      begin
+        requestDict.Add('R.OBJ.OWNER', UpperCase(Trim(reqOwner)));
+        fLogger.log('r.obj.owner added');
+      end;
+    end;
 
     fLogger.log('   Resolving Policies...');
 
@@ -186,13 +204,19 @@ begin
       if fPolicy.linkExists(request[0], policyList[0]) or
         soundexSimilar(Trim(request[0]), Trim(policyList[0]),
                                         Trunc(0.50 * Length(request[0]))) then
-//                                round(.50 * length(request[0]))) then
       begin
+        polDefinitions:=fModel.assertions(stPolicyDefinition);
 
-        policyDict:=resolve(policyList, rtPolicy,
-                                        fModel.assertions(stPolicyDefinition));
+        policyDict:=resolve(policyList, rtPolicy, polDefinitions);
+
+        // Match Owner
+        if (Trim(reqOwner)<>'') then
+          if policyDict.ContainsKey('P.OBJ') then
+            policyDict.Add('P.OBJ.OWNER',trim(reqOwner));
 
         fLogger.log('   Resolving Functions and Matcher...');
+
+
         // Resolve Matcher
         if string.Compare('indeterminate', Trim(policyList[policyList.Count-1]),
                                                     [coIgnoreCase])=0 then

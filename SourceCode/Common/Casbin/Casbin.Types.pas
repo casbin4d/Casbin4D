@@ -33,7 +33,9 @@ type
     procedure setModel(const aValue: IModel);
     procedure setPolicy(const aValue: IPolicyManager);
 
-    function enforce (const aParams: TEnforceParameters): boolean;
+    function enforce (const aParams: TEnforceParameters): boolean; overload;
+    function enforce (const aParams: TEnforceParameters;
+                      const reqOwner: string): boolean; overload;
 
     property Enabled: Boolean read getEnabled write setEnabled;
     property Logger: ILogger read getLogger write setLogger;

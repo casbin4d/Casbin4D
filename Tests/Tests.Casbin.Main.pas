@@ -296,23 +296,46 @@ type
     [TestCase ('PriorityModel.8','..\..\..\Examples\Default\priority_model.conf#'+
                             '..\..\..\Examples\Default\priority_policy.csv#'+
                             'bob,data2,write#false', '#')]
-{$ENDREGION}
-    // From model_test.go - TestABACModel
-//    [TestCase ('ABAC.1','..\..\..\Examples\Default\abac_model.conf#'+
-//                            '..\..\..\Examples\Default\basic_without_resources_policy.csv#'+
-//                            'alice,read#true', '#')]
-
-    ///////////////////////////////////////////////
-{$REGION 'TestPriorityModelIndeterminate'}
-    // From model_test.go - TestPriorityModelIndeterminate
-    [TestCase ('PriorityModelIndeterminate.1',
-            '..\..\..\Examples\Default\priority_model.conf#'+
-            '..\..\..\Examples\Default\priority_indeterminate_policy.csv#'+
+    [TestCase ('Indeterminate.1','..\..\..\Examples\Default\priority_model.conf#'+
+                            '..\..\..\Examples\Default\priority_indeterminate_policy.csv#'+
                             'alice,data1,read#false', '#')]
-
 {$ENDREGION}
+    ///////////////////////////////////////////////
     procedure testEnforce(const aModelFile, aPolicyFile, aEnforceParams: string;
         const aResult: boolean);
+
+    [Test]
+{$REGION 'TestPriorityModelIndeterminate'}
+    // From model_test.go - TestABACModel
+    [TestCase ('ABAC.1','..\..\..\Examples\Default\abac_model.conf#'+
+                            '..\..\..\Examples\Default\basic_policy.csv#'+
+                            'alice,data1,read#alice#true', '#')]
+    [TestCase ('ABAC.2','..\..\..\Examples\Default\abac_model.conf#'+
+                            '..\..\..\Examples\Default\basic_policy.csv#'+
+                            'alice,data1,write#alice#true', '#')]
+    [TestCase ('ABAC.3','..\..\..\Examples\Default\abac_model.conf#'+
+                            '..\..\..\Examples\Default\basic_policy.csv#'+
+                            'alice,data2,read#bob#false', '#')]
+    [TestCase ('ABAC.4','..\..\..\Examples\Default\abac_model.conf#'+
+                            '..\..\..\Examples\Default\basic_policy.csv#'+
+                            'alice,data2,write#bob#false', '#')]
+    [TestCase ('ABAC.5','..\..\..\Examples\Default\abac_model.conf#'+
+                            '..\..\..\Examples\Default\basic_policy.csv#'+
+                            'bob,data1,read#alice#false', '#')]
+    [TestCase ('ABAC.6','..\..\..\Examples\Default\abac_model.conf#'+
+                            '..\..\..\Examples\Default\basic_policy.csv#'+
+                            'bob,data1,write#alice#false', '#')]
+    [TestCase ('ABAC.7','..\..\..\Examples\Default\abac_model.conf#'+
+                            '..\..\..\Examples\Default\basic_policy.csv#'+
+                            'bob,data2,read#bob#true', '#')]
+    [TestCase ('ABAC.8','..\..\..\Examples\Default\abac_model.conf#'+
+                            '..\..\..\Examples\Default\basic_policy.csv#'+
+                            'bob,data2,write#bob#true', '#')]
+
+    ///////////////////////////////////////////////
+    procedure testEnforceABAC(const aModelFile, aPolicyFile, aEnforceParams: string;
+        const aOwner: string; const aResult: boolean);
+{$ENDREGION}
   end;
 
 implementation
@@ -367,6 +390,18 @@ begin
   casbin:=TCasbin.Create(aModelFile, aPolicyFile);
   params:=aEnforceParams.Split([',']);
   Assert.AreEqual(aResult, casbin.enforce(params));
+  casbin:=nil;
+end;
+
+procedure TTestCasbin.testEnforceABAC(const aModelFile, aPolicyFile,
+  aEnforceParams, aOwner: string; const aResult: boolean);
+var
+  params: TEnforceParameters;
+  casbin: ICasbin;
+begin
+  casbin:=TCasbin.Create(aModelFile, aPolicyFile);
+  params:=aEnforceParams.Split([',']);
+  Assert.AreEqual(aResult, casbin.enforce(params, aOwner));
   casbin:=nil;
 end;
 

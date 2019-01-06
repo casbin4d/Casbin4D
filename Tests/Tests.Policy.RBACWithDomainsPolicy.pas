@@ -58,8 +58,8 @@ end;
 procedure TTestPolicyRBACWithDomainsPolicy.testFilteredPolicies;
 begin
   fPolicyManager.load(['', 'domain1']);
-  Assert.IsTrue(fPolicyManager.policyExists(['admin','domain1','data1','read']));
-  Assert.IsFalse(fPolicyManager.policyExists(['admin','domain2','data2','read']));
+  Assert.IsTrue(fPolicyManager.policyExists(['admin','domain1','data1','read']),'1');
+  Assert.IsFalse(fPolicyManager.policyExists(['admin','domain2','data2','read']),'2');
 end;
 
 procedure TTestPolicyRBACWithDomainsPolicy.testInitialConditions(const aFilter:

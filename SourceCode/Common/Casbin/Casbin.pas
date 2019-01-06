@@ -194,10 +194,14 @@ begin
 
         fLogger.log('   Resolving Functions and Matcher...');
         // Resolve Matcher
-        if matchString<>'' then
-          matcherResult:=resolve(requestDict, policyDict, fFunctions, matchString)
+        if string.Compare('indeterminate', Trim(policyList[policyList.Count-1]),
+                                                    [coIgnoreCase])=0 then
+          matcherResult:=erIndeterminate
         else
-          matcherResult:=erIndeterminate;
+          if matchString<>'' then
+            matcherResult:=resolve(requestDict, policyDict, fFunctions, matchString)
+          else
+            matcherResult:=erIndeterminate;
         SetLength(effectArray, Length(effectArray)+1);
         effectArray[Length(effectArray)-1]:=matcherResult; //PALOFF
 
@@ -245,8 +249,6 @@ begin
 end;
 
 function TCasbin.rolesG(const Args: array of string): Boolean;
-var
-  str: string;
 begin
   if Length(Args)<>2 then
     raise ECasbinException.Create('The arguments are different than expected in '+

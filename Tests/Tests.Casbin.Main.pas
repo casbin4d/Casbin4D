@@ -303,6 +303,14 @@ type
 //                            'alice,read#true', '#')]
 
     ///////////////////////////////////////////////
+{$REGION 'TestPriorityModelIndeterminate'}
+    // From model_test.go - TestPriorityModelIndeterminate
+    [TestCase ('PriorityModelIndeterminate.1',
+            '..\..\..\Examples\Default\priority_model.conf#'+
+            '..\..\..\Examples\Default\priority_indeterminate_policy.csv#'+
+                            'alice,data1,read#false', '#')]
+
+{$ENDREGION}
     procedure testEnforce(const aModelFile, aPolicyFile, aEnforceParams: string;
         const aResult: boolean);
   end;

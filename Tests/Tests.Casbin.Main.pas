@@ -335,6 +335,7 @@ begin
   Assert.IsNotNull(casbin.Model);
   Assert.IsNotNull(casbin.Policy);
   Assert.IsTrue(casbin.Enabled);
+  casbin:=nil;
 end;
 
 procedure TTestCasbin.testEnabled;
@@ -346,6 +347,7 @@ begin
   Assert.IsTrue(casbin.Enabled);
   casbin.Enabled:=False;
   Assert.IsFalse(casbin.Enabled);
+  casbin:=nil;
 end;
 
 procedure TTestCasbin.testEnforce(const aModelFile, aPolicyFile,
@@ -357,6 +359,7 @@ begin
   casbin:=TCasbin.Create(aModelFile, aPolicyFile);
   params:=aEnforceParams.Split([',']);
   Assert.AreEqual(aResult, casbin.enforce(params));
+  casbin:=nil;
 end;
 
 procedure TTestCasbin.testFileConstructor;
@@ -369,6 +372,7 @@ begin
   Assert.IsNotNull(casbin.Model);
   Assert.IsNotNull(casbin.Policy);
   Assert.IsTrue(casbin.Enabled);
+  casbin:=nil;
 end;
 
 procedure TTestCasbin.testMemoryConstructor;
@@ -380,6 +384,7 @@ begin
   Assert.IsNotNull(casbin.Model);
   Assert.IsNotNull(casbin.Policy);
   Assert.IsTrue(casbin.Enabled);
+  casbin:=nil;
 end;
 
 initialization

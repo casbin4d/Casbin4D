@@ -28,6 +28,8 @@ const
   AssignmentCharForRoles = ',';
   AssignmentCharForConfig = '=';
 
+  builtinAccounts: array of string = ['root', 'guest', 'superuser'];
+
 implementation
 
 end.

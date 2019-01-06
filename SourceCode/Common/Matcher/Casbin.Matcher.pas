@@ -41,7 +41,7 @@ type
 implementation
 
 uses
-  System.StrUtils, System.SysUtils, Casbin.Exception.Types, System.Rtti;
+  System.StrUtils, System.SysUtils, Casbin.Exception.Types, System.Rtti, Casbin.Core.Defaults;
 
 procedure TMatcher.clearIdentifiers;
 begin
@@ -49,6 +49,8 @@ begin
 end;
 
 constructor TMatcher.Create;
+var
+  item: string;
 begin
   inherited;
   fMathsParser:=TCStyleParser.Create;
@@ -56,9 +58,9 @@ begin
   fIdentifiers:=TDictionary<string, integer>.Create;
   addIdentifier('true');
   addIdentifier('false');
-  addIdentifier('root');
-  addIdentifier('guest');
-  addIdentifier('superuser');
+
+  for item in builtinAccounts do
+    addIdentifier(item);
 end;
 
 destructor TMatcher.Destroy;

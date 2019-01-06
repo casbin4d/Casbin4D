@@ -287,40 +287,49 @@ var
   list: TStringList;
   item: string;
   itemString: string;
+  lDomain,
+  rDomain,
+  lItem,
+  rItem: string;
 begin
+  lDomain:=Trim(aLeftDomain);
+  rDomain:=Trim(aRightDomain);
+  lItem:=Trim(aLeft);
+  rItem:=Trim(aRight);
 {$IFDEF DEBUG}
-  fAdapter.Logger.log('   Roles for Left: '+aLeft);
+  fAdapter.Logger.log('   Roles for Left: '+lItem);
   fAdapter.Logger.log('      Roles: ');
   if Length(rolesForEntity(aLeft))=0 then
     fAdapter.Logger.log('         No Roles found')
   else
-    for item in rolesForEntity(aLeft) do
+    for item in rolesForEntity(lItem) do
       fAdapter.Logger.log('         '+item);
 
-  fAdapter.Logger.log('   Roles for Right: '+aRight);
+  fAdapter.Logger.log('   Roles for Right: '+rItem);
   fAdapter.Logger.log('      Roles: ');
-  if Length(rolesForEntity(aRight))=0 then
+  if Length(rolesForEntity(rItem))=0 then
     fAdapter.Logger.log('         No Roles found')
   else
-    for item in rolesForEntity(aRight) do
+    for item in rolesForEntity(rItem) do
       fAdapter.Logger.log('         '+item);
 
 
 {$ENDIF}
   Result:=False;
 
-  if SameText(UpperCase(aLeftDomain), UpperCase(aRightDomain)) and
-      SameText(UpperCase(aLeft), UpperCase(aRight)) then
+  if SameText(UpperCase(lDomain), UpperCase(rDomain)) and
+      SameText(UpperCase(lItem), UpperCase(rItem)) or
+        (IndexStr(lItem, builtinAccounts)>-1) then
   begin
     Result:=True;
     exit;
   end;
 
-  leftNode:=findRolesNode(aLeftDomain, aLeft);
+  leftNode:=findRolesNode(lDomain, lItem);
   if not Assigned(leftNode) then
     Exit;
 
-  rightNode:=findRolesNode(aRightDomain, aRight);
+  rightNode:=findRolesNode(rDomain, rItem);
   if not Assigned(rightNode) then
     Exit;
 

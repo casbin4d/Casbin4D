@@ -57,7 +57,7 @@ uses
   Casbin.Core.Logger.Default, System.Generics.Collections, System.SysUtils,
   Casbin.Resolve, Casbin.Resolve.Types, Casbin.Model.Sections.Types,
   Casbin.Core.Utilities, System.Rtti, Casbin.Effect.Types, Casbin.Effect,
-  Casbin.Functions, Casbin.Adapter.Memory, Casbin.Adapter.Memory.Policy, System.SyncObjs, System.Types;
+  Casbin.Functions, Casbin.Adapter.Memory, Casbin.Adapter.Memory.Policy, System.SyncObjs, System.Types, System.StrUtils;
 
 var
   criticalSection: TCriticalSection;
@@ -107,6 +107,8 @@ var
   matchString: string;
   reqDefinitions: TList<string>;
   polDefinitions: TList<string>;
+  param: string;
+  rightPolicy: Boolean;
 begin
   result:=true;
   if Length(aParams) = 0 then
@@ -173,27 +175,35 @@ begin
       matchString:='';
     for item in fPolicy.policies do
     begin
+      fLogger.log('   Processing policy: '+item);
       // Resolve Policy
       policyList:=TList<string>.Create;   //PALOFF
       policyList.AddRange(item.Split([',']));
 
-      //Item 0 has p,g, etc
+      // Item 0 has p,g, etc
       policyList.Delete(0);
-      policyDict:=resolve(policyList, rtPolicy,
-                                      fModel.assertions(stPolicyDefinition));
+      // We look at the relevant policies only
+      if fPolicy.linkExists(request[0], policyList[0]) or
+        soundexSimilar(Trim(request[0]), Trim(policyList[0]),
+                                        Trunc(0.50 * Length(request[0]))) then
+//                                round(.50 * length(request[0]))) then
+      begin
 
-      fLogger.log('   Resolving Functions and Matcher...');
-      // Resolve Matcher
-      if matchString<>'' then
-        matcherResult:=resolve(requestDict, policyDict, fFunctions, matchString)
-      else
-        matcherResult:=erIndeterminate;
-      SetLength(effectArray, Length(effectArray)+1);
-      effectArray[Length(effectArray)-1]:=matcherResult; //PALOFF
+        policyDict:=resolve(policyList, rtPolicy,
+                                        fModel.assertions(stPolicyDefinition));
 
-      policyDict.Free;
-      policyList.Free;
+        fLogger.log('   Resolving Functions and Matcher...');
+        // Resolve Matcher
+        if matchString<>'' then
+          matcherResult:=resolve(requestDict, policyDict, fFunctions, matchString)
+        else
+          matcherResult:=erIndeterminate;
+        SetLength(effectArray, Length(effectArray)+1);
+        effectArray[Length(effectArray)-1]:=matcherResult; //PALOFF
 
+        policyDict.Free;
+        policyList.Free;
+      end;
     end;
     matcher.Free;
 

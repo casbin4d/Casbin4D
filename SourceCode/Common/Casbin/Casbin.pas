@@ -224,9 +224,8 @@ begin
         soundexSimilar(Trim(request[0]), Trim(policyList[0]),
                                         Trunc(0.50 * Length(request[0]))) then
       begin
-        polDefinitions:=fModel.assertions(stPolicyDefinition);
-
-        policyDict:=resolve(policyList, rtPolicy, polDefinitions);
+        policyDict:=resolve(policyList, rtPolicy,
+                              fModel.assertions(stPolicyDefinition));
 
         // Match Owner
         if (Trim(reqOwner)<>'') then
@@ -293,18 +292,26 @@ end;
 
 function TCasbin.rolesG(const Args: array of string): Boolean;
 begin
-  if Length(Args)<>2 then
+  Result:=False;
+  if (Length(Args)<2) or (Length(Args)>3) then
     raise ECasbinException.Create('The arguments are different than expected in '+
                                     'g');
-  Result:=fPolicy.linkExists(Args[0], Args[1]);
+  if Length(Args)=3 then
+    Result:=rolesG2(Args);
+  if Length(Args)=2 then
+    Result:=fPolicy.linkExists(Args[0], Args[1]);
 end;
 
 function TCasbin.rolesG2(const Args: array of string): Boolean;
 begin
-  if Length(Args)<>3 then
+  Result:=False;
+  if (Length(Args)<2) or (Length(Args)>3) then
     raise ECasbinException.Create('The arguments are different than expected in '+
                                     'g2');
-  Result:=fPolicy.linkExists(Args[0], Args[2], Args[1]);
+  if Length(Args)=3 then
+    Result:=fPolicy.linkExists(Args[0], Args[2], Args[1]);
+  if Length(Args)=2 then
+    Result:=rolesG(Args);
 end;
 
 procedure TCasbin.setEnabled(const aValue: Boolean);

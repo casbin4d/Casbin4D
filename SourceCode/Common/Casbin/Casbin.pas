@@ -185,7 +185,7 @@ begin
       fLogger.log('   Resolving Functions and Matcher...');
       // Resolve Matcher
       if matchString<>'' then
-        matcherResult:=resolve(requestDict, policyDict, @fFunctions, matchString)
+        matcherResult:=resolve(requestDict, policyDict, fFunctions, matchString)
       else
         matcherResult:=erIndeterminate;
       SetLength(effectArray, Length(effectArray)+1);

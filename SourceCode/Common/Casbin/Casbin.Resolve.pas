@@ -28,10 +28,6 @@ function resolve(const aResolvedRequest, aResolvedPolicy: TDictionary<string,
     string>; const aFunctions: IFunctions; const aMatcher: string):
     TEffectResult; overload;
 
-function resolve(const aResolvedRequest, aResolvedPolicy: TDictionary<string,
-    string>; const aFunctions: Pointer; const aMatcher: string):
-    TEffectResult; overload;
-
 implementation
 
 uses
@@ -161,14 +157,6 @@ begin
   end;
   // Evaluation
   Result:=matcher.evaluateMatcher(resolvedMatcher);
-end;
-
-function resolve(const aResolvedRequest, aResolvedPolicy: TDictionary<string,
-    string>; const aFunctions: Pointer; const aMatcher: string):
-    TEffectResult; overload;
-begin
-  Result:=
-    resolve(aResolvedRequest, aResolvedPolicy, IFunctions(aFunctions^), aMatcher);
 end;
 
 end.

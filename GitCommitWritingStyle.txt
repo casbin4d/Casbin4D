@@ -4,7 +4,7 @@ Git commit messages follow the general guidelines widely available (atomic commi
 In addition, commits can use the following semantics:
 
 Commit		Element	Equivalent							Commit Message Example
-+			Add											+ methods to calculate ratios
++			Add										+ methods to calculate ratios
 -			Remove										- redundant calls to API
 *			Update										* project files
 Dolphins	Used to describe that the commit has 

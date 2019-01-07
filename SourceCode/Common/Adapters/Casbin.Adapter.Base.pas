@@ -34,18 +34,18 @@ type
     fLogger: ILogger;
     fAssertions: TList<string>;
   protected
-    fFiltered: Boolean;
-    fFilter: TFilterArray;
+    fFiltered: Boolean;   //PALOFF
+    fFilter: TFilterArray;  //PALOFF
   protected
 {$REGION 'Interface'}
     function getAssertions: TList<string>;
-    function getLogger: ILogger; virtual;
+    function getLogger: ILogger; virtual;  //PALOFF
     function getFilter: TFilterArray;
     procedure load(const aFilter: TFilterArray); virtual;
     procedure save; virtual; abstract;
     procedure setAssertions(const aValue: TList<string>); virtual;
     procedure setLogger(const aValue: ILogger);
-    function toOutputString: string; virtual;
+    function toOutputString: string; virtual;   //PALOFF
     procedure clear;
     function getFiltered: boolean;
 {$ENDREGION}

@@ -9,7 +9,6 @@ function KeyMatch3 (const aArgs: array of string): Boolean;
 var
   key1: string;
   key2: string;
-  index: Integer;
   regExp : TRegEx;
   match : TMatch;
 begin
@@ -23,7 +22,7 @@ begin
   while Pos('/{', key2, low(string))<>0 do
     key2:=TRegEx.Replace(key2, '(.*)\{[^/]+\}(.*)', '$1[^/]+$2');
 
-  regExp.Create(key2);
+  regExp:=TRegEx.Create(key2);
   match := regExp.Match(key1);
   Result:= match.Success;
 

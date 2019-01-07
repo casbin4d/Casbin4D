@@ -11,7 +11,7 @@ var
   IPArr1: TStringDynArray;
   IPArr2: TStringDynArray;
 
-  function validIP(const aIP: string): Boolean;
+  function validIP(const aIP: string): Boolean;  //PALOFF
   var
     strArr: TStringDynArray;
     i: Integer;

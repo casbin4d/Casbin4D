@@ -23,7 +23,7 @@ type
   private
     procedure resetSections;
   protected
-    fContent: TStringList;
+    fContent: TStringList; //PALOFF
    public
     constructor Create; overload;
     destructor Destroy; override;

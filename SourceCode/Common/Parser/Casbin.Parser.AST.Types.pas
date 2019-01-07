@@ -42,7 +42,7 @@ type
   public
     constructor Create;
     destructor Destroy; override;
-    function toOutputString: string; virtual;
+    function toOutputString: string;
 
     property Headers: TObjectList<THeaderNode> read fHeaders write fHeaders;
   end;

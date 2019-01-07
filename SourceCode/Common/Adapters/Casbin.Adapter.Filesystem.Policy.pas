@@ -87,12 +87,8 @@ end;
 procedure TPolicyFileAdapter.load(const aFilter: TFilterArray);
 var
   policy: string;
-  filter,
-  test: string;
-  index: Integer;
+  filter: string;
   i: Integer;
-  filteredArray: TStringList;
-  modifiedFilter: TList<string>;
   found: Boolean;
 begin
   // DO NOT CALL inherited when CACHE is implemented

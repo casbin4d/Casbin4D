@@ -9,7 +9,6 @@ function KeyMatch2 (const aArgs: array of string): Boolean;
 var
   key1: string;
   key2: string;
-  index: Integer;
   regExp : TRegEx;
   match : TMatch;
 begin
@@ -26,7 +25,7 @@ begin
     key2:='^'+key2+'$';
   end;
 
-  regExp.Create(key2);
+  regExp:=TRegEx.Create(key2);
   match := regExp.Match(key1);
   Result:= match.Success;
 

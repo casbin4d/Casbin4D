@@ -115,21 +115,14 @@ function TCasbin.enforce(const aParams: TEnforceParameters;
 var
   item: string;
   request: TList<string>;
-  tmpList: TList<string>;
   requestDict: TDictionary<string, string>;
   policyDict: TDictionary<string, string>;
   requestStr: string;
   matcherResult: TEffectResult;
   matcher: TList<string>;
   policyList: TList<string>;
-  policyArray: TArray<string>;
-  policy: string;
   effectArray: TEffectArray;
   matchString: string;
-  reqDefinitions: TList<string>;
-  polDefinitions: TList<string>;
-  param: string;
-  rightPolicy: Boolean;
 begin
   result:=true;
   if Length(aParams) = 0 then
@@ -215,7 +208,7 @@ begin
       fLogger.log('   Processing policy: '+item);
       // Resolve Policy
       policyList:=TList<string>.Create;   //PALOFF
-      policyList.AddRange(item.Split([',']));
+      policyList.AddRange(item.Split([',']));     //PALOFF
 
       // Item 0 has p,g, etc
       policyList.Delete(0);

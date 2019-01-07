@@ -42,6 +42,9 @@ function createDefaultSection(const aSection: TSectionType): TSection;
 
 implementation
 
+uses
+  Casbin.Exception.Types;
+
 function createDefaultSection(const aSection: TSectionType): TSection;
 begin
   case aSection of
@@ -93,6 +96,8 @@ begin
                         result.Tag:=roleDefinition.Tag;
                         result.&Type:=stRoleDefinition;
                       end;
+  else
+    raise ECasbinException.Create('Wrong secton type');
   end;
 
 end;

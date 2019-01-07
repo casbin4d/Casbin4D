@@ -23,15 +23,15 @@ uses
 type
   TModel = class (TBaseInterfacedObject, IModel)
   private
-    fAdapter: IAdapter;
-    fParser: IParser;
+    fAdapter: IAdapter;  //PALOFF
+    fParser: IParser;    //PALOFF
     fNodes: TNodeCollection;
     fAssertions: TList<string>;
     procedure checkSection(const aSection: TSectionType);
   protected
 {$REGION 'Interface'}
     function section(const aSection: TSectionType; const aSlim: Boolean = true):
-        string; virtual;
+        string;
     function assertions(const aSection: TSectionType): TList<System.string>;
     function effectCondition: TEffectCondition;
 {$ENDREGION}

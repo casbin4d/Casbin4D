@@ -27,9 +27,9 @@ type
     fParseType: TParseType;
     fStatus: TParserStatus;
     fNodes: TNodeCollection;
-    procedure cleanWhiteSpace;
-    procedure checkSyntaxErrors;
-    procedure checkHeaders;
+    procedure cleanWhiteSpace; //PALOFF
+    procedure checkSyntaxErrors; //PALOFF
+    procedure checkHeaders;  //PALOFF
     procedure parseContent;
   private
 {$REGION 'Interface'}
@@ -74,7 +74,6 @@ end;
 
 procedure TParser.checkHeaders;
 var
-  headers: array of Boolean;
   headerSet: TSectionTypeSet;
   section: TSectionType;
   sectionObj: TSection;
@@ -120,6 +119,7 @@ var
   posX: Integer;
   posY: Integer;
   strList: TStringList;
+  showError: Boolean;
 begin
   case fParseType of
     ptModel: fileString:=modelFileString;
@@ -133,13 +133,10 @@ begin
   posY:=1;
   for ch in fParseString do
   begin
+    showError:=False;
     case ch of
       '[': if insideHeader then
-           begin
-             fErrorMessage:=format(errorWrongHeaderFormat, [PosX, PosY, fileString]);
-             fStatus:=psError;
-             Exit;
-           end
+             showError:=True
            else
            begin
             insideHeader:=True;
@@ -148,13 +145,17 @@ begin
       ']': begin
              insideHeader:=False;
              if numLSquare = 0 then
-             begin
-               fErrorMessage:=format(errorWrongHeaderFormat, [PosX, PosY, fileString]);
-               fStatus:=psError;
-               Exit;
-             end;
+              showError:=True;
            end;
     end;
+
+    if showError then
+    begin
+      fErrorMessage:=format(errorWrongHeaderFormat, [PosX, PosY, fileString]);
+      fStatus:=psError;
+      Exit;
+    end;
+
     if SameText(Copy(fParseString, posX, Length(EOL)), EOL) then
     begin
       posX:=Low(string);
@@ -185,7 +186,6 @@ var
   matchersPosEnd: Integer;
   nextSectionPos: Integer;
   section: TSection;
-  tag: string;
   testStr: string;
 begin
   // Clean EOL in front of the string
@@ -389,19 +389,22 @@ begin
       end
       else
       begin
-        if fParseType=ptPolicy then
-          header.SectionType:=stPolicyRules;
-        if Trim(line)<>'' then
+        if Assigned(header) then
         begin
-          addAssertion(header, line);
-          if (header.SectionType=stPolicyEffect) and
-            ((header.ChildNodes.Items
-                [header.ChildNodes.Count-1] as TEffectNode)
-                                            .EffectCondition=ecUnknown) then
+          if fParseType=ptPolicy then
+            header.SectionType:=stPolicyRules;
+          if Trim(line)<>'' then
           begin
-            fErrorMessage:=format(errorUnknownAssertion, [line]);
-            fStatus:=psError;
-            Exit;
+            addAssertion(header, line);
+            if (header.SectionType=stPolicyEffect) and
+              ((header.ChildNodes.Items
+                  [header.ChildNodes.Count-1] as TEffectNode)
+                                              .EffectCondition=ecUnknown) then
+            begin
+              fErrorMessage:=format(errorUnknownAssertion, [line]);
+              fStatus:=psError;
+              Exit;
+            end;
           end;
         end;
       end;

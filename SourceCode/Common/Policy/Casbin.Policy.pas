@@ -24,7 +24,7 @@ type
   TPolicyManager = class(TBaseInterfacedObject, IPolicyManager)
   private
     fAdapter: IPolicyAdapter;
-    fParser: IParser;
+    fParser: IParser;    //PALOFF
     fNodes: TNodeCollection;
     fPoliciesList: TList<string>;
     fRolesList: TList<string>;
@@ -110,8 +110,6 @@ var
   bottomNode: TRoleNode;
   topNode: TRoleNode;
   IDList: TStringList;
-  itemString: string;
-  itemStringExists: Boolean;
 begin
   bottomNode:=findRolesNode(aBottomDomain, aBottom);
   if not Assigned(bottomNode) then
@@ -164,8 +162,8 @@ begin
     raise ECasbinException.Create('Adapter is nil in '+Self.ClassName);
   inherited Create;
   fAdapter:=aAdapter;
-  fPoliciesList:=TList<string>.Create;
-  fRolesList:=TList<string>.Create;
+  fPoliciesList:=TList<string>.Create;  //PALOFF
+  fRolesList:=TList<string>.Create;  //PALOFF
   fRolesNodes:=TObjectDictionary<string, TRoleNode>.Create([doOwnsValues]);
   fRolesLinks:=TObjectDictionary<string, TStringList>.Create([doOwnsValues]);
   loadPolicies;
@@ -284,9 +282,7 @@ function TPolicyManager.linkExists(const aLeftDomain: string; const aLeft:
 var
   leftNode: TRoleNode;
   rightNode: TRoleNode;
-  list: TStringList;
   item: string;
-  itemString: string;
   lDomain,
   rDomain,
   lItem,
@@ -379,24 +375,24 @@ end;
 procedure TPolicyManager.loadRoles;
 var
   role: string;
-  policy: string;
+  policyItem: string;
   roleList: TList<string>;
   policyList: TList<string>;
-  section: TSection;
+  sectionItem: TSection;
   useDomains: Boolean;
 begin
   useDomains:=False;
   clearRoles;
 
   // We get the Role Rules
-  section:=createDefaultSection(stRoleDefinition);
+  sectionItem:=createDefaultSection(stRoleDefinition);
   for role in roles do
   begin
     roleList:=TList<string>.Create;
     roleList.AddRange(role.Split([',']));
     if roleList.Count>=3 then
     begin
-      case IndexStr(roleList[0], section.Tag) of
+      case IndexStr(roleList[0], sectionItem.Tag) of
         /// NEED TO REWRITE
         /// By HUGE and RISKY convention we assume 0 --> g and 1 --> g2
         0: addLink(roleList[1], roleList[2]);
@@ -413,13 +409,13 @@ begin
     roleList.Free;
   end;
 
-  section.Free;
+  sectionItem.Free;
 
   // We now need to transverse the other policy rules to build the links
-  for policy in policies do
+  for policyItem in policies do
   begin
     policyList:=TList<string>.Create;
-    policyList.AddRange(policy.Split([',']));
+    policyList.AddRange(policyItem.Split([',']));
 
     // Need to filter the policies to load based on the avail links from the g's
     // Now we load all the policies and have them hanging around although never
@@ -438,20 +434,20 @@ function TPolicyManager.policies: TList<string>;
 var
   node: TChildNode;
   headerNode: THeaderNode;
-  section: TSection;
+  sectionItem: TSection;
   tag: string;
   foundTag: Boolean;
 begin
   foundTag:=False;
   fPoliciesList.Clear;
   fRolesList.Clear;
-  section:=createDefaultSection(stPolicyDefinition);
+  sectionItem:=createDefaultSection(stPolicyDefinition);
   for headerNode in fNodes.Headers do
     if (headerNode.SectionType=stPolicyRules) then
     begin
       for node in headerNode.ChildNodes do
       begin
-        for tag in section.Tag do
+        for tag in sectionItem.Tag do
           if node.Key=tag then
           begin
             foundTag:=True;
@@ -463,14 +459,14 @@ begin
           fPoliciesList.add(node.Key+AssignmentCharForPolicies+node.Value)
       end;
     end;
-  section.Free;
+  sectionItem.Free;
   Result:=fPoliciesList;
 end;
 
 function TPolicyManager.policy(const aFilter: TFilterArray = []): string;
 var
   i: Integer;
-  policy: string;
+  policyItem: string;
   test: string;
   testPolicy: string;
   strArray: TFilterArray;
@@ -485,9 +481,9 @@ begin
   end;
   testPolicy:=String.Join(',', strArray);
 
-  for policy in policies do
+  for policyItem in policies do
   begin
-    strArray:=policy.Split([',']);
+    strArray:=policyItem.Split([',']);
     for i:=0 to Length(strArray)-1 do
     begin
       strArray[i]:=trim(strArray[i]);
@@ -508,10 +504,9 @@ end;
 function TPolicyManager.policyExists(const aFilter: TFilterArray): Boolean;
 var
   i: Integer;
-  policy: string;
+  policyItem: string;
   test: string;
   testPolicy: string;
-  strArray: TFilterArray;
 begin
   Result:=False;
   if Length(aFilter)=0 then
@@ -530,9 +525,9 @@ begin
     Delete(testPolicy, findStartPos, i);
   end;
 
-  for policy in policies do
+  for policyItem in policies do
   begin
-    test:=policy;
+    test:=policyItem;
 
     while Pos(#32, test, findStartPos)<>0 do
       Delete(test, Pos(#32, test, findStartPos), 1);
@@ -567,19 +562,19 @@ function TPolicyManager.roles: TList<string>;
 var
   node: TChildNode;
   headerNode: THeaderNode;
-  section: TSection;
+  sectionItem: TSection;
   tag: string;
   foundTag: Boolean;
 begin
   foundTag:=False;
   fRolesList.Clear;
-  section:=createDefaultSection(stRoleDefinition);
+  sectionItem:=createDefaultSection(stRoleDefinition);
   for headerNode in fNodes.Headers do
     if (headerNode.SectionType=stPolicyRules) then
     begin
       for node in headerNode.ChildNodes do
       begin
-        for tag in section.Tag do
+        for tag in sectionItem.Tag do
           if node.Key=tag then
           begin
             foundTag:=True;
@@ -591,7 +586,7 @@ begin
           fRolesList.add(node.Key+AssignmentCharForRoles+node.Value)
       end;
     end;
-  section.Free;
+  sectionItem.Free;
   Result:=fRolesList;
 end;
 
@@ -629,7 +624,7 @@ function TPolicyManager.section(const aSlim: Boolean): string;
 var
   headerNode: THeaderNode;
   strList: TStringList;
-  policy: string;
+  policyItem: string;
 begin
   Result:='';
   for headerNode in fNodes.Headers do
@@ -643,8 +638,8 @@ begin
         Result:='';
         if aSlim and (strList.Strings[0][findStartPos]='[') then
           strList.Delete(0);
-        for policy in strList do
-          Result:=Result+policy+sLineBreak;
+        for policyItem in strList do
+          Result:=Result+policyItem+sLineBreak;
       end;
       strList.Free;
       Exit;

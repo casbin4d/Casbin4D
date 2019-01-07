@@ -38,7 +38,7 @@ type
     procedure setEnabled(const aValue: Boolean);
 {$ENDREGION}
   protected
-    fLastLoggedMessage: string;
+    fLastLoggedMessage: string;   //PALOFF
   public
 {$REGION 'Interface'}
     procedure log(const aMessage: string); virtual;

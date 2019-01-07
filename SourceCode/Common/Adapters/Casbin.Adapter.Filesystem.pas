@@ -21,7 +21,7 @@ uses
 type
   TFileAdapter = class(TBaseAdapter)
   protected
-    fFilename: string;
+    fFilename: string; //PALOFF
    public
     constructor Create(const aFilename: string); virtual;
     procedure load(const aFilter: TFilterArray); override;

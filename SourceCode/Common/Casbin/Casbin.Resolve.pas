@@ -72,14 +72,9 @@ var
   matcher: IMatcher;
   resolvedMatcher: string;
   item: string;
-  item2: string;
-  func: TCasbinFunc;
-  funcObj: TCasbinObjectFunc;
   args: string;
   argsArray: TArray<string>;
   endArgsPos: Integer;
-  resolvedList: TArray<string>;
-  replacedList: TArray<string>;
   startArgsPos: Integer;
   startFunPos: Integer;
   funcResult: Boolean;

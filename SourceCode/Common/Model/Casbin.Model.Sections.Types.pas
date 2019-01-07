@@ -74,7 +74,7 @@ type
     /// </remarks>
     {$ENDREGION}
     property Tag: TStringDynArray read fTag write fTag;
-    property &Type: TSectionType read fType write fType;
+    property &Type: TSectionType read fType write fType;  //PALOFF
   end;
 
 const

@@ -16,7 +16,7 @@ unit Casbin.Parser.Types;
 interface
 
 uses
-  Casbin.Core.Base.Types, Casbin.Core.Logger.Types, Casbin.Parser.AST.Types;
+  Casbin.Core.Base.Types, Casbin.Parser.AST.Types, Casbin.Core.Logger.Types;
 
 type
   TParseType = (ptModel, ptPolicy, ptConfig);

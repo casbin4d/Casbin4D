@@ -3,7 +3,7 @@
         <ProjectGuid>{4C61AAEF-77DD-4C09-B439-DF6D2E16F7B2}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
-        <Projects Include="Packages\CasbinD103Rio.dproj">
+        <Projects Include="Packages\Casbin4D103Rio.dproj">
             <Dependencies/>
         </Projects>
         <Projects Include="..\Tests\Tests.Casbin.dproj">
@@ -20,14 +20,14 @@
             <Default.Personality/>
         </BorlandProject>
     </ProjectExtensions>
-    <Target Name="CasbinD103Rio">
-        <MSBuild Projects="Packages\CasbinD103Rio.dproj"/>
+    <Target Name="Casbin4D103Rio">
+        <MSBuild Projects="Packages\Casbin4D103Rio.dproj"/>
     </Target>
-    <Target Name="CasbinD103Rio:Clean">
-        <MSBuild Projects="Packages\CasbinD103Rio.dproj" Targets="Clean"/>
+    <Target Name="Casbin4D103Rio:Clean">
+        <MSBuild Projects="Packages\Casbin4D103Rio.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="CasbinD103Rio:Make">
-        <MSBuild Projects="Packages\CasbinD103Rio.dproj" Targets="Make"/>
+    <Target Name="Casbin4D103Rio:Make">
+        <MSBuild Projects="Packages\Casbin4D103Rio.dproj" Targets="Make"/>
     </Target>
     <Target Name="Tests_Casbin">
         <MSBuild Projects="..\Tests\Tests.Casbin.dproj"/>
@@ -48,13 +48,13 @@
         <MSBuild Projects="..\Demos\Main\MainDemo.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="CasbinD103Rio;Tests_Casbin;MainDemo"/>
+        <CallTarget Targets="Casbin4D103Rio;Tests_Casbin;MainDemo"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="CasbinD103Rio:Clean;Tests_Casbin:Clean;MainDemo:Clean"/>
+        <CallTarget Targets="Casbin4D103Rio:Clean;Tests_Casbin:Clean;MainDemo:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="CasbinD103Rio:Make;Tests_Casbin:Make;MainDemo:Make"/>
+        <CallTarget Targets="Casbin4D103Rio:Make;Tests_Casbin:Make;MainDemo:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

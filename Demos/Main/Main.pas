@@ -18,7 +18,7 @@ type
     Memo2: TMemo;
     Layout1: TLayout;
     buttonValidateModel: TButton;
-    labelValidateModel: TLabel;                         ``
+    labelValidateModel: TLabel;
     rectangleModel: TRectangle;
     buttonValidatePolicies: TButton;
     Layout2: TLayout;

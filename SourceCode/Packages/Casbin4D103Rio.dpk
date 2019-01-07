@@ -1,4 +1,4 @@
-package CasbinD103Rio;
+package Casbin4D103Rio;
 
 {$R *.res}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}

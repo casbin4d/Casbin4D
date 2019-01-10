@@ -6,7 +6,7 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.StdCtrls,
   FMX.Controls.Presentation, FMX.ExtCtrls, FMX.ScrollBox, FMX.Memo, FMX.Objects,
-  FMX.Layouts, FMX.Edit;
+  FMX.Layouts, FMX.Edit, System.ImageList, FMX.ImgList;
 
 type
   TForm1 = class(TForm)
@@ -31,6 +31,11 @@ type
     rectangleEnforced: TRectangle;
     labelEnforced: TLabel;
     labelVersion: TLabel;
+    Layout4: TLayout;
+    Rectangle1: TRectangle;
+    LabelError: TLabel;
+    ImageList1: TImageList;
+    Image1: TImage;
     procedure Button1Click(Sender: TObject);
     procedure buttonValidateModelClick(Sender: TObject);
     procedure buttonValidatePoliciesClick(Sender: TObject);
@@ -66,17 +71,25 @@ begin
   end;
   params:=editParams.Text.Split([',']);
   casbin:=TCasbin.Create(fFolder+popupModel.Text, fFolder+popupPolicies.Text);
-  if casbin.enforce(params) then
-  begin
-    rectangleEnforced.Fill.Color:=TAlphaColorRec.Green;
-    labelEnforced.Text:='ALLOW';
-  end
-  else
-  begin
-    rectangleEnforced.Fill.Color:=TAlphaColorRec.Red;
-    labelEnforced.Text:='DENY';
+  try
+    if casbin.enforce(params) then
+    begin
+      rectangleEnforced.Fill.Color:=TAlphaColorRec.Green;
+      labelEnforced.Text:='ALLOW';
+    end
+    else
+    begin
+      rectangleEnforced.Fill.Color:=TAlphaColorRec.Red;
+      labelEnforced.Text:='DENY';
+    end;
+    labelEnforced.FontColor:=TAlphaColorRec.White;
+  except
+    on E: Exception do
+    begin
+      Image1.Bitmap:=ImageList1.Bitmap(TSizeF.Create(Image1.Height,Image1.Height), 0);
+      LabelError.Text:=E.Message;
+    end;
   end;
-  labelEnforced.FontColor:=TAlphaColorRec.White;
 end;
 
 procedure TForm1.buttonValidateModelClick(Sender: TObject);
@@ -119,9 +132,12 @@ end;
 
 procedure TForm1.editParamsChangeTracking(Sender: TObject);
 begin
-  labelEnforced.Text:='Not Enforced Yet';
+  labelEnforced.Text:='Nothing Enforced Yet';
   labelEnforced.FontColor:=TAlphaColorRec.Black;
   rectangleEnforced.Fill.Color:=TAlphaColorRec.Null;
+
+  Image1.Bitmap:=ImageList1.Bitmap(TSizeF.Create(Image1.Height,Image1.Height), 1);
+  LabelError.Text:='No Errors';
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
@@ -161,6 +177,10 @@ begin
   end;
   if popupPolicies.Items.Count>0 then
     popupPolicies.ItemIndex:=0;
+
+  //Errors
+  Image1.Bitmap:=ImageList1.Bitmap(TSizeF.Create(Image1.Height,Image1.Height), 1);
+  LabelError.Text:='No Errors';
 end;
 
 procedure TForm1.popupModelChange(Sender: TObject);

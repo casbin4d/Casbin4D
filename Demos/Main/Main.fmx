@@ -12,7 +12,7 @@ object Form1: TForm1
   DesignerMasterStyle = 0
   object GroupBox1: TGroupBox
     Position.X = 16.000000000000000000
-    Position.Y = 184.000000000000000000
+    Position.Y = 168.000000000000000000
     Size.Width = 345.000000000000000000
     Size.Height = 465.000000000000000000
     Size.PlatformDefault = False
@@ -95,7 +95,7 @@ object Form1: TForm1
   end
   object GroupBox2: TGroupBox
     Position.X = 392.000000000000000000
-    Position.Y = 184.000000000000000000
+    Position.Y = 168.000000000000000000
     Size.Width = 345.000000000000000000
     Size.Height = 465.000000000000000000
     Size.PlatformDefault = False
@@ -179,7 +179,7 @@ object Form1: TForm1
   object Label1: TLabel
     StyledSettings = [Family, Style, FontColor]
     Position.X = 16.000000000000000000
-    Position.Y = 24.000000000000000000
+    Position.Y = 8.000000000000000000
     Size.Width = 169.000000000000000000
     Size.Height = 41.000000000000000000
     Size.PlatformDefault = False
@@ -192,7 +192,7 @@ object Form1: TForm1
     TabOrder = 6
     TextSettings.Font.Size = 16.000000000000000000
     Position.X = 16.000000000000000000
-    Position.Y = 64.000000000000000000
+    Position.Y = 48.000000000000000000
     Size.Width = 345.000000000000000000
     Size.Height = 41.000000000000000000
     Size.PlatformDefault = False
@@ -205,7 +205,7 @@ object Form1: TForm1
     Margins.Right = 10.000000000000000000
     Margins.Bottom = 10.000000000000000000
     Position.X = 18.000000000000000000
-    Position.Y = 118.000000000000000000
+    Position.Y = 102.000000000000000000
     Size.Width = 159.000000000000000000
     Size.Height = 47.000000000000000000
     Size.PlatformDefault = False
@@ -215,7 +215,7 @@ object Form1: TForm1
   end
   object Layout3: TLayout
     Position.X = 200.000000000000000000
-    Position.Y = 118.000000000000000000
+    Position.Y = 102.000000000000000000
     Size.Width = 537.000000000000000000
     Size.Height = 47.000000000000000000
     Size.PlatformDefault = False
@@ -257,7 +257,7 @@ object Form1: TForm1
   end
   object Layout4: TLayout
     Position.X = 368.000000000000000000
-    Position.Y = 62.000000000000000000
+    Position.Y = 46.000000000000000000
     Size.Width = 369.000000000000000000
     Size.Height = 43.000000000000000000
     Size.PlatformDefault = False
@@ -484,6 +484,6 @@ object Form1: TForm1
           end>
       end>
     Left = 248
-    Top = 24
+    Top = 8
   end
 end

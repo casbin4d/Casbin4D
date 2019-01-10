@@ -115,7 +115,7 @@ procedure TForm1.buttonValidatePoliciesClick(Sender: TObject);
 var
   parser: IParser;
 begin
-  parser:=TParser.Create(Memo1.Text, ptPolicy);
+  parser:=TParser.Create(Memo2.Text, ptPolicy);
   parser.parse;
   if parser.Status=psError then
   begin

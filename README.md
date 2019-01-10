@@ -10,8 +10,10 @@ Casbin4D is a cross platform (FireMonkey) implementation for Delphi/Pascal of th
 
 **DISCLAIM:** This library is still under development (Work in Progress) and it is not production-ready. DO NOT USE it in production environment
 
-![Announcement](https://github.com/casbin4d/Casbin4D/blob/master/Images/Speaker-128x117.png)
-You are cordially invited to share, fork, review and improve this library. Please feel free to comment and offer suggestions
+<img style="float: left;" src="https://github.com/casbin4d/Casbin4D/blob/master/Images/Speaker-128x117.png">
+
+You are cordially invited to share, fork, review and improve this library.
+Please feel free to comment and offer suggestions
 
 ## Table of contents
 
@@ -160,17 +162,17 @@ Casbin4D is designed with multi-threading in mind. The current implementation ac
 
 Model | Model file | Policy file
 ----|------|----
-ACL | [basic_model.conf](https://github.com/casbin/casbin/blob/master/Examples/Default/basic_model.conf) | [basic_policy.csv](https://github.com/casbin/casbin/blob/master/Examples/Default/basic_policy.csv)
-ACL with superuser | [basic_model_with_root.conf](https://github.com/casbin/casbin/blob/master/Examples/Default/basic_with_root_model.conf) | [basic_policy.csv](https://github.com/casbin/casbin/blob/master/Examples/Default/basic_policy.csv)
-ACL without users | [basic_model_without_users.conf](https://github.com/casbin/casbin/blob/master/Examples/Default/basic_without_users_model.conf) | [basic_policy_without_users.csv](https://github.com/casbin/casbin/blob/master/Examples/Default/basic_without_users_policy.csv)
-ACL without resources | [basic_model_without_resources.conf](https://github.com/casbin/casbin/blob/master/Examples/Default/basic_without_resources_model.conf) | [basic_policy_without_resources.csv](https://github.com/casbin/casbin/blob/master/Examples/Default/basic_without_resources_policy.csv)
-RBAC | [rbac_model.conf](https://github.com/casbin/casbin/blob/master/Examples/Default/rbac_model.conf)  | [rbac_policy.csv](https://github.com/casbin/casbin/blob/master/Examples/Default/rbac_policy.csv)
-RBAC with resource roles | [rbac_model_with_resource_roles.conf](https://github.com/casbin/casbin/blob/master/Examples/Default/rbac_with_resource_roles_model.conf)  | [rbac_policy_with_resource_roles.csv](https://github.com/casbin/casbin/blob/master/Examples/Default/rbac_with_resource_roles_policy.csv)
-RBAC with domains/tenants | [rbac_model_with_domains.conf](https://github.com/casbin/casbin/blob/master/Examples/Default/rbac_with_domains_model.conf)  | [rbac_policy_with_domains.csv](https://github.com/casbin/casbin/blob/master/Examples/Default/rbac_with_domains_policy.csv)
-ABAC | [abac_model.conf](https://github.com/casbin/casbin/blob/master/Examples/Default/abac_model.conf)  | N/A
-RESTful | [keymatch_model.conf](https://github.com/casbin/casbin/blob/master/Examples/Default/keymatch_model.conf)  | [keymatch_policy.csv](https://github.com/casbin/casbin/blob/master/Examples/Default/keymatch_policy.csv)
-Deny-override | [rbac_model_with_deny.conf](https://github.com/casbin/casbin/blob/master/Examples/Default/rbac_with_deny_model.conf)  | [rbac_policy_with_deny.csv](https://github.com/casbin/casbin/blob/master/Examples/Default/rbac_with_deny_policy.csv)
-Priority | [priority_model.conf](https://github.com/casbin/casbin/blob/master/Examples/Default/priority_model.conf)  | [priority_policy.csv](https://github.com/casbin/casbin/blob/master/Examples/Default/priority_policy.csv)
+ACL | [basic_model.conf](https://github.com/casbin4d/Casbin4D/blob/master/Examples/Default/basic_model.conf) | [basic_policy.csv](https://github.com/casbin4d/Casbin4D/blob/master/Examples/Default/basic_policy.csv)
+ACL with superuser | [basic_model_with_root.conf](https://github.com/casbin4d/Casbin4D/blob/master/Examples/Default/basic_with_root_model.conf) | [basic_policy.csv](https://github.com/casbin4d/Casbin4D/blob/master/Examples/Default/basic_policy.csv)
+ACL without users | [basic_model_without_users.conf](https://github.com/casbin4d/Casbin4D/blob/master/Examples/Default/basic_without_users_model.conf) | [basic_policy_without_users.csv](https://github.com/casbin4d/Casbin4D/blob/master/Examples/Default/basic_without_users_policy.csv)
+ACL without resources | [basic_model_without_resources.conf](https://github.com/casbin4d/Casbin4D/blob/master/Examples/Default/basic_without_resources_model.conf) | [basic_policy_without_resources.csv](https://github.com/casbin4d/Casbin4D/blob/master/Examples/Default/basic_without_resources_policy.csv)
+RBAC | [rbac_model.conf](https://github.com/casbin4d/Casbin4D/blob/master/Examples/Default/rbac_model.conf)  | [rbac_policy.csv](https://github.com/casbin4d/Casbin4D/blob/master/Examples/Default/rbac_policy.csv)
+RBAC with resource roles | [rbac_model_with_resource_roles.conf](https://github.com/casbin4d/Casbin4D/blob/master/Examples/Default/rbac_with_resource_roles_model.conf)  | [rbac_policy_with_resource_roles.csv](https://github.com/casbin4d/Casbin4D/blob/master/Examples/Default/rbac_with_resource_roles_policy.csv)
+RBAC with domains/tenants | [rbac_model_with_domains.conf](https://github.com/casbin4d/Casbin4D/blob/master/Examples/Default/rbac_with_domains_model.conf)  | [rbac_policy_with_domains.csv](https://github.com/casbin4d/Casbin4D/blob/master/Examples/Default/rbac_with_domains_policy.csv)
+ABAC | [abac_model.conf](https://github.com/casbin4d/Casbin4D/blob/master/Examples/Default/abac_model.conf)  | N/A
+RESTful | [keymatch_model.conf](https://github.com/casbin4d/Casbin4D/blob/master/Examples/Default/keymatch_model.conf)  | [keymatch_policy.csv](https://github.com/casbin4d/Casbin4D/blob/master/Examples/Default/keymatch_policy.csv)
+Deny-override | [rbac_model_with_deny.conf](https://github.com/casbin4d/Casbin4D/blob/master/Examples/Default/rbac_with_deny_model.conf)  | [rbac_policy_with_deny.csv](https://github.com/casbin4d/Casbin4D/blob/master/Examples/Default/rbac_with_deny_policy.csv)
+Priority | [priority_model.conf](https://github.com/casbin4d/Casbin4D/blob/master/Examples/Default/priority_model.conf)  | [priority_policy.csv](https://github.com/casbin4d/Casbin4D/blob/master/Examples/Default/priority_policy.csv)
 
 ## Tests
 The vast majority of the tests of the original implementation in Go have been imported in Delphi. Please see <https://github.com/casbin4d/Casbin4D/Tests>

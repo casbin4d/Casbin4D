@@ -43,6 +43,13 @@ type
 
     [Test]
     procedure testEffect;
+
+    [Test]
+    [TestCase ('Request','r=sub,obj,act#true', '#')]
+    [TestCase ('Policy','p=sub,obj,act#true', '#')]
+    [TestCase ('Effect','e = some(where (p.eft == allow))', '#')]
+    [TestCase ('Matchers','m = r.sub == p.sub && r.obj == p.obj && r.act == p.act#true', '#')]
+    procedure testAssertionExists(const aAssertion: string; const aResult: boolean);
   end;
 
 implementation
@@ -60,6 +67,12 @@ procedure TTestModel.TearDown;
 begin
 end;
 
+
+procedure TTestModel.testAssertionExists(const aAssertion: string;
+  const aResult: boolean);
+begin
+  Assert.AreEqual(aResult, fModel.assertionExists(aAssertion));
+end;
 
 procedure TTestModel.testAssertions(const aSection: TSectionType);
 var

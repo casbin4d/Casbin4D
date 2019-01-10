@@ -34,6 +34,7 @@ type
         string;
     function assertions(const aSection: TSectionType): TList<System.string>;
     function effectCondition: TEffectCondition;
+    function assertionExists (const aAssertion: string): Boolean;
 {$ENDREGION}
   public
     constructor Create(const aModel: string); overload;
@@ -50,6 +51,28 @@ uses
 constructor TModel.Create(const aModel: string);
 begin
   Create(TFileAdapter.Create(aModel));
+end;
+
+
+function TModel.assertionExists(const aAssertion: string): Boolean;
+var
+  child: TChildNode;
+  header: THeaderNode;
+begin
+  Result:=false;
+  if Trim(aAssertion)='' then
+    Exit;
+
+  for header in fNodes.Headers do
+  begin
+    for child in header.ChildNodes do
+    begin
+      Result:= Trim(child.toOutputString) = Trim(aAssertion);
+
+      if Result then
+        Exit;
+    end;
+  end;
 end;
 
 function TModel.assertions(const aSection: TSectionType): TList<System.string>;

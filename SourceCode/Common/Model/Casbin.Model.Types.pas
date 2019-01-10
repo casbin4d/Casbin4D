@@ -25,6 +25,7 @@ type
     function section (const aSection: TSectionType;
                                         const aSlim: Boolean = true): string;
     function assertions (const aSection: TSectionType): TList<string>;
+    function assertionExists (const aAssertion: string): Boolean;
     function effectCondition: TEffectCondition;
   end;
 

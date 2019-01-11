@@ -15,7 +15,7 @@ unit Tests.Policy;
 
 interface
 uses
-  DUnitX.TestFramework, Casbin.Policy.Types;
+  DUnitX.TestFramework, Casbin.Policy.Types, Casbin.Model.Sections.Types;
 
 type
 
@@ -42,10 +42,26 @@ type
     procedure testPolicyExists;
 
     [Test]
+    procedure testRolesExist;
+
+    [Test]
     [TestCase ('Alice', 'p, alice, data1#read', '#')]
     [TestCase ('Bob', 'p, BOB, data2#write', '#')]
     [TestCase ('Non-existant', 'p, 123, aaaa#undefined', '#')]
     procedure testPolicy(const aFilter: string; const aExpected: string);
+
+    [Test]
+    [TestCase ('Policy.1','stPolicyRules#p#a,b,c', '#')]
+    [TestCase ('Policy.2','stRoleRules#g#a,b,c', '#')]
+    procedure testAddPolicyFull(const aSection: TSectionType; const aTag:
+        string; const aAssertion: string);
+
+    [Test]
+    [TestCase ('Policy.1','stPolicyRules#p,a,b,c', '#')]
+    [TestCase ('Policy.2','stRoleRules#g,a,b,c', '#')]
+    [TestCase ('Policy.3','stRoleRules#g2,a,b,c', '#')]
+    procedure testAddPolicyCompact(const aSection: TSectionType;
+                                                const aAssertion: string);
 
   end;
 
@@ -63,6 +79,20 @@ procedure TTestPolicyManager.TearDown;
 begin
 end;
 
+
+procedure TTestPolicyManager.testAddPolicyCompact(const aSection: TSectionType;
+  const aAssertion: string);
+begin
+  fPolicy.addPolicy(aSection, aAssertion);
+  Assert.IsTrue(fPolicy.policyExists(Trim(aAssertion).Split([','])));
+end;
+
+procedure TTestPolicyManager.testAddPolicyFull(const aSection: TSectionType;
+  const aTag, aAssertion: string);
+begin
+  fPolicy.addPolicy(aSection, aTag, aAssertion);
+  Assert.IsTrue(fPolicy.policyExists(Trim(aAssertion).Split([','])));
+end;
 
 procedure TTestPolicyManager.testPolicies;
 var
@@ -84,6 +114,9 @@ begin
   Assert.AreEqual(True, fPolicy.policyExists(['p','bob','DATA2','write']));
   Assert.AreEqual(false, fPolicy.policyExists(['p','bob','DATA100','write']));
   Assert.AreEqual(false, fPolicy.policyExists(['bob','DATA100','write']));
+
+  fPolicy.addPolicy(stRoleRules, 'g', '_,_');
+  Assert.AreEqual(True, fPolicy.policyExists(['g','_','_']));
 end;
 
 procedure TTestPolicyManager.testRoles;
@@ -97,6 +130,12 @@ begin
   Assert.AreEqual(2, list.Count, 'Count');
   Assert.AreEqual('g, alice, admin, domain1', list.Items[0], 'Line 1');
   Assert.AreEqual('g, bob, admin, domain2', list.Items[1], 'Line 2');
+end;
+
+procedure TTestPolicyManager.testRolesExist;
+begin
+  fPolicy.addPolicy(stRoleRules, 'g', '_,_');
+  Assert.AreEqual(True, fPolicy.roleExists(['g','_','_']));
 end;
 
 procedure TTestPolicyManager.testSection;

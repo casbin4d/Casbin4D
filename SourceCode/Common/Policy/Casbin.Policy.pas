@@ -17,8 +17,9 @@ interface
 
 uses
   Casbin.Core.Base.Types, Casbin.Policy.Types, Casbin.Parser.Types,
-  Casbin.Parser.AST.Types, System.Generics.Collections,
-  Casbin.Adapter.Policy.Types, System.Rtti, System.Types, System.Classes;
+  Casbin.Parser.AST.Types, Casbin.Adapter.Policy.Types, System.Rtti,
+  System.Types, System.Classes, Casbin.Model.Sections.Types,
+  System.Generics.Collections;
 
 type
   TPolicyManager = class(TBaseInterfacedObject, IPolicyManager)
@@ -38,11 +39,15 @@ type
 {$REGION 'Interface'}
     function section (const aSlim: Boolean = true): string;
     function policies: TList<string>;
-    procedure add(const aTag: string);
     procedure load (const aFilter: TFilterArray = []);
+
     function policy(const aFilter: TFilterArray = []): string;
     procedure clear;
     function policyExists(const aFilter: TFilterArray = []): Boolean;
+    procedure addPolicy (const aSection: TSectionType; const aTag: string;
+                              const aAssertion: string); overload;
+    procedure addPolicy (const aSection: TSectionType;
+                              const aAssertion: string); overload;
     procedure remove(const aPolicyDefinition: string); overload;
     procedure remove (const aPolicyDefinition: string; const aFilter: string);
                                                                 overload;
@@ -83,21 +88,16 @@ type
 implementation
 
 uses
-  Casbin.Adapter.Filesystem.Policy, Casbin.Exception.Types,
-  Casbin.Parser, Casbin.Core.Utilities, Casbin.Model.Sections.Types,
-  Casbin.Core.Defaults, System.SysUtils, System.StrUtils,
-  Casbin.Model.Sections.Default, Casbin.Adapter.Memory.Policy;
+  Casbin.Adapter.Filesystem.Policy, Casbin.Exception.Types, Casbin.Parser,
+  Casbin.Core.Utilities, Casbin.Core.Defaults, System.SysUtils,
+  System.StrUtils, Casbin.Model.Sections.Default, Casbin.Adapter.Memory.Policy,
+  Casbin.Parser.AST;
 
 { TPolicyManager }
 
 constructor TPolicyManager.Create(const aPolicy: string);
 begin
   Create(TPolicyFileAdapter.Create(aPolicy));
-end;
-
-procedure TPolicyManager.add(const aTag: string);
-begin
-  fAdapter.add(aTag);
 end;
 
 procedure TPolicyManager.addLink(const aBottom, aTop: string);
@@ -116,14 +116,14 @@ begin
   if not Assigned(bottomNode) then
   begin
     bottomNode:=TRoleNode.Create(aBottom, aBottomDomain);
-    fRolesNodes.Add(bottomNode.ID, bottomNode);
+    fRolesNodes.add(bottomNode.ID, bottomNode);
   end;
 
   topNode:=findRolesNode(aTopDomain, aTop);
   if not Assigned(topNode) then
   begin
     topNode:=TRoleNode.Create(aTop, aTopDomain);
-    fRolesNodes.Add(topNode.ID, topNode);
+    fRolesNodes.add(topNode.ID, topNode);
   end;
 
   if not fRolesLinks.ContainsKey(bottomNode.ID) then
@@ -131,14 +131,60 @@ begin
     IDList:=TStringList.Create;
     IDList.Sorted:=true;
     IDList.CaseSensitive:=False;
-    fRolesLinks.Add(bottomNode.ID, IDList);
+    fRolesLinks.add(bottomNode.ID, IDList);
   end;
 
   IDList:=fRolesLinks.Items[bottomNode.ID];
 
   if IDList.IndexOf(topNode.id)=-1 then
-    IDList.Add(topNode.ID);
+    IDList.add(topNode.ID);
 
+end;
+
+procedure TPolicyManager.addPolicy(const aSection: TSectionType;
+  const aAssertion: string);
+var
+  arrStr: TArray<string>;
+  tag: string;
+  passAssertion: string;
+  i: integer;
+begin
+  if trim(aAssertion)='' then
+    raise ECasbinException.Create('The Assertion is empty');
+  arrStr:=aAssertion.Split([',']);
+  if Length(arrStr)<=1 then
+    raise ECasbinException.Create('The Assertion '+aAssertion+' is wrong');
+  tag:=arrStr[0];
+  passAssertion:=string.Join(',', arrStr, 1, Length(arrStr)-1);
+
+  addPolicy(aSection, tag, passAssertion);
+end;
+
+procedure TPolicyManager.addPolicy(const aSection: TSectionType; const aTag,
+  aAssertion: string);
+var
+  header: THeaderNode;
+  child: TChildNode;
+  assertion: string;
+  foundHeader: Boolean;
+  section: TSection;
+begin
+  foundHeader:=False;
+  if trim(aTag)='' then
+    raise ECasbinException.Create('The Tag is empty');
+  if trim(aAssertion)='' then
+    raise ECasbinException.Create('The Assertion is empty');
+  if not ((aSection=stDefault) or (aSection=stPolicyRules) or
+                                            (aSection=stRoleRules)) then
+    raise ECasbinException.Create('Wrong section type');
+
+  assertion:= Trim(aTag)+','+trim(aAssertion);
+  fAdapter.add(assertion);
+  fParser:=TParser.Create(fAdapter.toOutputString, ptPolicy);
+  fParser.parse;
+  if fParser.Status=psError then
+    raise ECasbinException.Create('Parsing error in Model: '+fParser.ErrorMessage);
+  fNodes:=fParser.Nodes;
 end;
 
 procedure TPolicyManager.addLink(const aBottom, aTopDomain, aTop: string);
@@ -153,6 +199,7 @@ end;
 
 procedure TPolicyManager.clearRoles;
 begin
+
   fRolesLinks.Clear;
   fRolesNodes.Clear;
 end;
@@ -547,6 +594,9 @@ begin
       Break;
 
   end;
+
+  if not Result then
+    Result:=roleExists(aFilter);
 end;
 
 procedure TPolicyManager.remove(const aPolicyDefinition: string);

@@ -40,7 +40,10 @@ type
     function section (const aSlim: Boolean = true): string;
 
     function policies: TList<string>;
-    procedure add (const aTag: string);
+    procedure addPolicy (const aSection: TSectionType; const aTag: string;
+                              const aAssertion: string); overload;
+    procedure addPolicy (const aSection: TSectionType;
+                              const aAssertion: string); overload;
     procedure load (const aFilter: TFilterArray = []);
     function policy (const aFilter: TFilterArray = []): string;
     procedure clear;

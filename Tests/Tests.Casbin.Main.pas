@@ -490,6 +490,10 @@ type
     procedure testEnforceABAC(const aModelFile, aPolicyFile, aEnforceParams: string;
         const aOwner: string; const aResult: boolean);
 
+    [Test]
+    ///////////////////////////////////////////////
+    procedure testEnforceRBACInMemoryIndeterminate;
+
 
   end;
 
@@ -497,7 +501,7 @@ implementation
 
 uses
   Casbin.Model.Types, Casbin.Policy.Types, Casbin.Model, Casbin.Policy,
-  Casbin, SysUtils;
+  Casbin, SysUtils, Casbin.Model.Sections.Types;
 
 procedure TTestCasbin.Setup;
 begin
@@ -561,6 +565,24 @@ begin
 end;
 
 
+
+procedure TTestCasbin.testEnforceRBACInMemoryIndeterminate;
+var
+  model: IModel;
+  casbin: ICasbin;
+begin
+  model:=TModel.Create;
+  model.addDefinition(stRequestDefinition, 'r=sub,obj, act');
+  model.addDefinition(stPolicyDefinition, 'p', 'sub,obj,act');
+  model.addDefinition(stRoleDefinition,'g', '_,_');
+  model.addDefinition(stPolicyEffect, 'e','some(where (p.eft == allow))');
+  model.addDefinition(stMatchers,'m',
+                      'g(r.sub, p.sub) && r.obj==p.obj && r.act==p.act');
+  casbin:=TCasbin.Create(model, '');
+  casbin.Policy.addPolicy(stPolicyRules,'p','alice,data1,invalid');
+
+  Assert.IsFalse(casbin.enforce(['alice','data1','read']));
+end;
 
 procedure TTestCasbin.testFileConstructor;
 var

@@ -17,7 +17,7 @@ interface
 
 uses
   Casbin.Core.Base.Types, Casbin.Types, Casbin.Model.Types,
-  Casbin.Policy.Types, Casbin.Adapter.Types, Casbin.Core.Logger.Types, Casbin.Functions.Types;
+  Casbin.Adapter.Types, Casbin.Core.Logger.Types, Casbin.Functions.Types, Casbin.Policy.Types;
 
 type
   TCasbin = class (TBaseInterfacedObject, ICasbin)
@@ -49,6 +49,10 @@ type
     constructor Create; overload;
     constructor Create(const aModelFile, aPolicyFile: string); overload;  //PALOFF
     constructor Create(const aModel: IModel; const aPolicyAdapter: IPolicyManager);
+        overload;
+    constructor Create(const aModelFile: string; const aPolicyAdapter: IPolicyManager);
+        overload;
+    constructor Create(const aModel: IModel; const aPolicyFile: string);
         overload;
   end;
 
@@ -108,6 +112,19 @@ constructor TCasbin.Create;
 begin
   Create(TModel.Create(TMemoryAdapter.Create), TPolicyManager.Create(
                                                   TPolicyMemoryAdapter.Create));
+end;
+
+constructor TCasbin.Create(const aModelFile: string;
+  const aPolicyAdapter: IPolicyManager);
+var
+  model: IModel;
+begin
+  if trim(aModelFile)='' then
+    model:=TModel.Create(TMemoryAdapter.Create)
+  else
+    model:=TModel.Create(aModelFile);
+
+  Create(model, aPolicyAdapter);
 end;
 
 function TCasbin.enforce(const aParams: TEnforceParameters;
@@ -333,6 +350,18 @@ begin
   if not Assigned(aValue) then
     raise ECasbinException.Create('Policy Manager in nil');
   fPolicy:=aValue;
+end;
+
+constructor TCasbin.Create(const aModel: IModel; const aPolicyFile: string);
+var
+  policy: IPolicyManager;
+begin
+  if Trim(aPolicyFile)='' then
+    policy:=TPolicyManager.Create(TPolicyMemoryAdapter.Create)
+  else
+    policy:=TPolicyManager.Create(aPolicyFile);
+
+  Create(aModel, policy);
 end;
 
 initialization

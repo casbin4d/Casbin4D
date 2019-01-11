@@ -43,7 +43,7 @@ type
 implementation
 
 uses
-  Casbin.Effect.Types, Casbin.Effect;
+  Casbin.Effect.Types, Casbin.Effect, System.SysUtils;
 
 procedure TTestEffect.Setup;
 begin
@@ -171,8 +171,14 @@ begin
 end;
 
 procedure TTestEffect.testUnknown;
+var
+  proc: TProc;
 begin
-  Assert.AreEqual(False, mergeEffects(ecUnknown, []));
+  proc:=procedure
+        begin
+          mergeEffects(ecUnknown, []);
+        end;
+  Assert.WillRaise(proc);
 end;
 
 initialization

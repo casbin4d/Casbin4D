@@ -23,6 +23,9 @@ function mergeEffects(const aEffectCondition: TEffectCondition;
 
 implementation
 
+uses
+  System.SysUtils, Casbin.Exception.Types;
+
 function mergeEffects(const aEffectCondition: TEffectCondition;
   const aEffects: TEffectArray): Boolean;
 var
@@ -81,7 +84,10 @@ begin
                         end;
                       end;
 
-    ecUnknown: result:=False;
+    ecUnknown: begin
+                 result:=False;
+                 raise ECasbinException.Create('Unknown effector');
+               end;
   end;
 end;
 

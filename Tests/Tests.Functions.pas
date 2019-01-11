@@ -169,6 +169,7 @@ begin
         var
           func: TCasbinFunc;
         begin
+          func:=nil;
           fFunctions.registerFunction('', func);
         end;
   Assert.WillRaise(proc);

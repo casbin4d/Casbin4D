@@ -147,7 +147,6 @@ var
   arrStr: TArray<string>;
   tag: string;
   passAssertion: string;
-  i: integer;
 begin
   if trim(aAssertion)='' then
     raise ECasbinException.Create('The Assertion is empty');
@@ -163,13 +162,8 @@ end;
 procedure TPolicyManager.addPolicy(const aSection: TSectionType; const aTag,
   aAssertion: string);
 var
-  header: THeaderNode;
-  child: TChildNode;
   assertion: string;
-  foundHeader: Boolean;
-  section: TSection;
 begin
-  foundHeader:=False;
   if trim(aTag)='' then
     raise ECasbinException.Create('The Tag is empty');
   if trim(aAssertion)='' then

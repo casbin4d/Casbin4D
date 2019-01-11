@@ -68,7 +68,7 @@ begin
     raise ECasbinException.Create('The Assertion is empty');
   arrStr:=aAssertion.Split(['=']);
   if Length(arrStr)<>2 then
-    raise ECasbinException.Create('The Assestion '+aAssertion+' is wrong');
+    raise ECasbinException.Create('The Assertion '+aAssertion+' is wrong');
   addDefinition(aSection, arrStr[0], arrStr[1]);
 end;
 
@@ -76,7 +76,6 @@ procedure TModel.addDefinition(const aSection: TSectionType; const aTag,
   aAssertion: string);
 var
   header: THeaderNode;
-  child: TChildNode;
   assertion: string;
   foundHeader: Boolean;
   section: TSection;

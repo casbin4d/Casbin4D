@@ -25,8 +25,13 @@ type
     function section (const aSection: TSectionType;
                                         const aSlim: Boolean = true): string;
     function assertions (const aSection: TSectionType): TList<string>;
+    procedure addDefinition (const aSection: TSectionType; const aTag: string;
+                              const aAssertion: string); overload;
+    procedure addDefinition (const aSection: TSectionType;
+                              const aAssertion: string); overload;
     function assertionExists (const aAssertion: string): Boolean;
     function effectCondition: TEffectCondition;
+    function toOutputString: string;
   end;
 
 implementation

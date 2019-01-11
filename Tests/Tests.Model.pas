@@ -50,6 +50,29 @@ type
     [TestCase ('Effect','e = some(where (p.eft == allow))', '#')]
     [TestCase ('Matchers','m = r.sub == p.sub && r.obj == p.obj && r.act == p.act#true', '#')]
     procedure testAssertionExists(const aAssertion: string; const aResult: boolean);
+
+    [Test]
+    [TestCase ('Request','stRequestDefinition#r#a,b,c', '#')]
+    procedure testAddDefinitionFull(const aSection: TSectionType; const aTag:
+        string; const aAssertion: string);
+
+    [Test]
+    [TestCase ('Request','stRequestDefinition#r=a,b,c', '#')]
+    procedure testAddDefinitionCompact(const aSection: TSectionType;
+                                                const aAssertion: string);
+
+    [Test]
+    procedure testAddWrongAssertionType;
+
+    [Test]
+    procedure testAddEmptyAssertion;
+
+    [Test]
+    procedure testAddAssertionString;
+
+    [Test]
+    procedure testToOutputString;
+
   end;
 
 implementation
@@ -57,6 +80,61 @@ implementation
 uses
   Casbin.Adapter.Filesystem, Casbin.Model, System.SysUtils,
   System.Generics.Collections, System.Classes, Casbin.Effect.Types;
+
+procedure TTestModel.testAddAssertionString;
+begin
+  fModel.addDefinition(stRoleDefinition,'g','_,_');
+  Assert.AreEqual('[request_definition]'+sLineBreak+
+                  'r=sub,obj,act'+sLineBreak+sLineBreak+
+
+                  '[policy_definition]'+sLineBreak+
+                  'p=sub,obj,act'+sLineBreak+sLineBreak+
+
+                  '[role_definition]'+sLineBreak+
+                  'g=_,_'+sLineBreak+sLineBreak+
+                  '[policy_effect]'+sLineBreak+
+                  'e=some(where(p.eft==allow))'+sLineBreak+sLineBreak+
+
+                  '[matchers]'+sLineBreak+
+            'm = r.sub == p.sub && r.obj == p.obj && r.act == p.act',
+                                      Trim(fModel.toOutputString));
+end;
+
+procedure TTestModel.testAddDefinitionCompact(const aSection: TSectionType;
+  const aAssertion: string);
+begin
+  fModel.addDefinition(aSection, aAssertion);
+  Assert.IsTrue(fModel.assertionExists(Trim(aAssertion)));
+end;
+
+procedure TTestModel.testAddDefinitionFull(const aSection: TSectionType; const
+    aTag: string; const aAssertion: string);
+begin
+  fModel.addDefinition(aSection, aTag, aAssertion);
+  Assert.IsTrue(fModel.assertionExists(Trim(aTag)+'='+Trim(aAssertion)));
+end;
+
+procedure TTestModel.testAddEmptyAssertion;
+var
+  proc: TProc;
+begin
+  proc:=procedure
+        begin
+          fModel.addDefinition(stRequestDefinition, '');
+        end;
+  Assert.WillRaise(proc);
+end;
+
+procedure TTestModel.testAddWrongAssertionType;
+var
+  proc: TProc;
+begin
+  proc:=procedure
+        begin
+          fModel.addDefinition(stUnknown, '');
+        end;
+  Assert.WillRaise(proc);
+end;
 
 procedure TTestModel.Setup;
 begin
@@ -121,6 +199,22 @@ begin
                 'm = r.sub == p.sub && r.obj == p.obj && r.act == p.act';
   end;
   Assert.AreEqual(trim(expected), Trim(fModel.Section(aSection)));
+end;
+
+procedure TTestModel.testToOutputString;
+begin
+  Assert.AreEqual('[request_definition]'+sLineBreak+
+                  'r=sub,obj,act'+sLineBreak+sLineBreak+
+
+                  '[policy_definition]'+sLineBreak+
+                  'p=sub,obj,act'+sLineBreak+sLineBreak+
+
+                  '[policy_effect]'+sLineBreak+
+                  'e=some(where(p.eft==allow))'+sLineBreak+sLineBreak+
+
+                  '[matchers]'+sLineBreak+
+            'm = r.sub == p.sub && r.obj == p.obj && r.act == p.act',
+                                      Trim(fModel.toOutputString));
 end;
 
 initialization

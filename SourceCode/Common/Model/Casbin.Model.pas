@@ -34,7 +34,12 @@ type
         string;
     function assertions(const aSection: TSectionType): TList<System.string>;
     function effectCondition: TEffectCondition;
+    procedure addDefinition (const aSection: TSectionType; const aTag: string;
+                              const aAssertion: string); overload;
+    procedure addDefinition (const aSection: TSectionType;
+                              const aAssertion: string); overload;
     function assertionExists (const aAssertion: string): Boolean;
+    function toOutputString: string;
 {$ENDREGION}
   public
     constructor Create(const aModel: string); overload;
@@ -46,13 +51,69 @@ implementation
 
 uses
   Casbin.Exception.Types, Casbin.Adapter.Filesystem,
-  System.IOUtils, System.Classes, Casbin.Parser, Casbin.Core.Utilities;
+  System.IOUtils, System.Classes, Casbin.Parser, Casbin.Core.Utilities,
+  SysUtils, Casbin.Parser.AST, Casbin.Model.Sections.Default;
 
 constructor TModel.Create(const aModel: string);
 begin
   Create(TFileAdapter.Create(aModel));
 end;
 
+procedure TModel.addDefinition(const aSection: TSectionType;
+  const aAssertion: string);
+var
+  arrStr: TArray<string>;
+begin
+  if trim(aAssertion)='' then
+    raise ECasbinException.Create('The Assertion is empty');
+  arrStr:=aAssertion.Split(['=']);
+  if Length(arrStr)<>2 then
+    raise ECasbinException.Create('The Assestion '+aAssertion+' is wrong');
+  addDefinition(aSection, arrStr[0], arrStr[1]);
+end;
+
+procedure TModel.addDefinition(const aSection: TSectionType; const aTag,
+  aAssertion: string);
+var
+  header: THeaderNode;
+  child: TChildNode;
+  assertion: string;
+  foundHeader: Boolean;
+  section: TSection;
+begin
+  foundHeader:=False;
+  if trim(aTag)='' then
+    raise ECasbinException.Create('The Tag is empty');
+  if trim(aAssertion)='' then
+    raise ECasbinException.Create('The Assertion is empty');
+  if (aSection=stDefault) or (aSection=stUnknown) or
+      (aSection=stPolicyRules) or (aSection=stRoleRules) then
+    raise ECasbinException.Create('Wrong section type');
+
+  assertion:= Trim(aTag)+'='+trim(aAssertion);
+  if assertionExists(assertion) then
+    Exit
+  else
+  begin
+    for header in fNodes.Headers do
+      if header.SectionType=aSection then
+      begin
+        addAssertion(header, assertion);
+        Exit;
+      end;
+    if not foundHeader then
+    begin
+      section:=createDefaultSection(aSection);
+      header:=THeaderNode.Create;
+      header.Value:=section.Header;
+      header.SectionType:=aSection;
+      fNodes.Headers.Add(header);
+
+      addAssertion(header, assertion);
+      section.Free;
+    end;
+  end;
+end;
 
 function TModel.assertionExists(const aAssertion: string): Boolean;
 var
@@ -174,6 +235,24 @@ begin
       strList.Free;
       Exit;
     end;
+end;
+
+function TModel.toOutputString: string;
+var
+  secType: TSectionType;
+begin
+  for secType in modelSections do
+  begin
+    if (secType=stRoleDefinition) then
+    begin
+        if (section(stRoleDefinition, False))<>'' then
+        begin
+          Result:=Result+section(secType, false)+sLineBreak;
+        end;
+    end
+    else
+      Result:=Result+section(secType, false)+sLineBreak;
+  end;
 end;
 
 end.

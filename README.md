@@ -124,11 +124,11 @@ What Casbin does:
 What Casbin does NOT do:
 
 1. authentication (aka verify ``username`` and ``password`` when a user logs in)
-2. manage the list of users or roles. I believe it's more convenient for the project itself to manage these entities. Users usually have their passwords, and Casbin is not designed as a password container. However, Casbin stores the user-role mapping for the RBAC scenario 
+2. manage the list of users or roles. This is left to the application that uses Casbin. Keep in mind that Casbin is not designed as a password container. However, Casbin stores the user-role mapping for the RBAC scenario 
 
 ## Installation
 
-Casbin4D comes in a package (currently for Delphi 10.3 Rio) and you can install it in the IDE. However, there are no visual components which means that you can use the units independently of packages. Just import the units in your project
+Casbin4D comes in a package (currently for Delphi 10.3 Rio) and you can install it in the IDE. However, there are no visual components which means that you can use the units independently of packages. Just import the units in your project (assuming you do not mind the number of them)
 
 ## Documentation
 
@@ -140,7 +140,7 @@ You can also use the online editor (http://casbin.org/editor/) to write your Cas
 
 ## Demos
 
-Please see the /Demos folder. The /Examples folder contains the example configuration and policy files from the original Go implementation
+Please see the Demos folder. The Examples folder contains the example configuration and policy files from the original Go implementation
 
 ## Get started
 

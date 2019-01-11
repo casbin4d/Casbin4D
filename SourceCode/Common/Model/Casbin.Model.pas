@@ -44,6 +44,7 @@ type
   public
     constructor Create(const aModel: string); overload;
     constructor Create(const aAdapter: IAdapter); overload;
+    constructor Create; overload;
     destructor Destroy; override;
   end;
 
@@ -52,7 +53,7 @@ implementation
 uses
   Casbin.Exception.Types, Casbin.Adapter.Filesystem,
   System.IOUtils, System.Classes, Casbin.Parser, Casbin.Core.Utilities,
-  SysUtils, Casbin.Parser.AST, Casbin.Model.Sections.Default;
+  SysUtils, Casbin.Parser.AST, Casbin.Model.Sections.Default, Casbin.Adapter.Memory;
 
 constructor TModel.Create(const aModel: string);
 begin
@@ -178,6 +179,11 @@ begin
     raise ECasbinException.Create('Parsing error in Model: '+fParser.ErrorMessage);
   fNodes:=fParser.Nodes;
   fAssertions:=TList<string>.Create;
+end;
+
+constructor TModel.Create;
+begin
+  Create(TMemoryAdapter.Create);
 end;
 
 destructor TModel.Destroy;

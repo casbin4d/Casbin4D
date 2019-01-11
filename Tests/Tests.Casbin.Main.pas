@@ -609,8 +609,6 @@ begin
   model.addDefinition(stMatchers,'m',
                       'g(r.sub, p.sub) && r.obj==p.obj && r.act==p.act');
 
-  var str:=model.toOutputString;
-
   casbin:=TCasbin.Create(model, '');
   casbin.Policy.addPolicy(stPolicyRules,'p','alice,data1,read');
   casbin.Policy.addPolicy(stPolicyRules,'p','bob,data2, write');
@@ -622,10 +620,6 @@ begin
   // casbin.Policy.addLink('alice', 'data2_admin');
   // **** BUT YOU SHOULDN'T ****
   // Always, add roles using AddPolicy as in the example
-
-
-   var str2:=casbin.Policy.Section;
-   var l:=casbin.Policy.linkExists('alice','data2_admin');
 
   Assert.AreEqual(aResult, casbin.enforce(aEnforceParams.Split([','])));
 end;

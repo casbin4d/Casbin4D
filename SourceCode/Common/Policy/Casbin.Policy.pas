@@ -38,6 +38,8 @@ type
   private
 {$REGION 'Interface'}
     function section (const aSlim: Boolean = true): string;
+    function toOutputString: string;
+
     function policies: TList<string>;
     procedure load (const aFilter: TFilterArray = []);
 
@@ -179,6 +181,7 @@ begin
   if fParser.Status=psError then
     raise ECasbinException.Create('Parsing error in Model: '+fParser.ErrorMessage);
   fNodes:=fParser.Nodes;
+  loadRoles;
 end;
 
 procedure TPolicyManager.addLink(const aBottom, aTopDomain, aTop: string);
@@ -193,7 +196,6 @@ end;
 
 procedure TPolicyManager.clearRoles;
 begin
-
   fRolesLinks.Clear;
   fRolesNodes.Clear;
 end;
@@ -371,19 +373,22 @@ begin
   if not Assigned(rightNode) then
     Exit;
 
-  if fRolesLinks.Items[leftNode.ID].IndexOf(rightNode.ID)>-1 then
+  if fRolesLinks.ContainsKey(leftNode.ID) then
   begin
-    Result:=True;
-    Exit;
-  end
-  else
-  begin
-    for item in fRolesLinks.Items[leftNode.ID] do
+    if fRolesLinks.Items[leftNode.ID].IndexOf(rightNode.ID)>-1 then
     begin
-      leftNode:=fRolesNodes.Items[item];
+      Result:=True;
+      Exit;
+    end
+    else
+    begin
+      for item in fRolesLinks.Items[leftNode.ID] do
+      begin
+        leftNode:=fRolesNodes.Items[item];
 
-      Result:=linkExists(leftNode.Domain, leftNode.Value,
-                            rightNode.Domain, rightNode.Value);
+        Result:=linkExists(leftNode.Domain, leftNode.Value,
+                              rightNode.Domain, rightNode.Value);
+      end;
     end;
   end;
 end;
@@ -736,6 +741,11 @@ begin
       strList.Free;
       Exit;
     end;
+end;
+
+function TPolicyManager.toOutputString: string;
+begin
+  Result:=section;
 end;
 
 end.

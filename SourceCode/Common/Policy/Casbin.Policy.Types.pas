@@ -38,7 +38,9 @@ type
   IPolicyManager = interface (IBaseInterface)
     ['{B983A830-6107-4283-A45D-D74CDBB5E2EA}']
     function section (const aSlim: Boolean = true): string;
+    function toOutputString: string;
 
+    // Policies
     function policies: TList<string>;
     procedure addPolicy (const aSection: TSectionType; const aTag: string;
                               const aAssertion: string); overload;

@@ -22,7 +22,6 @@ uses
 type
   TPolicyMemoryAdapter = class (TBaseAdapter, IPolicyAdapter)
   private
-    fContent: TStringList;
     procedure resetSections;
   protected
 {$REGION 'IPolicyAdapter'}
@@ -39,7 +38,6 @@ type
   public
 {$REGION 'IAdapter'}
     constructor Create;
-    destructor Destroy; override;
     procedure load(const aFilter: TFilterArray = []); override;
     procedure save; override;
 {$ENDREGION}
@@ -50,24 +48,16 @@ type
   end;
 implementation
 
-
 procedure TPolicyMemoryAdapter.add(const aTag: string);
 begin
-  if fContent.IndexOf(aTag)=-1 then
-    fContent.Add(aTag);
+  if getAssertions.IndexOf(aTag)=-1 then
+    getAssertions.Add(aTag);
 end;
 
 constructor TPolicyMemoryAdapter.Create;
 begin
   inherited;
-  fContent:=TstringList.Create;
   resetSections;
-end;
-
-destructor TPolicyMemoryAdapter.Destroy;
-begin
-  fContent.Free;
-  inherited;
 end;
 
 function TPolicyMemoryAdapter.getAutoSave: Boolean;
@@ -88,15 +78,14 @@ end;
 procedure TPolicyMemoryAdapter.load(const aFilter: TFilterArray);
 begin
   inherited;
-  resetSections;
   clear;
-  getAssertions.AddRange(fContent.ToStringArray);
+  resetSections;
 end;
 
 procedure TPolicyMemoryAdapter.remove(const aPolicyDefinition: string);
 begin
-  if fContent.IndexOf(aPolicyDefinition)>-1 then
-    fContent.Delete(fContent.IndexOf(aPolicyDefinition));
+  if getAssertions.IndexOf(aPolicyDefinition)>-1 then
+    getAssertions.Delete(getAssertions.IndexOf(aPolicyDefinition));
 end;
 
 procedure TPolicyMemoryAdapter.remove(const aPolicyDefinition, aFilter: string);
@@ -106,9 +95,9 @@ end;
 
 procedure TPolicyMemoryAdapter.resetSections;
 begin
-  if fContent.Count=0 then
+  if getAssertions.Count=0 then
   begin
-    fContent.Add('[default]');
+    getAssertions.Add('[default]');
   end;
 end;
 

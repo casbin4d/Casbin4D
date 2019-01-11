@@ -60,6 +60,10 @@ type
                                  'p, data2_admin, data2, write, allow'+sLineBreak+
                                  'p, alice, data2, write, deny','#')]
     procedure testload(const aFilter, aExpected: string);
+
+    [Test]
+    [TestCase ('Add.1', 'p,a,b,c#p,a,b,c','#')]
+    procedure testAdd(const aAssertion, aExpected: string);
   end;
 
 implementation
@@ -76,6 +80,12 @@ procedure TTestPolicyFileAdapter.TearDown;
 begin
 end;
 
+
+procedure TTestPolicyFileAdapter.testAdd(const aAssertion, aExpected: string);
+begin
+  fFilesystem.add(aAssertion);
+  Assert.AreEqual(Trim(aExpected), trim(fFilesystem.toOutputString));
+end;
 
 procedure TTestPolicyFileAdapter.testAutoSave;
 begin

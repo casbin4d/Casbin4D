@@ -57,8 +57,8 @@ uses
 
 procedure TPolicyFileAdapter.add(const aTag: string);
 begin
-  {TODO -oOwner -cGeneral : Add PolicyFilterAdapter.Add}
-  raise Exception.Create('Not Implemented Yet');
+  if Trim(aTag)<>'' then
+    getAssertions.Add(Trim(aTag));
 end;
 
 constructor TPolicyFileAdapter.Create(const aFilename: string);

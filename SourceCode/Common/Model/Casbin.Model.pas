@@ -91,6 +91,11 @@ begin
     raise ECasbinException.Create('Wrong section type');
 
   assertion:= Trim(aTag)+'='+trim(aAssertion);
+
+  if not (aSection=stMatchers) then
+    while Pos(#32, assertion, findStartPos)<>0 do
+      Delete(assertion, Pos(#32, assertion, findStartPos), 1);
+
   if assertionExists(assertion) then
     Exit
   else

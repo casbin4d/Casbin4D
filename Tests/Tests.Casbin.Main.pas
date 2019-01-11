@@ -494,7 +494,20 @@ type
     ///////////////////////////////////////////////
     procedure testEnforceRBACInMemoryIndeterminate;
 
-
+    [Test]
+{$REGION 'RBACModelInMemory'}
+    // From model_test.go - TestRBACModelInMemory
+    [TestCase ('RBACInMemory.1', 'alice,data1,read#true', '#')]
+    [TestCase ('RBACInMemory.2', 'alice,data1,write#false', '#')]
+    [TestCase ('RBACInMemory.3', 'alice,data2,read#true', '#')]
+    [TestCase ('RBACInMemory.4', 'alice,data2,write#true', '#')]
+    [TestCase ('RBACInMemory.5', 'bob,data1,read#false', '#')]
+    [TestCase ('RBACInMemory.6', 'bob,data1,write#false', '#')]
+    [TestCase ('RBACInMemory.7', 'bob,data2,read#false', '#')]
+    [TestCase ('RBACInMemory.8', 'bob,data2,write#true', '#')]
+    procedure testEnforceRBACModelInMemory (const aEnforceParams: string;
+                              const aResult: Boolean);
+{$ENDREGION}
   end;
 
 implementation
@@ -564,8 +577,6 @@ begin
   casbin:=nil;
 end;
 
-
-
 procedure TTestCasbin.testEnforceRBACInMemoryIndeterminate;
 var
   model: IModel;
@@ -582,6 +593,41 @@ begin
   casbin.Policy.addPolicy(stPolicyRules,'p','alice,data1,invalid');
 
   Assert.IsFalse(casbin.enforce(['alice','data1','read']));
+end;
+
+procedure TTestCasbin.testEnforceRBACModelInMemory(const aEnforceParams: string;
+  const aResult: Boolean);
+var
+  model: IModel;
+  casbin: ICasbin;
+begin
+  model:=TModel.Create;
+  model.addDefinition(stRequestDefinition, 'r=sub,obj, act');
+  model.addDefinition(stPolicyDefinition, 'p', 'sub,obj,act');
+  model.addDefinition(stRoleDefinition,'g', '_,_');
+  model.addDefinition(stPolicyEffect, 'e','some(where (p.eft == allow))');
+  model.addDefinition(stMatchers,'m',
+                      'g(r.sub, p.sub) && r.obj==p.obj && r.act==p.act');
+
+  var str:=model.toOutputString;
+
+  casbin:=TCasbin.Create(model, '');
+  casbin.Policy.addPolicy(stPolicyRules,'p','alice,data1,read');
+  casbin.Policy.addPolicy(stPolicyRules,'p','bob,data2, write');
+  casbin.Policy.addPolicy(stPolicyRules,'p','data2_admin,data2,read');
+  casbin.Policy.addPolicy(stPolicyRules,'p','data2_admin,data2,write');
+
+  casbin.Policy.addPolicy(stRoleRules,'g','alice, data2_admin');
+  // You may be tempted to write this:
+  // casbin.Policy.addLink('alice', 'data2_admin');
+  // **** BUT YOU SHOULDN'T ****
+  // Always, add roles using AddPolicy as in the example
+
+
+   var str2:=casbin.Policy.Section;
+   var l:=casbin.Policy.linkExists('alice','data2_admin');
+
+  Assert.AreEqual(aResult, casbin.enforce(aEnforceParams.Split([','])));
 end;
 
 procedure TTestCasbin.testFileConstructor;

@@ -93,6 +93,7 @@ type
     // Roles
     procedure clearRoles;
     function roles: TList<string>;
+    function roleExists (const aFilter: TFilterArray = []): Boolean;
 
     procedure addLink(const aBottom: string; const aTop: string); overload;
     procedure addLink(const aBottom: string;

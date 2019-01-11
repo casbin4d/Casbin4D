@@ -49,6 +49,7 @@ type
 
     procedure clearRoles;
     function roles: TList<string>;
+    function roleExists (const aFilter: TFilterArray = []): Boolean;
     procedure addLink(const aBottom: string; const aTop: string); overload;
     procedure addLink(const aBottom: string;
                       const aTopDomain: string; const aTop: string); overload;
@@ -556,6 +557,53 @@ end;
 procedure TPolicyManager.remove(const aPolicyDefinition, aFilter: string);
 begin
   fAdapter.remove(aPolicyDefinition, aFilter);
+end;
+
+function TPolicyManager.roleExists(const aFilter: TFilterArray): Boolean;
+var
+  i: Integer;
+  ruleItem: string;
+  test: string;
+  testRule: string;
+begin
+  Result:=False;
+  if Length(aFilter)=0 then
+    Exit;
+
+  testRule:=string.Join(',', aFilter);
+
+  while Pos(#32, testRule, findStartPos)<>0 do
+    Delete(testRule, Pos(#32, testRule, findStartPos), 1);
+
+  if UpperCase(testRule).StartsWith('P,') or
+       UpperCase(testRule).StartsWith('G,') or
+         UpperCase(testRule).StartsWith('G2,') then
+  begin
+    i:=Pos(',', testRule, findStartPos);
+    Delete(testRule, findStartPos, i);
+  end;
+
+  for ruleItem in roles do
+  begin
+    test:=ruleItem;
+
+    while Pos(#32, test, findStartPos)<>0 do
+      Delete(test, Pos(#32, test, findStartPos), 1);
+
+    if UpperCase(test).StartsWith('P,') or
+         UpperCase(test).StartsWith('G,') or
+           UpperCase(test).StartsWith('G2,') then
+    begin
+      i:=Pos(',', test, findStartPos);
+      Delete(test, findStartPos, i);
+    end;
+
+    Result:=string.Compare(test, testRule, [coIgnoreCase]) = 0;
+
+    if Result then
+      Break;
+
+  end;
 end;
 
 function TPolicyManager.roles: TList<string>;

@@ -22,11 +22,8 @@ type
   TMemoryAdapter = class(TBaseAdapter)
   private
     procedure resetSections;
-  protected
-    fContent: TStringList; //PALOFF
    public
     constructor Create; overload;
-    destructor Destroy; override;
     procedure load(const aFilter: TFilterArray); override;
     procedure save; override;
   end;
@@ -36,22 +33,13 @@ implementation
 constructor TMemoryAdapter.Create;
 begin
   inherited;
-  fContent:=TStringList.Create;
   resetSections;
-end;
-
-destructor TMemoryAdapter.Destroy;
-begin
-  fContent.Free;
-  inherited;
 end;
 
 procedure TMemoryAdapter.load(const aFilter: TFilterArray);
 begin
   inherited;
   resetSections;
-  clear;
-  getAssertions.AddRange(fContent.ToStringArray);
 end;
 
 procedure TMemoryAdapter.save;
@@ -61,13 +49,13 @@ end;
 
 procedure TMemoryAdapter.resetSections;
 begin
-  if fContent.Count=0 then
+  if getAssertions.Count=0 then
   begin
-    fContent.Add('[request_definition]');
-    fContent.Add('[policy_definition]');
-    fContent.Add('[role_definition]');
-    fContent.Add('[policy_effect]');
-    fContent.Add('[matchers]');
+    getAssertions.Add('[request_definition]');
+    getAssertions.Add('[policy_definition]');
+    getAssertions.Add('[role_definition]');
+    getAssertions.Add('[policy_effect]');
+    getAssertions.Add('[matchers]');
   end;
 end;
 

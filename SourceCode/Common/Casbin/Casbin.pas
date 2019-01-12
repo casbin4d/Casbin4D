@@ -163,11 +163,6 @@ begin
 
     fLogger.log('   Resolving Request...');
 
-    // Check for builtin accounts
-    for item in builtinAccounts do
-      if requestStr.Contains(item) then
-        Exit;
-
     // Resolve Request
   {$IFDEF DEBUG}
     fLogger.log('   Request: '+requestStr);
@@ -217,7 +212,15 @@ begin
         fLogger.log('         '+item);
   {$ENDIF}
     if fModel.assertions(stMatchers).Count>0 then
-      matchString:=fModel.assertions(stMatchers).Items[0]
+    begin
+      matchString:=fModel.assertions(stMatchers).Items[0];
+
+      // Check for builtin accounts
+      for item in builtinAccounts do
+        if matchString.Contains(item) and requestStr.Contains(item) then
+          Exit;
+
+    end
     else
       matchString:='';
     for item in fPolicy.policies do

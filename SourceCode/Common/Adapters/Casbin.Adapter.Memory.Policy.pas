@@ -48,6 +48,9 @@ type
   end;
 implementation
 
+uses
+  System.SysUtils;
+
 procedure TPolicyMemoryAdapter.add(const aTag: string);
 begin
   if getAssertions.IndexOf(aTag)=-1 then
@@ -95,10 +98,12 @@ end;
 
 procedure TPolicyMemoryAdapter.resetSections;
 begin
-  if getAssertions.Count=0 then
-  begin
-    getAssertions.Add('[default]');
-  end;
+  if (getAssertions.Count=0) then
+     getAssertions.Add('[default]')
+  else
+  if ((getAssertions.Count>=1) and
+                    (uppercase(getAssertions.Items[0])<>'[DEFAULT]')) then
+    getAssertions.Insert(0, '[default]');
 end;
 
 procedure TPolicyMemoryAdapter.save;

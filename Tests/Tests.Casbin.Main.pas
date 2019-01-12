@@ -496,7 +496,7 @@ type
 
     [Test]
 {$REGION 'RBACModelInMemory'}
-    // From model_test.go - TestRBACModelInMemory
+    // From enforcer_test.go - TestRBACModelInMemory
     [TestCase ('RBACInMemory.1', 'alice,data1,read#true', '#')]
     [TestCase ('RBACInMemory.2', 'alice,data1,write#false', '#')]
     [TestCase ('RBACInMemory.3', 'alice,data2,read#true', '#')]
@@ -505,16 +505,70 @@ type
     [TestCase ('RBACInMemory.6', 'bob,data1,write#false', '#')]
     [TestCase ('RBACInMemory.7', 'bob,data2,read#false', '#')]
     [TestCase ('RBACInMemory.8', 'bob,data2,write#true', '#')]
+{$ENDREGION}
+    ///////////////////////////////////////////////
     procedure testEnforceRBACModelInMemory (const aEnforceParams: string;
                               const aResult: Boolean);
+{$REGION 'RBACModelInMemory2'}
+    // From enforcer_test.go - TestRBACModelInMemory2
+    [TestCase ('RBACInMemory2.1', 'alice,data1,read#true', '#')]
+    [TestCase ('RBACInMemory2.2', 'alice,data1,write#false', '#')]
+    [TestCase ('RBACInMemory2.3', 'alice,data2,read#true', '#')]
+    [TestCase ('RBACInMemory2.4', 'alice,data2,write#true', '#')]
+    [TestCase ('RBACInMemory2.5', 'bob,data1,read#false', '#')]
+    [TestCase ('RBACInMemory2.6', 'bob,data1,write#false', '#')]
+    [TestCase ('RBACInMemory2.7', 'bob,data2,read#false', '#')]
+    [TestCase ('RBACInMemory2.8', 'bob,data2,write#true', '#')]
 {$ENDREGION}
+    ///////////////////////////////////////////////
+    procedure testEnforceRBACModelInMemory2 (const aEnforceParams: string;
+                              const aResult: Boolean);
+{$REGION 'NotUsedRBACModelInMemory'}
+    // From enforcer_test.go - TestNotUsedRBACModelInMemory
+    [TestCase ('NotUsedRBACModelInMemory.1', 'alice,data1,read#true', '#')]
+    [TestCase ('NotUsedRBACModelInMemory.2', 'alice,data1,write#false', '#')]
+    [TestCase ('NotUsedRBACModelInMemory.3', 'alice,data2,read#false', '#')]
+    [TestCase ('NotUsedRBACModelInMemory.4', 'alice,data2,write#false', '#')]
+    [TestCase ('NotUsedRBACModelInMemory.5', 'bob,data1,read#false', '#')]
+    [TestCase ('NotUsedRBACModelInMemory.6', 'bob,data1,write#false', '#')]
+    [TestCase ('NotUsedRBACModelInMemory.7', 'bob,data2,read#false', '#')]
+    [TestCase ('NotUsedRBACModelInMemory.8', 'bob,data2,write#true', '#')]
+{$ENDREGION}
+    ///////////////////////////////////////////////
+    procedure testEnforceNotUsedRBACModelInMemory (const aEnforceParams: string;
+                              const aResult: Boolean);
+    [Test]
+    // From enforcer_test.go - TestEnableEnforce
+    ///////////////////////////////////////////////
+    procedure testEnableEnforce;
+
+    [Test]
+    // From enforcer_test.go - TestGetAndSetModel
+    ///////////////////////////////////////////////
+    procedure testGetAndSetModel;
+
+    [Test]
+    // From enforcer_test.go - TestGetAndSetAdapterInMem
+    ///////////////////////////////////////////////
+    procedure testGetAndSetAdapterInMem;
+
+    [Test]
+    // From enforcer_test.go - TestSetAdapterFromFile
+    ///////////////////////////////////////////////
+    procedure testGetAndSetAAdapterFromFile;
+
+    [Test]
+    // From enforcer_test.go - TestInitEmpty
+    ///////////////////////////////////////////////
+    procedure testInitEmpty;
   end;
 
 implementation
 
 uses
   Casbin.Model.Types, Casbin.Policy.Types, Casbin.Model, Casbin.Policy,
-  Casbin, SysUtils, Casbin.Model.Sections.Types;
+  Casbin, SysUtils, Casbin.Model.Sections.Types, Casbin.Adapter.Types, Casbin.Adapter.Filesystem, Casbin.Adapter.Policy.Types,
+  Casbin.Adapter.Filesystem.Policy;
 
 procedure TTestCasbin.Setup;
 begin
@@ -553,6 +607,37 @@ begin
   casbin:=nil;
 end;
 
+procedure TTestCasbin.testEnableEnforce;
+var
+  casbin: ICasbin;
+begin
+  casbin:=TCasbin.Create('..\..\..\Examples\Default\basic_model.conf',
+              '..\..\..\Examples\Default\basic_policy.csv');
+  casbin.Enabled:=False;
+
+  Assert.IsTrue(casbin.enforce(['alice','data1','read']));
+  Assert.IsTrue(casbin.enforce(['alice','data1','write']));
+  Assert.IsTrue(casbin.enforce(['alice','data2','read']));
+  Assert.IsTrue(casbin.enforce(['alice','data2','write']));
+  Assert.IsTrue(casbin.enforce(['bob','data1','read']));
+  Assert.IsTrue(casbin.enforce(['bob','data1','write']));
+  Assert.IsTrue(casbin.enforce(['bob','data2','read']));
+  Assert.IsTrue(casbin.enforce(['bob','data2','write']));
+
+  casbin.Enabled:=True;
+
+  Assert.IsTrue(casbin.enforce(['alice','data1','read']));
+  Assert.IsFalse(casbin.enforce(['alice','data1','write']));
+  Assert.IsFalse(casbin.enforce(['alice','data2','read']));
+  Assert.IsFalse(casbin.enforce(['alice','data2','write']));
+  Assert.IsFalse(casbin.enforce(['bob','data1','read']));
+  Assert.IsFalse(casbin.enforce(['bob','data1','write']));
+  Assert.IsFalse(casbin.enforce(['bob','data2','read']));
+  Assert.IsTrue(casbin.enforce(['bob','data2','write']));
+
+  casbin:=nil;
+end;
+
 procedure TTestCasbin.testEnforce(const aModelFile, aPolicyFile,
     aEnforceParams: string; const aResult: boolean);
 var
@@ -575,6 +660,27 @@ begin
   params:=aEnforceParams.Split([',']);
   Assert.AreEqual(aResult, casbin.enforce(params, aOwner));
   casbin:=nil;
+end;
+
+procedure TTestCasbin.testEnforceNotUsedRBACModelInMemory(
+  const aEnforceParams: string; const aResult: Boolean);
+var
+  model: IModel;
+  casbin: ICasbin;
+begin
+  model:=TModel.Create;
+  model.addDefinition(stRequestDefinition, 'r=sub,obj, act');
+  model.addDefinition(stPolicyDefinition, 'p', 'sub,obj,act');
+  model.addDefinition(stRoleDefinition,'g', '_,_');
+  model.addDefinition(stPolicyEffect, 'e','some(where (p.eft == allow))');
+  model.addDefinition(stMatchers,'m',
+                      'g(r.sub, p.sub) && r.obj==p.obj && r.act==p.act');
+
+  casbin:=TCasbin.Create(model, '');
+  casbin.Policy.addPolicy(stPolicyRules,'p','alice,data1,read');
+  casbin.Policy.addPolicy(stPolicyRules,'p','bob,data2, write');
+
+  Assert.AreEqual(aResult, casbin.enforce(aEnforceParams.Split([','])));
 end;
 
 procedure TTestCasbin.testEnforceRBACInMemoryIndeterminate;
@@ -624,6 +730,43 @@ begin
   Assert.AreEqual(aResult, casbin.enforce(aEnforceParams.Split([','])));
 end;
 
+procedure TTestCasbin.testEnforceRBACModelInMemory2(
+  const aEnforceParams: string; const aResult: Boolean);
+var
+  model: IModel;
+  casbin: ICasbin;
+begin
+  model:=TModel.Create;
+  model.addModel('[request_definition]'+sLineBreak+
+                 'r = sub, obj, act'+sLineBreak+
+
+                 '[policy_definition]'+sLineBreak+
+                 'p = sub, obj, act'+sLineBreak+
+
+                 '[role_definition]'+sLineBreak+
+                 'g = _, _'+sLineBreak+
+
+                 '[policy_effect]'+sLineBreak+
+                 'e = some(where (p.eft == allow))'+sLineBreak+
+
+                 '[matchers]'+sLineBreak+
+     ' m = g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act');
+
+  casbin:=TCasbin.Create(model, '');
+  casbin.Policy.addPolicy(stPolicyRules,'p','alice,data1,read');
+  casbin.Policy.addPolicy(stPolicyRules,'p','bob,data2, write');
+  casbin.Policy.addPolicy(stPolicyRules,'p','data2_admin,data2,read');
+  casbin.Policy.addPolicy(stPolicyRules,'p','data2_admin,data2,write');
+
+  casbin.Policy.addPolicy(stRoleRules,'g','alice, data2_admin');
+  // You may be tempted to write this:
+  // casbin.Policy.addLink('alice', 'data2_admin');
+  // **** BUT YOU SHOULDN'T ****
+  // Always, add roles using AddPolicy as in the example
+
+  Assert.AreEqual(aResult, casbin.enforce(aEnforceParams.Split([','])));
+end;
+
 procedure TTestCasbin.testFileConstructor;
 var
   casbin: ICasbin;
@@ -635,6 +778,86 @@ begin
   Assert.IsNotNull(casbin.Policy);
   Assert.IsTrue(casbin.Enabled);
   casbin:=nil;
+end;
+
+procedure TTestCasbin.testGetAndSetAAdapterFromFile;
+var
+  casbin: ICasbin;
+  adapter: IPolicyAdapter;
+  policy: IPolicyManager;
+begin
+  casbin:=TCasbin.Create('..\..\..\Examples\Default\basic_model.conf', '');
+
+  Assert.IsFalse(casbin.enforce(['alice','data1','read']), '1');
+
+  adapter:=TPolicyFileAdapter.Create('..\..\..\Examples\Default\basic_policy.csv');
+  policy:=TPolicyManager.Create(adapter);
+
+  casbin.Policy:=policy;
+
+  Assert.IsTrue(casbin.enforce(['alice','data1','read']), '2');
+
+  casbin:=nil;
+end;
+
+procedure TTestCasbin.testGetAndSetAdapterInMem;
+var
+  casbin1: ICasbin;
+  casbin2: ICasbin;
+begin
+  casbin1:=TCasbin.Create('..\..\..\Examples\Default\basic_model.conf',
+              '..\..\..\Examples\Default\basic_policy.csv');
+  Assert.IsTrue(casbin1.enforce(['alice','data1','read']), '1');
+  Assert.IsFalse(casbin1.enforce(['alice','data1','write'], '2'));
+
+  casbin2:=TCasbin.Create('..\..\..\Examples\Default\basic_model.conf',
+              '..\..\..\Examples\Default\basic_inverse_policy.csv');
+
+  casbin1.Policy:=casbin2.Policy;
+
+  Assert.IsFalse(casbin1.enforce(['alice','data1','read']), '3');
+  Assert.IsTrue(casbin1.enforce(['alice','data1','write'], '4'));
+
+  casbin1:=nil;
+  casbin2:=nil;
+end;
+
+procedure TTestCasbin.testGetAndSetModel;
+var
+  model1: IModel;
+  model2: IModel;
+  casbin: ICasbin;
+begin
+  model1:=TModel.Create('..\..\..\Examples\Default\basic_model.conf');
+  model2:=TModel.Create('..\..\..\Examples\Default\basic_with_root_model.conf');
+
+  casbin:=TCasbin.Create(model1, '');
+  Assert.IsFalse(casbin.enforce(['root','data1','read']), 'Model1');
+
+  casbin.Model:=model2;
+  Assert.IsTrue(casbin.enforce(['root','data1','read']), 'Model2');
+
+end;
+
+procedure TTestCasbin.testInitEmpty;
+var
+  model: IModel;
+  adapter: IPolicyAdapter;
+  casbin: ICasbin;
+begin
+  model:=TModel.Create;
+  model.addDefinition(stRequestDefinition, 'r=sub,obj, act');
+  model.addDefinition(stPolicyDefinition, 'p', 'sub,obj,act');
+  model.addDefinition(stPolicyEffect, 'e','some(where (p.eft == allow))');
+  model.addDefinition(stMatchers,'m',
+        'r.sub == p.sub && keyMatch(r.obj, p.obj) && regexMatch(r.act, p.act)');
+
+  adapter:=TPolicyFileAdapter.Create
+              ('..\..\..\Examples\Default\keymatch_policy.csv');
+
+  casbin:=TCasbin.Create(model, TPolicyManager.Create(adapter));
+
+  Assert.IsTrue(casbin.enforce(['alice', '/alice_data/resource1', 'GET']));
 end;
 
 procedure TTestCasbin.testMemoryConstructor;

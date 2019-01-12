@@ -28,6 +28,7 @@ type
     fNodes: TNodeCollection;
     fAssertions: TList<string>;
     procedure checkSection(const aSection: TSectionType);
+    procedure loadNodes(const aAdapter: IAdapter);
   protected
 {$REGION 'Interface'}
     function section(const aSection: TSectionType; const aSlim: Boolean = true):
@@ -38,11 +39,12 @@ type
                               const aAssertion: string); overload;
     procedure addDefinition (const aSection: TSectionType;
                               const aAssertion: string); overload;
+    procedure addModel(const aModel: string);
     function assertionExists (const aAssertion: string): Boolean;
     function toOutputString: string;
 {$ENDREGION}
   public
-    constructor Create(const aModel: string); overload;
+    constructor Create(const aModelFilename: string); overload;
     constructor Create(const aAdapter: IAdapter); overload;
     constructor Create; overload;
     destructor Destroy; override;
@@ -55,9 +57,9 @@ uses
   System.IOUtils, System.Classes, Casbin.Parser, Casbin.Core.Utilities,
   SysUtils, Casbin.Parser.AST, Casbin.Model.Sections.Default, Casbin.Adapter.Memory;
 
-constructor TModel.Create(const aModel: string);
+constructor TModel.Create(const aModelFilename: string);
 begin
-  Create(TFileAdapter.Create(aModel));
+  Create(TFileAdapter.Create(aModelFilename));
 end;
 
 procedure TModel.addDefinition(const aSection: TSectionType;
@@ -71,6 +73,18 @@ begin
   if Length(arrStr)<>2 then
     raise ECasbinException.Create('The Assertion '+aAssertion+' is wrong');
   addDefinition(aSection, arrStr[0], arrStr[1]);
+end;
+
+procedure TModel.addModel(const aModel: string);
+var
+  adapter: IAdapter;
+begin
+  if Trim(aModel)='' then
+    Exit;
+  fAdapter.Assertions.Clear;
+  fAdapter.Assertions.AddRange(aModel.Split([sLineBreak]));
+  loadNodes(fAdapter);
+  fAssertions.Clear;
 end;
 
 procedure TModel.addDefinition(const aSection: TSectionType; const aTag,
@@ -176,13 +190,7 @@ begin
   if not Assigned(aAdapter) then
     raise ECasbinException.Create('Adapter is nil in '+Self.ClassName);
   inherited Create;
-  fAdapter:=aAdapter;
-  fAdapter.load;
-  fParser:=TParser.Create(fAdapter.toOutputString, ptModel);
-  fParser.parse;
-  if fParser.Status=psError then
-    raise ECasbinException.Create('Parsing error in Model: '+fParser.ErrorMessage);
-  fNodes:=fParser.Nodes;
+  loadNodes(aAdapter);
   fAssertions:=TList<string>.Create;
 end;
 
@@ -221,6 +229,17 @@ begin
                        stPolicyEffect, stMatchers,
                        stRoleDefinition]) then
     raise ECasbinException.Create('Wrong section type');
+end;
+
+procedure TModel.loadNodes(const aAdapter: IAdapter);
+begin
+  fAdapter:=aAdapter;
+  fAdapter.load;
+  fParser:=TParser.Create(fAdapter.toOutputString, ptModel);
+  fParser.parse;
+  if fParser.Status=psError then
+    raise ECasbinException.Create('Parsing error in Model: '+fParser.ErrorMessage);
+  fNodes:=fParser.Nodes;
 end;
 
 function TModel.section(const aSection: TSectionType; const aSlim: Boolean =

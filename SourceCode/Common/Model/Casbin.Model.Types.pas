@@ -29,6 +29,7 @@ type
                               const aAssertion: string); overload;
     procedure addDefinition (const aSection: TSectionType;
                               const aAssertion: string); overload;
+    procedure addModel(const aModel: string);
     function assertionExists (const aAssertion: string): Boolean;
     function effectCondition: TEffectCondition;
     function toOutputString: string;

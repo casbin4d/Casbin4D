@@ -65,7 +65,7 @@ constructor TPolicyFileAdapter.Create(const aFilename: string);
 begin
   inherited;
   fAutosave:=True;
-  fCached:=False;
+  fCached:=False;      //PALOFF
   fCacheSize:=DefaultCacheSize;
 end;
 

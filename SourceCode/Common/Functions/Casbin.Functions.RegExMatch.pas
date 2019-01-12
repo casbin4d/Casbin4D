@@ -17,7 +17,7 @@ begin
   key1:=aArgs[0];
   key2:=aArgs[1];
 
-  regExp.Create(key2);
+  regExp:= TRegEx.Create(key2);
   match := regExp.Match(key1);
   Result:= match.Success;
 end;

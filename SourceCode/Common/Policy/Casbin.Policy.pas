@@ -147,24 +147,18 @@ procedure TPolicyManager.addPolicy(const aSection: TSectionType;
   const aAssertion: string);
 var
   arrStr: TArray<string>;
-  tag: string;
-  passAssertion: string;
 begin
   if trim(aAssertion)='' then
     raise ECasbinException.Create('The Assertion is empty');
   arrStr:=aAssertion.Split([',']);
   if Length(arrStr)<=1 then
     raise ECasbinException.Create('The Assertion '+aAssertion+' is wrong');
-  tag:=arrStr[0];
-  passAssertion:=string.Join(',', arrStr, 1, Length(arrStr)-1);
 
-  addPolicy(aSection, tag, passAssertion);
+  addPolicy(aSection, arrStr[0], string.Join(',', arrStr, 1, Length(arrStr)-1));
 end;
 
 procedure TPolicyManager.addPolicy(const aSection: TSectionType; const aTag,
   aAssertion: string);
-var
-  assertion: string;
 begin
   if trim(aTag)='' then
     raise ECasbinException.Create('The Tag is empty');
@@ -174,8 +168,7 @@ begin
                                             (aSection=stRoleRules)) then
     raise ECasbinException.Create('Wrong section type');
 
-  assertion:= Trim(aTag)+','+trim(aAssertion);
-  fAdapter.add(assertion);
+  fAdapter.add(Trim(aTag)+','+trim(aAssertion));
   fParser:=TParser.Create(fAdapter.toOutputString, ptPolicy);
   fParser.parse;
   if fParser.Status=psError then

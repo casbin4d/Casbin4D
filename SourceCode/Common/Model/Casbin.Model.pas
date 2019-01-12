@@ -76,8 +76,6 @@ begin
 end;
 
 procedure TModel.addModel(const aModel: string);
-var
-  adapter: IAdapter;
 begin
   if Trim(aModel)='' then
     Exit;
@@ -93,7 +91,7 @@ var
   header: THeaderNode;
   assertion: string;
   foundHeader: Boolean;
-  section: TSection;
+  sec: TSection;
 begin
   foundHeader:=False;
   if trim(aTag)='' then
@@ -122,14 +120,14 @@ begin
       end;
     if not foundHeader then
     begin
-      section:=createDefaultSection(aSection);
+      sec:=createDefaultSection(aSection);
       header:=THeaderNode.Create;
-      header.Value:=section.Header;
+      header.Value:=sec.Header;
       header.SectionType:=aSection;
       fNodes.Headers.Add(header);
 
       addAssertion(header, assertion);
-      section.Free;
+      sec.Free;
     end;
   end;
 end;

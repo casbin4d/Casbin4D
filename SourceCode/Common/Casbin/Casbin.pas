@@ -136,7 +136,6 @@ var
   policyDict: TDictionary<string, string>;
   requestStr: string;
   matcherResult: TEffectResult;
-  matcher: TList<string>;
   policyList: TList<string>;
   effectArray: TEffectArray;
   matchString: string;
@@ -150,14 +149,9 @@ begin
   criticalSection.Acquire;
   try
     request:=TList<string>.Create;  //PALOFF
-    for item in aParams do
-      request.Add(item);
+    request.AddRange(aParams);
 
-    for item in aParams do
-      requestStr:=requestStr+item+',';
-    if requestStr[findEndPos(requestStr)]=',' then
-      requestStr:=Copy(requestStr, findStartPos,
-                          findEndPos(requestStr));
+    requestStr:=string.Join(',', aParams);
 
     fLogger.log('Enforcing request '''+requestStr+'''');
 
@@ -264,7 +258,6 @@ begin
         policyList.Free;
       end;
     end;
-    matcher.Free;
 
     //Resolve Effector
     fLogger.log('   Merging effects...');

@@ -420,6 +420,9 @@ var
   policyList: TList<string>;
   sectionItem: TSection;
   useDomains: Boolean;
+  index: integer;
+  tagArrayRec: TArrayRecord<string>;
+  policyList: TList<string>;
 begin
   useDomains:=False;
   clearRoles;
@@ -432,40 +435,56 @@ begin
     roleList.AddRange(role.Split([',']));
     if roleList.Count>=3 then
     begin
-      case IndexStr(roleList[0], sectionItem.Tag) of
-        /// NEED TO REWRITE
-        /// By HUGE and RISKY convention we assume 0 --> g and 1 --> g2
-        0: addLink(roleList[1], roleList[2]);
-        1: if roleList.Count>=4 then
-           begin
-            addLink(roleList[1], roleList[3], roleList[2]);
-            useDomains:=true;
-           end
+      tagArrayRec:=TArrayRecord<string>.Create(sectionItem.Tag);
+      if tagArrayRec.Contains(roleList[0]) then
+      begin
+        if roleList.Count=3 then  //No Domains
+          addLink(roleList[1], roleList[2])
+        else
+        if roleList.Count=4 then  //Domains
+        begin
+         addLink(roleList[1], roleList[3], roleList[2]);
+         if (trim(roleList[3])<>DefaultDomain) then
+           fDomains.Add(trim(roleList[3]));
+         useDomains:=true;
+        end
+        else
+          raise ECasbinException.Create('The Role Rules are not correct.');
+      end
       else
-        raise ECasbinException.Create('The Role Rules are not correct.'+sLineBreak+
-                                      'Make sure you use g or g2');
-      end;
+        raise ECasbinException.Create('The Role Rules are not correct.');
     end;
     roleList.Free;
   end;
 
   sectionItem.Free;
 
+  fDomains.Sort;
+
   // We now need to transverse the other policy rules to build the links
   for policyItem in policies do
   begin
+    tagArrayRec:=TArrayRecord<string>.Create(fDomains.ToArray);
     policyList:=TList<string>.Create;
     policyList.AddRange(policyItem.Split([',']));
-
-    // Need to filter the policies to load based on the avail links from the g's
-    // Now we load all the policies and have them hanging around although never
-    // being called (enforced)
-    if (policyList.Count>=5) and useDomains then
-      addLink(policyList[1], policyList[3], policyList[2])
+    if useDomains then
+    begin
+      tagArrayRec.ForEach(procedure(var Value: string; Index: integer)
+                          var
+                            domIndex: integer;
+                          begin
+                            if policyItem.Contains(Value) then
+                            begin
+                              domIndex:=IndexStr(Value, policyList.ToArray);
+                              if (domIndex-1>=0) and
+                                    (domIndex+1<=policyList.Count-1) then
+                                addLink(policyList[domIndex-1], Value,
+                                          policyList[domIndex+1]);
+                            end;
+                          end);
+    end
     else
-      if (policyList.Count>=4) and (not useDomains) then
-        addLink(policyList[1], policyList[2]);
-
+      addLink(policyList[1], policyList[2]);
     policyList.Free;
   end;
 end;

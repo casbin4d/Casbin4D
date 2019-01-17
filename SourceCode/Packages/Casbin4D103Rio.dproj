@@ -153,6 +153,7 @@
         <DCCReference Include="..\Common\Casbin\Casbin.pas"/>
         <DCCReference Include="..\Common\Adapters\Casbin.Adapter.Memory.Policy.pas"/>
         <DCCReference Include="..\Common\Adapters\Casbin.Adapter.Memory.pas"/>
+        <DCCReference Include="..\Common\Third Party\ArrayHelper\ArrayHelper.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

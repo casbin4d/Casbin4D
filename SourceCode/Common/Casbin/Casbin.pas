@@ -28,6 +28,7 @@ type
     fEnabled: boolean;
     fFunctions: IFunctions;
 
+    function rolesGsInternal(const Args: array of string): Boolean;
     function rolesG(const Args: array of string): Boolean;
     function rolesG2(const Args: array of string): Boolean;
   private
@@ -298,26 +299,24 @@ end;
 
 function TCasbin.rolesG(const Args: array of string): Boolean;
 begin
-  Result:=False;
-  if (Length(Args)<2) or (Length(Args)>3) then
-    raise ECasbinException.Create('The arguments are different than expected in '+
-                                    'g');
-  if Length(Args)=3 then
-    Result:=rolesG2(Args);
-  if Length(Args)=2 then
-    Result:=fPolicy.linkExists(Args[0], Args[1]);
+  Result:=rolesGsInternal(Args);
 end;
 
 function TCasbin.rolesG2(const Args: array of string): Boolean;
 begin
-  Result:=False;
+  Result:=rolesGsInternal(Args);
+end;
+
+function TCasbin.rolesGsInternal(const Args: array of string): Boolean;
+begin
+  result:=False;
   if (Length(Args)<2) or (Length(Args)>3) then
     raise ECasbinException.Create('The arguments are different than expected in '+
-                                    'g2');
+                                    'g''s functions');
   if Length(Args)=3 then
     Result:=fPolicy.linkExists(Args[0], Args[2], Args[1]);
   if Length(Args)=2 then
-    Result:=rolesG(Args);
+    Result:=fPolicy.linkExists(Args[0], Args[1]);
 end;
 
 procedure TCasbin.setEnabled(const aValue: Boolean);

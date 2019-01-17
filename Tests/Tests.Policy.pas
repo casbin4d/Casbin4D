@@ -62,6 +62,12 @@ type
     [TestCase ('Policy.3','stRoleRules#g2,a,b,c', '#')]
     procedure testAddPolicyCompact(const aSection: TSectionType;
                                                 const aAssertion: string);
+    [Test]
+    [TestCase ('TestDomains.1','..\..\..\Examples\Default\rbac_policy.csv#','#')]
+    [TestCase ('TestDomains.2',
+        '..\..\..\Examples\Default\rbac_with_domains_policy.csv#'+
+          'domain1,domain2','#')]
+    procedure testDomains(const aPolicyFile, aDomains: string);
 
   end;
 
@@ -92,6 +98,16 @@ procedure TTestPolicyManager.testAddPolicyFull(const aSection: TSectionType;
 begin
   fPolicy.addPolicy(aSection, aTag, aAssertion);
   Assert.IsTrue(fPolicy.policyExists(Trim(aAssertion).Split([','])));
+end;
+
+procedure TTestPolicyManager.testDomains(const aPolicyFile, aDomains: string);
+var
+  manager: IPolicyManager;
+  arr: TArray<string>;
+begin
+  manager:=TPolicyManager.Create(aPolicyFile);
+  arr:=manager.domains.ToArray;
+  Assert.IsTrue(Trim(string.Join(',', manager.domains.ToArray))=Trim(aDomains));
 end;
 
 procedure TTestPolicyManager.testPolicies;

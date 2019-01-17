@@ -29,6 +29,7 @@ type
     fNodes: TNodeCollection;
     fPoliciesList: TList<string>;
     fRolesList: TList<string>;
+    fDomains: TList<string>;
 
     fRolesNodes: TObjectDictionary<string, TRoleNode>;
     fRolesLinks: TObjectDictionary<string, TStringList>;
@@ -56,6 +57,7 @@ type
 
     procedure clearRoles;
     function roles: TList<string>;
+    function domains: TList<string>;
     function roleExists (const aFilter: TFilterArray = []): Boolean;
     procedure addLink(const aBottom: string; const aTop: string); overload;
     procedure addLink(const aBottom: string;
@@ -93,7 +95,7 @@ uses
   Casbin.Adapter.Filesystem.Policy, Casbin.Exception.Types, Casbin.Parser,
   Casbin.Core.Utilities, Casbin.Core.Defaults, System.SysUtils,
   System.StrUtils, Casbin.Model.Sections.Default, Casbin.Adapter.Memory.Policy,
-  Casbin.Parser.AST;
+  Casbin.Parser.AST, ArrayHelper;
 
 { TPolicyManager }
 
@@ -203,7 +205,9 @@ begin
   fRolesList:=TList<string>.Create;  //PALOFF
   fRolesNodes:=TObjectDictionary<string, TRoleNode>.Create([doOwnsValues]);
   fRolesLinks:=TObjectDictionary<string, TStringList>.Create([doOwnsValues]);
+  fDomains:=TList<string>.Create;
   loadPolicies;
+  loadRoles;
 end;
 
 constructor TPolicyManager.Create;
@@ -252,7 +256,13 @@ begin
   fRolesList.Free;
   fRolesLinks.Free;
   fRolesNodes.Free;
+  fDomains.Free;
   inherited;
+end;
+
+function TPolicyManager.domains: TList<string>;
+begin
+  Result:=fDomains;
 end;
 
 function TPolicyManager.EntitiesForRole(const aEntity,
@@ -417,7 +427,6 @@ var
   role: string;
   policyItem: string;
   roleList: TList<string>;
-  policyList: TList<string>;
   sectionItem: TSection;
   useDomains: Boolean;
   index: integer;
@@ -426,6 +435,9 @@ var
 begin
   useDomains:=False;
   clearRoles;
+
+  // Domains
+  fDomains.Clear;
 
   // We get the Role Rules
   sectionItem:=createDefaultSection(stRoleDefinition);

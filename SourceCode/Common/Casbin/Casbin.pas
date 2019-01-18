@@ -64,7 +64,8 @@ uses
   Casbin.Core.Logger.Default, System.Generics.Collections, System.SysUtils,
   Casbin.Resolve, Casbin.Resolve.Types, Casbin.Model.Sections.Types,
   Casbin.Core.Utilities, System.Rtti, Casbin.Effect.Types, Casbin.Effect,
-  Casbin.Functions, Casbin.Adapter.Memory, Casbin.Adapter.Memory.Policy, System.SyncObjs, System.Types, System.StrUtils, Casbin.Core.Defaults;
+  Casbin.Functions, Casbin.Adapter.Memory, Casbin.Adapter.Memory.Policy, System.SyncObjs, System.Types, System.StrUtils, Casbin.Core.Defaults,
+  ArrayHelper;
 
 var
   criticalSection: TCriticalSection;
@@ -140,6 +141,8 @@ var
   policyList: TList<string>;
   effectArray: TEffectArray;
   matchString: string;
+  reqDomain: string;
+  domainsArrayRec: TArrayRecord<string>;
 begin
   result:=true;
   if Length(aParams) = 0 then
@@ -218,6 +221,8 @@ begin
     end
     else
       matchString:='';
+
+    domainsArrayRec:=TArrayRecord<string>.Create(fPolicy.domains.ToArray);
     for item in fPolicy.policies do
     begin
       fLogger.log('   Processing policy: '+item);
@@ -228,7 +233,21 @@ begin
       // Item 0 has p,g, etc
       policyList.Delete(0);
       // We look at the relevant policies only
-      if fPolicy.linkExists(request[0], policyList[0]) or
+      // by working out the domains
+      reqDomain:=DefaultDomain;
+      domainsArrayRec.ForEach(procedure(var Value: string; Index: integer)
+                              var
+                                item: string;
+                              begin
+                                for item in policyList do
+                                  if Trim(Value) = Trim(item) then
+                                  begin
+                                    reqDomain:=Trim(Value);
+                                    Break;
+                                  end;
+                              end);
+
+      if fPolicy.linkExists(request[0], reqDomain, policyList[0]) or
         soundexSimilar(Trim(request[0]), Trim(policyList[0]),
                                         Trunc(0.50 * Length(request[0]))) then
       begin

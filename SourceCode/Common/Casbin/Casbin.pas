@@ -143,6 +143,7 @@ var
   matchString: string;
   reqDomain: string;
   domainsArrayRec: TArrayRecord<string>;
+  requestArrayRec: TArrayRecord<string>;
 begin
   result:=true;
   if Length(aParams) = 0 then
@@ -152,8 +153,10 @@ begin
 
   criticalSection.Acquire;
   try
+    requestArrayRec:=TArrayRecord<string>.Create(aParams);
+
     request:=TList<string>.Create;  //PALOFF
-    request.AddRange(aParams);
+    requestArrayRec.List(request);
 
     requestStr:=string.Join(',', aParams);
 

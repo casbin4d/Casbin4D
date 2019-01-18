@@ -53,6 +53,7 @@ type
     [Test]
     [TestCase ('Policy.1','stPolicyRules#p#a,b,c', '#')]
     [TestCase ('Policy.2','stRoleRules#g#a,b,c', '#')]
+    [TestCase ('Policy.3','stPolicyRules#p#a,b,c,d', '#')]
     procedure testAddPolicyFull(const aSection: TSectionType; const aTag:
         string; const aAssertion: string);
 

@@ -70,6 +70,8 @@ type
           'domain1,domain2','#')]
     procedure testDomains(const aPolicyFile, aDomains: string);
 
+    [Test]
+    procedure testRemovePolicy;
   end;
 
 implementation
@@ -134,6 +136,21 @@ begin
 
   fPolicy.addPolicy(stRoleRules, 'g', '_,_');
   Assert.AreEqual(True, fPolicy.policyExists(['g','_','_']));
+end;
+
+procedure TTestPolicyManager.testRemovePolicy;
+var
+  policyManager: IPolicyManager;
+begin
+  policyManager:=TPolicyManager.Create
+                  ('..\..\..\Examples\Default\rbac_with_domains_policy.csv');
+  policyManager.removePolicy(['admin','domain1','data1','read']);
+  Assert.IsFalse(policyManager.policyExists(['admin','domain1','data1','read']), '1');
+
+  policyManager.removePolicy(['*','domain2']);
+  Assert.IsFalse(policyManager.policyExists(['admin','domain2','data2','read']), '2');
+  Assert.IsFalse(policyManager.policyExists(['admin','domain2','data2','write']), '3');
+
 end;
 
 procedure TTestPolicyManager.testRoles;

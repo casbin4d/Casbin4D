@@ -47,14 +47,11 @@ type
     function policy(const aFilter: TFilterArray = []): string;
     procedure clear;
     function policyExists(const aFilter: TFilterArray = []): Boolean;
+    procedure removePolicy(const aFilter: TFilterArray = []);
     procedure addPolicy (const aSection: TSectionType; const aTag: string;
                               const aAssertion: string); overload;
     procedure addPolicy (const aSection: TSectionType;
                               const aAssertion: string); overload;
-    procedure remove(const aPolicyDefinition: string); overload;
-    procedure remove (const aPolicyDefinition: string; const aFilter: string);
-                                                                overload;
-
     procedure clearRoles;
     function roles: TList<string>;
     function domains: TList<string>;
@@ -237,6 +234,63 @@ begin
     index:=list.IndexOf(rightNode.ID);
     if (index>-1) and (rightNode.Domain=aRightDomain) then
       list.Delete(index);
+  end;
+end;
+
+procedure TPolicyManager.removePolicy(const aFilter: TFilterArray);
+var
+  arrString: TArrayRecord<string>;
+  item: string;
+  exists: Boolean;
+  polString: TArrayRecord<string>;
+  i: Integer;
+  header: THeaderNode;
+  child: TChildNode;
+  outString: string;
+  itemString: string;
+begin
+  arrString:=TArrayRecord<string>.Create(aFilter);
+  for item in policies do
+  begin
+    exists:=false;
+    arrString.ForEach(procedure(var Value: string; Index: integer)
+                      begin
+                        if Value='*' then
+                          exists:=true
+                        else
+                          exists:=exists or Trim(item).Contains(Trim(Value));
+                      end);
+    if exists then
+    begin
+      polString:=TArrayRecord<string>.Create(item.Split([',']));
+      if polString.Count>=2 then
+        //  This is p, g, etc.
+        polString.Delete(0);
+      if polString.Count>=1 then
+        for i := 1 to polString.Count-1 do
+          // to-do
+          // Here we need to consider the domains
+          removeLink(polString[i-1], polString[i]);
+      for header in fNodes.Headers do
+      begin
+        for child in header.ChildNodes do
+        begin
+          outString:=child.toOutputString;
+          while Pos(#32, outString, findStartPos)<>0 do
+            Delete(outString, Pos(#32, outString, findStartPos), 1);
+
+          itemString:=Trim(item);
+          itemString:=itemString.Replace('p,',' ');
+          itemString:=itemString.Replace('g,',' ');
+          itemString:=itemString.Replace('g2,',' ');
+          while Pos(#32, itemString, findStartPos)<>0 do
+            Delete(itemString, Pos(#32, itemString, findStartPos), 1);
+
+          if Trim(UpperCase(outString)).Contains(Trim(UpperCase(itemString))) then
+            header.ChildNodes.Remove(child);
+        end;
+      end;
+    end;
   end;
 end;
 
@@ -620,16 +674,6 @@ begin
 
   if not Result then
     Result:=roleExists(aFilter);
-end;
-
-procedure TPolicyManager.remove(const aPolicyDefinition: string);
-begin
-  fAdapter.remove(aPolicyDefinition);
-end;
-
-procedure TPolicyManager.remove(const aPolicyDefinition, aFilter: string);
-begin
-  fAdapter.remove(aPolicyDefinition, aFilter);
 end;
 
 function TPolicyManager.roleExists(const aFilter: TFilterArray): Boolean;

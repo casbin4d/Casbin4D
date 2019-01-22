@@ -241,14 +241,10 @@ procedure TPolicyManager.removePolicy(const aFilter: TFilterArray);
 var
   arrString: TArrayRecord<string>;
   item: string;
-  exists: Boolean;
-  polString: TArrayRecord<string>;
-  i: Integer;
   header: THeaderNode;
   child: TChildNode;
-  outString: string;
+  outStr: string;
   itemString: string;
-  delIndeces: TArrayRecord<integer>;
   regExp: TRegEx;
   match: TMatch;
   key: string;
@@ -263,12 +259,12 @@ begin
   begin
     for child in header.ChildNodes do
     begin
-      outString:=child.toOutputString;
-      outString:=outString.Replace('p=',' ');
-      outString:=outString.Replace('g=',' ');
-      outString:=outString.Replace('g2=',' ');
-      while Pos(#32, outString, findStartPos)<>0 do
-        Delete(outString, Pos(#32, outString, findStartPos), 1);
+      outStr:=child.toOutputString;
+      outStr:=outStr.Replace('p=',' ');
+      outStr:=outStr.Replace('g=',' ');
+      outStr:=outStr.Replace('g2=',' ');
+      while Pos(#32, outStr, findStartPos)<>0 do
+        Delete(outStr, Pos(#32, outStr, findStartPos), 1);
 
       if arrString.Contains('*') then
       begin
@@ -280,12 +276,12 @@ begin
         end;
         key:=key+'.*$';
         regExp:=TRegEx.Create(key);
-        match:=regExp.Match(outString);
+        match:=regExp.Match(outStr);
         if match.Success then
           header.ChildNodes.Remove(child);
       end
       else
-        if Trim(UpperCase(outString)) = Trim(UpperCase(itemString)) then
+        if Trim(UpperCase(outStr)) = Trim(UpperCase(itemString)) then
           header.ChildNodes.Remove(child);
     end;
   end;
@@ -481,7 +477,6 @@ var
   roleList: TList<string>;
   sectionItem: TSection;
   useDomains: Boolean;
-  index: integer;
   tagArrayRec: TArrayRecord<string>;
   policyList: TList<string>;
 begin

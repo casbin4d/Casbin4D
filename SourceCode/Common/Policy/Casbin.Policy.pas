@@ -92,7 +92,7 @@ uses
   Casbin.Adapter.Filesystem.Policy, Casbin.Exception.Types, Casbin.Parser,
   Casbin.Core.Utilities, Casbin.Core.Defaults, System.SysUtils,
   System.StrUtils, Casbin.Model.Sections.Default, Casbin.Adapter.Memory.Policy,
-  Casbin.Parser.AST, ArrayHelper;
+  Casbin.Parser.AST, ArrayHelper, System.RegularExpressions;
 
 { TPolicyManager }
 
@@ -146,7 +146,7 @@ procedure TPolicyManager.addPolicy(const aSection: TSectionType;
   const aAssertion: string);
 var
   arrStr: TArray<string>;
-begin
+ begin
   if trim(aAssertion)='' then
     raise ECasbinException.Create('The Assertion is empty');
   arrStr:=aAssertion.Split([',']);
@@ -248,50 +248,48 @@ var
   child: TChildNode;
   outString: string;
   itemString: string;
+  delIndeces: TArrayRecord<integer>;
+  regExp: TRegEx;
+  match: TMatch;
+  key: string;
 begin
   arrString:=TArrayRecord<string>.Create(aFilter);
-  for item in policies do
+
+  itemString:=string.Join(',', aFilter);
+  while Pos(#32, itemString, findStartPos)<>0 do
+    Delete(itemString, Pos(#32, itemString, findStartPos), 1);
+
+  for header in fNodes.Headers do
   begin
-    exists:=false;
-    arrString.ForEach(procedure(var Value: string; Index: integer)
-                      begin
-                        if Value='*' then
-                          exists:=true
-                        else
-                          exists:=exists or Trim(item).Contains(Trim(Value));
-                      end);
-    if exists then
+    for child in header.ChildNodes do
     begin
-      polString:=TArrayRecord<string>.Create(item.Split([',']));
-      if polString.Count>=2 then
-        //  This is p, g, etc.
-        polString.Delete(0);
-      if polString.Count>=1 then
-        for i := 1 to polString.Count-1 do
-          // to-do
-          // Here we need to consider the domains
-          removeLink(polString[i-1], polString[i]);
-      for header in fNodes.Headers do
+      outString:=child.toOutputString;
+      outString:=outString.Replace('p=',' ');
+      outString:=outString.Replace('g=',' ');
+      outString:=outString.Replace('g2=',' ');
+      while Pos(#32, outString, findStartPos)<>0 do
+        Delete(outString, Pos(#32, outString, findStartPos), 1);
+
+      if arrString.Contains('*') then
       begin
-        for child in header.ChildNodes do
+        key:='^';
+        for item in arrString do
         begin
-          outString:=child.toOutputString;
-          while Pos(#32, outString, findStartPos)<>0 do
-            Delete(outString, Pos(#32, outString, findStartPos), 1);
-
-          itemString:=Trim(item);
-          itemString:=itemString.Replace('p,',' ');
-          itemString:=itemString.Replace('g,',' ');
-          itemString:=itemString.Replace('g2,',' ');
-          while Pos(#32, itemString, findStartPos)<>0 do
-            Delete(itemString, Pos(#32, itemString, findStartPos), 1);
-
-          if Trim(UpperCase(outString)).Contains(Trim(UpperCase(itemString))) then
-            header.ChildNodes.Remove(child);
+          if item<>'*' then
+            key:=key+'(?=.*\b'+Trim(item)+'\b)';
         end;
-      end;
+        key:=key+'.*$';
+        regExp:=TRegEx.Create(key);
+        match:=regExp.Match(outString);
+        if match.Success then
+          header.ChildNodes.Remove(child);
+      end
+      else
+        if Trim(UpperCase(outString)) = Trim(UpperCase(itemString)) then
+          header.ChildNodes.Remove(child);
     end;
   end;
+  loadRoles;
 end;
 
 procedure TPolicyManager.removeLink(const aLeft, aRightDomain, aRight: string);

@@ -149,8 +149,15 @@ begin
 
   policyManager.removePolicy(['*','domain2']);
   Assert.IsFalse(policyManager.policyExists(['admin','domain2','data2','read']), '2');
-  Assert.IsFalse(policyManager.policyExists(['admin','domain2','data2','write']), '3');
 
+  policyManager.removePolicy(['*','domain1','data1']);
+  Assert.IsFalse(policyManager.policyExists(['admin','domain1','data1','read']), '3');
+
+  policyManager.addPolicy(stPolicyRules,'p','admin,data1,read');
+  Assert.IsTrue(policyManager.policyExists(['admin','domain1','data1','read']), '4');
+
+  policyManager.removePolicy(['*','data1','domain1']);
+  Assert.IsFalse(policyManager.policyExists(['admin','domain1','data1','read']), '5');
 end;
 
 procedure TTestPolicyManager.testRoles;

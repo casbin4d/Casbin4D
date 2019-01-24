@@ -1,5 +1,7 @@
 program MainDemo;
 
+{$R *.dres}
+
 uses
   System.StartUpCopy,
   FMX.Forms,

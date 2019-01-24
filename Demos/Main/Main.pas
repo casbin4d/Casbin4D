@@ -36,6 +36,10 @@ type
     LabelError: TLabel;
     ImageList1: TImageList;
     Image1: TImage;
+    Layout5: TLayout;
+    Rectangle2: TRectangle;
+    Label2: TLabel;
+    Image2: TImage;
     procedure Button1Click(Sender: TObject);
     procedure buttonValidateModelClick(Sender: TObject);
     procedure buttonValidatePoliciesClick(Sender: TObject);
@@ -55,7 +59,8 @@ var
 implementation
 
 uses
-  System.IOUtils, Casbin.Parser.Types, Casbin.Parser, Casbin.Types, Casbin, Casbin.Core.Utilities;
+  System.IOUtils, Casbin.Parser.Types, Casbin.Parser, Casbin.Types, Casbin,
+  Casbin.Core.Utilities;
 
 {$R *.fmx}
 
@@ -76,6 +81,9 @@ begin
     begin
       rectangleEnforced.Fill.Color:=TAlphaColorRec.Green;
       labelEnforced.Text:='ALLOW';
+      // No Errors
+      Image1.Bitmap:=ImageList1.Bitmap(TSizeF.Create(Image1.Height,Image1.Height), 1);
+      LabelError.Text:='No Errors';
     end
     else
     begin
@@ -87,7 +95,10 @@ begin
     on E: Exception do
     begin
       Image1.Bitmap:=ImageList1.Bitmap(TSizeF.Create(Image1.Height,Image1.Height), 0);
-      LabelError.Text:=E.Message;
+      if E.Message.Contains('math') then
+        LabelError.Text:='Select the correct model-policy files'
+      else
+        LabelError.Text:=E.Message;
     end;
   end;
 end;
@@ -146,7 +157,8 @@ var
   Res: Integer;
 begin
   labelVersion.Text:=version;
-  fFolder:='..\..\..\..\Examples\Default\';
+//  fFolder:='..\..\..\..\Examples\Default\'; //When in Platform/Config folder
+  fFolder:='..\..\Examples\Default\';
   Res := FindFirst(fFolder+'*.conf', faAnyfile, SRec );
   if Res = 0 then
   try
@@ -178,16 +190,19 @@ begin
   if popupPolicies.Items.Count>0 then
     popupPolicies.ItemIndex:=0;
 
-  //Errors
+  // No Errors
   Image1.Bitmap:=ImageList1.Bitmap(TSizeF.Create(Image1.Height,Image1.Height), 1);
   LabelError.Text:='No Errors';
+
+  // Warnings
+  Image2.Bitmap:=ImageList1.Bitmap(TSizeF.Create(Image2.Height,Image2.Height), 2);
 end;
 
 procedure TForm1.popupModelChange(Sender: TObject);
 begin
   Memo1.Lines.Clear;
   Memo1.Lines.AddStrings(
-    TFile.ReadAllLines('..\..\..\..\Examples\Default\'+
+    TFile.ReadAllLines('..\..\Examples\Default\'+
                                     popupModel.Items[popupModel.ItemIndex]));
   labelValidateModel.Text:='Not Validated Yet';
   labelValidateModel.FontColor:=TAlphaColorRec.Black;
@@ -199,7 +214,7 @@ procedure TForm1.popupPoliciesChange(Sender: TObject);
 begin
   Memo2.Lines.Clear;
   Memo2.Lines.AddStrings(
-    TFile.ReadAllLines('..\..\..\..\Examples\Default\'+
+    TFile.ReadAllLines('..\..\Examples\Default\'+
                                     popupPolicies.Items[popupPolicies.ItemIndex]));
   labelValidatePolicies.FontColor:=TAlphaColorRec.Black;
   rectanglePolicies.Fill.Color:=TAlphaColorRec.Null;

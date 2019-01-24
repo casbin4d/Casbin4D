@@ -150,9 +150,15 @@ Please see the [wiki pages](<https://github.com/casbin4d/Casbin4D/wiki>)
 
 You can also use the online editor (http://casbin.org/editor/) to write your Casbin model and policy in your web browser. It provides functionality such as ``syntax highlighting`` and ``code completion``, just like an IDE for a programming language.
 
+You can, also, use the Main Demo to test the scripts and the assertions. See the [Demos](#Demos) 
+
 ## Demos
 
-Please see the Demos folder. The Examples folder contains the example configuration and policy files from the original Go implementation
+See the Demos folder. The Examples folder contains the example configuration and policy files from the original Go implementation
+
+The main demo is under Demos/Main folder. You can, also, find an executable file in this folder so you can download it and try Casbin4D
+
+![Main Demo](https://github.com/casbin4d/Casbin4D/blob/master/Images/MainDemo.png)
 
 ## Get started
 

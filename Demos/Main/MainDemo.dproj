@@ -102,7 +102,7 @@
         <Icon_MainIcon>$(BDS)\bin\delphi_PROJECTICON.ico</Icon_MainIcon>
         <Icns_MainIcns>$(BDS)\bin\delphi_PROJECTICNS.icns</Icns_MainIcns>
         <SanitizedProjectName>MainDemo</SanitizedProjectName>
-        <DCC_UnitSearchPath>..\..\SourceCode\Common;..\..\SourceCode\Common\Adapters;..\..\SourceCode\Common\Casbin;..\..\SourceCode\Common\Config;..\..\SourceCode\Common\Core;..\..\SourceCode\Common\Effect;..\..\SourceCode\Common\Functions;..\..\SourceCode\Common\Matcher;..\..\SourceCode\Common\Model;..\..\SourceCode\Common\Parser;..\..\SourceCode\Common\Policy;..\..\SourceCode\Common\Third Party\TExpressionParser;\\vmware-host\Shared Folders\ProductionHD\NusEnvision\Components\Delphi\Casbin4D\SourceCode\Common\Loggers;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+        <DCC_UnitSearchPath>..\..\SourceCode\Common;..\..\SourceCode\Common\Adapters;..\..\SourceCode\Common\Casbin;..\..\SourceCode\Common\Config;..\..\SourceCode\Common\Core;..\..\SourceCode\Common\Effect;..\..\SourceCode\Common\Functions;..\..\SourceCode\Common\Matcher;..\..\SourceCode\Common\Model;..\..\SourceCode\Common\Parser;..\..\SourceCode\Common\Policy;..\..\SourceCode\Common\Third Party\TExpressionParser;..\..\SourceCode\Common\Loggers;..\..\SourceCode\Common\Third Party\ArrayHelper;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Android)'!=''">
         <DCC_UsePackage>DBXSqliteDriver;RESTComponents;DBXInterBaseDriver;tethering;TMSScripter;FMXTMSFNCUIPackPkgDXE12;bindcompfmx;fmx;FireDACIBDriver;dbexpress;IndyCore;xdata;dsnap;FireDACCommon;RESTBackendComponents;soapserver;TMSLoggingPkgFMXDXE12;bindengine;CloudService;FireDACCommonDriver;inet;IndyIPCommon;bindcompdbx;IndyIPServer;sparkle;tmsbcl;IndySystem;FMXTMSFNCCorePkgDXE12;fmxFireDAC;FireDAC;FireDACSqliteDriver;soaprtl;DbxCommonDriver;xmlrtl;soapmidas;rtl;DbxClientDriver;CustomIPTransport;bindcomp;IndyIPClient;TMSLoggingPkgCoreDXE12;dbxcds;aurelius;dsnapxml;dbrtl;IndyProtocols;FMXTMSFNCChartPkgDXE12;$(DCC_UsePackage)</DCC_UsePackage>
@@ -266,6 +266,8 @@
         <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
         <UWP_DelphiLogo44>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_44.png</UWP_DelphiLogo44>
         <UWP_DelphiLogo150>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_150.png</UWP_DelphiLogo150>
+        <DCC_DcpOutput>.\$(Platform)\$(Config)</DCC_DcpOutput>
+        <DCC_ExeOutput>.\</DCC_ExeOutput>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win64)'!=''">
         <DCC_UsePackage>DBXSqliteDriver;RESTComponents;VCLTMSFNCChartPkgDXE12;DBXInterBaseDriver;vclactnband;vclFireDAC;tethering;FireDACADSDriver;TMSScripter;FMXTMSFNCUIPackPkgDXE12;vcltouch;vcldb;bindcompfmx;inetdb;TMSScripter_Memo;fmx;FireDACIBDriver;fmxdae;dbexpress;IndyCore;xdata;vclx;dsnap;FireDACCommon;VCLTMSFNCUIPackPkgDXE12;RESTBackendComponents;VCLRESTComponents;soapserver;TMSScripter_Legacy;TMSLoggingPkgFMXDXE12;TMSScripter_VCL;vclie;bindengine;DBXMySQLDriver;CloudService;FireDACMySQLDriver;FireDACCommonODBC;FireDACCommonDriver;VCLTMSFNCCorePkgDXE12;inet;IndyIPCommon;bindcompdbx;vcl;IndyIPServer;sparkle;tmsbcl;IndySystem;VCLTMSFNCDashboardPackPkgDXE12;dsnapcon;FMXTMSFNCCorePkgDXE12;FireDACMSAccDriver;fmxFireDAC;vclimg;FireDAC;FireDACSqliteDriver;FireDACPgDriver;soaprtl;DbxCommonDriver;xmlrtl;soapmidas;fmxobj;vclwinx;rtl;DbxClientDriver;TMSScripter_IDE;CustomIPTransport;vcldsnap;bindcomp;appanalytics;TMSLoggingPkgVCLDXE12;IndyIPClient;bindcompvcl;TMSLoggingPkgCoreDXE12;dbxcds;VclSmp;adortl;aurelius;dsnapxml;dbrtl;IndyProtocols;inetdbxpress;FMXTMSFNCChartPkgDXE12;fmxase;$(DCC_UsePackage)</DCC_UsePackage>
@@ -319,6 +321,10 @@
             <Form>Form1</Form>
             <FormType>fmx</FormType>
         </DCCReference>
+        <RcItem Include="Images\delete_button_error.png">
+            <ResourceType>RCDATA</ResourceType>
+            <ResourceId>PngImage_1</ResourceId>
+        </RcItem>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -345,13 +351,13 @@
                 </Excluded_Packages>
             </Delphi.Personality>
             <Deployment Version="3">
-                <DeployFile LocalName="$(BDS)\Redist\osx64\libcgsqlite3.dylib" Class="DependencyModule">
-                    <Platform Name="OSX64">
+                <DeployFile LocalName="$(BDS)\Redist\osx32\libcgunwind.1.0.dylib" Class="DependencyModule">
+                    <Platform Name="OSX32">
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="$(BDS)\Redist\osx32\libcgunwind.1.0.dylib" Class="DependencyModule">
-                    <Platform Name="OSX32">
+                <DeployFile LocalName="$(BDS)\Redist\osx64\libcgsqlite3.dylib" Class="DependencyModule">
+                    <Platform Name="OSX64">
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -367,6 +373,12 @@
                 </DeployFile>
                 <DeployFile LocalName="$(BDS)\Redist\osx32\libcgsqlite3.dylib" Class="DependencyModule">
                     <Platform Name="OSX32">
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Images\delete_button_error.png" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

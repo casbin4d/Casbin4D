@@ -158,7 +158,8 @@ See the Demos folder. The Examples folder contains the example configuration and
 
 The main demo is under Demos/Main folder. You can, also, find an executable file in this folder so you can download it and try Casbin4D
 
-![Main Demo](https://github.com/casbin4d/Casbin4D/blob/master/Images/MainDemo.png)
+![Main Demo](https://github.com/casbin4d/Casbin4D/blob/master/Demos/Main/Images/MainDemo.png)
+
 
 ## Get started
 

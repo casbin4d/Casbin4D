@@ -79,3 +79,6 @@ Thumbs.db
 Tests/Win32/
 Support/
 Documentation/
+
+#Include Demo Exe
+!Demos/Main/*.exe

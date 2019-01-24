@@ -195,7 +195,8 @@ This project is licensed under the [Apache 2.0 license](LICENSE).
 
 ## Contact
 
-If you have any issues or feature requests, please contact us. PR is welcomed.
+If you have any issues or feature requests, please contact us. PR is welcome
 - [https://github.com/casbin4d/Casbin4D/issues](https://github.com/casbin4d/Casbin4D/issues)
 - [j_kour@hotmail.com](mailto:j_kour@hotmail.com)
+- [Casbin Lobby](https://gitter.im/casbin/lobby)
 

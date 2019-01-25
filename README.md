@@ -10,10 +10,8 @@ Casbin4D is a cross platform (FireMonkey) implementation for Delphi/Pascal of th
 
 **DISCLAIM:** This library is still under development (Work in Progress) and it is not production-ready. DO NOT USE it in production environment
 
-<img style="float: left;" src="https://github.com/casbin4d/Casbin4D/blob/master/Images/Speaker-128x117.png">
-
-You are cordially invited to share, fork, review and improve this library.
-Please feel free to comment and offer suggestions
+<img style="float: left;" src="https://github.com/casbin4d/Casbin4D/blob/master/Images/Speaker-128x117.png">You are cordially invited to share, fork, review and improve this library.
+Please feel free to comment and offer suggestions. If you want to contribute, check the wiki page for developers first
 
 ## All the languages supported by Casbin:
 

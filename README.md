@@ -175,6 +175,32 @@ In Casbin4D, the policy storage is abstracted via the concept of the adapter. Th
 
 Casbin4D is designed with multi-threading in mind. The current implementation achieves this at the Enforcer level
 
+## Benchmarks
+
+There is a benchmark project located in [Benchmarks](https://github.com/casbin4d/Casbin4D/blob/master/Benchmarks) folder which tests the policy enforcement. 
+
+The project was executed in the following machine/installation:
+```
+* Dell XPS 15 9560: Intel(R) Core(TM) i7-7700HQ CPU @2.80GHz, 2801MHz, 4 Core(s), 8 Logical Processor(s)
+
+* Windows: Windows 10 Pro 64-bit, 10.0.16299 Build 16299
+```
+
+The results are shown in the following table. The time overhead is calculated per operation (op) which represents a single call to ```TCasbin.enforce[..]```  
+
+Test case | Size | Time overhead | Memory overhead
+----|------|------|----
+Raw Enforce | 2 Rules (2 Users) | 0.000158 sec/op |   0 KB
+Basic Model | 2 Rules (2 Users) | 0.000633 sec/op | 153 KB
+RBAC | 5 Rules (2 Users, 1 Role) | 0.001852 sec/op | 15.7 KB
+RBAC (Small) | 1,100 Rules (1,000 Users, 100 roles) | 0.238945 sec/op | 1.49 MB
+RBAC (Medium) | 11,000 Rules (10,000 Users, 1,000 Roles) | 9.745707 sec/op | 15.7 MB
+RBAC (With Resource Roles) | 6 Rules (2 Users, 2 Roles) | 0.000975 sec/op | 153 KB
+RBAC (With Domains/Tenants) | 6 Rules (2 Users, 1 Role, 2 Domains) | 0.001223 sec/op | 153 KB
+RBAC (With Deny) | 6 Rules (2 Users, 1 Role) | 0.001350 sec/op | 196 KB
+KeyMatch | 2 Rules (2 Users) | 0.001053 sec/op | 536 KB 
+Priority | 9 Rules (2 Users, 2 Roles) | 0.001383 sec/op | 610 KB
+
 ## Examples
 
 Model | Model file | Policy file

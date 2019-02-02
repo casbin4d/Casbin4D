@@ -1,0 +1,74 @@
+package Casbin4D102Tokyo;
+
+{$R *.res}
+{$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO OFF}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION OFF}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES ON}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DEFINE DEBUG}
+{$ENDIF IMPLICITBUILDING}
+{$IMPLICITBUILD ON}
+
+requires
+  rtl;
+
+contains
+  Casbin.Adapter.Types in '..\Common\Adapters\Casbin.Adapter.Types.pas',
+  Casbin.Adapter.Policy.Types in '..\Common\Adapters\Casbin.Adapter.Policy.Types.pas',
+  Casbin.Adapter.Memory.Policy in '..\Common\Adapters\Casbin.Adapter.Memory.Policy.pas',
+  Casbin.Adapter.Memory in '..\Common\Adapters\Casbin.Adapter.Memory.pas',
+  Casbin.Adapter.Filesystem.Policy in '..\Common\Adapters\Casbin.Adapter.Filesystem.Policy.pas',
+  Casbin.Adapter.Filesystem in '..\Common\Adapters\Casbin.Adapter.Filesystem.pas',
+  Casbin.Adapter.Base in '..\Common\Adapters\Casbin.Adapter.Base.pas',
+  Casbin.Types in '..\Common\Casbin\Casbin.Types.pas',
+  Casbin.Resolve.Types in '..\Common\Casbin\Casbin.Resolve.Types.pas',
+  Casbin.Resolve in '..\Common\Casbin\Casbin.Resolve.pas',
+  Casbin in '..\Common\Casbin\Casbin.pas',
+  Casbin.Exception.Types in '..\Common\Core\Casbin.Exception.Types.pas',
+  Casbin.Core.Utilities in '..\Common\Core\Casbin.Core.Utilities.pas',
+  Casbin.Core.Strings in '..\Common\Core\Casbin.Core.Strings.pas',
+  Casbin.Core.Defaults in '..\Common\Core\Casbin.Core.Defaults.pas',
+  Casbin.Core.Base.Types in '..\Common\Core\Casbin.Core.Base.Types.pas',
+  Casbin.Effect.Types in '..\Common\Effect\Casbin.Effect.Types.pas',
+  Casbin.Effect in '..\Common\Effect\Casbin.Effect.pas',
+  Casbin.Functions.Types in '..\Common\Functions\Casbin.Functions.Types.pas',
+  Casbin.Functions in '..\Common\Functions\Casbin.Functions.pas',
+  Casbin.Core.Logger.Types in '..\Common\Loggers\Casbin.Core.Logger.Types.pas',
+  Casbin.Core.Logger.Default in '..\Common\Loggers\Casbin.Core.Logger.Default.pas',
+  Casbin.Core.Logger.Base in '..\Common\Loggers\Casbin.Core.Logger.Base.pas',
+  Casbin.Matcher.Types in '..\Common\Matcher\Casbin.Matcher.Types.pas',
+  Casbin.Matcher in '..\Common\Matcher\Casbin.Matcher.pas',
+  Casbin.Model.Types in '..\Common\Model\Casbin.Model.Types.pas',
+  Casbin.Model.Sections.Types in '..\Common\Model\Casbin.Model.Sections.Types.pas',
+  Casbin.Model.Sections.Default in '..\Common\Model\Casbin.Model.Sections.Default.pas',
+  Casbin.Model in '..\Common\Model\Casbin.Model.pas',
+  Casbin.Parser.Types in '..\Common\Parser\Casbin.Parser.Types.pas',
+  Casbin.Parser in '..\Common\Parser\Casbin.Parser.pas',
+  Casbin.Parser.AST.Types in '..\Common\Parser\Casbin.Parser.AST.Types.pas',
+  Casbin.Parser.AST in '..\Common\Parser\Casbin.Parser.AST.pas',
+  Casbin.Policy.Types in '..\Common\Policy\Casbin.Policy.Types.pas',
+  Casbin.Policy in '..\Common\Policy\Casbin.Policy.pas',
+  ArrayHelper in '..\Common\Third Party\ArrayHelper\ArrayHelper.pas',
+  ParseExpr in '..\Common\Third Party\TExpressionParser\ParseExpr.pas',
+  ParseClass in '..\Common\Third Party\TExpressionParser\ParseClass.pas',
+  oObjects in '..\Common\Third Party\TExpressionParser\oObjects.pas';
+
+end.

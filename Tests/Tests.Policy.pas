@@ -77,7 +77,8 @@ type
 implementation
 
 uses
-  Casbin.Policy, System.Generics.Collections, System.SysUtils;
+  Casbin.Policy, System.Generics.Collections, System.SysUtils,
+  Casbin.Core.Base.Types;
 
 procedure TTestPolicyManager.Setup;
 begin
@@ -93,14 +94,14 @@ procedure TTestPolicyManager.testAddPolicyCompact(const aSection: TSectionType;
   const aAssertion: string);
 begin
   fPolicy.addPolicy(aSection, aAssertion);
-  Assert.IsTrue(fPolicy.policyExists(Trim(aAssertion).Split([','])));
+  Assert.IsTrue(fPolicy.policyExists(TFilterArray(Trim(aAssertion).Split([',']))));
 end;
 
 procedure TTestPolicyManager.testAddPolicyFull(const aSection: TSectionType;
   const aTag, aAssertion: string);
 begin
   fPolicy.addPolicy(aSection, aTag, aAssertion);
-  Assert.IsTrue(fPolicy.policyExists(Trim(aAssertion).Split([','])));
+  Assert.IsTrue(fPolicy.policyExists(TFilterArray(Trim(aAssertion).Split([',']))));
 end;
 
 procedure TTestPolicyManager.testDomains(const aPolicyFile, aDomains: string);
@@ -125,7 +126,7 @@ end;
 
 procedure TTestPolicyManager.testPolicy(const aFilter, aExpected: string);
 begin
-  Assert.AreEqual(aExpected, fPolicy.policy(aFilter.Split([','])));
+  Assert.AreEqual(aExpected, fPolicy.policy(TFilterArray(aFilter.Split([',']))));
 end;
 
 procedure TTestPolicyManager.testPolicyExists;

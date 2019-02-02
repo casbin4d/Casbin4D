@@ -74,7 +74,7 @@ begin
     ShowMessage('The parameters are empty');
     Exit;
   end;
-  params:=editParams.Text.Split([',']);
+  params:=TStringDynArray(editParams.Text.Split([',']));
   casbin:=TCasbin.Create(fFolder+popupModel.Text, fFolder+popupPolicies.Text);
   try
     if casbin.enforce(params) then
@@ -201,9 +201,9 @@ end;
 procedure TForm1.popupModelChange(Sender: TObject);
 begin
   Memo1.Lines.Clear;
-  Memo1.Lines.AddStrings(
+  Memo1.Lines.AddStrings(TArray<string>(
     TFile.ReadAllLines('..\..\Examples\Default\'+
-                                    popupModel.Items[popupModel.ItemIndex]));
+                                    popupModel.Items[popupModel.ItemIndex])));
   labelValidateModel.Text:='Not Validated Yet';
   labelValidateModel.FontColor:=TAlphaColorRec.Black;
   rectangleModel.Fill.Color:=TAlphaColorRec.Null;
@@ -213,9 +213,9 @@ end;
 procedure TForm1.popupPoliciesChange(Sender: TObject);
 begin
   Memo2.Lines.Clear;
-  Memo2.Lines.AddStrings(
+  Memo2.Lines.AddStrings(TArray<string>(
     TFile.ReadAllLines('..\..\Examples\Default\'+
-                                    popupPolicies.Items[popupPolicies.ItemIndex]));
+                                    popupPolicies.Items[popupPolicies.ItemIndex])));
   labelValidatePolicies.FontColor:=TAlphaColorRec.Black;
   rectanglePolicies.Fill.Color:=TAlphaColorRec.Null;
 end;

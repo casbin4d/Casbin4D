@@ -657,7 +657,7 @@ implementation
 uses
   Casbin.Model.Types, Casbin.Policy.Types, Casbin.Model, Casbin.Policy,
   Casbin, SysUtils, Casbin.Model.Sections.Types, Casbin.Adapter.Types, Casbin.Adapter.Filesystem, Casbin.Adapter.Policy.Types,
-  Casbin.Adapter.Filesystem.Policy;
+  Casbin.Adapter.Filesystem.Policy, Casbin.Core.Base.Types;
 
 procedure TTestCasbin.Setup;
 begin
@@ -734,7 +734,7 @@ var
   casbin: ICasbin;
 begin
   casbin:=TCasbin.Create(aModelFile, aPolicyFile);
-  params:=aEnforceParams.Split([',']);
+  params:=TFilterArray(aEnforceParams.Split([',']));
   Assert.AreEqual(aResult, casbin.enforce(params));
   casbin:=nil;
 end;
@@ -746,7 +746,7 @@ var
   casbin: ICasbin;
 begin
   casbin:=TCasbin.Create(aModelFile, aPolicyFile);
-  params:=aEnforceParams.Split([',']);
+  params:=TFilterArray(aEnforceParams.Split([',']));
   Assert.AreEqual(aResult, casbin.enforce(params, aOwner));
   casbin:=nil;
 end;
@@ -769,7 +769,7 @@ begin
   casbin.Policy.addPolicy(stPolicyRules,'p','alice,data1,read');
   casbin.Policy.addPolicy(stPolicyRules,'p','bob,data2, write');
 
-  Assert.AreEqual(aResult, casbin.enforce(aEnforceParams.Split([','])));
+  Assert.AreEqual(aResult, casbin.enforce(TFilterArray(aEnforceParams.Split([',']))));
 end;
 
 procedure TTestCasbin.testEnforceRBACInMemoryIndeterminate;
@@ -816,7 +816,7 @@ begin
   // **** BUT YOU SHOULDN'T ****
   // Always, add roles using AddPolicy as in the example
 
-  Assert.AreEqual(aResult, casbin.enforce(aEnforceParams.Split([','])));
+  Assert.AreEqual(aResult, casbin.enforce(TFilterArray(aEnforceParams.Split([',']))));
 end;
 
 procedure TTestCasbin.testEnforceRBACModelInMemory2(
@@ -853,7 +853,7 @@ begin
   // **** BUT YOU SHOULDN'T ****
   // Always, add roles using AddPolicy as in the example
 
-  Assert.AreEqual(aResult, casbin.enforce(aEnforceParams.Split([','])));
+  Assert.AreEqual(aResult, casbin.enforce(TFilterArray(aEnforceParams.Split([',']))));
 end;
 
 procedure TTestCasbin.testEnforceRBACModelWithDomainsAtRuntime(

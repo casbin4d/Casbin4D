@@ -54,7 +54,7 @@ begin
   fMatcher.addIdentifier('john');
   fMatcher.addIdentifier('alice');
   fMatcher.addIdentifier('kour');
-  fMatcher.addIdentifier('mu');
+  fMatcher.addIdentifier('m');
 end;
 
 procedure TTestMatcher.TearDown;

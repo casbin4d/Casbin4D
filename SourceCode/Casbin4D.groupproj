@@ -15,6 +15,9 @@
         <Projects Include="..\Benchmarks\Benchmarks.Casbin.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="Packages\Casbin4D102Tokyo.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -59,14 +62,23 @@
     <Target Name="Benchmarks_Casbin:Make">
         <MSBuild Projects="..\Benchmarks\Benchmarks.Casbin.dproj" Targets="Make"/>
     </Target>
+    <Target Name="Casbin4D102Tokyo">
+        <MSBuild Projects="Packages\Casbin4D102Tokyo.dproj"/>
+    </Target>
+    <Target Name="Casbin4D102Tokyo:Clean">
+        <MSBuild Projects="Packages\Casbin4D102Tokyo.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Casbin4D102Tokyo:Make">
+        <MSBuild Projects="Packages\Casbin4D102Tokyo.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="Casbin4D103Rio;Tests_Casbin;MainDemo;Benchmarks_Casbin"/>
+        <CallTarget Targets="Casbin4D103Rio;Tests_Casbin;MainDemo;Benchmarks_Casbin;Casbin4D102Tokyo"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="Casbin4D103Rio:Clean;Tests_Casbin:Clean;MainDemo:Clean;Benchmarks_Casbin:Clean"/>
+        <CallTarget Targets="Casbin4D103Rio:Clean;Tests_Casbin:Clean;MainDemo:Clean;Benchmarks_Casbin:Clean;Casbin4D102Tokyo:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="Casbin4D103Rio:Make;Tests_Casbin:Make;MainDemo:Make;Benchmarks_Casbin:Make"/>
+        <CallTarget Targets="Casbin4D103Rio:Make;Tests_Casbin:Make;MainDemo:Make;Benchmarks_Casbin:Make;Casbin4D102Tokyo:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

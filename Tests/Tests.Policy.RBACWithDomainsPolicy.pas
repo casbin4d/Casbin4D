@@ -67,7 +67,7 @@ procedure TTestPolicyRBACWithDomainsPolicy.testInitialConditions(const aFilter:
 var
   filters: TFilterArray;
 begin
-  filters:=aFilter.Split([',']);
+  filters:=TFilterArray(aFilter.Split([',']));
   Assert.AreEqual(aResult, fPolicyManager.policyExists(filters));
 end;
 

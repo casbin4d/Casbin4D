@@ -268,6 +268,7 @@ function TModel.toOutputString: string;
 var
   secType: TSectionType;
 begin
+  result:='';
   for secType in modelSections do
   begin
     if (secType=stRoleDefinition) then

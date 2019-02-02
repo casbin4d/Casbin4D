@@ -84,10 +84,7 @@ begin
                         end;
                       end;
 
-    ecUnknown: begin
-                 result:=False;
-                 raise ECasbinException.Create('Unknown effector');
-               end;
+    ecUnknown: raise ECasbinException.Create('Unknown effector');
   end;
 end;
 

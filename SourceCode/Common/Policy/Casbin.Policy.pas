@@ -601,7 +601,7 @@ begin
 
   for policyItem in policies do
   begin
-    strArray:=TFilterArray(policyItem.Split([',']));
+    strArray:=TFilterArray(policyItem.Split([','])); //PALOFF
     for i:=0 to Length(strArray)-1 do
     begin
       strArray[i]:=trim(strArray[i]);

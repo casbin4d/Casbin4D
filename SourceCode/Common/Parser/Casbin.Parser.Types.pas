@@ -23,6 +23,7 @@ type
   TParserStatus = (psIdle, psRunning, psError);
 
   IParser = interface (IBaseInterface)
+    ['{6BC39E48-976B-43F3-BB42-18796CE21985}']
     function getErrorMessage: string;
     function getLogger: ILogger;
     function getNodes: TNodeCollection;

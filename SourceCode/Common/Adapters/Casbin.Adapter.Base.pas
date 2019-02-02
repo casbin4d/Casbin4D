@@ -111,11 +111,9 @@ end;
 
 procedure TBaseAdapter.setLogger(const aValue: ILogger);
 begin
+  fLogger:=nil;
   if Assigned(aValue) then
-  begin
-    fLogger:=nil;
-    fLogger:=aValue;
-  end
+    fLogger:=aValue
   else
     fLogger:=TDefaultLogger.Create;
 end;
@@ -124,6 +122,7 @@ function TBaseAdapter.toOutputString: string;
 var
   item: string;
 begin
+  result:='';
   for item in fAssertions do
     Result:=Result+item+sLineBreak;
 end;

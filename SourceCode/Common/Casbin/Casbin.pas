@@ -155,7 +155,7 @@ begin
   try
     requestArrayRec:=TArrayRecord<string>.Create(aParams);
 
-    request:=TList<string>.Create;  //PALOFF
+    request:=TList<string>.Create;
     requestArrayRec.List(request);
 
     requestStr:=string.Join(',', aParams);
@@ -278,8 +278,8 @@ begin
         effectArray[Length(effectArray)-1]:=matcherResult; //PALOFF
 
         policyDict.Free;
-        policyList.Free;
-      end;
+        end;
+      policyList.Free;
     end;
 
     //Resolve Effector
@@ -348,11 +348,11 @@ end;
 
 procedure TCasbin.setLogger(const aValue: ILogger);
 begin
+  fLogger:=nil;
   if Assigned(aValue) then
-  begin
-    fLogger:=nil;
-    fLogger:=aValue;
-  end;
+    fLogger:=aValue
+  else
+    fLogger:=TDefaultLogger.Create;
 end;
 
 procedure TCasbin.setModel(const aValue: IModel);

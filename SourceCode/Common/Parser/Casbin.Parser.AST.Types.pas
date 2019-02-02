@@ -107,6 +107,7 @@ function TNodeCollection.toOutputString: string;
 var
   header: THeaderNode;
 begin
+  result:='';
   for header in fHeaders do
     Result:=Result+header.toOutputString+sLineBreak;
 end;

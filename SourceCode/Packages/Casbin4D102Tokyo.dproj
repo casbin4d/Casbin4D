@@ -149,6 +149,7 @@
         <DCCReference Include="..\Common\Third Party\TExpressionParser\ParseExpr.pas"/>
         <DCCReference Include="..\Common\Third Party\TExpressionParser\ParseClass.pas"/>
         <DCCReference Include="..\Common\Third Party\TExpressionParser\oObjects.pas"/>
+        <None Include="..\Common\Version.inc"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -201,7 +202,7 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="C:\Users\Public\Documents\Embarcadero\Studio\19.0\Bpl\Casbin4D102Tokyo.bpl" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile LocalName="C:\Users\Public\Documents\Embarcadero\Studio\20.0\Bpl\Casbin4D102Tokyo.bpl" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>Casbin4D102Tokyo.bpl</RemoteName>
                         <Overwrite>true</Overwrite>

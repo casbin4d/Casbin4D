@@ -55,10 +55,10 @@ type
     [TestCase('KeyMatch2-1', '/foo,/foo,true')]
     [TestCase('KeyMatch2-2', '/foo,/foo*,true')]
     [TestCase('KeyMatch2-3', '/foo,/foo/*,false')]
-    [TestCase('KeyMatch2-4', '/foo/bar,/foo,true')] // different with KeyMatch.
+    [TestCase('KeyMatch2-4', '/foo/bar,/foo,true')] // different from KeyMatch
     [TestCase('KeyMatch2-5', '/foo/bar,/foo*,true')]
     [TestCase('KeyMatch2-6', '/foo/bar,/foo/*,true')]
-    [TestCase('KeyMatch2-7', '/foobar,/foo,true')] // different with KeyMatch.
+    [TestCase('KeyMatch2-7', '/foobar,/foo,true')] // different from KeyMatch
     [TestCase('KeyMatch2-8', '/foobar,/foo*,true')]
     [TestCase('KeyMatch2-9', '/foobar,/foo/*,false')]
 
@@ -84,10 +84,10 @@ type
     [TestCase('KeyMatch3-1', '/foo,/foo,true')]
     [TestCase('KeyMatch3-2', '/foo,/foo*,true')]
     [TestCase('KeyMatch3-3', '/foo,/foo/*,false')]
-    [TestCase('KeyMatch3-4', '/foo/bar,/foo,true')] // different with KeyMatch.
+    [TestCase('KeyMatch3-4', '/foo/bar,/foo,true')] // different from KeyMatch
     [TestCase('KeyMatch3-5', '/foo/bar,/foo*,true')]
     [TestCase('KeyMatch3-6', '/foo/bar,/foo/*,true')]
-    [TestCase('KeyMatch3-7', '/foobar,/foo,true')] // different with KeyMatch.
+    [TestCase('KeyMatch3-7', '/foobar,/foo,true')] // different from KeyMatch
     [TestCase('KeyMatch3-8', '/foobar,/foo*,true')]
     [TestCase('KeyMatch3-9', '/foobar,/foo/*,false')]
 

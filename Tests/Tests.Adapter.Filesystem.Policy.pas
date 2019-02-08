@@ -64,12 +64,15 @@ type
     [Test]
     [TestCase ('Add.1', 'p,a,b,c#p,a,b,c','#')]
     procedure testAdd(const aAssertion, aExpected: string);
+
+    [Test]
+    procedure testSave;
   end;
 
 implementation
 
 uses
-  Casbin.Adapter.Filesystem.Policy, System.SysUtils, System.Classes, System.Types;
+  Casbin.Adapter.Filesystem.Policy, System.SysUtils, System.Classes, System.Types, System.IOUtils;
 
 procedure TTestPolicyFileAdapter.Setup;
 begin
@@ -132,6 +135,28 @@ begin
   fFilesystem.load(strArray);
   Assert.AreEqual(Trim(aExpected), Trim(fFilesystem.toOutputString));
   strList.Free;
+end;
+
+procedure TTestPolicyFileAdapter.testSave;
+var
+  originalPolicies: string;
+  retrievedPolicies: string;
+  fileSystem: IPolicyAdapter;
+  filename: string;
+begin
+  filename:=TPath.Combine(TPath.GetTempPath, TPath.GetTempFileName);
+  originalPolicies:='p=john, file, save'+sLineBreak+'p=kour, file, read';
+  TFile.WriteAllText(filename, originalPolicies);
+
+  fileSystem:=TPolicyFileAdapter.Create(filename);
+  fileSystem.load;
+  fileSystem.add('p2=john, john, john');
+  fileSystem.save;
+
+  retrievedPolicies:=TFile.ReadAllText(filename);
+  originalPolicies:=originalPolicies+sLineBreak+'p2=john, john, john';
+  Assert.AreEqual(originalPolicies, Trim(retrievedPolicies));
+  TFile.Delete(filename);
 end;
 
 initialization

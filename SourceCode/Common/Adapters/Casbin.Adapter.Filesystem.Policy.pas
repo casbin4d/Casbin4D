@@ -50,7 +50,7 @@ type
 implementation
 
 uses
-  System.SysUtils, Casbin.Core.Utilities, System.Classes, System.Generics.Collections;
+  System.SysUtils, Casbin.Core.Utilities, System.Classes, System.Generics.Collections, System.IOUtils, System.Types;
 
 { TPolicyFileAdapter }
 
@@ -120,8 +120,7 @@ end;
 procedure TPolicyFileAdapter.save;
 begin
   inherited;
-   {TODO -oOwner -cGeneral : Add PolicyFilterAdapter.save}
-  raise Exception.Create('Not Implemented Yet');
+  TFile.WriteAllLines(fFilename, TStringDynArray(getAssertions.ToArray));
 end;
 
 procedure TPolicyFileAdapter.setAutoSave(const aValue: Boolean);

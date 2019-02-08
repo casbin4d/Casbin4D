@@ -24,6 +24,7 @@ type
     fCached: Boolean;
     fAutosave: Boolean;
     fCacheSize: Integer;
+    fSaved: Boolean;
   protected
 {$REGION 'IPolicyAdapter'}
     procedure add(const aTag: string);
@@ -57,7 +58,10 @@ uses
 procedure TPolicyFileAdapter.add(const aTag: string);
 begin
   if Trim(aTag)<>'' then
+  begin
     getAssertions.Add(Trim(aTag));
+    fSaved:=False;
+  end;
 end;
 
 constructor TPolicyFileAdapter.Create(const aFilename: string);
@@ -66,6 +70,7 @@ begin
   fAutosave:=True;
   fCached:=False;      //PALOFF
   fCacheSize:=DefaultCacheSize;
+  fSaved:=False;
 end;
 
 function TPolicyFileAdapter.getAutoSave: Boolean;
@@ -120,7 +125,11 @@ end;
 procedure TPolicyFileAdapter.save;
 begin
   inherited;
-  TFile.WriteAllLines(fFilename, TStringDynArray(getAssertions.ToArray));
+  if not fSaved then
+  begin
+    TFile.WriteAllLines(fFilename, TStringDynArray(getAssertions.ToArray));
+    fSaved:=True;
+  end;
 end;
 
 procedure TPolicyFileAdapter.setAutoSave(const aValue: Boolean);

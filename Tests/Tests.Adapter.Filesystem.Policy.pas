@@ -32,9 +32,14 @@ type
     [Test]
     procedure testCached;
     [Test]
-    procedure testAutoSave;
-    [Test]
     procedure testCachSize;
+
+    [Test]
+    procedure testAutoSaveProperty;
+
+    [Test]
+    procedure testAutoSave;
+
     [Test]
     procedure testFiltered;
 
@@ -75,7 +80,8 @@ type
 implementation
 
 uses
-  Casbin.Adapter.Filesystem.Policy, System.SysUtils, System.Classes, System.Types, System.IOUtils;
+  Casbin.Adapter.Filesystem.Policy, System.SysUtils, System.Classes,
+  System.Types, System.IOUtils;
 
 procedure TTestPolicyFileAdapter.Setup;
 begin
@@ -94,6 +100,33 @@ begin
 end;
 
 procedure TTestPolicyFileAdapter.testAutoSave;
+var
+  originalPolicies: string;
+  retrievedPolicies: string;
+  fileSystem: IPolicyAdapter;
+  filename: string;
+begin
+  filename:=TPath.Combine(TPath.GetTempPath, TPath.GetTempFileName);
+  originalPolicies:='p=john, file, save'+sLineBreak+'p=kour, file, read';
+  TFile.WriteAllText(filename, originalPolicies);
+
+  fileSystem:=TPolicyFileAdapter.Create(filename);
+  fileSystem.load;
+  fileSystem.AutoSave:=False;
+  fileSystem.remove('p=kour, file, read');
+  fileSystem.load;
+  Assert.AreEqual(originalPolicies, Trim(fileSystem.toOutputString),'false');
+
+  fileSystem.load;
+  fileSystem.AutoSave:=true;
+  fileSystem.remove('p=kour, file, read');
+  fileSystem.load;
+  Assert.AreEqual('p=john, file, save', Trim(fileSystem.toOutputString),'true');
+
+  TFile.Delete(filename);
+end;
+
+procedure TTestPolicyFileAdapter.testAutoSaveProperty;
 begin
   Assert.AreEqual(true, fFilesystem.AutoSave, 'default');
   fFilesystem.AutoSave:=not fFilesystem.AutoSave;

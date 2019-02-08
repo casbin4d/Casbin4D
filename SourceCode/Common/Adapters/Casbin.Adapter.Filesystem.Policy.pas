@@ -117,9 +117,23 @@ begin
 end;
 
 procedure TPolicyFileAdapter.remove(const aPolicyDefinition: string);
+var
+  assertion: string;
 begin
-  {TODO -oOwner -cGeneral : Add PolicyFilterAdapter.remove}
-  raise Exception.Create('Not Implemented Yet');
+  if Trim(aPolicyDefinition)='' then
+    Exit;
+  for assertion in getAssertions do
+    if SameText(UpperCase(Trim(aPolicyDefinition)), UpperCase(trim(assertion))) then
+    begin
+      getAssertions.Remove(assertion);
+      Break;
+    end;
+  fSaved:=False;
+  if fAutosave then
+    save;
+
+  // We need to remove and role-based policies
+
 end;
 
 procedure TPolicyFileAdapter.save;

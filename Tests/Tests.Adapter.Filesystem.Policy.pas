@@ -67,6 +67,9 @@ type
 
     [Test]
     procedure testSave;
+
+    [Test]
+    procedure testRemove;
   end;
 
 implementation
@@ -135,6 +138,28 @@ begin
   fFilesystem.load(strArray);
   Assert.AreEqual(Trim(aExpected), Trim(fFilesystem.toOutputString));
   strList.Free;
+end;
+
+procedure TTestPolicyFileAdapter.testRemove;
+var
+  originalPolicies: string;
+  retrievedPolicies: string;
+  fileSystem: IPolicyAdapter;
+  filename: string;
+begin
+  filename:=TPath.Combine(TPath.GetTempPath, TPath.GetTempFileName);
+  originalPolicies:='p=john, file, save'+sLineBreak+'p=kour, file, read';
+  TFile.WriteAllText(filename, originalPolicies);
+
+  fileSystem:=TPolicyFileAdapter.Create(filename);
+  fileSystem.load;
+  fileSystem.remove('p=kour, file, read');
+  fileSystem.save;
+
+  retrievedPolicies:=TFile.ReadAllText(filename);
+  originalPolicies:='p=john, file, save';
+  Assert.AreEqual(originalPolicies, Trim(retrievedPolicies));
+  TFile.Delete(filename);
 end;
 
 procedure TTestPolicyFileAdapter.testSave;

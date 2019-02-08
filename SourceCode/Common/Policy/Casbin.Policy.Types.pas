@@ -17,7 +17,7 @@ interface
 
 uses
   Casbin.Core.Base.Types, Casbin.Model.Sections.Types,
-  System.Generics.Collections, System.Rtti, System.Types;
+  System.Generics.Collections, System.Rtti, System.Types, Casbin.Watcher.Types;
 
 const
   DefaultDomain = 'default';
@@ -95,6 +95,11 @@ type
     function rolesForEntity (const aEntity: string; const aDomain: string =''):TStringDynArray;
 
     function EntitiesForRole (const aEntity: string; const aDomain: string =''):TStringDynArray;
+
+    // Watchers
+    procedure registerWatcher (const aWatcher: IWatcher);
+    procedure unregisterWatcher (const aWatcher: IWatcher);
+    procedure notifyWatchers;
   end;
 
 implementation

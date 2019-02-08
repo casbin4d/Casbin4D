@@ -183,6 +183,8 @@
         <DCCReference Include="Tests.Adapter.MemorySystem.Policy.pas"/>
         <DCCReference Include="Tests.Policy.Roles.pas"/>
         <DCCReference Include="..\SourceCode\Common\Third Party\ArrayHelper\ArrayHelper.pas"/>
+        <DCCReference Include="..\SourceCode\Common\Watcher\Casbin.Watcher.Types.pas"/>
+        <DCCReference Include="Tests.Watcher.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

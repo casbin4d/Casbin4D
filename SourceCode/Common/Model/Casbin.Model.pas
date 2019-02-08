@@ -18,7 +18,7 @@ interface
 uses
   Casbin.Core.Base.Types, Casbin.Model.Types, Casbin.Adapter.Types,
   Casbin.Parser.Types, Casbin.Parser.AST.Types, Casbin.Model.Sections.Types,
-  System.Generics.Collections, Casbin.Effect.Types;
+  System.Generics.Collections, Casbin.Effect.Types, Casbin.Watcher.Types;
 
 type
   TModel = class (TBaseInterfacedObject, IModel)
@@ -27,6 +27,8 @@ type
     fParser: IParser;    //PALOFF
     fNodes: TNodeCollection;
     fAssertions: TList<string>;
+    fWatchers: TList<IWatcher>;
+
     procedure checkSection(const aSection: TSectionType);
     procedure loadNodes(const aAdapter: IAdapter);
   protected
@@ -42,6 +44,11 @@ type
     procedure addModel(const aModel: string);
     function assertionExists (const aAssertion: string): Boolean;
     function toOutputString: string;
+
+    // Watchers
+    procedure registerWatcher (const aWatcher: IWatcher);
+    procedure unregisterWatcher (const aWatcher: IWatcher);
+    procedure notifyWatchers;
 {$ENDREGION}
   public
     constructor Create(const aModelFilename: string); overload;
@@ -116,7 +123,8 @@ begin
       if header.SectionType=aSection then
       begin
         addAssertion(header, assertion);
-        Exit;
+        foundHeader:=True;
+        Break;
       end;
     if not foundHeader then
     begin
@@ -129,6 +137,7 @@ begin
       addAssertion(header, assertion);
       sec.Free;
     end;
+    notifyWatchers;
   end;
 end;
 
@@ -190,6 +199,7 @@ begin
   inherited Create;
   loadNodes(aAdapter);
   fAssertions:=TList<string>.Create;
+  fWatchers:=TList<IWatcher>.Create;
 end;
 
 constructor TModel.Create;
@@ -200,6 +210,7 @@ end;
 destructor TModel.Destroy;
 begin
   fAssertions.Free;
+  fWatchers.Free;
   inherited;
 end;
 
@@ -238,6 +249,20 @@ begin
   if fParser.Status=psError then
     raise ECasbinException.Create('Parsing error in Model: '+fParser.ErrorMessage);
   fNodes:=fParser.Nodes;
+end;
+
+procedure TModel.notifyWatchers;
+var
+  watcher: IWatcher;
+begin
+  for watcher in fWatchers do
+    watcher.update;
+end;
+
+procedure TModel.registerWatcher(const aWatcher: IWatcher);
+begin
+  if not fWatchers.Contains(aWatcher) then
+    fWatchers.Add(aWatcher);
 end;
 
 function TModel.section(const aSection: TSectionType; const aSlim: Boolean =
@@ -281,6 +306,12 @@ begin
     else
       Result:=Result+section(secType, false)+sLineBreak;
   end;
+end;
+
+procedure TModel.unregisterWatcher(const aWatcher: IWatcher);
+begin
+  if fWatchers.Contains(aWatcher) then
+    fWatchers.Remove(aWatcher);
 end;
 
 end.

@@ -69,6 +69,7 @@ contains
   Casbin in '..\Common\Casbin\Casbin.pas',
   Casbin.Adapter.Memory.Policy in '..\Common\Adapters\Casbin.Adapter.Memory.Policy.pas',
   Casbin.Adapter.Memory in '..\Common\Adapters\Casbin.Adapter.Memory.pas',
-  ArrayHelper in '..\Common\Third Party\ArrayHelper\ArrayHelper.pas';
+  ArrayHelper in '..\Common\Third Party\ArrayHelper\ArrayHelper.pas',
+  Casbin.Watcher.Types in '..\Common\Watcher\Casbin.Watcher.Types.pas';
 
 end.

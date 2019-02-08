@@ -149,6 +149,7 @@
         <DCCReference Include="..\Common\Third Party\TExpressionParser\ParseExpr.pas"/>
         <DCCReference Include="..\Common\Third Party\TExpressionParser\ParseClass.pas"/>
         <DCCReference Include="..\Common\Third Party\TExpressionParser\oObjects.pas"/>
+        <DCCReference Include="..\Common\Watcher\Casbin.Watcher.Types.pas"/>
         <None Include="..\Common\Version.inc"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>

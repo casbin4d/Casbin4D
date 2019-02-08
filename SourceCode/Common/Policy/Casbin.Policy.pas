@@ -19,7 +19,7 @@ uses
   Casbin.Core.Base.Types, Casbin.Policy.Types, Casbin.Parser.Types,
   Casbin.Parser.AST.Types, Casbin.Adapter.Policy.Types, System.Rtti,
   System.Types, System.Classes, Casbin.Model.Sections.Types,
-  System.Generics.Collections;
+  System.Generics.Collections, Casbin.Watcher.Types;
 
 type
   TPolicyManager = class(TBaseInterfacedObject, IPolicyManager)
@@ -30,6 +30,7 @@ type
     fPoliciesList: TList<string>;
     fRolesList: TList<string>;
     fDomains: TList<string>;
+    fWatchers: TList<IWatcher>;
 
     fRolesNodes: TObjectDictionary<string, TRoleNode>;
     fRolesLinks: TObjectDictionary<string, TStringList>;
@@ -78,6 +79,11 @@ type
                                                                 TStringDynArray;
     function EntitiesForRole (const aEntity: string; const aDomain: string =''):
                                                                 TStringDynArray;
+
+    // Watchers
+    procedure registerWatcher (const aWatcher: IWatcher);
+    procedure unregisterWatcher(const aWatcher: IWatcher);
+    procedure notifyWatchers;
 {$ENDREGION}
   public
     constructor Create(const aPolicy: string); overload;
@@ -174,6 +180,7 @@ begin
     raise ECasbinException.Create('Parsing error in Model: '+fParser.ErrorMessage);
   fNodes:=fParser.Nodes;
   loadRoles;
+  notifyWatchers;
 end;
 
 procedure TPolicyManager.addLink(const aBottom, aTopDomain, aTop: string);
@@ -203,6 +210,7 @@ begin
   fRolesNodes:=TObjectDictionary<string, TRoleNode>.Create([doOwnsValues]);
   fRolesLinks:=TObjectDictionary<string, TStringList>.Create([doOwnsValues]);
   fDomains:=TList<string>.Create;
+  fWatchers:=TList<IWatcher>.Create;
   loadPolicies;
   loadRoles;
 end;
@@ -210,6 +218,12 @@ end;
 constructor TPolicyManager.Create;
 begin
   Create(TPolicyMemoryAdapter.Create);
+end;
+
+procedure TPolicyManager.registerWatcher(const aWatcher: IWatcher);
+begin
+  if not fWatchers.Contains(aWatcher) then
+    fWatchers.Add(aWatcher);
 end;
 
 procedure TPolicyManager.removeLink(const aLeftDomain, aLeft, aRightDomain,
@@ -286,6 +300,7 @@ begin
     end;
   end;
   loadRoles;
+  notifyWatchers;
 end;
 
 procedure TPolicyManager.removeLink(const aLeft, aRightDomain, aRight: string);
@@ -305,6 +320,7 @@ begin
   fRolesLinks.Free;
   fRolesNodes.Free;
   fDomains.Free;
+  fWatchers.Free;
   inherited;
 end;
 
@@ -546,6 +562,14 @@ begin
       addLink(policyList[1], policyList[2]);
     policyList.Free;
   end;
+end;
+
+procedure TPolicyManager.notifyWatchers;
+var
+  watcher: IWatcher;
+begin
+  for watcher in fWatchers do
+    watcher.update;
 end;
 
 function TPolicyManager.policies: TList<string>;
@@ -807,6 +831,12 @@ end;
 function TPolicyManager.toOutputString: string;
 begin
   Result:=section;
+end;
+
+procedure TPolicyManager.unregisterWatcher(const aWatcher: IWatcher);
+begin
+  if fWatchers.Contains(aWatcher) then
+    fWatchers.Remove(aWatcher);
 end;
 
 end.

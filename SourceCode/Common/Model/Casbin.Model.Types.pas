@@ -17,7 +17,7 @@ interface
 
 uses
   Casbin.Core.Base.Types, Casbin.Model.Sections.Types,
-  System.Generics.Collections, Casbin.Effect.Types;
+  System.Generics.Collections, Casbin.Effect.Types, Casbin.Watcher.Types;
 
 type
   IModel = interface (IBaseInterface)
@@ -33,6 +33,11 @@ type
     function assertionExists (const aAssertion: string): Boolean;
     function effectCondition: TEffectCondition;
     function toOutputString: string;
+
+    // Watchers
+    procedure registerWatcher (const aWatcher: IWatcher);
+    procedure unregisterWatcher (const aWatcher: IWatcher);
+    procedure notifyWatchers;
   end;
 
 implementation

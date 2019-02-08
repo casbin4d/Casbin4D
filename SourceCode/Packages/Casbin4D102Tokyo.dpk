@@ -69,6 +69,7 @@ contains
   ArrayHelper in '..\Common\Third Party\ArrayHelper\ArrayHelper.pas',
   ParseExpr in '..\Common\Third Party\TExpressionParser\ParseExpr.pas',
   ParseClass in '..\Common\Third Party\TExpressionParser\ParseClass.pas',
-  oObjects in '..\Common\Third Party\TExpressionParser\oObjects.pas';
+  oObjects in '..\Common\Third Party\TExpressionParser\oObjects.pas',
+  Casbin.Watcher.Types in '..\Common\Watcher\Casbin.Watcher.Types.pas';
 
 end.

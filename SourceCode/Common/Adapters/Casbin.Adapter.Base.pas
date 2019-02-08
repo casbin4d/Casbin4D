@@ -16,7 +16,8 @@ unit Casbin.Adapter.Base;
 interface
 
 uses
-  Casbin.Core.Base.Types, Casbin.Adapter.Types, Casbin.Core.Logger.Types, System.Generics.Collections;
+  Casbin.Core.Base.Types, Casbin.Adapter.Types, Casbin.Core.Logger.Types,
+  System.Generics.Collections;
 
 type
   {$REGION 'This is the base class for all Adapters'}

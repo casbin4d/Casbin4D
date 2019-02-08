@@ -43,7 +43,6 @@ type
 {$ENDREGION}
 {$REGION 'IPolicyAdapter'}
     procedure remove(const aPolicyDefinition: string); overload;
-    procedure remove (const aPolicyDefinition: string; const aFilter: string); overload;
 {$ENDREGION}
   end;
 implementation
@@ -89,11 +88,6 @@ procedure TPolicyMemoryAdapter.remove(const aPolicyDefinition: string);
 begin
   if getAssertions.IndexOf(aPolicyDefinition)>-1 then
     getAssertions.Delete(getAssertions.IndexOf(aPolicyDefinition));
-end;
-
-procedure TPolicyMemoryAdapter.remove(const aPolicyDefinition, aFilter: string);
-begin
-  remove(aPolicyDefinition);
 end;
 
 procedure TPolicyMemoryAdapter.resetSections;

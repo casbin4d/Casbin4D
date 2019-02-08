@@ -16,7 +16,7 @@ unit Casbin.Adapter.Policy.Types;
 interface
 
 uses
-  Casbin.Adapter.Types;
+  Casbin.Adapter.Types, Casbin.Core.Base.Types;
 
 type
   IPolicyAdapter = interface (IAdapter)
@@ -72,7 +72,6 @@ type
     ///   </list>
     /// </example>
     {$ENDREGION}
-    procedure remove (const aPolicyDefinition: string; const aFilter: string); overload;
     procedure setCacheSize(const aValue: Integer);
 
     property AutoSave: Boolean read getAutoSave write setAutoSave;

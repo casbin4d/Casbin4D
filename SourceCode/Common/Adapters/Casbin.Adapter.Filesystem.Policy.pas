@@ -43,7 +43,6 @@ type
 {$ENDREGION}
 {$REGION 'IPolicyAdapter'}
     procedure remove(const aPolicyDefinition: string); overload;
-    procedure remove (const aPolicyDefinition: string; const aFilter: string); overload;
 {$ENDREGION}
     constructor Create(const aFilename: string); override;
   end;
@@ -110,12 +109,6 @@ begin
         getAssertions.Delete(i);
     end;
   end;
-end;
-
-procedure TPolicyFileAdapter.remove(const aPolicyDefinition, aFilter: string);
-begin
-  {TODO -oOwner -cGeneral : Add PolicyFilterAdapter.remove}
-  raise Exception.Create('Not Implemented Yet');
 end;
 
 procedure TPolicyFileAdapter.remove(const aPolicyDefinition: string);

@@ -97,7 +97,7 @@ var
 begin
   // DO NOT CALL inherited when CACHE is implemented
   // WE NEED TO MANAGE THE CACHE
-  {TODO -oOwner -cGeneral : Implement Cache}
+  // Now, cache is not managed at all
   inherited; // <-- This should be removed when Cache is implemented
              //     But the fFiltered should be managed here
              //     And the fFilter property
@@ -133,6 +133,7 @@ begin
     save;
 
   // We need to remove and role-based policies
+  // For now, if policies are deleted the role rules exists in the file
 
 end;
 

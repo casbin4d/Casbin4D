@@ -59,9 +59,26 @@ type
     function domains: TList<string>;
     function roleExists (const aFilter: TFilterArray = []): Boolean;
 
+    {$REGION 'Adds the inheritance link between two roles'}
+    /// <summary>
+    ///   Adds the inheritance link between two roles
+    /// </summary>
+    /// <example>
+    ///   addLink(name1, name2) adds a link between role:name 1 and role: name2
+    /// </example>
+    {$ENDREGION}
     procedure addLink(const aBottom: string; const aTop: string); overload;
     procedure addLink(const aBottom: string;
                       const aTopDomain: string; const aTop: string); overload;
+    {$REGION 'Adds the inheritance link between two roles by passign domains'}
+    /// <summary>
+    ///   Adds the inheritance link between two roles by passign domains
+    /// </summary>
+    /// <example>
+    ///   addLink(domain1, name1, domain2, name2) adds a link between role:name
+    ///   1 in domain1 and role: name2 in domain 2
+    /// </example>
+    {$ENDREGION}
     procedure addLink(const aBottomDomain: string; const aBottom: string;
                       const aTopDomain: string; const aTop: string); overload;
     procedure removeLink(const aLeft: string; const aRight: string); overload;

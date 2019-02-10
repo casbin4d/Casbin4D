@@ -152,12 +152,20 @@ type
     [TestCase ('EntitiesForRole.6', 'g2#u3,u4', '#')]
     [TestCase ('EntitiesForRole.7', 'g3#g1,u4', '#')]
     procedure testEntitiesForRoleNormal(const aEntity, aExpected: string);
+
+    [Test]
+    // From rbac_api_test.go
+    procedure testRoleAPI;
+
+    [Test]
+    // From rbac_api_test.go
+    procedure testPermissionAPI;
   end;
 
 implementation
 
 uses
-  Casbin.Policy, System.SysUtils;
+  Casbin.Policy, System.SysUtils, Casbin.Model.Sections.Types, Casbin.Model.Types, Casbin.Types, Casbin;
 
 procedure TTestPolicyRoles.Setup;
 begin
@@ -216,6 +224,92 @@ begin
   actArray:=fPolicy.EntitiesForRole(aEntity);
   actString:=string.Join(',', actArray);
   Assert.AreEqual(Trim(aExpected), Trim(actString));
+end;
+
+procedure TTestPolicyRoles.testPermissionAPI;
+var
+  casbin: ICasbin;
+  roles: TStringDynArray;
+begin
+  casbin:=TCasbin.Create('..\..\..\Examples\Default\basic_without_resources_model.conf',
+            '..\..\..\Examples\Default\basic_without_resources_policy.csv');
+
+  Assert.AreEqual(True, casbin.enforce(['alice','read']), 'Start.1');
+  Assert.AreEqual(False, casbin.enforce(['alice','write']),'Start.2');
+  Assert.AreEqual(False, casbin.enforce(['bob','read']),'Start.3');
+  Assert.AreEqual(True, casbin.enforce(['bob','write']),'Start.4');
+
+  roles:=casbin.Policy.rolesForEntity('alice');
+  Assert.IsTrue(Length(roles) = 0, 'Alice.4');
+
+
+
+end;
+
+procedure TTestPolicyRoles.testRoleAPI;
+var
+  casbin: ICasbin;
+  policy: IPolicyManager;
+  roles: TStringDynArray;
+begin
+  policy:=TPolicyManager.Create
+    ('..\..\..\Examples\Default\rbac_policy.csv');
+
+  ///////////////
+  policy.removePolicy(['alice','*']);
+  roles:=[];
+  roles:=policy.rolesForEntity('alice');
+  Assert.IsTrue(Length(roles) = 0, 'Alice.4');
+
+  roles:=[];
+  roles:=policy.rolesForEntity('bob');
+  Assert.IsTrue(Length(roles) = 0, 'Bob.4');
+
+  roles:=[];
+  roles:=policy.rolesForEntity('data2_admin');
+  Assert.IsTrue(Length(roles) = 0, 'Data2_admin.4');
+
+  ///////////////////////
+  policy.addPolicy(stRoleRules,'g','alice, data1_admin');
+  policy.removePolicy(['alice','*']);
+  policy.removeLink('alice','*');
+  roles:=[];
+  roles:=policy.rolesForEntity('alice');
+  Assert.IsTrue(Length(roles) = 1, 'Alice.5');
+
+  roles:=[];
+  roles:=policy.rolesForEntity('bob');
+  Assert.IsTrue(Length(roles) = 0, 'Bob.5');
+
+  roles:=[];
+  roles:=policy.rolesForEntity('data2_admin');
+  Assert.IsTrue(Length(roles) = 0, 'Data2_admin.5');
+
+  ///////////////////////
+  policy.addPolicy(stRoleRules, 'g', 'alice, data2_admin');
+
+  casbin:=TCasbin.Create('..\..\..\Examples\Default\rbac_model.conf', policy);
+  Assert.AreEqual(True, casbin.enforce(['alice', 'data1', 'read']), 'Add.1');
+  Assert.AreEqual(False, casbin.enforce(['alice', 'data1', 'write']), 'Add.2');
+  Assert.AreEqual(True, casbin.enforce(['alice', 'data2', 'read']), 'Add.3');
+  Assert.AreEqual(True, casbin.enforce(['alice', 'data2', 'write']), 'Add.4');
+
+  Assert.AreEqual(False, casbin.enforce(['bob', 'data1', 'read']), 'Add.1');
+  Assert.AreEqual(False, casbin.enforce(['bob', 'data1', 'write']), 'Add.2');
+  Assert.AreEqual(False, casbin.enforce(['bob', 'data2', 'read']), 'Add.3');
+  Assert.AreEqual(True, casbin.enforce(['bob', 'data2', 'write']), 'Add.4');
+
+  policy.removePolicy(['data2_admin','*']);
+  Assert.AreEqual(True, casbin.enforce(['alice', 'data1', 'read']), 'Remove.1');
+  Assert.AreEqual(False, casbin.enforce(['alice', 'data1', 'write']), 'Remove.2');
+  Assert.AreEqual(False, casbin.enforce(['alice', 'data2', 'read']), 'Remove.3');
+  Assert.AreEqual(False, casbin.enforce(['alice', 'data2', 'write']), 'Remove.4');
+
+  Assert.AreEqual(False, casbin.enforce(['bob', 'data1', 'read']), 'Remove.5');
+  Assert.AreEqual(False, casbin.enforce(['bob', 'data1', 'write']), 'Remove.6');
+  Assert.AreEqual(False, casbin.enforce(['bob', 'data2', 'read']), 'Remove.7');
+  Assert.AreEqual(True, casbin.enforce(['bob', 'data2', 'write']), 'Remove.8');
+
 end;
 
 procedure TTestPolicyRoles.testRolesDomainDelete(const aLeft, aRight,

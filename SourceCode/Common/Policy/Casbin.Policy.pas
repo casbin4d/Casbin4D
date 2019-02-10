@@ -36,6 +36,7 @@ type
     fRolesLinks: TObjectDictionary<string, TStringList>;
     procedure loadPolicies;
     function findRolesNode(const aDomain, aValue: string): TRoleNode;
+    function implicitPolicyExists(const aValue, aResource: string): Boolean;
     procedure loadRoles;
   private
 {$REGION 'Interface'}
@@ -75,8 +76,8 @@ type
                                                                         overload;
     function linkExists(const aLeftDomain: string; const aLeft: string; const
         aRightDomain: string; const aRight: string): boolean; overload;
-    function rolesForEntity (const aEntity: string; const aDomain: string =''):
-                                                                TStringDynArray;
+    function rolesForEntity(const aEntity: string; const aDomain: string = '';
+        const aRoleMode: TGetRoleMode = rmNonImplicit): TStringDynArray;
     function EntitiesForRole (const aEntity: string; const aDomain: string =''):
                                                                 TStringDynArray;
 
@@ -380,6 +381,23 @@ begin
     end;
   end;
   Result := node;
+end;
+
+function TPolicyManager.implicitPolicyExists(const aValue, aResource: string):
+    Boolean;
+var
+  policy: string;
+begin
+  Result:=False;
+  for policy in policies do
+  begin
+    if UpperCase(policy).Contains(Trim(UpperCase(aValue))) and
+      UpperCase(policy).Contains(Trim(UpperCase(aResource))) then
+    begin
+      Result:=True;
+      Break;
+    end;
+  end;
 end;
 
 function TPolicyManager.linkExists(const aLeft: string; const aRight: string):
@@ -772,8 +790,9 @@ begin
   Result:=fRolesList;
 end;
 
-function TPolicyManager.rolesForEntity(const aEntity,
-  aDomain: string): TStringDynArray;
+function TPolicyManager.rolesForEntity(const aEntity: string; const aDomain:
+    string = ''; const aRoleMode: TGetRoleMode = rmNonImplicit):
+    TStringDynArray;
 var
   nodeEntity: TRoleNode;
   entity: TRoleNode;
@@ -793,8 +812,18 @@ begin
       for id in fRolesLinks.Items[nodeEntity.ID] do
       begin
         entity:=fRolesNodes.Items[id];
-        SetLength(Result, Length(Result)+1);
-        Result[Length(Result)-1]:=entity.Value;
+
+        if (aRoleMode=rmImplicit) then
+        begin
+          SetLength(Result, Length(Result)+1);
+          Result[Length(Result)-1]:=entity.Value;
+        end
+        else
+        if not implicitPolicyExists(aEntity, entity.Value) then
+        begin
+          SetLength(Result, Length(Result)+1);
+          Result[Length(Result)-1]:=entity.Value;
+        end;
       end;
     end;
   end;

@@ -35,6 +35,20 @@ type
     property ID: string read fID write fID;
   end;
 
+  TGetRoleMode = (
+    {$REGION 'Returns all the roles and those inferred by the policies'}
+    /// <summary>
+    ///   Returns all the roles and those inferred by the policies
+    /// </summary>
+    {$ENDREGION}
+    rmImplicit,
+    {$REGION 'Returns only the roles'}
+    /// <summary>
+    ///   Returns only the roles
+    /// </summary>
+    {$ENDREGION}
+    rmNonImplicit);
+
   IPolicyManager = interface (IBaseInterface)
     ['{B983A830-6107-4283-A45D-D74CDBB5E2EA}']
     function section (const aSlim: Boolean = true): string;
@@ -72,7 +86,7 @@ type
                       const aTopDomain: string; const aTop: string); overload;
     {$REGION 'Adds the inheritance link between two roles by passign domains'}
     /// <summary>
-    ///   Adds the inheritance link between two roles by passign domains
+    ///   Adds the inheritance link between two roles by passing domains
     /// </summary>
     /// <example>
     ///   addLink(domain1, name1, domain2, name2) adds a link between role:name
@@ -92,7 +106,8 @@ type
     function linkExists(const aLeftDomain: string; const aLeft: string;
                       const aRightDomain: string; const aRight: string):boolean; overload;
 
-    function rolesForEntity (const aEntity: string; const aDomain: string =''):TStringDynArray;
+    function rolesForEntity(const aEntity: string; const aDomain: string = '';
+        const aRoleMode: TGetRoleMode = rmNonImplicit): TStringDynArray;
 
     function EntitiesForRole (const aEntity: string; const aDomain: string =''):TStringDynArray;
 

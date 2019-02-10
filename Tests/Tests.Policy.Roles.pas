@@ -256,10 +256,17 @@ begin
   Assert.AreEqual(True, casbin.enforce(['bob','read']),'AddBobRead.3');
   Assert.AreEqual(True, casbin.enforce(['bob','write']),'AddBobRead.4');
 
-//  roles:=casbin.Policy.rolesForEntity('alice');
-//  Assert.IsTrue(Length(roles) = 0, 'Alice.4');
+  casbin.Policy.removePolicy(['bob','read']);
+  Assert.AreEqual(False, casbin.enforce(['alice','read']), 'DeleteBobRead.1');
+  Assert.AreEqual(False, casbin.enforce(['alice','write']),'DeleteBobRead.2');
+  Assert.AreEqual(False, casbin.enforce(['bob','read']),'DeleteBobRead.3');
+  Assert.AreEqual(True, casbin.enforce(['bob','write']),'DeleteBobRead.4');
 
-
+  casbin.Policy.removePolicy(['bob','*']);
+  Assert.AreEqual(False, casbin.enforce(['alice','read']), 'DeleteBob.1');
+  Assert.AreEqual(False, casbin.enforce(['alice','write']),'DeleteBob.2');
+  Assert.AreEqual(False, casbin.enforce(['bob','read']),'DeleteBob.3');
+  Assert.AreEqual(False, casbin.enforce(['bob','write']),'DeleteBob.4');
 
 end;
 
@@ -272,8 +279,59 @@ begin
   policy:=TPolicyManager.Create
     ('..\..\..\Examples\Default\rbac_policy.csv');
   policy.Adapter.AutoSave:=False;
+
+  ///////////////////////
+  roles:=[];
+  roles:=policy.rolesForEntity('alice');
+  Assert.IsTrue(Length(roles) = 1, 'Alice.1');
+  Assert.AreEqual('data2_admin', roles[0], 'g.1');
+
+  roles:=[];
+  roles:=policy.rolesForEntity('bob');
+  Assert.IsTrue(Length(roles) = 0, 'Bob.1');
+
+  roles:=[];
+  roles:=policy.rolesForEntity('data2_admin');
+  Assert.IsTrue(Length(roles) = 0, 'Data2_admin.1');
+
+  roles:=[];
+  roles:=policy.rolesForEntity('non_exist');
+  Assert.IsTrue(Length(roles) = 0, 'Non_exist.1');
+
+  ///////////////////////
+  policy.addPolicy(stRoleRules,'g','alice, data1_admin');
+  roles:=[];
+  roles:=policy.rolesForEntity('alice');
+  Assert.IsTrue(Length(roles) = 2, 'Alice.2');
+  Assert.AreEqual('data1_admin', roles[0],'g.2');
+  Assert.AreEqual('data2_admin', roles[1],'g.3');
+
+  roles:=[];
+  roles:=policy.rolesForEntity('bob');
+  Assert.IsTrue(Length(roles) = 0, 'Bob.2');
+
+  roles:=[];
+  roles:=policy.rolesForEntity('data2_admin');
+  Assert.IsTrue(Length(roles) = 0, 'Data2_admin.2');
+
   ///////////////
-  policy.removePolicy(['alice','*']);
+  policy.removePolicy(['alice','data1_admin']);
+  roles:=[];
+  roles:=policy.rolesForEntity('alice');
+  Assert.IsTrue(Length(roles) = 1, 'Alice.3');
+  Assert.AreEqual('data2_admin', roles[0], 'g.4');
+
+  roles:=[];
+  roles:=policy.rolesForEntity('bob');
+  Assert.IsTrue(Length(roles) = 0, 'Bob.3');
+
+  roles:=[];
+  roles:=policy.rolesForEntity('data2_admin');
+  Assert.IsTrue(Length(roles) = 0, 'Data2_admin.3');
+
+
+  ///////////////
+  policy.removePolicy(['alice','*'], rmNonImplicit);
   roles:=[];
   roles:=policy.rolesForEntity('alice');
   Assert.IsTrue(Length(roles) = 0, 'Alice.4');
@@ -288,11 +346,10 @@ begin
 
   ///////////////////////
   policy.addPolicy(stRoleRules,'g','alice, data1_admin');
-  policy.removePolicy(['alice','*']);
-  policy.removeLink('alice','*');
+  policy.removePolicy(['alice','*'], rmNonImplicit);
   roles:=[];
   roles:=policy.rolesForEntity('alice');
-  Assert.IsTrue(Length(roles) = 1, 'Alice.5');
+  Assert.IsTrue(Length(roles) = 0, 'Alice.5');
 
   roles:=[];
   roles:=policy.rolesForEntity('bob');
@@ -311,10 +368,10 @@ begin
   Assert.AreEqual(True, casbin.enforce(['alice', 'data2', 'read']), 'Add.3');
   Assert.AreEqual(True, casbin.enforce(['alice', 'data2', 'write']), 'Add.4');
 
-  Assert.AreEqual(False, casbin.enforce(['bob', 'data1', 'read']), 'Add.1');
-  Assert.AreEqual(False, casbin.enforce(['bob', 'data1', 'write']), 'Add.2');
-  Assert.AreEqual(False, casbin.enforce(['bob', 'data2', 'read']), 'Add.3');
-  Assert.AreEqual(True, casbin.enforce(['bob', 'data2', 'write']), 'Add.4');
+  Assert.AreEqual(False, casbin.enforce(['bob', 'data1', 'read']), 'Add.5');
+  Assert.AreEqual(False, casbin.enforce(['bob', 'data1', 'write']), 'Add.6');
+  Assert.AreEqual(False, casbin.enforce(['bob', 'data2', 'read']), 'Add.7');
+  Assert.AreEqual(True, casbin.enforce(['bob', 'data2', 'write']), 'Add.8');
 
   policy.removePolicy(['data2_admin','*']);
   Assert.AreEqual(True, casbin.enforce(['alice', 'data1', 'read']), 'Remove.1');

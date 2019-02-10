@@ -102,7 +102,6 @@ end;
 procedure TTestPolicyFileAdapter.testAutoSave;
 var
   originalPolicies: string;
-  retrievedPolicies: string;
   fileSystem: IPolicyAdapter;
   filename: string;
 begin

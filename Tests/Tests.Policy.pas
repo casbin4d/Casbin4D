@@ -131,12 +131,13 @@ end;
 
 procedure TTestPolicyManager.testPolicyExists;
 begin
-  Assert.AreEqual(True, fPolicy.policyExists(['p','bob','DATA2','write']));
-  Assert.AreEqual(false, fPolicy.policyExists(['p','bob','DATA100','write']));
-  Assert.AreEqual(false, fPolicy.policyExists(['bob','DATA100','write']));
+  Assert.AreEqual(True, fPolicy.policyExists(['p','bob','DATA2','write']), 'Equal.1');
+  Assert.AreEqual(false, fPolicy.policyExists(['p','bob','DATA100','write']), 'Equal.2');
+  Assert.AreEqual(false, fPolicy.policyExists(['bob','DATA100','write']), 'Equal.3');
+  Assert.AreEqual(True, fPolicy.policyExists(['bob','write']), 'Equal.4');
 
   fPolicy.addPolicy(stRoleRules, 'g', '_,_');
-  Assert.AreEqual(True, fPolicy.policyExists(['g','_','_']));
+  Assert.AreEqual(True, fPolicy.policyExists(['g','_','_']), 'Equal.5');
 end;
 
 procedure TTestPolicyManager.testRemovePolicy;

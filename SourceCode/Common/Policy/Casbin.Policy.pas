@@ -665,42 +665,50 @@ function TPolicyManager.policyExists(const aFilter: TFilterArray): Boolean;
 var
   i: Integer;
   policyItem: string;
-  test: string;
-  testPolicy: string;
+  filterRec: TArrayRecord<string>;
+  policyRec: TArrayRecord<string>;
+  outcome: Boolean;
+  policy: string;
 begin
   Result:=False;
   if Length(aFilter)=0 then
     Exit;
 
-  testPolicy:=string.Join(',', aFilter);
-
-  while Pos(#32, testPolicy, findStartPos)<>0 do
-    Delete(testPolicy, Pos(#32, testPolicy, findStartPos), 1);
-
-  if UpperCase(testPolicy).StartsWith('P,') or
-       UpperCase(testPolicy).StartsWith('G,') or
-         UpperCase(testPolicy).StartsWith('G2,') then
-  begin
-    i:=Pos(',', testPolicy, findStartPos);
-    Delete(testPolicy, findStartPos, i);
-  end;
+  filterRec:=TArrayRecord<string>.Create(aFilter);
+  filterRec.Remove('p');
+  filterRec.Remove('P');
+  filterRec.Remove('g');
+  filterRec.Remove('G');
+  filterRec.Remove('g2');
+  filterRec.Remove('G2');
+  filterRec.ForEach(procedure(var Value: string; Index: Integer)
+                    begin
+                      value:=Trim(value);
+                    end);
 
   for policyItem in policies do
   begin
-    test:=policyItem;
+    policyRec:=TArrayRecord<string>.Create(policyItem.Split([',']));
+    policyRec.Remove('p');
+    policyRec.Remove('P');
+    policyRec.Remove('g');
+    policyRec.Remove('G');
+    policyRec.Remove('g2');
+    policyRec.Remove('G2');
+    policyRec.ForEach(procedure(var Value: string; Index: Integer)
+                      begin
+                        value:=trim(value);
+                      end);
 
-    while Pos(#32, test, findStartPos)<>0 do
-      Delete(test, Pos(#32, test, findStartPos), 1);
+    policy:=string.Join(',', policyRec.Items);
 
-    if UpperCase(test).StartsWith('P,') or
-         UpperCase(test).StartsWith('G,') or
-           UpperCase(test).StartsWith('G2,') then
-    begin
-      i:=Pos(',', test, findStartPos);
-      Delete(test, findStartPos, i);
-    end;
-
-    Result:=string.Compare(test, testPolicy, [coIgnoreCase]) = 0;
+    outcome:=true;
+    filterRec.ForEach(procedure(var Value: string; Index: Integer)
+                   begin
+                     outcome:= outcome and
+                                UpperCase(policy).Contains(UpperCase(Value));
+                   end);
+    Result:=outcome;
 
     if Result then
       Break;

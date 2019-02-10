@@ -386,13 +386,13 @@ end;
 function TPolicyManager.implicitPolicyExists(const aValue, aResource: string):
     Boolean;
 var
-  policy: string;
+  policyStr: string;
 begin
   Result:=False;
-  for policy in policies do
+  for policyStr in policies do
   begin
-    if UpperCase(policy).Contains(Trim(UpperCase(aValue))) and
-      UpperCase(policy).Contains(Trim(UpperCase(aResource))) then
+    if UpperCase(policyStr).Contains(Trim(UpperCase(aValue))) and
+      UpperCase(policyStr).Contains(Trim(UpperCase(aResource))) then
     begin
       Result:=True;
       Break;
@@ -668,7 +668,7 @@ var
   filterRec: TArrayRecord<string>;
   policyRec: TArrayRecord<string>;
   outcome: Boolean;
-  policy: string;
+  policyStr: string;
 begin
   Result:=False;
   if Length(aFilter)=0 then
@@ -700,13 +700,13 @@ begin
                         value:=trim(value);
                       end);
 
-    policy:=string.Join(',', policyRec.Items);
+    policyStr:=string.Join(',', policyRec.Items);
 
     outcome:=true;
     filterRec.ForEach(procedure(var Value: string; Index: Integer)
                    begin
                      outcome:= outcome and
-                                UpperCase(policy).Contains(UpperCase(Value));
+                                UpperCase(policyStr).Contains(UpperCase(Value));
                    end);
     Result:=outcome;
 

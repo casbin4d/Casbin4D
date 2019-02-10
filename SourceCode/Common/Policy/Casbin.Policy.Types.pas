@@ -35,7 +35,7 @@ type
     property ID: string read fID write fID;
   end;
 
-  TGetRoleMode = (
+  TRoleMode = (
     {$REGION 'Returns all the roles and those inferred by the policies'}
     /// <summary>
     ///   Returns all the roles and those inferred by the policies
@@ -66,7 +66,18 @@ type
     procedure clear;
     function policyExists (const aFilter: TFilterArray = []): Boolean;
 
-    procedure removePolicy (const aFilter: TFilterArray = []);
+    {$REGION ''}
+    /// <param name="aRoleMode">
+    ///   <para>
+    ///     rmImplicit: Deletes all roles from both 'g' and 'p' sections
+    ///   </para>
+    ///   <para>
+    ///     rmNonImplicit: Deletes roles only in 'g' sections
+    ///   </para>
+    /// </param>
+    {$ENDREGION}
+    procedure removePolicy (const aFilter: TFilterArray = [];
+            const aRoleMode: TRoleMode = rmImplicit);
 
     // Roles
     procedure clearRoles;
@@ -108,7 +119,7 @@ type
                       const aRightDomain: string; const aRight: string):boolean; overload;
 
     function rolesForEntity(const aEntity: string; const aDomain: string = '';
-        const aRoleMode: TGetRoleMode = rmNonImplicit): TStringDynArray;
+        const aRoleMode: TRoleMode = rmNonImplicit): TStringDynArray;
 
     function EntitiesForRole (const aEntity: string; const aDomain: string =''):TStringDynArray;
 

@@ -50,7 +50,8 @@ type
     function policy(const aFilter: TFilterArray = []): string;
     procedure clear;
     function policyExists(const aFilter: TFilterArray = []): Boolean;
-    procedure removePolicy(const aFilter: TFilterArray = []);
+    procedure removePolicy(const aFilter: TFilterArray = []; const aRoleMode:
+        TRoleMode = rmImplicit);
     procedure addPolicy (const aSection: TSectionType; const aTag: string;
                               const aAssertion: string); overload;
     procedure addPolicy (const aSection: TSectionType;
@@ -78,7 +79,7 @@ type
     function linkExists(const aLeftDomain: string; const aLeft: string; const
         aRightDomain: string; const aRight: string): boolean; overload;
     function rolesForEntity(const aEntity: string; const aDomain: string = '';
-        const aRoleMode: TGetRoleMode = rmNonImplicit): TStringDynArray;
+        const aRoleMode: TRoleMode = rmNonImplicit): TStringDynArray;
     function EntitiesForRole (const aEntity: string; const aDomain: string =''):
                                                                 TStringDynArray;
 
@@ -253,7 +254,8 @@ begin
   end;
 end;
 
-procedure TPolicyManager.removePolicy(const aFilter: TFilterArray);
+procedure TPolicyManager.removePolicy(const aFilter: TFilterArray = []; const
+    aRoleMode: TRoleMode = rmImplicit);
 var
   arrString: TArrayRecord<string>;
   item: string;
@@ -264,6 +266,7 @@ var
   regExp: TRegEx;
   match: TMatch;
   key: string;
+  pType: Boolean;
 begin
   arrString:=TArrayRecord<string>.Create(aFilter);
 
@@ -276,6 +279,7 @@ begin
     for child in header.ChildNodes do
     begin
       outStr:=child.toOutputString;
+      pType:=UpperCase(outStr).Contains('P=');
       outStr:=outStr.Replace('p=',' ');
       outStr:=outStr.Replace('g=',' ');
       outStr:=outStr.Replace('g2=',' ');
@@ -295,15 +299,23 @@ begin
         match:=regExp.Match(outStr);
         if match.Success then
         begin
-          fAdapter.remove(child.toOutputString.Replace('=',','));
-          header.ChildNodes.Remove(child);
+          if (aRoleMode=rmImplicit) or
+            ((aRoleMode=rmNonImplicit) and (not pType)) then
+          begin
+            fAdapter.remove(child.toOutputString.Replace('=',','));
+            header.ChildNodes.Remove(child);
+          end;
         end;
       end
       else
         if Trim(UpperCase(outStr)) = Trim(UpperCase(itemString)) then
         begin
-          fAdapter.remove(child.toOutputString.Replace('=',','));
-          header.ChildNodes.Remove(child);
+          if (aRoleMode=rmImplicit) or
+            ((aRoleMode=rmNonImplicit) and (not pType)) then
+          begin
+            fAdapter.remove(child.toOutputString.Replace('=',','));
+            header.ChildNodes.Remove(child);
+          end;
         end;
     end;
   end;
@@ -811,8 +823,7 @@ begin
 end;
 
 function TPolicyManager.rolesForEntity(const aEntity: string; const aDomain:
-    string = ''; const aRoleMode: TGetRoleMode = rmNonImplicit):
-    TStringDynArray;
+    string = ''; const aRoleMode: TRoleMode = rmNonImplicit): TStringDynArray;
 var
   nodeEntity: TRoleNode;
   entity: TRoleNode;

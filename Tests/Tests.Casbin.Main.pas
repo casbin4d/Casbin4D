@@ -880,7 +880,7 @@ begin
   Assert.IsTrue(casbin.enforce(['bob','domain2','data2','read']), '7');
   Assert.IsTrue(casbin.enforce(['bob','domain2','data2','write']), '8');
 
-  casbin.Policy.removePolicy(['*','domain1','data1']);
+  casbin.Policy.removePolicy(['*','domain1','data1'], rmImplicit);
 
   Assert.IsFalse(casbin.enforce(['alice','domain1','data1','read']), '9');
 //  Assert.IsFalse(casbin.enforce(['alice','domain1','data1','write']), '10');

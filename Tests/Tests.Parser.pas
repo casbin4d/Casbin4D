@@ -45,12 +45,12 @@ type
     [Test]
     [TestCase('Matchers respect spaces',
                 '[matchers]'+sLineBreak+
-                'm = r.sub == p.sub'+sLineBreak+
+                'm=r.sub == p.sub'+sLineBreak+
                 '[request_definition]'+sLineBreak+
                 '[policy_definition]'+sLineBreak+
                 '[policy_effect]'+'#'+
 
-                'm = r.sub == p.sub',
+                'm=r.sub == p.sub',
                 '#')]
     procedure testMatchersSection(const aInput, aExpected: string);
 

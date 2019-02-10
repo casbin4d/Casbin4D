@@ -233,14 +233,31 @@ var
 begin
   casbin:=TCasbin.Create('..\..\..\Examples\Default\basic_without_resources_model.conf',
             '..\..\..\Examples\Default\basic_without_resources_policy.csv');
+  casbin.Policy.Adapter.AutoSave:=False;
 
   Assert.AreEqual(True, casbin.enforce(['alice','read']), 'Start.1');
   Assert.AreEqual(False, casbin.enforce(['alice','write']),'Start.2');
   Assert.AreEqual(False, casbin.enforce(['bob','read']),'Start.3');
   Assert.AreEqual(True, casbin.enforce(['bob','write']),'Start.4');
 
-  roles:=casbin.Policy.rolesForEntity('alice');
-  Assert.IsTrue(Length(roles) = 0, 'Alice.4');
+  //////////
+
+
+  //////////
+  casbin.Policy.removePolicy(['read','*']);
+  Assert.AreEqual(False, casbin.enforce(['alice','read']), 'DeleteRead.1');
+  Assert.AreEqual(False, casbin.enforce(['alice','write']),'DeleteRead.2');
+  Assert.AreEqual(False, casbin.enforce(['bob','read']),'DeleteRead.3');
+  Assert.AreEqual(True, casbin.enforce(['bob','write']),'DeleteRead.4');
+
+  casbin.Policy.addPolicy(stPolicyRules,'p','bob, read');
+  Assert.AreEqual(False, casbin.enforce(['alice','read']), 'AddBobRead.1');
+  Assert.AreEqual(False, casbin.enforce(['alice','write']),'AddBobRead.2');
+  Assert.AreEqual(True, casbin.enforce(['bob','read']),'AddBobRead.3');
+  Assert.AreEqual(True, casbin.enforce(['bob','write']),'AddBobRead.4');
+
+//  roles:=casbin.Policy.rolesForEntity('alice');
+//  Assert.IsTrue(Length(roles) = 0, 'Alice.4');
 
 
 
@@ -254,7 +271,7 @@ var
 begin
   policy:=TPolicyManager.Create
     ('..\..\..\Examples\Default\rbac_policy.csv');
-
+  policy.Adapter.AutoSave:=False;
   ///////////////
   policy.removePolicy(['alice','*']);
   roles:=[];

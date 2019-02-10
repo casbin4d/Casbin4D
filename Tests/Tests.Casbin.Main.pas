@@ -734,6 +734,7 @@ var
   casbin: ICasbin;
 begin
   casbin:=TCasbin.Create(aModelFile, aPolicyFile);
+  casbin.Policy.Adapter.AutoSave:=False;
   params:=TFilterArray(aEnforceParams.Split([',']));
   Assert.AreEqual(aResult, casbin.enforce(params));
   casbin:=nil;

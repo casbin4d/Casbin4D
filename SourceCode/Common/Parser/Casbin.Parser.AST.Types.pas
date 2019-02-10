@@ -160,14 +160,14 @@ end;
 
 function TChildNode.toOutputString: string;
 begin
-  Result:=fKey+'='+fValue;
+  Result:=Trim(fKey)+'='+Trim(fValue);
 end;
 
 { TAssertionNode }
 
 function TAssertionNode.toOutputString: string;
 begin
-  Result:=fKey+'.'+fValue;
+  Result:=Trim(fKey)+'.'+Trim(fValue);
 end;
 
 end.

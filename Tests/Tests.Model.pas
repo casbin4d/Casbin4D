@@ -48,7 +48,7 @@ type
     [TestCase ('Request','r=sub,obj,act#true', '#')]
     [TestCase ('Policy','p=sub,obj,act#true', '#')]
     [TestCase ('Effect','e = some(where (p.eft == allow))', '#')]
-    [TestCase ('Matchers','m = r.sub == p.sub && r.obj == p.obj && r.act == p.act#true', '#')]
+    [TestCase ('Matchers','m=r.sub == p.sub && r.obj == p.obj && r.act == p.act#true', '#')]
     procedure testAssertionExists(const aAssertion: string; const aResult: boolean);
 
     [Test]
@@ -96,7 +96,7 @@ begin
                   'e=some(where(p.eft==allow))'+sLineBreak+sLineBreak+
 
                   '[matchers]'+sLineBreak+
-            'm = r.sub == p.sub && r.obj == p.obj && r.act == p.act',
+            'm=r.sub == p.sub && r.obj == p.obj && r.act == p.act',
                                       Trim(fModel.toOutputString));
 end;
 
@@ -196,7 +196,7 @@ begin
     stPolicyDefinition: expected:= 'p=sub,obj,act';
     stPolicyEffect: expected:= 'e=some(where(p.eft==allow))';
     stMatchers: expected:=
-                'm = r.sub == p.sub && r.obj == p.obj && r.act == p.act';
+                'm=r.sub == p.sub && r.obj == p.obj && r.act == p.act';
   end;
   Assert.AreEqual(trim(expected), Trim(fModel.Section(aSection)));
 end;
@@ -213,7 +213,7 @@ begin
                   'e=some(where(p.eft==allow))'+sLineBreak+sLineBreak+
 
                   '[matchers]'+sLineBreak+
-            'm = r.sub == p.sub && r.obj == p.obj && r.act == p.act',
+            'm=r.sub == p.sub && r.obj == p.obj && r.act == p.act',
                                       Trim(fModel.toOutputString));
 end;
 

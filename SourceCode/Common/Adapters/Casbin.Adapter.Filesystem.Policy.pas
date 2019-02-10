@@ -119,20 +119,30 @@ end;
 procedure TPolicyFileAdapter.remove(const aPolicyDefinition: string);
 var
   assertion: string;
+  def: string;
+  asDef: string;
 begin
   if Trim(aPolicyDefinition)='' then
     Exit;
   for assertion in getAssertions do
-    if SameText(UpperCase(Trim(aPolicyDefinition)), UpperCase(trim(assertion))) then
+  begin
+    def:=assertion;
+    while Pos(#32, def, findStartPos)<>0 do
+      Delete(def, Pos(#32, def, findStartPos), 1);
+    asDef:=aPolicyDefinition;
+    while Pos(#32, asDef, findStartPos)<>0 do
+      Delete(asDef, Pos(#32, asDef, findStartPos), 1);
+    if SameText(UpperCase(Trim(def)), UpperCase(trim(asDef))) then
     begin
       getAssertions.Remove(assertion);
       Break;
     end;
+  end;
   fSaved:=False;
   if fAutosave then
     save;
 
-  // We need to remove and role-based policies
+  // We need to remove the role-based policies as well
   // For now, if policies are deleted the role rules exists in the file
 
 end;

@@ -42,6 +42,7 @@ type
 {$REGION 'Interface'}
     function section (const aSlim: Boolean = true): string;
     function toOutputString: string;
+    function getAdapter: IPolicyAdapter;
 
     function policies: TList<string>;
     procedure load (const aFilter: TFilterArray = []);
@@ -293,11 +294,17 @@ begin
         regExp:=TRegEx.Create(key);
         match:=regExp.Match(outStr);
         if match.Success then
+        begin
+          fAdapter.remove(child.toOutputString.Replace('=',','));
           header.ChildNodes.Remove(child);
+        end;
       end
       else
         if Trim(UpperCase(outStr)) = Trim(UpperCase(itemString)) then
+        begin
+          fAdapter.remove(child.toOutputString.Replace('=',','));
           header.ChildNodes.Remove(child);
+        end;
     end;
   end;
   loadRoles;
@@ -381,6 +388,11 @@ begin
     end;
   end;
   Result := node;
+end;
+
+function TPolicyManager.getAdapter: IPolicyAdapter;
+begin
+  result:=fAdapter;
 end;
 
 function TPolicyManager.implicitPolicyExists(const aValue, aResource: string):

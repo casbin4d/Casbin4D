@@ -17,7 +17,7 @@ interface
 
 uses
   Casbin.Core.Base.Types, Casbin.Model.Sections.Types,
-  System.Generics.Collections, System.Rtti, System.Types, Casbin.Watcher.Types;
+  System.Generics.Collections, System.Rtti, System.Types, Casbin.Watcher.Types, Casbin.Adapter.Types, Casbin.Adapter.Policy.Types;
 
 const
   DefaultDomain = 'default';
@@ -53,6 +53,7 @@ type
     ['{B983A830-6107-4283-A45D-D74CDBB5E2EA}']
     function section (const aSlim: Boolean = true): string;
     function toOutputString: string;
+    function getAdapter: IPolicyAdapter;
 
     // Policies
     function policies: TList<string>;
@@ -115,6 +116,9 @@ type
     procedure registerWatcher (const aWatcher: IWatcher);
     procedure unregisterWatcher (const aWatcher: IWatcher);
     procedure notifyWatchers;
+
+    // Adapter
+    property Adapter: IPolicyAdapter read getAdapter;
   end;
 
 implementation

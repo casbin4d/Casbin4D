@@ -121,15 +121,27 @@ type
     function rolesForEntity(const aEntity: string; const aDomain: string = '';
         const aRoleMode: TRoleMode = rmNonImplicit): TStringDynArray;
 
-    function EntitiesForRole (const aEntity: string; const aDomain: string =''):TStringDynArray;
+    function entitiesForRole (const aEntity: string; const aDomain: string =''):TStringDynArray;
 
     // Watchers
     procedure registerWatcher (const aWatcher: IWatcher);
     procedure unregisterWatcher (const aWatcher: IWatcher);
     procedure notifyWatchers;
 
+    // Permissions
+    {$REGION ''}
+    /// <remarks>
+    ///   Assumes the last part of a policy (assertion) statement indicates the
+    ///   permission
+    /// </remarks>
+    {$ENDREGION}
+    function permissionsForEntity (const aEntity: string): TStringDynArray;
+    function permissionExists (const aEntity: string; const aPermission: string):
+                                                              Boolean;
+
     // Adapter
     property Adapter: IPolicyAdapter read getAdapter;
+
   end;
 
 implementation

@@ -31,7 +31,6 @@ type
     fRolesList: TList<string>;
     fDomains: TList<string>;
     fWatchers: TList<IWatcher>;
-
     fRolesNodes: TObjectDictionary<string, TRoleNode>;
     fRolesLinks: TObjectDictionary<string, TStringList>;
     procedure loadPolicies;
@@ -44,6 +43,7 @@ type
     function toOutputString: string;
     function getAdapter: IPolicyAdapter;
 
+    // Policies
     function policies: TList<string>;
     procedure load (const aFilter: TFilterArray = []);
 
@@ -56,6 +56,8 @@ type
                               const aAssertion: string); overload;
     procedure addPolicy (const aSection: TSectionType;
                               const aAssertion: string); overload;
+
+    // Roles
     procedure clearRoles;
     function roles: TList<string>;
     function domains: TList<string>;
@@ -80,13 +82,18 @@ type
         aRightDomain: string; const aRight: string): boolean; overload;
     function rolesForEntity(const aEntity: string; const aDomain: string = '';
         const aRoleMode: TRoleMode = rmNonImplicit): TStringDynArray;
-    function EntitiesForRole (const aEntity: string; const aDomain: string =''):
-                                                                TStringDynArray;
+    function entitiesForRole(const aEntity: string; const aDomain: string =''):
+        TStringDynArray;
 
     // Watchers
     procedure registerWatcher (const aWatcher: IWatcher);
     procedure unregisterWatcher(const aWatcher: IWatcher);
     procedure notifyWatchers;
+
+    //Permissions
+    function permissionsForEntity(const aEntity: string): TStringDynArray;
+    function permissionExists (const aEntity: string; const aPermission: string):
+                                                              Boolean;
 {$ENDREGION}
   public
     constructor Create(const aPolicy: string); overload;
@@ -349,8 +356,8 @@ begin
   Result:=fDomains;
 end;
 
-function TPolicyManager.EntitiesForRole(const aEntity,
-  aDomain: string): TStringDynArray;
+function TPolicyManager.entitiesForRole(const aEntity: string; const aDomain:
+    string =''): TStringDynArray;
 var
   domain: string;
   entity: TRoleNode;
@@ -371,8 +378,8 @@ begin
       if fRolesNodes.ContainsKey(linkID) then
       begin
         entity:=fRolesNodes.Items[linkID];
-        if SameText(entity.Domain, domain) and
-            SameText(entity.Value, aEntity) then
+        if SameText(Trim(UpperCase(entity.Domain)), Trim(UpperCase(domain))) and
+            SameText(Trim(UpperCase(entity.Value)), Trim(UpperCase(aEntity))) then
         begin
           SetLength(Result, Length(Result)+1);
           Result[Length(Result)-1]:=fRolesNodes.items[id].Value;
@@ -612,6 +619,54 @@ var
 begin
   for watcher in fWatchers do
     watcher.update;
+end;
+
+function TPolicyManager.permissionExists(const aEntity,
+  aPermission: string): Boolean;
+var
+  permArray: TStringDynArray;
+  permArrRec: TArrayRecord<string>;
+begin
+  permArray:=permissionsForEntity(aEntity);
+  permArrRec:=TArrayRecord<string>.Create(permArray);
+  permArrRec.ForEach(procedure(var Value: string; Index: Integer)
+                     begin
+                       value:=trim(UpperCase(value));
+                     end);
+  Result:=permArrRec.Contains(UpperCase(aPermission));
+end;
+
+function TPolicyManager.permissionsForEntity(const aEntity: string):
+    TStringDynArray;
+var
+  policyItem: string;
+  polArray: TArrayRecord<string>;
+  tmpArray: TArrayRecord<string>;
+begin
+  SetLength(Result, 0);
+  if Trim(aEntity)<>'' then
+  begin
+    for policyItem in policies do
+    begin
+      polArray:=TArrayRecord<string>.Create(UpperCase(policyItem).Split([',']));
+      polArray.ForEach(procedure(var Value: string; Index: Integer)
+                       begin
+                         value:=trim(value);
+                       end);
+
+      tmpArray:=TArrayRecord<string>.Create(policyItem.Split([',']));
+      tmpArray.ForEach(procedure(var Value: string; Index: Integer)
+                       begin
+                         value:=trim(value);
+                       end);
+
+      if polArray.Contains(UpperCase(aEntity)) then
+      begin
+        SetLength(Result, Length(Result)+1);
+        result[Length(Result)-1]:=tmpArray[tmpArray.Count-1];
+      end;
+    end;
+  end;
 end;
 
 function TPolicyManager.policies: TList<string>;

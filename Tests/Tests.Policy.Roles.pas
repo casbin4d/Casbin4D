@@ -230,6 +230,7 @@ procedure TTestPolicyRoles.testPermissionAPI;
 var
   casbin: ICasbin;
   roles: TStringDynArray;
+  permissions: TStringDynArray;
 begin
   casbin:=TCasbin.Create('..\..\..\Examples\Default\basic_without_resources_model.conf',
             '..\..\..\Examples\Default\basic_without_resources_policy.csv');
@@ -241,7 +242,18 @@ begin
   Assert.AreEqual(True, casbin.enforce(['bob','write']),'Start.4');
 
   //////////
+  permissions:=casbin.Policy.permissionsForEntity('alice');
+  Assert.IsTrue(Length(permissions) = 1, 'Permission.1');
+  Assert.IsTrue(permissions[0] = 'read', 'Permission.2');
 
+  permissions:=casbin.Policy.permissionsForEntity('bob');
+  Assert.IsTrue(Length(permissions) = 1, 'Permission.3');
+  Assert.IsTrue(permissions[0] = 'write', 'Permission.4');
+
+  Assert.IsTrue(casbin.Policy.permissionExists('alice','read'), 'Permission.5');
+  Assert.IsFalse(casbin.Policy.permissionExists('alice','write'), 'Permission.6');
+  Assert.IsFalse(casbin.Policy.permissionExists('bob','read'), 'Permission.7');
+  Assert.IsTrue(casbin.Policy.permissionExists('bob','write'), 'Permission.8');
 
   //////////
   casbin.Policy.removePolicy(['read','*']);

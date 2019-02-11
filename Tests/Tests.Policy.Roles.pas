@@ -160,6 +160,11 @@ type
     [Test]
     // From rbac_api_test.go
     procedure testPermissionAPI;
+
+    [Test]
+    // From rbac_api_with_domains_test.go
+    procedure testUserRBACAPIWithDomains;
+
   end;
 
 implementation
@@ -280,6 +285,45 @@ begin
   Assert.AreEqual(False, casbin.enforce(['bob','read']),'DeleteBob.3');
   Assert.AreEqual(False, casbin.enforce(['bob','write']),'DeleteBob.4');
 
+end;
+
+procedure TTestPolicyRoles.testUserRBACAPIWithDomains;
+var
+  casbin: ICasbin;
+  policy: IPolicyManager;
+  entities: TStringDynArray;
+begin
+  casbin:=TCasbin.Create('..\..\..\Examples\Default\rbac_with_domains_model.conf',
+        '..\..\..\Examples\Default\rbac_with_domains_policy.csv');
+  casbin.Policy.Adapter.AutoSave:=False;
+
+  entities:=casbin.Policy.entitiesForRole('admin','domain1');
+  Assert.IsTrue(Length(entities) = 1, 'Api-Domain.1');
+  Assert.AreEqual('alice', entities[0], 'Api-Domain.2');
+
+  entities:=casbin.Policy.entitiesForRole('non_exist','domain1');
+  Assert.IsTrue(Length(entities) = 0, 'Api-Domain.3');
+
+  entities:=casbin.Policy.entitiesForRole('admin','domain2');
+  Assert.IsTrue(Length(entities) = 1, 'Api-Domain.4');
+  Assert.AreEqual('bob', entities[0], 'Api-Domain.5');
+
+  casbin.Policy.removePolicy(['alice','admin','domain1']);
+  casbin.Policy.addPolicy(stRoleRules, 'g', 'bob, admin, domain1');
+
+  entities:=casbin.Policy.entitiesForRole('admin','domain1');
+  Assert.IsTrue(Length(entities) = 1, 'Api-Domain.6');
+  Assert.AreEqual('bob', entities[0], 'Api-Domain.7');
+
+  entities:=casbin.Policy.entitiesForRole('non_exist','domain1');
+  Assert.IsTrue(Length(entities) = 0, 'Api-Domain.8');
+
+  entities:=casbin.Policy.entitiesForRole('admin','domain2');
+  Assert.IsTrue(Length(entities) = 1, 'Api-Domain.9');
+  Assert.AreEqual('bob', entities[0], 'Api-Domain.10');
+
+  entities:=casbin.Policy.entitiesForRole('non_exist','domain2');
+  Assert.IsTrue(Length(entities) = 0, 'Api-Domain.11');
 end;
 
 procedure TTestPolicyRoles.testRoleAPI;

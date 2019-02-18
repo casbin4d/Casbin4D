@@ -84,3 +84,4 @@ Documentation/
 !Demos/Main/*.exe
 Benchmarks/Win32/
 *.ficfg
+Tests/CodeCoverage/

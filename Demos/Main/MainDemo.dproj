@@ -5,7 +5,7 @@
         <FrameworkType>FMX</FrameworkType>
         <MainSource>MainDemo.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Debug</Config>
+        <Config Condition="'$(Config)'==''">Release</Config>
         <Platform Condition="'$(Platform)'==''">Win32</Platform>
         <TargetedPlatforms>1119</TargetedPlatforms>
         <AppType>Application</AppType>
@@ -102,7 +102,7 @@
         <Icon_MainIcon>$(BDS)\bin\delphi_PROJECTICON.ico</Icon_MainIcon>
         <Icns_MainIcns>$(BDS)\bin\delphi_PROJECTICNS.icns</Icns_MainIcns>
         <SanitizedProjectName>MainDemo</SanitizedProjectName>
-        <DCC_UnitSearchPath>..\..\SourceCode\Common;..\..\SourceCode\Common\Adapters;..\..\SourceCode\Common\Casbin;..\..\SourceCode\Common\Config;..\..\SourceCode\Common\Core;..\..\SourceCode\Common\Effect;..\..\SourceCode\Common\Functions;..\..\SourceCode\Common\Matcher;..\..\SourceCode\Common\Model;..\..\SourceCode\Common\Parser;..\..\SourceCode\Common\Policy;..\..\SourceCode\Common\Third Party\TExpressionParser;..\..\SourceCode\Common\Loggers;..\..\SourceCode\Common\Third Party\ArrayHelper;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+        <DCC_UnitSearchPath>..\..\SourceCode\Common;..\..\SourceCode\Common\Adapters;..\..\SourceCode\Common\Casbin;..\..\SourceCode\Common\Core;..\..\SourceCode\Common\Effect;..\..\SourceCode\Common\Functions;..\..\SourceCode\Common\Matcher;..\..\SourceCode\Common\Model;..\..\SourceCode\Common\Parser;..\..\SourceCode\Common\Policy;..\..\SourceCode\Common\Third Party\TExpressionParser;..\..\SourceCode\Common\Loggers;..\..\SourceCode\Common\Third Party\ArrayHelper;\\vmware-host\Shared Folders\ProductionHD\NusEnvision\Components\Delphi\Casbin4D\SourceCode\Common\Watcher;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Android)'!=''">
         <DCC_UsePackage>DBXSqliteDriver;RESTComponents;DBXInterBaseDriver;tethering;TMSScripter;FMXTMSFNCUIPackPkgDXE12;bindcompfmx;fmx;FireDACIBDriver;dbexpress;IndyCore;xdata;dsnap;FireDACCommon;RESTBackendComponents;soapserver;TMSLoggingPkgFMXDXE12;bindengine;CloudService;FireDACCommonDriver;inet;IndyIPCommon;bindcompdbx;IndyIPServer;sparkle;tmsbcl;IndySystem;FMXTMSFNCCorePkgDXE12;fmxFireDAC;FireDAC;FireDACSqliteDriver;soaprtl;DbxCommonDriver;xmlrtl;soapmidas;rtl;DbxClientDriver;CustomIPTransport;bindcomp;IndyIPClient;TMSLoggingPkgCoreDXE12;dbxcds;aurelius;dsnapxml;dbrtl;IndyProtocols;FMXTMSFNCChartPkgDXE12;$(DCC_UsePackage)</DCC_UsePackage>
@@ -393,11 +393,19 @@
                 <Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\dcloffice2k260.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\dclofficexp260.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dclFMXtee9260.bpl">TeeChart Lite FMX Components</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dcltee9260.bpl">TeeChart Standard VCL Components</Excluded_Packages>
                 </Excluded_Packages>
             </Delphi.Personality>
             <Deployment Version="3">
                 <DeployFile LocalName="$(BDS)\Redist\osx32\libcgunwind.1.0.dylib" Class="DependencyModule">
                     <Platform Name="OSX32">
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="MainDemo.exe" Configuration="Debug" Class="ProjectOutput">
+                    <Platform Name="Win32">
+                        <RemoteName>MainDemo.exe</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -424,12 +432,6 @@
                 <DeployFile LocalName="Images\delete_button_error.png" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win32">
                         <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="Win32\Debug\MainDemo.exe" Configuration="Debug" Class="ProjectOutput">
-                    <Platform Name="Win32">
-                        <RemoteName>MainDemo.exe</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

@@ -2,8 +2,9 @@ Casbin4D
 ====
 
 [![Made With Delphi](https://img.shields.io/badge/MADE%20WITH-DELPHI-red.svg)](<https://www.embarcadero.com/products/delphi>)
+[![Code Coverage](https://img.shields.io/badge/coverage-91%25-green.svg)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/casbin/lobby)
-[![Patreon](https://img.shields.io/badge/patreon-donate-yellow.svg)](http://www.patreon.com/yangluo)
+[![Version](https://img.shields.io/github/tag/jkour/casbin4D.svg?label=latest%20version&style=popout)
 
 ![casbin Logo](https://github.com/casbin4d/Casbin4D/blob/master/Images/casbin4D-logo.png)
 
@@ -220,7 +221,9 @@ Deny-override | [rbac_model_with_deny.conf](https://github.com/casbin4d/Casbin4D
 Priority | [priority_model.conf](https://github.com/casbin4d/Casbin4D/blob/master/Examples/Default/priority_model.conf)  | [priority_policy.csv](https://github.com/casbin4d/Casbin4D/blob/master/Examples/Default/priority_policy.csv)
 
 ## Tests
-The vast majority of the tests of the original implementation in Go have been imported in Delphi. Please see <https://github.com/casbin4d/Casbin4D/Tests>
+The vast majority of the tests of the original implementation in Go have been imported in Delphi. Please see the [Tests](<https://github.com/casbin4d/Casbin4D/Tests>)
+
+You can check the code coverage [here](http://codecoverage.casbin4d.kouraklis.com/) for the up to date status. You are welcome to improve the tests and the coverage
 
 ## License
 

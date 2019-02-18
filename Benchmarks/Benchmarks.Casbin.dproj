@@ -1,7 +1,7 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <ProjectGuid>{427888C7-AD85-46B6-A2A7-F2B80BF4CFDA}</ProjectGuid>
-        <ProjectVersion>18.5</ProjectVersion>
+        <ProjectVersion>18.6</ProjectVersion>
         <FrameworkType>None</FrameworkType>
         <MainSource>Benchmarks.Casbin.dpr</MainSource>
         <Base>True</Base>
@@ -167,6 +167,7 @@
         <DCCReference Include="Benchmarks\Benchmarks.KeyMatchModel.pas"/>
         <DCCReference Include="Benchmarks\Benchmarks.RBACModelWithDeny.pas"/>
         <DCCReference Include="Benchmarks\Benchmarks.PriorityModel.pas"/>
+        <DCCReference Include="..\SourceCode\Common\Watcher\Casbin.Watcher.Types.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

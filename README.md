@@ -191,16 +191,17 @@ The results are shown in the following table. The time overhead is calculated pe
 
 Test case | Size | Time overhead | Memory overhead
 ----|------|------|----
-Raw Enforce | 2 Rules (2 Users) | 0.000158 sec/op |   0 KB
-Basic Model | 2 Rules (2 Users) | 0.000633 sec/op | 153 KB
-RBAC | 5 Rules (2 Users, 1 Role) | 0.001852 sec/op | 15.7 KB
+Raw Enforce | 2 Rules (2 Users) | 0.000090 sec/op |   0 KB
+Basic Model | 2 Rules (2 Users) | 0.000466 sec/op | 432 B
+RBAC | 5 Rules (2 Users, 1 Role) | 0.000872 sec/op | 352 B
 RBAC (Small) | 1,100 Rules (1,000 Users, 100 roles) | 0.238945 sec/op | 1.49 MB
 RBAC (Medium) | 11,000 Rules (10,000 Users, 1,000 Roles) | 9.745707 sec/op | 15.7 MB
-RBAC (With Resource Roles) | 6 Rules (2 Users, 2 Roles) | 0.000975 sec/op | 153 KB
-RBAC (With Domains/Tenants) | 6 Rules (2 Users, 1 Role, 2 Domains) | 0.001223 sec/op | 153 KB
-RBAC (With Deny) | 6 Rules (2 Users, 1 Role) | 0.001350 sec/op | 196 KB
-KeyMatch | 2 Rules (2 Users) | 0.001053 sec/op | 536 KB 
-Priority | 9 Rules (2 Users, 2 Roles) | 0.001383 sec/op | 610 KB
+RBAC (With Resource Roles) | 6 Rules (2 Users, 2 Roles) | 0.000658 sec/op | 352 B
+RBAC (With Domains/Tenants) | 6 Rules (2 Users, 1 Role, 2 Domains) | 0.000670 sec/op | 352 B
+RBAC (With Deny) | 6 Rules (2 Users, 1 Role) | 0.001260 sec/op | 380 B
+ABAC | 0 Rules (0 Users) | 0.000181 sec/op | 120 B
+KeyMatch | 2 Rules (2 Users) | 0.000782 sec/op | 352 B 
+Priority | 9 Rules (2 Users, 2 Roles) | 0.001124 sec/op | 380 B
 
 ## Examples
 

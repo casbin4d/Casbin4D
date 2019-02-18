@@ -34,7 +34,8 @@ uses
   Benchmarks.ABACModel in 'Benchmarks\Benchmarks.ABACModel.pas',
   Benchmarks.KeyMatchModel in 'Benchmarks\Benchmarks.KeyMatchModel.pas',
   Benchmarks.RBACModelWithDeny in 'Benchmarks\Benchmarks.RBACModelWithDeny.pas',
-  Benchmarks.PriorityModel in 'Benchmarks\Benchmarks.PriorityModel.pas';
+  Benchmarks.PriorityModel in 'Benchmarks\Benchmarks.PriorityModel.pas',
+  Casbin.Watcher.Types in '..\SourceCode\Common\Watcher\Casbin.Watcher.Types.pas';
 
 procedure loadbenchmarks (const aManager: TBenchmarkManager);
 var
@@ -52,20 +53,20 @@ begin
   benchMark:=TBenchmarkRBACModel.Create('RBAC Model', '5 Rules (2 Users, 1 Role)', 100);
   aManager.addBenchmark(benchMark);
 
-  // RBAC Model Small
-  benchMark:=TBenchmarkRBACModelSmall.Create('RBAC Model Small',
-                                    '1100 Rules (1000 Users, 100 Role)', 100);
-  aManager.addBenchmark(benchMark);
-
-  // RBAC Model Medium
-  benchMark:=TBenchmarkRBACModelMedium.Create('RBAC Model Medium',
-                                    '11000 Rules (10000 Users, 1000 Role)', 100);
-  aManager.addBenchmark(benchMark);
-
-  // RBAC Model Large
-  benchMark:=TBenchmarkRBACModelLarge.Create('RBAC Model Large',
-                                    '110000 Rules (100000 Users, 10000 Role)', 100);
-  aManager.addBenchmark(benchMark);
+//  // RBAC Model Small
+//  benchMark:=TBenchmarkRBACModelSmall.Create('RBAC Model Small',
+//                                    '1100 Rules (1000 Users, 100 Role)', 100);
+//  aManager.addBenchmark(benchMark);
+//
+//  // RBAC Model Medium
+//  benchMark:=TBenchmarkRBACModelMedium.Create('RBAC Model Medium',
+//                                    '11000 Rules (10000 Users, 1000 Role)', 100);
+//  aManager.addBenchmark(benchMark);
+//
+//  // RBAC Model Large
+//  benchMark:=TBenchmarkRBACModelLarge.Create('RBAC Model Large',
+//                                    '110000 Rules (100000 Users, 10000 Role)', 100);
+//  aManager.addBenchmark(benchMark);
 
   // RBAC Model With Resource Roles
   benchMark:=TBenchmarkRBACModelWithResourceRoles.Create
@@ -80,10 +81,10 @@ begin
   aManager.addBenchmark(benchMark);
 
 //  // ABAC Model
-//  benchMark:=TBenchmarkABACModel.Create
-//      ('ABAC',
-//        '0 rules 0 Users', 100);
-//  aManager.addBenchmark(benchMark);
+  benchMark:=TBenchmarkABACModel.Create
+      ('ABAC',
+        '0 rules 0 Users', 100);
+  aManager.addBenchmark(benchMark);
 
   // KeyMatch Model
   benchMark:=TBenchmarkKeyMatchModel.Create ('KeyMatch', '', 1000);

@@ -77,7 +77,7 @@
         <Icns_MainIcns>$(BDS)\bin\delphi_PROJECTICNS.icns</Icns_MainIcns>
         <DCC_UnitSearchPath>$(DUnitX);$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
         <SanitizedProjectName>Tests_Casbin</SanitizedProjectName>
-        <DCC_Define>EUREKALOG_VER7;EUREKALOG;TESTINSIGHT;$(DCC_Define)</DCC_Define>
+        <DCC_Define>EUREKALOG_VER7;EUREKALOG;$(DCC_Define)</DCC_Define>
         <DCC_MapFile>3</DCC_MapFile>
         <DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
     </PropertyGroup>

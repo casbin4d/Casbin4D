@@ -3,14 +3,12 @@ Casbin4D
 
 [![Made With Delphi](https://img.shields.io/badge/MADE%20WITH-DELPHI-red.svg)](<https://www.embarcadero.com/products/delphi>)
 [![CodeCoverage](https://img.shields.io/badge/coverage-91%25-green.svg)]()
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/casbin/lobby)
 [![Version](https://img.shields.io/github/tag/casbin4D/casbin4D.svg?label=latest%20version&style=popout)]()
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/casbin/lobby)
 
 ![casbin Logo](https://github.com/casbin4d/Casbin4D/blob/master/Images/casbin4D-logo.png)
 
 Casbin4D is a cross platform (FireMonkey) implementation for Delphi/Pascal of the popular authorisation library [Carsbin](https://casbin.org). It provides support for enforcing authorization based on various [access control models](https://en.wikipedia.org/wiki/Computer_security_model).
-
-**DISCLAIM:** This library is still under development (Work in Progress) and it is not production-ready. DO NOT USE it in production environment
 
 <img style="float: left;" src="https://github.com/casbin4d/Casbin4D/blob/master/Images/Speaker-128x117.png">You are cordially invited to share, fork, review and improve this library.
 Please feel free to comment and offer suggestions. If you want to contribute, check the wiki page for developers first

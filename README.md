@@ -4,7 +4,7 @@ Casbin4D
 [![Made With Delphi](https://img.shields.io/badge/MADE%20WITH-DELPHI-red.svg)](<https://www.embarcadero.com/products/delphi>)
 [![CodeCoverage](https://img.shields.io/badge/coverage-91%25-green.svg)]()
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/casbin/lobby)
-[![Version](https://img.shields.io/github/tag/jkour/casbin4D.svg?label=latest%20version&style=popout)]()
+[![Version](https://img.shields.io/github/tag/casbin4D/casbin4D.svg?label=latest%20version&style=popout)]()
 
 ![casbin Logo](https://github.com/casbin4d/Casbin4D/blob/master/Images/casbin4D-logo.png)
 

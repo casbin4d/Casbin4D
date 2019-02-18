@@ -17,7 +17,7 @@ interface
 
 uses
   Casbin.Core.Base.Types, Casbin.Model.Types, Casbin.Policy.Types,
-  Casbin.Core.Logger.Types, System.Types;
+  Casbin.Core.Logger.Types, System.Types, System.TypInfo;
 
 type
   TEnforceParameters = TStringDynArray;
@@ -35,7 +35,8 @@ type
 
     function enforce (const aParams: TEnforceParameters): boolean; overload;
     function enforce (const aParams: TEnforceParameters;
-                      const reqOwner: string): boolean; overload;
+                      const aPointer: PTypeInfo;
+                      const aRec): boolean; overload;
 
     property Enabled: Boolean read getEnabled write setEnabled;
     property Logger: ILogger read getLogger write setLogger;

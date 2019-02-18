@@ -31,8 +31,8 @@ function resolve(const aResolvedRequest, aResolvedPolicy: TDictionary<string,
 implementation
 
 uses
-  Casbin.Exception.Types, SysUtils, Casbin.Matcher.Types, Casbin.Matcher,
-  Casbin.Core.Utilities, System.StrUtils, Classes;
+  Casbin.Exception.Types, System.SysUtils, Casbin.Matcher.Types, Casbin.Matcher,
+  Casbin.Core.Utilities, Classes;
 
 function resolve (const aResolve: TList<string>;
                   const aResolveType: TResolveType;
@@ -72,6 +72,7 @@ var
   matcher: IMatcher;
   resolvedMatcher: string;
   item: string;
+  subItem: string;
   args: string;
   argsArray: TArray<string>;
   endArgsPos: Integer;
@@ -79,8 +80,11 @@ var
   startFunPos: Integer;
   funcResult: Boolean;
   replaceStr: string;
-  boolReplacseStr: string;
+  boolReplaceStr: string;
   i: Integer;
+  breakLines: TArray<string>;
+  fixLines: TArray<string>;
+  ch: Char;
 begin
   if not Assigned(aResolvedRequest) then
     raise ECasbinException.Create('Resolved Request is nil');
@@ -92,28 +96,30 @@ begin
   resolvedMatcher:=UpperCase(Trim(aMatcher));
   matcher:=TMatcher.Create;
 
-  //Fix Owner first
-  if aResolvedRequest.ContainsKey('R.OBJ.OWNER') then
-    resolvedMatcher:=resolvedMatcher.Replace
-                          ('R.OBJ.OWNER',
-                              UpperCase(aResolvedRequest.Items['R.OBJ.OWNER']),
-                                [rfReplaceAll]);
-
+  // We replace first the ABAC related terms because a simple call to Replace
+  // does not respect whole words
+  // This assumes ABAC attributes are modeled with two 'dots'. e.g r.obj.owner
   for item in aResolvedRequest.Keys do
   begin
-    resolvedMatcher:=resolvedMatcher.Replace
+    if item.CountChar('.')=2 then
+      resolvedMatcher:=resolvedMatcher.Replace
                           (UpperCase(item),
                               UpperCase(aResolvedRequest.Items[item]),
-                                [rfReplaceAll]);
+                                [rfIgnoreCase, rfReplaceAll]);
     matcher.addIdentifier(UpperCase(aResolvedRequest.Items[item]));
   end;
 
-  //Fix Owner first
-  if aResolvedPolicy.ContainsKey('P.OBJ.OWNER') then
-    resolvedMatcher:=resolvedMatcher.Replace
-                          ('P.OBJ.OWNER',
-                              UpperCase(aResolvedPolicy.Items['P.OBJ.OWNER']),
-                                [rfReplaceAll]);
+  for item in aResolvedRequest.Keys do
+  begin
+    if item.CountChar('.')=1 then
+      resolvedMatcher:=resolvedMatcher.Replace
+                          (UpperCase(item),
+                              UpperCase(aResolvedRequest.Items[item]),
+                                [rfIgnoreCase, rfReplaceAll]);
+
+    matcher.addIdentifier(UpperCase(aResolvedRequest.Items[item]));
+  end;
+
   for item in aResolvedPolicy.Keys do
   begin
     resolvedMatcher:=resolvedMatcher.Replace
@@ -159,11 +165,11 @@ begin
         replaceStr:=replaceStr+')';
 
       if funcResult then
-        boolReplacseStr:='100 = 100'
+        boolReplaceStr:='100 = 100'
       else
-        boolReplacseStr:='100 = 90';
+        boolReplaceStr:='100 = 90';
 
-      resolvedMatcher:=resolvedMatcher.Replace(replaceStr, boolReplacseStr,
+      resolvedMatcher:=resolvedMatcher.Replace(replaceStr, boolReplaceStr,
                                                           [rfReplaceAll]);
 
     end;

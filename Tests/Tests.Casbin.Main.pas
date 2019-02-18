@@ -742,13 +742,19 @@ end;
 
 procedure TTestCasbin.testEnforceABAC(const aModelFile, aPolicyFile,
   aEnforceParams, aOwner: string; const aResult: boolean);
+type
+  TABACRecord = record
+    Owner: string;
+  end;
 var
   params: TEnforceParameters;
   casbin: ICasbin;
+  rec: TABACRecord;
 begin
   casbin:=TCasbin.Create(aModelFile, aPolicyFile);
   params:=TFilterArray(aEnforceParams.Split([',']));
-  Assert.AreEqual(aResult, casbin.enforce(params, aOwner));
+  rec.Owner:=aOwner;
+  Assert.AreEqual(aResult, casbin.enforce(params, TypeInfo(TABACRecord), rec));
   casbin:=nil;
 end;
 
@@ -946,7 +952,7 @@ begin
   casbin1:=TCasbin.Create('..\..\..\Examples\Default\basic_model.conf',
               '..\..\..\Examples\Default\basic_policy.csv');
   Assert.IsTrue(casbin1.enforce(['alice','data1','read']), '1');
-  Assert.IsFalse(casbin1.enforce(['alice','data1','write'], '2'));
+  Assert.IsFalse(casbin1.enforce(['alice','data1','write']), '2');
 
   casbin2:=TCasbin.Create('..\..\..\Examples\Default\basic_model.conf',
               '..\..\..\Examples\Default\basic_inverse_policy.csv');
@@ -954,7 +960,7 @@ begin
   casbin1.Policy:=casbin2.Policy;
 
   Assert.IsFalse(casbin1.enforce(['alice','data1','read']), '3');
-  Assert.IsTrue(casbin1.enforce(['alice','data1','write'], '4'));
+  Assert.IsTrue(casbin1.enforce(['alice','data1','write']), '4');
 
   casbin1:=nil;
   casbin2:=nil;

@@ -17,7 +17,7 @@ interface
 
 uses
   Casbin.Core.Base.Types, Casbin.Types, Casbin.Model.Types,
-  Casbin.Adapter.Types, Casbin.Core.Logger.Types, Casbin.Functions.Types, Casbin.Policy.Types;
+  Casbin.Adapter.Types, Casbin.Core.Logger.Types, Casbin.Functions.Types, Casbin.Policy.Types, System.TypInfo;
 
 type
   TCasbin = class (TBaseInterfacedObject, ICasbin)
@@ -43,8 +43,8 @@ type
     procedure setEnabled(const aValue: Boolean);
 
     function enforce (const aParams: TEnforceParameters): boolean; overload;
-    function enforce (const aParams: TEnforceParameters;
-                      const reqOwner: string): boolean; overload;
+    function enforce(const aParams: TEnforceParameters; const aPointer: PTypeInfo;
+        const aRec): boolean; overload;
 {$ENDREGION}
   public
     constructor Create; overload;
@@ -106,8 +106,10 @@ begin
 end;
 
 function TCasbin.enforce(const aParams: TEnforceParameters): boolean;
+var
+  rec: string;
 begin
-  Result:=enforce(aParams, '');
+  Result:=enforce(aParams, nil, rec);
 end;
 
 constructor TCasbin.Create;
@@ -129,8 +131,8 @@ begin
   Create(model, aPolicyAdapter);
 end;
 
-function TCasbin.enforce(const aParams: TEnforceParameters;
-                         const reqOwner: string): boolean;
+function TCasbin.enforce(const aParams: TEnforceParameters; const aPointer:
+    PTypeInfo; const aRec): boolean;
 var
   item: string;
   request: TList<string>;
@@ -144,6 +146,10 @@ var
   reqDomain: string;
   domainsArrayRec: TArrayRecord<string>;
   requestArrayRec: TArrayRecord<string>;
+  ctx: TRttiContext;
+  cType: TRttiType;
+  cField: TRttiField;
+  abacList: TList<string>;
 begin
   result:=true;
   if Length(aParams) = 0 then
@@ -176,14 +182,37 @@ begin
   {$ENDIF}
     requestDict:=resolve(request, rtRequest,
                             fModel.assertions(stRequestDefinition));
-    if Trim(reqOwner)<>'' then
+
+    // Resolve ABAC record
+    abacList:=TList<string>.Create;
+    if Assigned(aPointer) and Assigned(@aRec) then
     begin
-      fLogger.log('Owner identified');
-      // This assumes the request uses the letter 'r'
-      if requestDict.ContainsKey('R.OBJ') then
+      fLogger.log('Record Identified');
+      ctx:=TRttiContext.Create;
+      cType:=ctx.GetType(aPointer);
+
+      if fModel.assertions(stRequestDefinition).Count>0 then
       begin
-        requestDict.Add('R.OBJ.OWNER', UpperCase(Trim(reqOwner)));
-        fLogger.log('r.obj.owner added');
+        abacList.AddRange(fModel.assertions(stRequestDefinition));
+        fLogger.log('Request identifiers retrieved ('+string.Join(',', abacList.ToArray)+')');
+      end
+      else
+      begin
+        // This assumes the request uses the letter 'r' and typical 'sub,obj,act'
+        abacList.Add('r.sub');
+        abacList.Add('r.obj');
+        abacList.Add('r.act');
+        fLogger.log('Default identifiers used (r)');
+      end;
+
+      fLogger.log('Retrieving content of '+cType.Name+' record');
+      for cField in cType.GetFields do
+      begin
+        for item in abacList do
+        begin
+          requestDict.Add(UpperCase(item)+'.'+UpperCase(cField.Name),
+                          UpperCase(cField.GetValue(@aRec).AsString));
+        end;
       end;
     end;
 
@@ -257,13 +286,7 @@ begin
         policyDict:=resolve(policyList, rtPolicy,
                               fModel.assertions(stPolicyDefinition));
 
-        // Match Owner
-        if (Trim(reqOwner)<>'') then
-          if policyDict.ContainsKey('P.OBJ') then
-            policyDict.Add('P.OBJ.OWNER',trim(reqOwner));
-
         fLogger.log('   Resolving Functions and Matcher...');
-
 
         // Resolve Matcher
         if string.Compare('indeterminate', Trim(policyList[policyList.Count-1]),
@@ -289,6 +312,7 @@ begin
 
     fLogger.log('Enforcement completed (Result: '+BoolToStr(Result, true)+')');
 
+    abacList.Free;
     request.Free;
     requestDict.Free;
 

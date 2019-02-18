@@ -742,7 +742,6 @@ end;
 
 function TPolicyManager.policyExists(const aFilter: TFilterArray): Boolean;
 var
-  i: Integer;
   policyItem: string;
   filterRec: TArrayRecord<string>;
   policyRec: TArrayRecord<string>;

@@ -72,7 +72,6 @@ var
   matcher: IMatcher;
   resolvedMatcher: string;
   item: string;
-  subItem: string;
   args: string;
   argsArray: TArray<string>;
   endArgsPos: Integer;
@@ -82,9 +81,6 @@ var
   replaceStr: string;
   boolReplaceStr: string;
   i: Integer;
-  breakLines: TArray<string>;
-  fixLines: TArray<string>;
-  ch: Char;
 begin
   if not Assigned(aResolvedRequest) then
     raise ECasbinException.Create('Resolved Request is nil');

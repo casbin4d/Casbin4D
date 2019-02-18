@@ -2,7 +2,7 @@
     <PropertyGroup>
         <ProjectGuid>{C1029AB9-E7AC-4F0F-9C51-7461FA882330}</ProjectGuid>
         <MainSource>Casbin4D102Tokyo.dpk</MainSource>
-        <ProjectVersion>18.5</ProjectVersion>
+        <ProjectVersion>18.6</ProjectVersion>
         <FrameworkType>None</FrameworkType>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>

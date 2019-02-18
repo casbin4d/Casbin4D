@@ -2,7 +2,7 @@
     <PropertyGroup>
         <ProjectGuid>{2EB5A94C-5C9D-4F30-8FC0-469DFCFD9566}</ProjectGuid>
         <MainSource>Casbin4D103Rio.dpk</MainSource>
-        <ProjectVersion>18.5</ProjectVersion>
+        <ProjectVersion>18.6</ProjectVersion>
         <FrameworkType>None</FrameworkType>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>

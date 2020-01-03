@@ -8,7 +8,7 @@ Casbin4D
 
 ![casbin Logo](https://github.com/casbin4d/Casbin4D/blob/master/Images/casbin4D-logo.png)
 
-Casbin4D is a cross platform (FireMonkey) implementation for Delphi/Pascal of the popular authorisation library [Carsbin](https://casbin.org). It provides support for enforcing authorization based on various [access control models](https://en.wikipedia.org/wiki/Computer_security_model).
+Casbin4D is a cross platform (FireMonkey) implementation for Delphi/Pascal of the popular authorisation library [Casbin](https://casbin.org). It provides support for enforcing authorization based on various [access control models](https://en.wikipedia.org/wiki/Computer_security_model).
 
 <img style="float: left;" src="https://github.com/casbin4d/Casbin4D/blob/master/Images/Speaker-128x117.png">You are cordially invited to share, fork, review and improve this library.
 Please feel free to comment and offer suggestions. If you want to contribute, check the wiki page for developers first

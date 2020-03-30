@@ -1,9 +1,20 @@
+unit Casbin.Functions.KeyMatch;
+
+interface
+
 /// <summary>
 ///   Determines whether key1 matches the pattern of key2
 ///   (as in REST paths)
 ///   key2 can contain '*'
 ///   eg. '/foo/bar' matches '/foo/*'
 /// </summary>
+function KeyMatch (const aArgs: array of string): Boolean;
+
+implementation
+
+uses
+  System.SysUtils;
+
 function KeyMatch (const aArgs: array of string): Boolean;
 var
   key1: string;
@@ -27,3 +38,4 @@ begin
 
 end;
 
+end.

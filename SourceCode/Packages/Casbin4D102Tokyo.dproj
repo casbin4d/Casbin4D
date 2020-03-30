@@ -164,6 +164,11 @@
         <DCCReference Include="..\Common\Third Party\TExpressionParser\ParseClass.pas"/>
         <DCCReference Include="..\Common\Third Party\TExpressionParser\oObjects.pas"/>
         <DCCReference Include="..\Common\Watcher\Casbin.Watcher.Types.pas"/>
+        <DCCReference Include="..\Common\Functions\Casbin.Functions.IPMatch.pas"/>
+        <DCCReference Include="..\Common\Functions\Casbin.Functions.KeyMatch.pas"/>
+        <DCCReference Include="..\Common\Functions\Casbin.Functions.KeyMatch2.pas"/>
+        <DCCReference Include="..\Common\Functions\Casbin.Functions.KeyMatch3.pas"/>
+        <DCCReference Include="..\Common\Functions\Casbin.Functions.RegExMatch.pas"/>
         <None Include="..\Common\Version.inc"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>

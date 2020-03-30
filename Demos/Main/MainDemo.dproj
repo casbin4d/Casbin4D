@@ -410,6 +410,11 @@
             <FormType>fmx</FormType>
         </DCCReference>
         <DCCReference Include="..\..\SourceCode\Common\Watcher\Casbin.Watcher.Types.pas"/>
+        <DCCReference Include="..\..\SourceCode\Common\Functions\Casbin.Functions.IPMatch.pas"/>
+        <DCCReference Include="..\..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch.pas"/>
+        <DCCReference Include="..\..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch2.pas"/>
+        <DCCReference Include="..\..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch3.pas"/>
+        <DCCReference Include="..\..\SourceCode\Common\Functions\Casbin.Functions.RegExMatch.pas"/>
         <RcItem Include="Images\delete_button_error.png">
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>PngImage_1</ResourceId>
@@ -453,9 +458,9 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="Images\delete_button_error.png" Configuration="Release" Class="ProjectFile">
+                <DeployFile LocalName="MainDemo.exe" Configuration="Release" Class="ProjectOutput">
                     <Platform Name="Win32">
-                        <RemoteDir>.\</RemoteDir>
+                        <RemoteName>MainDemo.exe</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -464,9 +469,9 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="MainDemo.exe" Configuration="Release" Class="ProjectOutput">
+                <DeployFile LocalName="Images\delete_button_error.png" Configuration="Release" Class="ProjectFile">
                     <Platform Name="Win32">
-                        <RemoteName>MainDemo.exe</RemoteName>
+                        <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

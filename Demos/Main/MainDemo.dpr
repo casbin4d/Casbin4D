@@ -5,7 +5,8 @@ program MainDemo;
 uses
   System.StartUpCopy,
   FMX.Forms,
-  Main in 'Main.pas' {Form1};
+  Main in 'Main.pas' {Form1},
+  Casbin.Watcher.Types in '..\..\SourceCode\Common\Watcher\Casbin.Watcher.Types.pas';
 
 {$R *.res}
 

@@ -85,3 +85,5 @@ Documentation/
 Benchmarks/Win32/
 *.ficfg
 Tests/CodeCoverage/
+*.txaPackage
+*.txvpck

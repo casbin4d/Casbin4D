@@ -144,9 +144,9 @@ begin
       begin
         argsArray[i]:=Trim(argsArray[i]);
         if argsArray[i][findStartPos]='(' then
-          argsArray[i]:=Copy(argsArray[i],findStartPos+1, Length(argsArray[i]));
+          argsArray[i]:=trim(Copy(argsArray[i],findStartPos+1, Length(argsArray[i])));
         if argsArray[i][findEndPos(argsArray[i])]=')' then
-          argsArray[i]:=Copy(argsArray[i], findStartPos, Length(argsArray[i])-1);
+          argsArray[i]:=trim(Copy(argsArray[i], findStartPos, Length(argsArray[i])-1));
       end;
 
       if (UpperCase(item)='G') or (UpperCase(item)='G2') then

@@ -481,33 +481,33 @@ type
                             '..\..\..\Examples\Default\rbac_with_domains_policy.csv#'+
                             'bob,domain2,data2,write#true', '#')]
 {$ENDREGION}
-//{$REGION 'TestRBACModelWithDeny'}
-//    // From model_test.go - TestRBACModelWithDeny
-//    [TestCase ('TestRBACModelWithDeny.1','..\..\..\Examples\Default\rbac_with_deny_model.conf#'+
-//                            '..\..\..\Examples\Default\rbac_with_deny_policy.csv#'+
-//                            'alice,data1,read#true', '#')]
-//    [TestCase ('TestRBACModelWithDeny.2','..\..\..\Examples\Default\rbac_with_deny_model.conf#'+
-//                            '..\..\..\Examples\Default\rbac_with_deny_policy.csv#'+
-//                            'alice,data1,write#false', '#')]
-//    [TestCase ('TestRBACModelWithDeny.3','..\..\..\Examples\Default\rbac_with_deny_model.conf#'+
-//                            '..\..\..\Examples\Default\rbac_with_deny_policy.csv#'+
-//                            'alice,data2,read#true', '#')]
-//    [TestCase ('TestRBACModelWithDeny.4','..\..\..\Examples\Default\rbac_with_deny_model.conf#'+
-//                            '..\..\..\Examples\Default\rbac_with_deny_policy.csv#'+
-//                            'alice,data2,write#false', '#')]
-//    [TestCase ('TestRBACModelWithDeny.5','..\..\..\Examples\Default\rbac_with_deny_model.conf#'+
-//                            '..\..\..\Examples\Default\rbac_with_deny_policy.csv#'+
-//                            'bob,data1,read#false', '#')]
-//    [TestCase ('TestRBACModelWithDeny.6','..\..\..\Examples\Default\rbac_with_deny_model.conf#'+
-//                            '..\..\..\Examples\Default\rbac_with_deny_policy.csv#'+
-//                            'bob,data1,write#false', '#')]
-//    [TestCase ('TestRBACModelWithDeny.7','..\..\..\Examples\Default\rbac_with_deny_model.conf#'+
-//                            '..\..\..\Examples\Default\rbac_with_deny_policy.csv#'+
-//                            'bob,data2,read#false', '#')]
-//    [TestCase ('TestRBACModelWithDeny.8','..\..\..\Examples\Default\rbac_with_deny_model.conf#'+
-//                            '..\..\..\Examples\Default\rbac_with_deny_policy.csv#'+
-//                            'bob,data2,write#true', '#')]
-//{$ENDREGION}
+{$REGION 'TestRBACModelWithDeny'}
+    // From model_test.go - TestRBACModelWithDeny
+    [TestCase ('TestRBACModelWithDeny.1','..\..\..\Examples\Default\rbac_with_deny_model.conf#'+
+                            '..\..\..\Examples\Default\rbac_with_deny_policy.csv#'+
+                            'alice,data1,read#true', '#')]
+    [TestCase ('TestRBACModelWithDeny.2','..\..\..\Examples\Default\rbac_with_deny_model.conf#'+
+                            '..\..\..\Examples\Default\rbac_with_deny_policy.csv#'+
+                            'alice,data1,write#false', '#')]
+    [TestCase ('TestRBACModelWithDeny.3','..\..\..\Examples\Default\rbac_with_deny_model.conf#'+
+                            '..\..\..\Examples\Default\rbac_with_deny_policy.csv#'+
+                            'alice,data2,read#true', '#')]
+    [TestCase ('TestRBACModelWithDeny.4','..\..\..\Examples\Default\rbac_with_deny_model.conf#'+
+                            '..\..\..\Examples\Default\rbac_with_deny_policy.csv#'+
+                            'alice,data2,write#false', '#')]
+    [TestCase ('TestRBACModelWithDeny.5','..\..\..\Examples\Default\rbac_with_deny_model.conf#'+
+                            '..\..\..\Examples\Default\rbac_with_deny_policy.csv#'+
+                            'bob,data1,read#false', '#')]
+    [TestCase ('TestRBACModelWithDeny.6','..\..\..\Examples\Default\rbac_with_deny_model.conf#'+
+                            '..\..\..\Examples\Default\rbac_with_deny_policy.csv#'+
+                            'bob,data1,write#false', '#')]
+    [TestCase ('TestRBACModelWithDeny.7','..\..\..\Examples\Default\rbac_with_deny_model.conf#'+
+                            '..\..\..\Examples\Default\rbac_with_deny_policy.csv#'+
+                            'bob,data2,read#false', '#')]
+    [TestCase ('TestRBACModelWithDeny.8','..\..\..\Examples\Default\rbac_with_deny_model.conf#'+
+                            '..\..\..\Examples\Default\rbac_with_deny_policy.csv#'+
+                            'bob,data2,write#true', '#')]
+{$ENDREGION}
 {$REGION 'TestRBACModelInMultiLines'}
     // From model_test.go - TestRBACModelInMultiLines
     [TestCase ('TestRBACModelInMultiLines.1','..\..\..\Examples\Default\rbac_model_in_multi_line.conf#'+

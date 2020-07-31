@@ -16,7 +16,8 @@ unit Casbin.Matcher;
 interface
 
 uses
-  Casbin.Core.Base.Types, Casbin.Matcher.Types, Casbin.Effect.Types, ParseExpr, System.Generics.Collections;
+  Casbin.Core.Base.Types, Casbin.Matcher.Types, Casbin.Effect.Types, ParseExpr,
+  System.Generics.Collections;
 
 type
   TMatcher = class (TBaseInterfacedObject, IMatcher)

@@ -1,8 +1,20 @@
+unit Casbin.Functions.IPMatch;
+
+interface
+
 /// <summary>
 ///   Determines whether an IP address ip1 matches the pattern of ip2
 ///   ip1 and ip2 can be an IP address or a CIDR pattern
 ///   eg. '192.168.2.123' matches '192.168.2.0/24'
 /// </summary>
+function IPMatch (const aArgs: array of string): Boolean;
+
+implementation
+
+uses
+  System.SysUtils,
+  System.Types, System.StrUtils;
+
 function IPMatch (const aArgs: array of string): Boolean;
 var
   ip1: string;
@@ -68,3 +80,5 @@ begin
   Result:= (IPArr1[0]=IPArr2[0]) and (IPArr1[1]=IPArr2[1])
                                         and (IPArr1[2]=IPArr2[2]);
 end;
+
+end.

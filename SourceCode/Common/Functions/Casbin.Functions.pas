@@ -46,7 +46,9 @@ type
 implementation
 
 uses
-  System.SysUtils, System.RegularExpressions, System.StrUtils;
+  System.SysUtils, System.RegularExpressions, System.StrUtils,
+  Casbin.Functions.IPMatch, Casbin.Functions.KeyMatch,
+  Casbin.Functions.KeyMatch2, Casbin.Functions.RegExMatch;
 
 constructor TFunctions.Create;
 begin
@@ -116,22 +118,6 @@ begin
   Result:=fObjDictionary.Items[Trim(aName)];
 end;
 
-// Built-in functions
-// In this section, built-in functions are imported
-{$IF DEFINED(CASBINTESTS)}
-  {$I ..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch.pas}
-  {$I ..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch2.pas}
-  {$I ..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch3.pas}
-  {$I ..\SourceCode\Common\Functions\Casbin.Functions.RegExMatch.pas}
-  {$I ..\SourceCode\Common\Functions\Casbin.Functions.IPMatch.pas}
-{$ELSE}
-  {$I ..\..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch.pas}
-  {$I ..\..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch2.pas}
-  {$I ..\..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch3.pas}
-  {$I ..\..\SourceCode\Common\Functions\Casbin.Functions.RegExMatch.pas}
-  {$I ..\..\SourceCode\Common\Functions\Casbin.Functions.IPMatch.pas}
-{$ENDIF}
-
 function TFunctions.list: TStringList;
 var
   name: string;
@@ -152,13 +138,6 @@ begin
   fDictionary.Add('RegExMatch', regexMatch);
   fDictionary.Add('IPMatch', IPMatch);
 end;
-
-// Custom functions
-// If you want to add more functions include the files here
-// Then register it in loadCustomFunctions
-// (see loadBuiltInFunctions for examples)
-
-{ $I ..\SourceCode\Common\Functions\NewCustomFunction.pas}
 
 procedure TFunctions.loadCustomFunctions;
 begin

@@ -142,15 +142,9 @@ implementation
 
 uses
   Casbin.Functions, System.SysUtils, System.RegularExpressions, System.Types,
-  System.StrUtils, System.Classes;
-
-// Built-in functions
-// In this section, built-in functions are imported
-{$I ..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch.pas}
-{$I ..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch2.pas}
-{$I ..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch3.pas}
-{$I ..\SourceCode\Common\Functions\Casbin.Functions.RegExMatch.pas}
-{$I ..\SourceCode\Common\Functions\Casbin.Functions.IPMatch.pas}
+  System.StrUtils, System.Classes, Casbin.Functions.IPMatch,
+  Casbin.Functions.KeyMatch, Casbin.Functions.KeyMatch2,
+  Casbin.Functions.KeyMatch3, Casbin.Functions.RegExMatch;
 
 procedure TTestFunctions.Setup;
 begin

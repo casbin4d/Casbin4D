@@ -23,7 +23,7 @@ production-ready | production-ready | production-ready | production-ready
 [![python](https://casbin.org/img/langs/python.png)](https://github.com/casbin/pycasbin) | [![delphi](https://github.com/casbin4d/Casbin4D/blob/master/Images/Delphi.png)](https://github.com/casbin4d/Casbin4D) | [![dotnet](https://casbin.org/img/langs/dotnet.png)](https://github.com/Devolutions/casbin-net) | [![rust](https://casbin.org/img/langs/rust.png)](https://github.com/casbin/casbin-rs)
 ----|----|----|----
 [PyCasbin](https://github.com/casbin/pycasbin) | [Casbin4D](https://github.com/casbin4d/Casbin4D) | [Casbin-Net](https://github.com/Devolutions/casbin-net) | [Casbin-RS](https://github.com/casbin/casbin-rs)
-production-ready | experimental | WIP | WIP
+production-ready | experimental | production-ready | production-ready
 
 ## Table of contents
 

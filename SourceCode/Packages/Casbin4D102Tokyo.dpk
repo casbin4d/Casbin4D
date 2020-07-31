@@ -70,6 +70,11 @@ contains
   ParseExpr in '..\Common\Third Party\TExpressionParser\ParseExpr.pas',
   ParseClass in '..\Common\Third Party\TExpressionParser\ParseClass.pas',
   oObjects in '..\Common\Third Party\TExpressionParser\oObjects.pas',
-  Casbin.Watcher.Types in '..\Common\Watcher\Casbin.Watcher.Types.pas';
+  Casbin.Watcher.Types in '..\Common\Watcher\Casbin.Watcher.Types.pas',
+  Casbin.Functions.IPMatch in '..\Common\Functions\Casbin.Functions.IPMatch.pas',
+  Casbin.Functions.KeyMatch in '..\Common\Functions\Casbin.Functions.KeyMatch.pas',
+  Casbin.Functions.KeyMatch2 in '..\Common\Functions\Casbin.Functions.KeyMatch2.pas',
+  Casbin.Functions.KeyMatch3 in '..\Common\Functions\Casbin.Functions.KeyMatch3.pas',
+  Casbin.Functions.RegExMatch in '..\Common\Functions\Casbin.Functions.RegExMatch.pas';
 
 end.

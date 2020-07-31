@@ -9,6 +9,9 @@
         <Projects Include="Packages\Casbin4D103Rio.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="Packages\Casbin4D104Sydney.dproj">
+            <Dependencies/>
+        </Projects>
         <Projects Include="..\Demos\Main\MainDemo.dproj">
             <Dependencies/>
         </Projects>
@@ -47,6 +50,15 @@
     <Target Name="Casbin4D103Rio:Make">
         <MSBuild Projects="Packages\Casbin4D103Rio.dproj" Targets="Make"/>
     </Target>
+    <Target Name="Casbin4D104Sydney">
+        <MSBuild Projects="Packages\Casbin4D104Sydney.dproj"/>
+    </Target>
+    <Target Name="Casbin4D104Sydney:Clean">
+        <MSBuild Projects="Packages\Casbin4D104Sydney.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Casbin4D104Sydney:Make">
+        <MSBuild Projects="Packages\Casbin4D104Sydney.dproj" Targets="Make"/>
+    </Target>
     <Target Name="MainDemo">
         <MSBuild Projects="..\Demos\Main\MainDemo.dproj"/>
     </Target>
@@ -84,13 +96,13 @@
         <MSBuild Projects="..\Demos\Console\ConsoleDemo.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="Casbin4D102Tokyo;Casbin4D103Rio;MainDemo;Benchmarks_Casbin;Tests_Casbin;ConsoleDemo"/>
+        <CallTarget Targets="Casbin4D102Tokyo;Casbin4D103Rio;Casbin4D104Sydney;MainDemo;Benchmarks_Casbin;Tests_Casbin;ConsoleDemo"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="Casbin4D102Tokyo:Clean;Casbin4D103Rio:Clean;MainDemo:Clean;Benchmarks_Casbin:Clean;Tests_Casbin:Clean;ConsoleDemo:Clean"/>
+        <CallTarget Targets="Casbin4D102Tokyo:Clean;Casbin4D103Rio:Clean;Casbin4D104Sydney:Clean;MainDemo:Clean;Benchmarks_Casbin:Clean;Tests_Casbin:Clean;ConsoleDemo:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="Casbin4D102Tokyo:Make;Casbin4D103Rio:Make;MainDemo:Make;Benchmarks_Casbin:Make;Tests_Casbin:Make;ConsoleDemo:Make"/>
+        <CallTarget Targets="Casbin4D102Tokyo:Make;Casbin4D103Rio:Make;Casbin4D104Sydney:Make;MainDemo:Make;Benchmarks_Casbin:Make;Tests_Casbin:Make;ConsoleDemo:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

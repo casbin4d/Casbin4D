@@ -1,5 +1,5 @@
 const
-	MajorVersion = '0';
-	MinorVersion = '2';
+	MajorVersion = '1';
+	MinorVersion = '0';
 	BugVersion = '0';
-	TypeVersion = 'Alpha';
+	TypeVersion = 'Beta';

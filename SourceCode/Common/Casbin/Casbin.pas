@@ -17,7 +17,8 @@ interface
 
 uses
   Casbin.Core.Base.Types, Casbin.Types, Casbin.Model.Types,
-  Casbin.Adapter.Types, Casbin.Core.Logger.Types, Casbin.Functions.Types, Casbin.Policy.Types, System.TypInfo;
+  Casbin.Adapter.Types, Casbin.Core.Logger.Types, Casbin.Functions.Types,
+  Casbin.Policy.Types, System.TypInfo;
 
 type
   TCasbin = class (TBaseInterfacedObject, ICasbin)
@@ -64,7 +65,8 @@ uses
   Casbin.Core.Logger.Default, System.Generics.Collections, System.SysUtils,
   Casbin.Resolve, Casbin.Resolve.Types, Casbin.Model.Sections.Types,
   Casbin.Core.Utilities, System.Rtti, Casbin.Effect.Types, Casbin.Effect,
-  Casbin.Functions, Casbin.Adapter.Memory, Casbin.Adapter.Memory.Policy, System.SyncObjs, System.Types, System.StrUtils, Casbin.Core.Defaults,
+  Casbin.Functions, Casbin.Adapter.Memory, Casbin.Adapter.Memory.Policy,
+  System.SyncObjs, System.Types, System.StrUtils, Casbin.Core.Defaults,
   ArrayHelper;
 
 var
@@ -150,6 +152,8 @@ var
   cType: TRttiType;
   cField: TRttiField;
   abacList: TList<string>;
+  num: integer;
+  canContinue: Boolean;
 begin
   result:=true;
   if Length(aParams) = 0 then
@@ -279,9 +283,11 @@ begin
                                   end;
                               end);
 
-      if fPolicy.linkExists(request[0], reqDomain, policyList[0]) or
-        soundexSimilar(Trim(request[0]), Trim(policyList[0]),
-                                        Trunc(0.50 * Length(request[0]))) then
+      if fPolicy.linkExists(request[0], reqDomain, policyList[0])
+//      or
+//        soundexSimilar(Trim(request[0]), Trim(policyList[0]),
+//                                        Trunc(0.50 * Length(request[0]))))
+                                                                          then
       begin
         policyDict:=resolve(policyList, rtPolicy,
                               fModel.assertions(stPolicyDefinition));
@@ -291,17 +297,34 @@ begin
         // Resolve Matcher
         if string.Compare('indeterminate', Trim(policyList[policyList.Count-1]),
                                                     [coIgnoreCase])=0 then
-          matcherResult:=erIndeterminate
+        begin
+          SetLength(effectArray, Length(effectArray)+1);
+          effectArray[Length(effectArray)-1]:=erIndeterminate; //PALOFF
+        end
         else
-          if matchString<>'' then
-            matcherResult:=resolve(requestDict, policyDict, fFunctions, matchString)
-          else
-            matcherResult:=erIndeterminate;
-        SetLength(effectArray, Length(effectArray)+1);
-        effectArray[Length(effectArray)-1]:=matcherResult; //PALOFF
-
-        policyDict.Free;
+        begin
+          /// resolve returns one of the two options erAllow (means the policy is
+          /// relevant) or erDeny (the policy is not relevant)
+          matcherResult:=resolve(requestDict, policyDict, fFunctions, matchString);
+          if matcherResult = erAllow then
+          begin
+            if policyList.count = request.Count then
+              matcherResult:=erAllow
+            else
+            begin
+              var f: string :=  policyList[request.Count];
+              if policyList.Count > request.Count then
+                if UpperCase(policyList[request.Count]) = 'ALLOW' then
+                  matcherResult:=erAllow
+                else
+                  matcherResult:=erDeny;
+              SetLength(effectArray, Length(effectArray)+1);
+              effectArray[Length(effectArray)-1]:=matcherResult; //PALOFF
+            end;
+          end;
         end;
+        policyDict.Free;
+      end;
       policyList.Free;
     end;
 

@@ -18,6 +18,9 @@
         <Projects Include="..\Tests\Tests.Casbin.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="..\Demos\Console\ConsoleDemo.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -71,14 +74,23 @@
     <Target Name="Tests_Casbin:Make">
         <MSBuild Projects="..\Tests\Tests.Casbin.dproj" Targets="Make"/>
     </Target>
+    <Target Name="ConsoleDemo">
+        <MSBuild Projects="..\Demos\Console\ConsoleDemo.dproj"/>
+    </Target>
+    <Target Name="ConsoleDemo:Clean">
+        <MSBuild Projects="..\Demos\Console\ConsoleDemo.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ConsoleDemo:Make">
+        <MSBuild Projects="..\Demos\Console\ConsoleDemo.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="Casbin4D102Tokyo;Casbin4D103Rio;MainDemo;Benchmarks_Casbin;Tests_Casbin"/>
+        <CallTarget Targets="Casbin4D102Tokyo;Casbin4D103Rio;MainDemo;Benchmarks_Casbin;Tests_Casbin;ConsoleDemo"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="Casbin4D102Tokyo:Clean;Casbin4D103Rio:Clean;MainDemo:Clean;Benchmarks_Casbin:Clean;Tests_Casbin:Clean"/>
+        <CallTarget Targets="Casbin4D102Tokyo:Clean;Casbin4D103Rio:Clean;MainDemo:Clean;Benchmarks_Casbin:Clean;Tests_Casbin:Clean;ConsoleDemo:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="Casbin4D102Tokyo:Make;Casbin4D103Rio:Make;MainDemo:Make;Benchmarks_Casbin:Make;Tests_Casbin:Make"/>
+        <CallTarget Targets="Casbin4D102Tokyo:Make;Casbin4D103Rio:Make;MainDemo:Make;Benchmarks_Casbin:Make;Tests_Casbin:Make;ConsoleDemo:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

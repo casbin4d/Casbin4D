@@ -32,6 +32,7 @@ type
     [TestCase ('NormalRole.10', 'u4,g1#false', '#')]
     [TestCase ('NormalRole.11', 'u4,g2#true', '#')]
     [TestCase ('NormalRole.12', 'u4,g3#true', '#')]
+    [testCase ('NormalRole.13', 'u1,u2#false', '#')]
     procedure testRolesNormal(const aLeft, aRight: string; const aResult: boolean);
 
     [Test]
@@ -170,7 +171,8 @@ type
 implementation
 
 uses
-  Casbin.Policy, System.SysUtils, Casbin.Model.Sections.Types, Casbin.Model.Types, Casbin.Types, Casbin;
+  Casbin.Policy, System.SysUtils, Casbin.Model.Sections.Types,
+  Casbin.Model.Types, Casbin.Types, Casbin;
 
 procedure TTestPolicyRoles.Setup;
 begin

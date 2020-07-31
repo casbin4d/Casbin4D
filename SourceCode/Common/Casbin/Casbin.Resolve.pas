@@ -24,6 +24,17 @@ function resolve (const aResolve: TList<string>;
                   const aAssertions: TList<string>):
                     TDictionary<string, string>; overload;
 
+{$REGION 'This function decides whether a policy is relevant to the request. It returnsone of the two options erAllow (means the policy is relevant) or erDeny (the policy is not relevant)'}
+/// <summary>
+///   <para>
+///     This function decides whether a policy is relevant to the request.
+///   </para>
+///   <para>
+///     It returns one of the two options erAllow (means the policy is
+///     relevant) or erDeny (the policy is not relevant)
+///   </para>
+/// </summary>
+{$ENDREGION}
 function resolve(const aResolvedRequest, aResolvedPolicy: TDictionary<string,
     string>; const aFunctions: IFunctions; const aMatcher: string):
     TEffectResult; overload;
@@ -167,7 +178,6 @@ begin
 
       resolvedMatcher:=resolvedMatcher.Replace(replaceStr, boolReplaceStr,
                                                           [rfReplaceAll]);
-
     end;
   end;
   // Evaluation

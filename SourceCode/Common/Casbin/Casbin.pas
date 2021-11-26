@@ -309,18 +309,20 @@ begin
           if matcherResult = erAllow then
           begin
             if policyList.count = request.Count then
-              matcherResult:=erAllow
+            begin
+              matcherResult:=erAllow;
+            end
             else
             begin
               var f: string :=  policyList[request.Count];
               if policyList.Count > request.Count then
-                if UpperCase(policyList[request.Count]) = 'ALLOW' then
+                if SameText(Trim(policyList[request.Count]), 'ALLOW') then
                   matcherResult:=erAllow
                 else
                   matcherResult:=erDeny;
-              SetLength(effectArray, Length(effectArray)+1);
-              effectArray[Length(effectArray)-1]:=matcherResult; //PALOFF
             end;
+            SetLength(effectArray, Length(effectArray)+1);
+            effectArray[Length(effectArray)-1]:=matcherResult; //PALOFF
           end;
         end;
         policyDict.Free;

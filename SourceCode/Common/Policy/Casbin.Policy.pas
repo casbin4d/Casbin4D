@@ -108,7 +108,7 @@ uses
   Casbin.Adapter.Filesystem.Policy, Casbin.Exception.Types, Casbin.Parser,
   Casbin.Core.Utilities, Casbin.Core.Defaults, System.SysUtils,
   System.StrUtils, Casbin.Model.Sections.Default, Casbin.Adapter.Memory.Policy,
-  Casbin.Parser.AST, ArrayHelper, System.RegularExpressions;
+  Casbin.Parser.AST, ArrayHelper, System.RegularExpressions, Casbin.Functions.IPMatch;
 
 { TPolicyManager }
 
@@ -473,8 +473,8 @@ begin
 {$ENDIF}
   Result:=False;
 
-  if SameText(UpperCase(lDomain), UpperCase(rDomain)) and
-      SameText(UpperCase(lItem), UpperCase(rItem)) or
+  if SameText(lDomain, rDomain) and
+      (SameText(lItem, rItem) or IPmatch(lItem, rItem, False)) or
         (IndexStr(lItem, builtinAccounts)>-1) then
   begin
     Result:=True;

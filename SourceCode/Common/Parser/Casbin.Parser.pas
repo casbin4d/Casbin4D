@@ -360,6 +360,7 @@ begin
     mainLines.Text:=fParseString;
 
     startPos:=findStartPos;
+    header:=nil;
     for line in mainLines do
     begin
       endPos:=findEndPos(line);

@@ -54,7 +54,9 @@ var
   st: TMemoryManagerState;
   sb: TSmallBlockTypeState;
 begin
+  {$WARN SYMBOL_PLATFORM OFF}
   GetMemoryManagerState(st);
+  {$WARN SYMBOL_PLATFORM ON}
   Result := st.TotalAllocatedMediumBlockSize + st.TotalAllocatedLargeBlockSize;
   for sb in st.SmallBlockTypeStates do
     result := result + sb.UseableBlockSize * sb.AllocatedBlockCount;

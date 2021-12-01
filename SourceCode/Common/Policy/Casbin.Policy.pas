@@ -21,6 +21,8 @@ uses
   System.Types, System.Classes, Casbin.Model.Sections.Types,
   System.Generics.Collections, Casbin.Watcher.Types;
 
+{$I Casbin.inc}
+
 type
   TPolicyManager = class(TBaseInterfacedObject, IPolicyManager)
   private
@@ -452,7 +454,7 @@ begin
   rDomain:=Trim(aRightDomain);
   lItem:=Trim(aLeft);
   rItem:=Trim(aRight);
-{$IFDEF DEBUG}
+{$IFDEF CASBIN_LOGGING}
   fAdapter.Logger.log('   Roles for Left: '+lItem);
   fAdapter.Logger.log('      Roles: ');
   if Length(rolesForEntity(aLeft))=0 then

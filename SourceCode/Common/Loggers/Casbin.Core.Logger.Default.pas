@@ -18,6 +18,8 @@ interface
 uses
   Casbin.Core.Logger.Base;
 
+{$I Casbin.inc}
+
 type
   TDefaultLogger = class (TBaseLogger)
   public
@@ -37,7 +39,7 @@ procedure TDefaultLogger.log(const aMessage: string);
 begin
   inherited;
 {$IFDEF MSWINDOWS}
-{$IFDEF DEBUG}
+{$IFDEF CASBIN_LOGGING}
   OutputDebugString(PChar(aMessage));
 {$ENDIF}
 {$ENDIF}

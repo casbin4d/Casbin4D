@@ -20,6 +20,8 @@ uses
   Casbin.Adapter.Types, Casbin.Core.Logger.Types, Casbin.Functions.Types,
   Casbin.Policy.Types, System.TypInfo;
 
+{$I Casbin.inc}
+
 type
   TCasbin = class (TBaseInterfacedObject, ICasbin)
   private
@@ -175,7 +177,7 @@ begin
     fLogger.log('   Resolving Request...');
 
     // Resolve Request
-  {$IFDEF DEBUG}
+  {$IFDEF CASBIN_LOGGING}
     fLogger.log('   Request: '+requestStr);
     fLogger.log('      Assertions: ');
     if fModel.assertions(stRequestDefinition).Count=0 then
@@ -222,7 +224,7 @@ begin
 
     fLogger.log('   Resolving Policies...');
 
-  {$IFDEF DEBUG}
+  {$IFDEF CASBIN_LOGGING}
     fLogger.log('   Policies: ');
     fLogger.log('      Assertions: ');
     if fPolicy.policies.Count=0 then
@@ -236,7 +238,7 @@ begin
       fLogger.log('         '+item);
   {$ENDIF}
 
-  {$IFDEF DEBUG}
+  {$IFDEF CASBIN_LOGGING}
     fLogger.log('   Matchers: '+requestStr);
     fLogger.log('      Assertions: ');
     if fModel.assertions(stMatchers).Count=0 then

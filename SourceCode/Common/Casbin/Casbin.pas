@@ -152,8 +152,6 @@ var
   cType: TRttiType;
   cField: TRttiField;
   abacList: TList<string>;
-  num: integer;
-  canContinue: Boolean;
 begin
   result:=true;
   if Length(aParams) = 0 then

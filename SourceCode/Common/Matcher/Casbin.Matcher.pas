@@ -42,7 +42,8 @@ type
 implementation
 
 uses
-  System.StrUtils, System.SysUtils, Casbin.Exception.Types, System.Rtti, Casbin.Core.Defaults;
+  System.StrUtils, System.SysUtils, Casbin.Exception.Types, System.Rtti, Casbin.Core.Defaults,
+  System.RegularExpressions;
 
 procedure TMatcher.clearIdentifiers;
 begin
@@ -124,8 +125,12 @@ procedure TMatcher.replaceIdentifiers(var aParseString: string);
 var
   pair: TPair<string, integer>;
 begin
+  // FIELDSUSER == FIELDSUSER && FIELDS == FIELDS && READ == LAUNCH
+  // Replace FIELDS -> 22. Dont replace FIELDSUSER to 22USER
+  // * Key has to be at the start of the string or the previous char is ' ' or '='
+  // * Key has to be at the end of the string or the following char is ' ' or '='
   for pair in fIdentifiers do
-    aParseString:=aParseString.Replace(pair.Key, pair.Value.ToString, [rfReplaceAll]);
+    aParseString:=TRegex.Replace(aParseString, '(^|[ =])'+pair.Key+'($|[ =])', '$1'+pair.Value.ToString+'$2');
 end;
 
 end.

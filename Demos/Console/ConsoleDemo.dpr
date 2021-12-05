@@ -18,11 +18,11 @@ begin
     casbin:=TCasbin.Create('..\..\rbac_with_deny_model.conf','');
     with casbin.Policy do
     begin
-      addPolicy(stPolicyRules, 'p, superuser, user, add, allow');
-      addPolicy(stPolicyRules, 'p, superuser, user, delete, allow');
+      addPolicy(stPolicyRules, 'p, applicationManager, user, add, allow');
+      addPolicy(stPolicyRules, 'p, applicationManager, user, delete, allow');
       addPolicy(stPolicyRules, 'p, alice, user, delete, deny');
-      addPolicy(stPolicyRules, 'g, alice, superuser');
-      addPolicy(stPolicyRules, 'g, bob, superuser');
+      addPolicy(stPolicyRules, 'g, alice, applicationManager');
+      addPolicy(stPolicyRules, 'g, bob, applicationManager');
     end;
 
     Assert(casbin.enforce(['alice', 'user', 'add']) = true);

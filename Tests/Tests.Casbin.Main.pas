@@ -143,11 +143,9 @@ type
 {$ENDREGION}
 {$REGION 'TestKeyMatchModelDeny'}
     // From enforce_test.go - TestKeyMatchModelInMemoryDeny
-    // In the original GO test, it reports the expected value should be true
-    // but it must be wrong????? This returns false
     [TestCase ('KeyMatchDeny.1','..\..\..\Examples\Tests\keymatch_model_Deny.conf#'+
                             '..\..\..\Examples\Tests\keymatch_policy.csv#'+
-                            'alice,/alice_data/resource2,POST#false', '#')]
+                            'alice,/alice_data/resource2,POST#true', '#')]
 {$ENDREGION}
 {$REGION 'TestBasicModelWithRoot'}
     // From model_test.go - TestBasicModelWithRoot

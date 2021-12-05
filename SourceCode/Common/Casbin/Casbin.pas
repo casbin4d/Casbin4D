@@ -109,7 +109,7 @@ end;
 
 function TCasbin.enforce(const aParams: TEnforceParameters): boolean;
 var
-  rec: string;
+  rec: string; //PALOFF
 begin
   Result:=enforce(aParams, nil, rec);
 end;
@@ -312,7 +312,6 @@ begin
             end
             else
             begin
-              var f: string :=  policyList[request.Count];
               if policyList.Count > request.Count then
                 if policyList[request.Count].Trim.ToUpper.Equals('ALLOW') then
                   matcherResult:=erAllow

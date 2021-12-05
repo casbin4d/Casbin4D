@@ -24,7 +24,7 @@ type
     fCached: Boolean;
     fAutosave: Boolean;
     fCacheSize: Integer;
-    fSaved: Boolean;
+    fSaved: Boolean;  //PALOFF
   protected
 {$REGION 'IPolicyAdapter'}
     procedure add(const aTag: string);

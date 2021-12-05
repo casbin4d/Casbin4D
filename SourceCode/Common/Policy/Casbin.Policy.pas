@@ -219,8 +219,8 @@ begin
   fRolesList:=TList<string>.Create;  //PALOFF
   fRolesNodes:=TObjectDictionary<string, TRoleNode>.Create([doOwnsValues]);
   fRolesLinks:=TObjectDictionary<string, TStringList>.Create([doOwnsValues]);
-  fDomains:=TList<string>.Create;
-  fWatchers:=TList<IWatcher>.Create;
+  fDomains:=TList<string>.Create; //PALOFF
+  fWatchers:=TList<IWatcher>.Create; //PALOFF
   loadPolicies;
   loadRoles;
 end;
@@ -881,7 +881,7 @@ function TPolicyManager.rolesForEntity(const aEntity: string; const aDomain:
 var
   nodeEntity: TRoleNode;
   entity: TRoleNode;
-  domain: string;
+  domain: string; //PALOFF
   id: string;
 begin
   if Trim(aDomain)='' then

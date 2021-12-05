@@ -19,17 +19,14 @@ uses
 
 function KeyMatch2 (const aArgs: array of string): Boolean;
 var
-  key1: string;
   key2: string;
   regExp : TRegEx;
   match : TMatch;
 begin
   if Length(aArgs)<>2 then
     raise Exception.Create('Wrong number of arguments in KeyMatch2');
-  key1:=aArgs[0];
-  key2:=aArgs[1];
 
-  key2:=StringReplace(key2, '/*', '/.*', [rfReplaceAll]);
+  key2:=StringReplace(aArgs[1], '/*', '/.*', [rfReplaceAll]);
 
   while Pos('/:', key2, low(string))<>0 do
   begin
@@ -38,7 +35,7 @@ begin
   end;
 
   regExp:=TRegEx.Create(key2);
-  match := regExp.Match(key1);
+  match := regExp.Match(aArgs[0]);
   Result:= match.Success;
 
 end;

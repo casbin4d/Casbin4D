@@ -1,7 +1,7 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <ProjectGuid>{8E6C47C7-C5A9-461D-A306-D0E6A2FE40B6}</ProjectGuid>
-        <ProjectVersion>19.0</ProjectVersion>
+        <ProjectVersion>19.3</ProjectVersion>
         <FrameworkType>None</FrameworkType>
         <MainSource>Tests.Casbin.dpr</MainSource>
         <Base>True</Base>
@@ -28,13 +28,13 @@
         <CfgParent>Base</CfgParent>
         <Base>true</Base>
     </PropertyGroup>
-    <PropertyGroup Condition="('$(Platform)'=='iOSSimulator' and '$(Base)'=='true') or '$(Base_iOSSimulator)'!=''">
-        <Base_iOSSimulator>true</Base_iOSSimulator>
+    <PropertyGroup Condition="('$(Platform)'=='OSX64' and '$(Base)'=='true') or '$(Base_OSX64)'!=''">
+        <Base_OSX64>true</Base_OSX64>
         <CfgParent>Base</CfgParent>
         <Base>true</Base>
     </PropertyGroup>
-    <PropertyGroup Condition="('$(Platform)'=='OSX64' and '$(Base)'=='true') or '$(Base_OSX64)'!=''">
-        <Base_OSX64>true</Base_OSX64>
+    <PropertyGroup Condition="('$(Platform)'=='OSXARM64' and '$(Base)'=='true') or '$(Base_OSXARM64)'!=''">
+        <Base_OSXARM64>true</Base_OSXARM64>
         <CfgParent>Base</CfgParent>
         <Base>true</Base>
     </PropertyGroup>
@@ -77,7 +77,7 @@
         <Icns_MainIcns>$(BDS)\bin\delphi_PROJECTICNS.icns</Icns_MainIcns>
         <DCC_UnitSearchPath>$(DUnitX);$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
         <SanitizedProjectName>Tests_Casbin</SanitizedProjectName>
-        <DCC_Define>EUREKALOG_VER7;EUREKALOG;CASBINTESTS;TESTINSIGHT;$(DCC_Define)</DCC_Define>
+        <DCC_Define>CASBINTESTS;TESTINSIGHT;$(DCC_Define)</DCC_Define>
         <DCC_MapFile>3</DCC_MapFile>
         <DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
         <VerInfo_Locale>2057</VerInfo_Locale>
@@ -91,6 +91,7 @@
         <Android_NotificationIcon48>$(BDS)\bin\Artwork\Android\FM_NotificationIcon_48x48.png</Android_NotificationIcon48>
         <Android_NotificationIcon72>$(BDS)\bin\Artwork\Android\FM_NotificationIcon_72x72.png</Android_NotificationIcon72>
         <Android_NotificationIcon96>$(BDS)\bin\Artwork\Android\FM_NotificationIcon_96x96.png</Android_NotificationIcon96>
+        <Android_LauncherIcon192>$(BDS)\bin\Artwork\Android\FM_LauncherIcon_192x192.png</Android_LauncherIcon192>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Android64)'!=''">
         <VerInfo_Keys>package=com.embarcadero.$(MSBuildProjectName);label=$(MSBuildProjectName);versionCode=1;versionName=1.0.0;persistent=False;restoreAnyVersion=False;installLocation=auto;largeHeap=False;theme=TitleBar;hardwareAccelerated=true;apiKey=</VerInfo_Keys>
@@ -100,12 +101,11 @@
         <Base>true</Base>
         <DCC_UsePackage>DBXSqliteDriver;RESTComponents;DBXInterBaseDriver;tethering;TMSScripter;FMXTMSFNCUIPackPkgDXE12;bindcompfmx;fmx;FireDACIBDriver;dbexpress;IndyCore;xdata;dsnap;FireDACCommon;RESTBackendComponents;soapserver;TMSLoggingPkgFMXDXE12;bindengine;CloudService;FireDACCommonDriver;inet;IndyIPCommon;bindcompdbx;IndyIPServer;sparkle;tmsbcl;IndySystem;FMXTMSFNCCorePkgDXE12;fmxFireDAC;FireDAC;FireDACSqliteDriver;soaprtl;DbxCommonDriver;xmlrtl;soapmidas;rtl;DbxClientDriver;CustomIPTransport;bindcomp;IndyIPClient;TMSLoggingPkgCoreDXE12;dbxcds;aurelius;dsnapxml;dbrtl;IndyProtocols;FMXTMSFNCChartPkgDXE12;$(DCC_UsePackage);$(DCC_UsePackage)</DCC_UsePackage>
         <EnabledSysJars>android-support-v4.dex.jar;cloud-messaging.dex.jar;fmx.dex.jar;google-analytics-v2.dex.jar;google-play-billing.dex.jar;google-play-licensing.dex.jar;google-play-services-ads-7.0.0.dex.jar;google-play-services-analytics-7.0.0.dex.jar;google-play-services-base-7.0.0.dex.jar;google-play-services-gcm-7.0.0.dex.jar;google-play-services-identity-7.0.0.dex.jar;google-play-services-maps-7.0.0.dex.jar;google-play-services-panorama-7.0.0.dex.jar;google-play-services-plus-7.0.0.dex.jar;google-play-services-wallet-7.0.0.dex.jar</EnabledSysJars>
+        <Android_LauncherIcon192>$(BDS)\bin\Artwork\Android\FM_LauncherIcon_192x192.png</Android_LauncherIcon192>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_iOSDevice64)'!=''">
         <DCC_UsePackage>DBXSqliteDriver;RESTComponents;DBXInterBaseDriver;tethering;TMSScripter;FMXTMSFNCUIPackPkgDXE12;bindcompfmx;fmx;FireDACIBDriver;dbexpress;IndyCore;xdata;dsnap;FireDACCommon;RESTBackendComponents;soapserver;TMSLoggingPkgFMXDXE12;bindengine;CloudService;FireDACCommonDriver;inet;IndyIPCommon;bindcompdbx;IndyIPServer;sparkle;tmsbcl;IndySystem;FMXTMSFNCCorePkgDXE12;fmxFireDAC;FireDAC;FireDACSqliteDriver;soaprtl;DbxCommonDriver;xmlrtl;soapmidas;rtl;DbxClientDriver;CustomIPTransport;bindcomp;IndyIPClient;TMSLoggingPkgCoreDXE12;dbxcds;TMSFMXPackPkgDXE12;aurelius;dsnapxml;dbrtl;IndyProtocols;FMXTMSFNCChartPkgDXE12;fmxase;$(DCC_UsePackage)</DCC_UsePackage>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Base_iOSSimulator)'!=''">
-        <DCC_UsePackage>DBXSqliteDriver;RESTComponents;DBXInterBaseDriver;tethering;TMSScripter;FMXTMSFNCUIPackPkgDXE12;bindcompfmx;fmx;FireDACIBDriver;dbexpress;IndyCore;xdata;dsnap;FireDACCommon;RESTBackendComponents;soapserver;TMSLoggingPkgFMXDXE12;bindengine;CloudService;FireDACCommonDriver;inet;IndyIPCommon;bindcompdbx;IndyIPServer;sparkle;tmsbcl;IndySystem;FMXTMSFNCCorePkgDXE12;fmxFireDAC;FireDAC;FireDACSqliteDriver;soaprtl;DbxCommonDriver;xmlrtl;soapmidas;rtl;DbxClientDriver;CustomIPTransport;bindcomp;IndyIPClient;TMSLoggingPkgCoreDXE12;dbxcds;aurelius;dsnapxml;dbrtl;IndyProtocols;FMXTMSFNCChartPkgDXE12;fmxase;$(DCC_UsePackage)</DCC_UsePackage>
+        <iOS_AppStore1024>$(BDS)\bin\Artwork\iOS\iPhone\FM_ApplicationIcon_1024x1024.png</iOS_AppStore1024>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_OSX64)'!=''">
         <VerInfo_Keys>CFBundleName=$(MSBuildProjectName);CFBundleDisplayName=$(MSBuildProjectName);CFBundleIdentifier=$(MSBuildProjectName);CFBundleVersion=1.0.0;CFBundleShortVersionString=1.0.0;CFBundlePackageType=APPL;CFBundleSignature=????;CFBundleAllowMixedLocalizations=YES;CFBundleExecutable=$(MSBuildProjectName);NSHighResolutionCapable=true;LSApplicationCategoryType=public.app-category.utilities;NSLocationUsageDescription=The reason for accessing the location information of the user;NSContactsUsageDescription=The reason for accessing the contacts</VerInfo_Keys>
@@ -114,6 +114,15 @@
         <CfgParent>Base</CfgParent>
         <Base>true</Base>
         <DCC_UsePackage>DBXSqliteDriver;RESTComponents;DBXInterBaseDriver;tethering;TMSScripter;FMXTMSFNCUIPackPkgDXE12;bindcompfmx;inetdb;fmx;FireDACIBDriver;fmxdae;dbexpress;IndyCore;xdata;dsnap;FireDACCommon;RESTBackendComponents;soapserver;TMSLoggingPkgFMXDXE12;bindengine;DBXMySQLDriver;CloudService;FireDACMySQLDriver;FireDACCommonODBC;FireDACCommonDriver;inet;IndyIPCommon;bindcompdbx;IndyIPServer;sparkle;tmsbcl;IndySystem;FMXTMSFNCCorePkgDXE12;fmxFireDAC;FireDAC;FireDACSqliteDriver;FireDACPgDriver;soaprtl;DbxCommonDriver;xmlrtl;soapmidas;fmxobj;rtl;DbxClientDriver;CustomIPTransport;bindcomp;IndyIPClient;TMSLoggingPkgCoreDXE12;dbxcds;aurelius;dsnapxml;dbrtl;IndyProtocols;inetdbxpress;FMXTMSFNCChartPkgDXE12;fmxase;$(DCC_UsePackage);$(DCC_UsePackage)</DCC_UsePackage>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Base_OSXARM64)'!=''">
+        <VerInfo_Keys>CFBundleName=$(MSBuildProjectName);CFBundleDisplayName=$(MSBuildProjectName);CFBundleIdentifier=$(MSBuildProjectName);CFBundleVersion=1.0.0;CFBundleShortVersionString=1.0.0;CFBundlePackageType=APPL;CFBundleSignature=????;CFBundleAllowMixedLocalizations=YES;CFBundleExecutable=$(MSBuildProjectName);NSHighResolutionCapable=true;LSApplicationCategoryType=public.app-category.utilities;NSLocationUsageDescription=The reason for accessing the location information of the user;NSContactsUsageDescription=The reason for accessing the contacts</VerInfo_Keys>
+        <BT_BuildType>Debug</BT_BuildType>
+        <Base_OSX64>true</Base_OSX64>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+        <Base_OSX32>true</Base_OSX32>
+        <DCC_UsePackage>DBXSqliteDriver;RESTComponents;DBXInterBaseDriver;tethering;TMSScripter;FMXTMSFNCUIPackPkgDXE12;bindcompfmx;inetdb;fmx;FireDACIBDriver;fmxdae;dbexpress;IndyCore;xdata;dsnap;FireDACCommon;RESTBackendComponents;soapserver;TMSLoggingPkgFMXDXE12;bindengine;DBXMySQLDriver;CloudService;FireDACMySQLDriver;FireDACCommonODBC;FireDACCommonDriver;inet;IndyIPCommon;bindcompdbx;IndyIPServer;sparkle;tmsbcl;IndySystem;FMXTMSFNCCorePkgDXE12;fmxFireDAC;FireDAC;FireDACSqliteDriver;FireDACPgDriver;soaprtl;DbxCommonDriver;xmlrtl;soapmidas;fmxobj;rtl;DbxClientDriver;CustomIPTransport;bindcomp;IndyIPClient;TMSLoggingPkgCoreDXE12;dbxcds;aurelius;dsnapxml;dbrtl;IndyProtocols;inetdbxpress;FMXTMSFNCChartPkgDXE12;fmxase;$(DCC_UsePackage);$(DCC_UsePackage);$(DCC_UsePackage)</DCC_UsePackage>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <DCC_UsePackage>DBXSqliteDriver;RESTComponents;VCLTMSFNCChartPkgDXE12;DBXInterBaseDriver;FmxTeeUI926;vclactnband;vclFireDAC;tethering;svnui;FireDACADSDriver;TeeGL926;FMXTeeLanguage926;TMSScripter;FMXTMSFNCUIPackPkgDXE12;vcltouch;vcldb;bindcompfmx;svn;OrangeUIDesign_FMX_D10_3;inetdb;TMSScripter_Memo;fmx;FireDACIBDriver;fmxdae;TeeMaker126;dbexpress;IndyCore;FMXTeeImport926;xdata;vclx;dsnap;FireDACCommon;VCLTMSFNCUIPackPkgDXE12;RESTBackendComponents;TeeImport926;VCLRESTComponents;soapserver;TMSScripter_Legacy;TMSLoggingPkgFMXDXE12;TMSScripter_VCL;vclie;FMXTeeDB926;bindengine;DBXMySQLDriver;CloudService;FireDACMySQLDriver;FireDACCommonODBC;FireDACCommonDriver;VCLTMSFNCCorePkgDXE12;TeeUI926;TeeTree2D26Tee9;inet;IndyIPCommon;bindcompdbx;TeePro926;vcl;IndyIPServer;sparkle;tmsbcl;IndySystem;VCLTMSFNCDashboardPackPkgDXE12;FMXTee926;dsnapcon;FMXTMSFNCCorePkgDXE12;FireDACMSAccDriver;fmxFireDAC;vclimg;FireDAC;TeeLanguage926;TeeImage926;Tee926;FireDACSqliteDriver;FireDACPgDriver;soaprtl;DbxCommonDriver;FMXTMSFNCDashboardPackPkgDXE12;TeeDB926;xmlrtl;soapmidas;fmxobj;vclwinx;rtl;RFindUnit;DbxClientDriver;TMSScripter_IDE;CustomIPTransport;vcldsnap;bindcomp;appanalytics;FMXTeePro926;TMSLoggingPkgVCLDXE12;IndyIPClient;EurekaLogCore;bindcompvcl;TMSLoggingPkgCoreDXE12;TMSCryptoPkgDXE12;dbxcds;VclSmp;TMSFMXPackPkgDXE12;adortl;aurelius;dsnapxml;TMSCryptoPkgDEDXE12;dbrtl;IndyProtocols;inetdbxpress;FMXTMSFNCChartPkgDXE12;FMXTree26;TeeWorld926;fmxase;$(DCC_UsePackage)</DCC_UsePackage>
@@ -210,15 +219,15 @@
         <DCCReference Include="..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch2.pas"/>
         <DCCReference Include="..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch3.pas"/>
         <DCCReference Include="..\SourceCode\Common\Functions\Casbin.Functions.RegExMatch.pas"/>
-        <BuildConfiguration Include="Release">
-            <Key>Cfg_2</Key>
-            <CfgParent>Base</CfgParent>
-        </BuildConfiguration>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
         <BuildConfiguration Include="Debug">
             <Key>Cfg_1</Key>
+            <CfgParent>Base</CfgParent>
+        </BuildConfiguration>
+        <BuildConfiguration Include="Release">
+            <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
         </BuildConfiguration>
     </ItemGroup>
@@ -231,35 +240,12 @@
                     <Source Name="MainSource">Tests.Casbin.dpr</Source>
                 </Source>
                 <Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k260.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp260.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\dclFMXtee9260.bpl">TeeChart Lite FMX Components</Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\dcltee9260.bpl">TeeChart Standard VCL Components</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k280.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp280.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
                 </Excluded_Packages>
             </Delphi.Personality>
             <Deployment Version="3">
-                <DeployFile LocalName="$(BDS)\Redist\osx64\libcgsqlite3.dylib" Class="DependencyModule">
-                    <Platform Name="OSX64">
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="$(BDS)\Redist\osx32\libcgunwind.1.0.dylib" Class="DependencyModule">
-                    <Platform Name="OSX32">
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="Win32\Debug\Tests.Casbin.exe" Configuration="Debug" Class="ProjectOutput">
-                    <Platform Name="Win32">
-                        <RemoteName>Tests_Casbin.exe</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
                 <DeployFile LocalName="$(BDS)\Redist\iossimulator\libcgunwind.1.0.dylib" Class="DependencyModule">
-                    <Platform Name="iOSSimulator">
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="$(BDS)\Redist\iossimulator\libpcre.dylib" Class="DependencyModule">
                     <Platform Name="iOSSimulator">
                         <Overwrite>true</Overwrite>
                     </Platform>
@@ -269,12 +255,43 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
+                <DeployFile LocalName="$(BDS)\Redist\iossimulator\libpcre.dylib" Class="DependencyModule">
+                    <Platform Name="iOSSimulator">
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Win32\Debug\Tests.Casbin.exe" Configuration="Debug" Class="ProjectOutput">
+                    <Platform Name="Win32">
+                        <RemoteName>Tests_Casbin.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="$(BDS)\Redist\osx32\libcgunwind.1.0.dylib" Class="DependencyModule">
+                    <Platform Name="OSX32">
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="$(BDS)\Redist\osx64\libcgsqlite3.dylib" Class="DependencyModule">
+                    <Platform Name="OSX64">
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployClass Name="AdditionalDebugSymbols">
                     <Platform Name="OSX32">
                         <Operation>1</Operation>
                     </Platform>
                     <Platform Name="Win32">
                         <Operation>0</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="AndroidClasses">
+                    <Platform Name="Android">
+                        <RemoteDir>classes</RemoteDir>
+                        <Operation>64</Operation>
+                    </Platform>
+                    <Platform Name="Android64">
+                        <RemoteDir>classes</RemoteDir>
+                        <Operation>64</Operation>
                     </Platform>
                 </DeployClass>
                 <DeployClass Name="AndroidClassesDexFile">
@@ -402,6 +419,16 @@
                     </Platform>
                     <Platform Name="Android64">
                         <RemoteDir>res\drawable-xxhdpi</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="Android_LauncherIcon192">
+                    <Platform Name="Android">
+                        <RemoteDir>res\drawable-xxxhdpi</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="Android64">
+                        <RemoteDir>res\drawable-xxxhdpi</RemoteDir>
                         <Operation>1</Operation>
                     </Platform>
                 </DeployClass>
@@ -565,6 +592,10 @@
                         <Operation>1</Operation>
                         <Extensions>.framework</Extensions>
                     </Platform>
+                    <Platform Name="OSXARM64">
+                        <Operation>1</Operation>
+                        <Extensions>.framework</Extensions>
+                    </Platform>
                     <Platform Name="Win32">
                         <Operation>0</Operation>
                     </Platform>
@@ -575,6 +606,10 @@
                         <Extensions>.dylib</Extensions>
                     </Platform>
                     <Platform Name="OSX64">
+                        <Operation>1</Operation>
+                        <Extensions>.dylib</Extensions>
+                    </Platform>
+                    <Platform Name="OSXARM64">
                         <Operation>1</Operation>
                         <Extensions>.dylib</Extensions>
                     </Platform>
@@ -601,6 +636,10 @@
                         <Extensions>.dylib</Extensions>
                     </Platform>
                     <Platform Name="OSX64">
+                        <Operation>1</Operation>
+                        <Extensions>.dylib</Extensions>
+                    </Platform>
+                    <Platform Name="OSXARM64">
                         <Operation>1</Operation>
                         <Extensions>.dylib</Extensions>
                     </Platform>
@@ -631,8 +670,37 @@
                     <Platform Name="OSX64">
                         <Operation>0</Operation>
                     </Platform>
+                    <Platform Name="OSXARM64">
+                        <Operation>0</Operation>
+                    </Platform>
                     <Platform Name="Win32">
                         <Operation>0</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="iOS_AppStore1024">
+                    <Platform Name="iOSDevice64">
+                        <RemoteDir>..\$(PROJECTNAME).launchscreen\Assets\AppIcon.appiconset</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="iPad_AppIcon152">
+                    <Platform Name="iOSDevice64">
+                        <RemoteDir>..\$(PROJECTNAME).launchscreen\Assets\AppIcon.appiconset</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="iOSSimulator">
+                        <RemoteDir>..\$(PROJECTNAME).launchscreen\Assets\AppIcon.appiconset</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="iPad_AppIcon167">
+                    <Platform Name="iOSDevice64">
+                        <RemoteDir>..\$(PROJECTNAME).launchscreen\Assets\AppIcon.appiconset</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="iOSSimulator">
+                        <RemoteDir>..\$(PROJECTNAME).launchscreen\Assets\AppIcon.appiconset</RemoteDir>
+                        <Operation>1</Operation>
                     </Platform>
                 </DeployClass>
                 <DeployClass Name="iPad_Launch1024">
@@ -806,6 +874,56 @@
                     </Platform>
                     <Platform Name="iOSSimulator">
                         <RemoteDir>..\$(PROJECTNAME).launchscreen\Assets\LaunchScreenImage.imageset</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="iPad_Notification40">
+                    <Platform Name="iOSDevice64">
+                        <RemoteDir>..\$(PROJECTNAME).launchscreen\Assets\AppIcon.appiconset</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="iOSSimulator">
+                        <RemoteDir>..\$(PROJECTNAME).launchscreen\Assets\AppIcon.appiconset</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="iPad_Setting58">
+                    <Platform Name="iOSDevice64">
+                        <RemoteDir>..\$(PROJECTNAME).launchscreen\Assets\AppIcon.appiconset</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="iOSSimulator">
+                        <RemoteDir>..\$(PROJECTNAME).launchscreen\Assets\AppIcon.appiconset</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="iPad_SpotLight80">
+                    <Platform Name="iOSDevice64">
+                        <RemoteDir>..\$(PROJECTNAME).launchscreen\Assets\AppIcon.appiconset</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="iOSSimulator">
+                        <RemoteDir>..\$(PROJECTNAME).launchscreen\Assets\AppIcon.appiconset</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="iPhone_AppIcon120">
+                    <Platform Name="iOSDevice64">
+                        <RemoteDir>..\$(PROJECTNAME).launchscreen\Assets\AppIcon.appiconset</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="iOSSimulator">
+                        <RemoteDir>..\$(PROJECTNAME).launchscreen\Assets\AppIcon.appiconset</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="iPhone_AppIcon180">
+                    <Platform Name="iOSDevice64">
+                        <RemoteDir>..\$(PROJECTNAME).launchscreen\Assets\AppIcon.appiconset</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="iOSSimulator">
+                        <RemoteDir>..\$(PROJECTNAME).launchscreen\Assets\AppIcon.appiconset</RemoteDir>
                         <Operation>1</Operation>
                     </Platform>
                 </DeployClass>
@@ -1003,6 +1121,66 @@
                         <Operation>1</Operation>
                     </Platform>
                 </DeployClass>
+                <DeployClass Name="iPhone_Notification40">
+                    <Platform Name="iOSDevice64">
+                        <RemoteDir>..\$(PROJECTNAME).launchscreen\Assets\AppIcon.appiconset</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="iOSSimulator">
+                        <RemoteDir>..\$(PROJECTNAME).launchscreen\Assets\AppIcon.appiconset</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="iPhone_Notification60">
+                    <Platform Name="iOSDevice64">
+                        <RemoteDir>..\$(PROJECTNAME).launchscreen\Assets\AppIcon.appiconset</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="iOSSimulator">
+                        <RemoteDir>..\$(PROJECTNAME).launchscreen\Assets\AppIcon.appiconset</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="iPhone_Setting58">
+                    <Platform Name="iOSDevice64">
+                        <RemoteDir>..\$(PROJECTNAME).launchscreen\Assets\AppIcon.appiconset</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="iOSSimulator">
+                        <RemoteDir>..\$(PROJECTNAME).launchscreen\Assets\AppIcon.appiconset</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="iPhone_Setting87">
+                    <Platform Name="iOSDevice64">
+                        <RemoteDir>..\$(PROJECTNAME).launchscreen\Assets\AppIcon.appiconset</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="iOSSimulator">
+                        <RemoteDir>..\$(PROJECTNAME).launchscreen\Assets\AppIcon.appiconset</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="iPhone_Spotlight120">
+                    <Platform Name="iOSDevice64">
+                        <RemoteDir>..\$(PROJECTNAME).launchscreen\Assets\AppIcon.appiconset</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="iOSSimulator">
+                        <RemoteDir>..\$(PROJECTNAME).launchscreen\Assets\AppIcon.appiconset</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="iPhone_Spotlight80">
+                    <Platform Name="iOSDevice64">
+                        <RemoteDir>..\$(PROJECTNAME).launchscreen\Assets\AppIcon.appiconset</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="iOSSimulator">
+                        <RemoteDir>..\$(PROJECTNAME).launchscreen\Assets\AppIcon.appiconset</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
                 <DeployClass Name="ProjectAndroidManifest">
                     <Platform Name="Android">
                         <Operation>1</Operation>
@@ -1048,6 +1226,10 @@
                         <RemoteDir>Contents\Resources</RemoteDir>
                         <Operation>1</Operation>
                     </Platform>
+                    <Platform Name="OSXARM64">
+                        <RemoteDir>Contents\Resources</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
                 </DeployClass>
                 <DeployClass Required="true" Name="ProjectOutput">
                     <Platform Name="Android">
@@ -1074,6 +1256,9 @@
                         <Operation>1</Operation>
                     </Platform>
                     <Platform Name="OSX64">
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="OSXARM64">
                         <Operation>1</Operation>
                     </Platform>
                     <Platform Name="Win32">
@@ -1114,23 +1299,25 @@
                         <Operation>1</Operation>
                     </Platform>
                 </DeployClass>
-                <ProjectRoot Platform="iOSDevice64" Name="$(PROJECTNAME).app"/>
-                <ProjectRoot Platform="Win64" Name="$(PROJECTNAME)"/>
-                <ProjectRoot Platform="iOSDevice32" Name="$(PROJECTNAME).app"/>
-                <ProjectRoot Platform="Linux64" Name="$(PROJECTNAME)"/>
-                <ProjectRoot Platform="Win32" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="OSX32" Name="$(PROJECTNAME)"/>
-                <ProjectRoot Platform="Android" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="OSX64" Name="$(PROJECTNAME)"/>
-                <ProjectRoot Platform="iOSSimulator" Name="$(PROJECTNAME).app"/>
+                <ProjectRoot Platform="Win32" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="Android64" Name="$(PROJECTNAME)"/>
+                <ProjectRoot Platform="Android" Name="$(PROJECTNAME)"/>
+                <ProjectRoot Platform="Win64" Name="$(PROJECTNAME)"/>
+                <ProjectRoot Platform="OSXARM64" Name="$(PROJECTNAME)"/>
+                <ProjectRoot Platform="iOSDevice32" Name="$(PROJECTNAME).app"/>
+                <ProjectRoot Platform="iOSDevice64" Name="$(PROJECTNAME).app"/>
+                <ProjectRoot Platform="Linux64" Name="$(PROJECTNAME)"/>
+                <ProjectRoot Platform="iOSSimulator" Name="$(PROJECTNAME).app"/>
             </Deployment>
             <Platforms>
                 <Platform value="Android">False</Platform>
                 <Platform value="Android64">False</Platform>
                 <Platform value="iOSDevice64">False</Platform>
-                <Platform value="iOSSimulator">False</Platform>
+                <Platform value="Linux64">False</Platform>
                 <Platform value="OSX64">False</Platform>
+                <Platform value="OSXARM64">False</Platform>
                 <Platform value="Win32">True</Platform>
                 <Platform value="Win64">False</Platform>
             </Platforms>

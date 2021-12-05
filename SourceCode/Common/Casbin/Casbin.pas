@@ -314,7 +314,7 @@ begin
             begin
               var f: string :=  policyList[request.Count];
               if policyList.Count > request.Count then
-                if SameText(Trim(policyList[request.Count]), 'ALLOW') then
+                if policyList[request.Count].Trim.ToUpper.Equals('ALLOW') then
                   matcherResult:=erAllow
                 else
                   matcherResult:=erDeny;

@@ -87,3 +87,4 @@ Benchmarks/Win32/
 Tests/CodeCoverage/
 *.txaPackage
 *.txvpck
+Reports

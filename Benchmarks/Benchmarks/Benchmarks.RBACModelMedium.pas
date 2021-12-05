@@ -31,7 +31,7 @@ type
 implementation
 
 uses
-  Casbin, Casbin.Model.Sections.Types, System.AnsiStrings;
+  Casbin, Casbin.Model.Sections.Types, System.SysUtils;
 
 { TBenchmarkRBACModelSmall }
 

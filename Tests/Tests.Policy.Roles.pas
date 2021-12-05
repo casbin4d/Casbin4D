@@ -236,7 +236,6 @@ end;
 procedure TTestPolicyRoles.testPermissionAPI;
 var
   casbin: ICasbin;
-  roles: TStringDynArray;
   permissions: TStringDynArray;
 begin
   casbin:=TCasbin.Create('..\..\..\Examples\Default\basic_without_resources_model.conf',
@@ -292,7 +291,6 @@ end;
 procedure TTestPolicyRoles.testUserRBACAPIWithDomains;
 var
   casbin: ICasbin;
-  policy: IPolicyManager;
   entities: TStringDynArray;
 begin
   casbin:=TCasbin.Create('..\..\..\Examples\Default\rbac_with_domains_model.conf',

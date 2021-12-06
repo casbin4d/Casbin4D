@@ -130,7 +130,7 @@ begin
   // * Key has to be at the start of the string or the previous char is ' ' or '='
   // * Key has to be at the end of the string or the following char is ' ' or '='
   for pair in fIdentifiers do
-    aParseString:=TRegex.Replace(aParseString, '(^|[ =])'+pair.Key+'($|[ =])', '$1'+pair.Value.ToString+'$2');
+    aParseString:=TRegex.Replace(aParseString, '(^|[ \W])'+pair.Key+'($|[ \W])', '$1'+pair.Value.ToString+'$2');
 end;
 
 end.

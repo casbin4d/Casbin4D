@@ -39,6 +39,7 @@ type
     [TestCase('1 part.1-Allow','john==john#erAllow', '#')]
     [TestCase('1 part.2-Deny','john==alice#erDeny', '#')]
     [TestCase('2 parts.1-Deny','alice==kour and john=john#erDeny', '#')]
+    [TestCase('john<>johnny','johnny==johhn && kour==kour && m==m#erDeny', '#')]
     procedure testMatcher(const aExpression: string; const aExpected:
         TEffectResult);
   end;

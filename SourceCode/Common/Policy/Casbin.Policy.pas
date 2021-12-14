@@ -21,8 +21,6 @@ uses
   System.Types, System.Classes, Casbin.Model.Sections.Types,
   System.Generics.Collections, Casbin.Watcher.Types;
 
-{$I Casbin.inc}
-
 type
   TPolicyManager = class(TBaseInterfacedObject, IPolicyManager)
   private
@@ -454,25 +452,25 @@ begin
   rDomain:=Trim(aRightDomain);
   lItem:=Trim(aLeft);
   rItem:=Trim(aRight);
-{$IFDEF CASBIN_LOGGING}
-  fAdapter.Logger.log('   Roles for Left: '+lItem);
-  fAdapter.Logger.log('      Roles: ');
-  if Length(rolesForEntity(aLeft))=0 then
-    fAdapter.Logger.log('         No Roles found')
-  else
-    for item in rolesForEntity(lItem) do
-      fAdapter.Logger.log('         '+item);
+  if fAdapter.Logger.Enabled then
+  begin
+    fAdapter.Logger.log('   Roles for Left: '+lItem);
+    fAdapter.Logger.log('      Roles: ');
+    if Length(rolesForEntity(aLeft))=0 then
+      fAdapter.Logger.log('         No Roles found')
+    else
+      for item in rolesForEntity(lItem) do
+        fAdapter.Logger.log('         '+item);
 
-  fAdapter.Logger.log('   Roles for Right: '+rItem);
-  fAdapter.Logger.log('      Roles: ');
-  if Length(rolesForEntity(rItem))=0 then
-    fAdapter.Logger.log('         No Roles found')
-  else
-    for item in rolesForEntity(rItem) do
-      fAdapter.Logger.log('         '+item);
+    fAdapter.Logger.log('   Roles for Right: '+rItem);
+    fAdapter.Logger.log('      Roles: ');
+    if Length(rolesForEntity(rItem))=0 then
+      fAdapter.Logger.log('         No Roles found')
+    else
+      for item in rolesForEntity(rItem) do
+        fAdapter.Logger.log('         '+item);
+  end;
 
-
-{$ENDIF}
   Result:=False;
 
   if SameText(UpperCase(lDomain), UpperCase(rDomain)) and

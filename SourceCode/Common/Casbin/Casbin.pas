@@ -20,8 +20,6 @@ uses
   Casbin.Adapter.Types, Casbin.Core.Logger.Types, Casbin.Functions.Types,
   Casbin.Policy.Types, System.TypInfo;
 
-{$I Casbin.inc}
-
 type
   TCasbin = class (TBaseInterfacedObject, ICasbin)
   private
@@ -177,15 +175,16 @@ begin
     fLogger.log('   Resolving Request...');
 
     // Resolve Request
-  {$IFDEF CASBIN_LOGGING}
-    fLogger.log('   Request: '+requestStr);
-    fLogger.log('      Assertions: ');
-    if fModel.assertions(stRequestDefinition).Count=0 then
-      fLogger.log('         No Request Assertions found')
-    else
-      for item in fModel.assertions(stRequestDefinition) do
-        fLogger.log('         '+item);
-  {$ENDIF}
+    if fLogger.Enabled then
+    begin
+      fLogger.log('   Request: '+requestStr);
+      fLogger.log('      Assertions: ');
+      if fModel.assertions(stRequestDefinition).Count=0 then
+        fLogger.log('         No Request Assertions found')
+      else
+        for item in fModel.assertions(stRequestDefinition) do
+          fLogger.log('         '+item);
+    end;
     requestDict:=resolve(request, rtRequest,
                             fModel.assertions(stRequestDefinition));
 
@@ -224,29 +223,29 @@ begin
 
     fLogger.log('   Resolving Policies...');
 
-  {$IFDEF CASBIN_LOGGING}
-    fLogger.log('   Policies: ');
-    fLogger.log('      Assertions: ');
-    if fPolicy.policies.Count=0 then
-      fLogger.log('         No Policy Assertions found')
-    else
-      for item in fPolicy.policies do
+    if fLogger.Enabled then
+    begin
+      fLogger.log('   Policies: ');
+      fLogger.log('      Assertions: ');
+      if fPolicy.policies.Count=0 then
+        fLogger.log('         No Policy Assertions found')
+      else
+        for item in fPolicy.policies do
+          fLogger.log('         '+item);
+
+      fLogger.log('      Assertions: '+requestStr);
+      for item in fModel.assertions(stPolicyDefinition) do
         fLogger.log('         '+item);
 
-    fLogger.log('      Assertions: '+requestStr);
-    for item in fModel.assertions(stPolicyDefinition) do
-      fLogger.log('         '+item);
-  {$ENDIF}
+      fLogger.log('   Matchers: '+requestStr);
+      fLogger.log('      Assertions: ');
+      if fModel.assertions(stMatchers).Count=0 then
+        fLogger.log('         No Matcher Assertions found')
+      else
+        for item in fModel.assertions(stMatchers) do
+          fLogger.log('         '+item);
+    end;
 
-  {$IFDEF CASBIN_LOGGING}
-    fLogger.log('   Matchers: '+requestStr);
-    fLogger.log('      Assertions: ');
-    if fModel.assertions(stMatchers).Count=0 then
-      fLogger.log('         No Matcher Assertions found')
-    else
-      for item in fModel.assertions(stMatchers) do
-        fLogger.log('         '+item);
-  {$ENDIF}
     if fModel.assertions(stMatchers).Count>0 then
     begin
       matchString:=fModel.assertions(stMatchers).Items[0];

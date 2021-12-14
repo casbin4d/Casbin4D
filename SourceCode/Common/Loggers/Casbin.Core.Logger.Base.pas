@@ -39,6 +39,7 @@ type
 {$ENDREGION}
   protected
     fLastLoggedMessage: string;   //PALOFF
+    property Enabled: Boolean read getEnabled write setEnabled;
   public
 {$REGION 'Interface'}
     procedure log(const aMessage: string); virtual;
@@ -55,7 +56,7 @@ uses
 constructor TBaseLogger.Create;
 begin
   inherited;
-  fEnabled:=True;
+  fEnabled:={$IFDEF DEBUG}True{$ELSE}False{$ENDIF};
 end;
 
 { TBaseLogger }

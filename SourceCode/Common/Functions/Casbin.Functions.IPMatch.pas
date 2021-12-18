@@ -8,7 +8,6 @@ interface
 ///   eg. '192.168.2.123' matches '192.168.2.0/24'
 /// </summary>
 function IPMatch (const aArgs: array of string): Boolean; overload;
-
 function IPMatch (const aIP1, aIP2: string; const aInvalidIPAsError: Boolean): Boolean; overload;
 
 implementation
@@ -39,8 +38,8 @@ var
     numIP: integer;
   begin
     Result:=True;
-    strArr:=SplitString(aIP, '.');
-    if Length(strArr)<>4 then
+    strArr:=aIP.Split(['.']);
+    if Length(strArr) <> 4 then
       Result:=false
     else
     begin
@@ -50,23 +49,25 @@ var
                           and (numIP>=0) and (numIP<=255)) then
         begin
           Result:=False;
-          Exit;
+          Break;
         end;
       end;
     end;
   end;
 
 begin
-  ip1 := Trim(aIP1);
-  ip2 := Trim(aIP2);
+  result:=false;
 
-  index:=Pos('/', ip1, low(string));
-  if index<>0 then
-    ip1:=Copy(ip1, Low(string), index-1);
+  ip1 := aIP1.Trim;
+  ip2 := aIP2.Trim;
 
-  index:=Pos('/', ip2, low(string));
-  if index<>0 then
-    ip2:=Copy(ip2, Low(string), index-1);
+  if ip1.IsEmpty or ip2.IsEmpty then
+    Exit;
+
+  if ip1.IndexOf('/') > -1 then
+    ip1:=ip1.Split(['/'])[0];
+  if ip2.IndexOf('/') > -1 then
+    ip2:=ip2.Split(['/'])[0];
 
   if not validIP(ip1) then
   begin
@@ -82,14 +83,14 @@ begin
     Exit(False);
   end;
 
-  if ip1=ip2 then
+  if ip1.Equals(ip2) then
   begin
-    Result:=True;
-    Exit;
+    result:=true;
+    exit;
   end;
 
-  IPArr1:=SplitString(ip1, '.');
-  IPArr2:=SplitString(ip2, '.');
+  IPArr1:=ip1.Split(['.']);
+  IPArr2:=ip2.Split(['.']);
 
   Result:= (IPArr1[0]=IPArr2[0]) and (IPArr1[1]=IPArr2[1])
                                         and (IPArr1[2]=IPArr2[2]);

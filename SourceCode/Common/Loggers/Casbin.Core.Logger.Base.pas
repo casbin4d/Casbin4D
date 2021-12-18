@@ -18,6 +18,8 @@ interface
 uses
   Casbin.Core.Base.Types, Casbin.Core.Logger.Types;
 
+{$I ..\Casbin.inc}
+
 type
   {$REGION 'This is the base logger class. It does not do anything. You can expand the functionality by subclassing this one'}
   /// <summary>
@@ -31,15 +33,18 @@ type
   {$ENDREGION}
   TBaseLogger = class (TBaseInterfacedObject, ILogger)
   private
-    fEnabled: Boolean;
 {$REGION 'Interface'}
     function getEnabled: Boolean;
     function getLastLoggedMessage: string;
     procedure setEnabled(const aValue: Boolean);
+    function getEnableConsole: Boolean;
+    procedure setEnableConsole(const Value: Boolean);
 {$ENDREGION}
-  protected
-    fLastLoggedMessage: string;   //PALOFF
   public
+  protected
+    fEnabled: Boolean;
+    fEnableConsole: boolean;
+    fLastLoggedMessage: string;   //PALOFF
 {$REGION 'Interface'}
     procedure log(const aMessage: string); virtual;
 {$ENDREGION}
@@ -56,9 +61,15 @@ constructor TBaseLogger.Create;
 begin
   inherited;
   fEnabled:=True;
+  fEnableConsole:={$IFDEF CASBIN_DEBUG}True{$ELSE}False{$ENDIF};
 end;
 
 { TBaseLogger }
+
+function TBaseLogger.getEnableConsole: Boolean;
+begin
+  result:=fEnableConsole;
+end;
 
 function TBaseLogger.getEnabled: Boolean;
 begin
@@ -72,9 +83,15 @@ end;
 
 procedure TBaseLogger.log(const aMessage: string);
 begin
-  if not fEnabled then
-    Exit;
-  fLastLoggedMessage:=trim(aMessage);
+  if fEnabled then
+    fLastLoggedMessage:=trim(aMessage)
+  else
+    fLastLoggedMessage:='';
+end;
+
+procedure TBaseLogger.setEnableConsole(const Value: Boolean);
+begin
+  fEnableConsole:=Value;
 end;
 
 procedure TBaseLogger.setEnabled(const aValue: Boolean);

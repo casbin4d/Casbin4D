@@ -37,6 +37,9 @@ type
 
     [Test]
     procedure testLogWhenDisabled;
+
+    [Test]
+    procedure testLogEnableConsole;
   end;
 
 implementation
@@ -61,6 +64,15 @@ begin
   Assert.IsFalse(fLogger.Enabled);
   fLogger.Enabled:=True;
   Assert.IsTrue(fLogger.Enabled);
+end;
+
+procedure TTestLogger.testLogEnableConsole;
+begin
+  fLogger.EnableConsole:=true;
+  Assert.IsTrue(fLogger.EnableConsole, '1');
+
+  fLogger.EnableConsole:=false;
+  Assert.IsFalse(fLogger.EnableConsole, '2');
 end;
 
 procedure TTestLogger.testLogWhenDisabled;

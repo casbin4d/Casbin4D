@@ -26,21 +26,28 @@ type
 
 implementation
 
-{$IFDEF MSWINDOWS}
 uses
-  Winapi.Windows;
-{$ENDIF}
+  {$IFDEF MSWINDOWS}
+  Winapi.Windows,
+  {$ENDIF}
+  Casbin.Core.Logger.Types;
 
 { TDefaultLogger }
 
 procedure TDefaultLogger.log(const aMessage: string);
 begin
   inherited;
-{$IFDEF MSWINDOWS}
-{$IFDEF DEBUG}
-  OutputDebugString(PChar(aMessage));
-{$ENDIF}
-{$ENDIF}
+  // The default logger does not log anything.
+  // Any descentent classes can use aMessage
+  // if Enabled then
+  //  ...log the message...
+
+  if fEnableConsole then
+    {$IFDEF MSWINDOWS}
+    OutputDebugString(PChar(aMessage))
+    {$ELSE}
+    raise Exception.Create('Not implemented yet');
+    {$ENDIF}
 end;
 
 end.

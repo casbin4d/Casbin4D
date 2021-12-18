@@ -124,13 +124,18 @@ end;
 procedure TMatcher.replaceIdentifiers(var aParseString: string);
 var
   pair: TPair<string, integer>;
+  pattern: string;
 begin
-  // FIELDSUSER == FIELDSUSER && FIELDS == FIELDS && READ == LAUNCH
-  // Replace FIELDS -> 22. Dont replace FIELDSUSER to 22USER
-  // * Key has to be at the start of the string or the previous char is ' ' or '='
-  // * Key has to be at the end of the string or the following char is ' ' or '='
+  // JOHN == JOHNNY
+  // Replace JOHN -> 22. Dont replace JOHNNY to 22NY
+  // * Key has to be at the start of the string or the previous char is not part of the identifier (not a word)
+  // * Key has to be at the end of the string or the following char is not part of the identifier (not a word)
   for pair in fIdentifiers do
-    aParseString:=TRegex.Replace(aParseString, '(^|[ \W])'+pair.Key+'($|[ \W])', '$1'+pair.Value.ToString+'$2');
+  begin
+    pattern:='(^|\W)'+pair.Key+'($|\W)';
+    while TRegex.Match(aParseString, pattern).Success do
+      aParseString:=TRegex.Replace(aParseString, pattern, '$1'+pair.Value.ToString+'$2');
+  end;
 end;
 
 end.

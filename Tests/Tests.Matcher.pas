@@ -53,6 +53,7 @@ procedure TTestMatcher.Setup;
 begin
   fMatcher:=TMatcher.Create;
   fMatcher.addIdentifier('john');
+  fMatcher.addIdentifier('johnny');
   fMatcher.addIdentifier('alice');
   fMatcher.addIdentifier('kour');
   fMatcher.addIdentifier('m');

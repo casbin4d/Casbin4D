@@ -7,7 +7,9 @@ interface
 ///   ip1 and ip2 can be an IP address or a CIDR pattern
 ///   eg. '192.168.2.123' matches '192.168.2.0/24'
 /// </summary>
-function IPMatch (const aArgs: array of string): Boolean;
+function IPMatch (const aArgs: array of string): Boolean; overload;
+
+function IPMatch (const aIP1, aIP2: string; const aInvalidIPAsError: Boolean): Boolean; overload;
 
 implementation
 
@@ -16,6 +18,13 @@ uses
   System.Types, System.StrUtils;
 
 function IPMatch (const aArgs: array of string): Boolean;
+begin
+  if Length(aArgs)<>2 then
+    raise Exception.Create('Wrong number of arguments in IPMatch');
+  Result := IPMatch(aArgs[0], aArgs[1], True);
+end;
+
+function IPMatch(const aIP1, aIP2: string; const aInvalidIPAsError: Boolean): Boolean;
 var
   ip1: string;
   ip2: string;
@@ -48,10 +57,8 @@ var
   end;
 
 begin
-  if Length(aArgs)<>2 then
-    raise Exception.Create('Wrong number of arguments in IPMatch');
-  ip1:=trim(aArgs[0]);
-  ip2:=trim(aArgs[1]);
+  ip1 := Trim(aIP1);
+  ip2 := Trim(aIP2);
 
   index:=Pos('/', ip1, low(string));
   if index<>0 then
@@ -62,11 +69,18 @@ begin
     ip2:=Copy(ip2, Low(string), index-1);
 
   if not validIP(ip1) then
-    raise Exception.Create('Invalid IP: '+ip1+' in IPMatch');
+  begin
+    if aInvalidIPAsError then
+      raise Exception.Create('Invalid IP: '+ip1+' in IPMatch');
+    Exit(False);
+  end;
 
   if not validIP(ip2) then
-    raise Exception.Create('Invalid IP: '+ip2+' in IPMatch');
-
+  begin
+    if aInvalidIPAsError then
+      raise Exception.Create('Invalid IP: '+ip1+' in IPMatch');
+    Exit(False);
+  end;
 
   if ip1=ip2 then
   begin

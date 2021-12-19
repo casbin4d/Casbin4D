@@ -27,7 +27,6 @@ function IPMatch(const aIP1, aIP2: string; const aInvalidIPAsError: Boolean): Bo
 var
   ip1: string;
   ip2: string;
-  index: integer;
   IPArr1: TStringDynArray;
   IPArr2: TStringDynArray;
 

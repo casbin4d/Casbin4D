@@ -78,7 +78,7 @@ procedure TMatcher.addIdentifier(const aTag: string);
 var
   tag: string;
 begin
-  tag:=UpperCase(Trim(aTag));
+  tag:=aTag.Trim.ToUpper;
   if not fIdentifiers.ContainsKey(tag) then
     fIdentifiers.Add(tag, Integer(Round(Random*100)));
 end;
@@ -87,15 +87,15 @@ procedure TMatcher.cleanMatcher;
 var
   index: Integer;
 begin
-  fMatcherString:=ReplaceStr(fMatcherString, '==', '=');
-  fMatcherString:=ReplaceStr(fMatcherString, '&&', 'and');
-  fMatcherString:=ReplaceStr(fMatcherString, '||', 'or');
-  fMatcherString:=ReplaceStr(fMatcherString, '!', 'not');
-  index:=Pos('''', fMatcherString, Low(string));
-  while Index<>0 do
+  fMatcherString:=fMatcherString.Replace('==', '=');
+  fMatcherString:=fMatcherString.Replace('&&', 'and');
+  fMatcherString:=fMatcherString.Replace('||', 'or');
+  fMatcherString:=fMatcherString.Replace('!', 'not');
+  index:=fMatcherString.IndexOf('''');
+  while Index<>-1 do
   begin
-    Delete(fMatcherString, index, 1);
-    index:=Pos('''', fMatcherString, Low(string));
+    fMatcherString:=fMatcherString.Remove(index, 1);
+  index:=fMatcherString.IndexOf('''');
   end;
 end;
 
@@ -104,7 +104,7 @@ var
   eval: string;
 begin
   fMatcherString:=UpperCase(aMatcherString);
-  if Trim(fMatcherString)='' then
+  if fMatcherString.Trim.IsEmpty then
   begin
     Result:=erIndeterminate;
     Exit;
@@ -114,8 +114,8 @@ begin
 
   {TODO -oOwner -cGeneral : ReplaceStr(functions in expressions)}
   fMathsParser.Optimize := true;
-  eval:=fMathsParser.AsString[fMathsParser.AddExpression(trim(fMatcherString))];
-  if upperCase(eval)='TRUE' then
+  eval:=fMathsParser.AsString[fMathsParser.AddExpression(fMatcherString.Trim)];
+  if eval.ToUpper='TRUE' then
     Result:=erAllow
   else
     result:=erDeny;

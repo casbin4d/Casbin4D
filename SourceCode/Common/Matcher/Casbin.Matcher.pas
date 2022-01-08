@@ -130,6 +130,8 @@ begin
   // Replace JOHN -> 22. Dont replace JOHNNY to 22NY
   // * Key has to be at the start of the string or the previous char is not part of the identifier (not a word)
   // * Key has to be at the end of the string or the following char is not part of the identifier (not a word)
+  //
+  // Written by ErikUniformAgri
   for pair in fIdentifiers do
   begin
     pattern:='(^|\W)'+pair.Key+'($|\W)';

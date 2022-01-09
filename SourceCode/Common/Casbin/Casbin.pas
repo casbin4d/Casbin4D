@@ -159,17 +159,17 @@ begin
   if not fEnabled then
     Exit;
 
+  requestArrayRec:=TArrayRecord<string>.Create(aParams);
+  request:=TList<string>.Create;
+  requestDict:=nil;
+  abacList:=TList<string>.Create;
   criticalSection.Acquire;
   try
-    requestArrayRec:=TArrayRecord<string>.Create(aParams);
-
-    request:=TList<string>.Create;
     requestArrayRec.List(request);
 
     requestStr:=string.Join(',', aParams);
 
     fLogger.log('Enforcing request '''+requestStr+'''');
-
     fLogger.log('   Resolving Request...');
 
     // Resolve Request
@@ -186,7 +186,6 @@ begin
                             fModel.assertions(stRequestDefinition));
 
     // Resolve ABAC record
-    abacList:=TList<string>.Create;
     if Assigned(aPointer) and Assigned(@aRec) then
     begin
       fLogger.log('Record Identified');
@@ -334,12 +333,11 @@ begin
 
     fLogger.log('Enforcement completed (Result: '+BoolToStr(Result, true)+')');
 
-    abacList.Free;
-    request.Free;
-    requestDict.Free;
-
   finally
     criticalSection.Release;
+    request.Free;
+    requestDict.Free;
+    abacList.Free;
   end;
 end;
 

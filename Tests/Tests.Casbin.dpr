@@ -92,8 +92,8 @@ var
   logger : ITestLogger;
   nunitLogger : ITestLogger;
 begin
-//  ReportMemoryLeaksOnShutdown:=True;
 {$IFDEF TESTINSIGHT}
+  ReportMemoryLeaksOnShutdown:=True;
   TestInsight.DUnitX.RunRegisteredTests;
   exit;
 {$ENDIF}

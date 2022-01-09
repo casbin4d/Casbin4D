@@ -25,8 +25,11 @@ type
     fMatcherString: string;
     fMathsParser: TCStyleParser;
     fIdentifiers: TDictionary<string, integer>;
+    fIDValues: TList<integer>;
+    fPass: integer;
     procedure cleanMatcher;
     procedure replaceIdentifiers(var aParseString: string);
+    procedure loadIDValues;
   private
   {$REGION 'Interface'}
     function evaluateMatcher(const aMatcherString: string): TEffectResult;
@@ -58,6 +61,10 @@ begin
   fMathsParser:=TCStyleParser.Create;
   TCStyleParser(fMathsParser).CStyle:=False;
   fIdentifiers:=TDictionary<string, integer>.Create;
+
+  fIDValues:=TList<integer>.Create;
+  fPass:=0;
+
   addIdentifier('true');
   addIdentifier('false');
 
@@ -69,10 +76,9 @@ destructor TMatcher.Destroy;
 begin
   fIdentifiers.Free;
   fMathsParser.Free;
+  fIDValues.Free;
   inherited;
 end;
-
-{ TMatcher }
 
 procedure TMatcher.addIdentifier(const aTag: string);
 var
@@ -80,7 +86,16 @@ var
 begin
   tag:=aTag.Trim.ToUpper;
   if not fIdentifiers.ContainsKey(tag) then
-    fIdentifiers.Add(tag, Integer(Round(Random*100)));
+  begin
+    if fIDValues.Count = 0 then
+    begin
+      Inc(fPass);
+      loadIDValues;
+    end;
+
+    fIdentifiers.Add(tag, fIDValues[0]);
+    fIDValues.Delete(0);
+  end;
 end;
 
 procedure TMatcher.cleanMatcher;
@@ -119,6 +134,18 @@ begin
     Result:=erAllow
   else
     result:=erDeny;
+end;
+
+procedure TMatcher.loadIDValues;
+var
+  num: integer;
+  startNum: integer;
+  lastNum: integer;
+begin
+  startNum:=(fPass - 1) * 5000 + 1;
+  lastNum:=fPass * 5000;
+  for num := startNum to lastNum do
+    fIDValues.Add(num);
 end;
 
 procedure TMatcher.replaceIdentifiers(var aParseString: string);

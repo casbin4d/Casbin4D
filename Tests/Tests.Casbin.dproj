@@ -108,7 +108,7 @@
     <PropertyGroup Condition="'$(Base)'!=''">
         <SanitizedProjectName>Tests_Casbin</SanitizedProjectName>
         <DCC_DcuOutput>.\$(Platform)\$(Config)</DCC_DcuOutput>
-        <DCC_Define>CASBINTESTS;TESTINSIGHT;$(DCC_Define)</DCC_Define>
+        <DCC_Define>CASBINTESTS;TESTINSIGHT;EUREKALOG_VER7;$(DCC_Define)</DCC_Define>
         <DCC_ExeOutput>.\$(Platform)\$(Config)</DCC_ExeOutput>
         <DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
         <DCC_MapFile>3</DCC_MapFile>

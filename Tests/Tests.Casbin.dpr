@@ -7,13 +7,13 @@ uses
   {$IFDEF EurekaLog}
   EMemLeaks,
   EResLeaks,
-  EDialogWinAPIEurekaLogDetailed,
-  EDialogWinAPIStepsToReproduce,
   EDebugExports,
   EDebugJCL,
   EFixSafeCallException,
   EMapWin32,
   EAppConsole,
+  EDialogWinAPIEurekaLogDetailed,
+  EDialogWinAPIStepsToReproduce,
   ExceptionLog7,
   {$ENDIF EurekaLog}
   System.SysUtils,
@@ -131,6 +131,7 @@ begin
       System.Writeln(E.ClassName, ': ', E.Message);
   end;
 end.
+
 
 
 

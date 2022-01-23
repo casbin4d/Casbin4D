@@ -100,7 +100,7 @@ begin
   while Index<>-1 do
   begin
     fMatcherString:=fMatcherString.Remove(index, 1);
-  index:=fMatcherString.IndexOf('''');
+    index:=fMatcherString.IndexOf('''');
   end;
 end;
 

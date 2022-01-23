@@ -2,6 +2,10 @@
 
 This changelog describes the changes in Casbin4D project
 
+## [1.1.1 - Beta] - 2022 - 01 - 23
+### Changed
+- **[Casbin.Matcher.pas]** Fix a bug in matcher 
+
 ## [1.1.0 - Beta] - 2021 - 12 - 12
 ### Added
 - Package for Delphi 11.0 Alexandria

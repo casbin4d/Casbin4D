@@ -211,6 +211,7 @@
         <DCCReference Include="..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch2.pas"/>
         <DCCReference Include="..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch3.pas"/>
         <DCCReference Include="..\SourceCode\Common\Functions\Casbin.Functions.RegExMatch.pas"/>
+        <DCCReference Include="Tests.Casbin.Main.Threaded.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

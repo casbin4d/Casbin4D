@@ -2,6 +2,13 @@
 
 This changelog describes the changes in Casbin4D project
 
+## [1.1.2 - Beta] - 2023 - 02 - 25
+### Added
+- **[Casbin.Tests.Function]** New tests added (KeyMatch-10, KeyMatch2-9) (Many thanks to **wiphi**)
+### Changed
+- **[Casbin.Functions.KeyMatch.pas]** Fix a bug in KeyMatch (Many thanks to **wiphi**)
+ 
+
 ## [1.1.1 - Beta] - 2022 - 01 - 23
 ### Changed
 - **[Casbin.Matcher.pas]** Fix a bug in matcher 
@@ -14,7 +21,7 @@ This changelog describes the changes in Casbin4D project
 - **[Casbin.inc]** CASBIN_DEBUG compiler directive (See Casbin.inc)
 - **[Casbin.Functions.IPMatch.pas]** IPMatch has an added option to throw an exception
 ### Changed
-- **[Casbin.Matcher.pas]** Improved RegEx matcher (Many thanks to ErikUniformAgri). Now all tests pass 
+- **[Casbin.Matcher.pas]** Improved RegEx matcher (Many thanks to **ErikUniformAgri**). Now all tests pass 
 ## [1.0.0 - Beta] - 2020 - 07 - 31
 ### Added
 - RBAC model tests added

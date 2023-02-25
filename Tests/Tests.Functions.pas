@@ -49,6 +49,7 @@ type
     [TestCase('KeyMatch-7', '/foobar,/foo,false')]
     [TestCase('KeyMatch-8', '/foobar,/foo*,true')]
     [TestCase('KeyMatch-9', '/foobar,/foo/*,false')]
+    [TestCase('KeyMatch-10', '/foo/b,/foo/*,true')]
     procedure testKeyMatch(const aKey1, aKey2: string; const aResult: boolean);
 
     [Test]
@@ -78,6 +79,7 @@ type
     [TestCase('KeyMatch2-21', '/alice/all,/:id/all,true')]
     [TestCase('KeyMatch2-22', '/alice,/:id/all,false')]
     [TestCase('KeyMatch2-23', '/alice/all,/:id,false')]
+    [TestCase('KeyMatch2-24', '/foo/b,/foo/*,true')]
     procedure testKeyMatch2(const aKey1, aKey2: string; const aResult: boolean);
 
     [Test]

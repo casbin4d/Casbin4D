@@ -28,6 +28,9 @@ type
     procedure Setup;
     [TearDown]
     procedure TearDown;
+
+    [Test]
+    procedure testAdd;
   end;
 
 implementation
@@ -44,6 +47,12 @@ procedure TTestPolicyMemoryAdapter.TearDown;
 begin
 end;
 
+
+procedure TTestPolicyMemoryAdapter.testAdd;
+begin
+  fAdapter.add('123');
+  Assert.IsTrue(fAdapter.Assertions.Count = 2, '1'); // There is a [default] line
+end;
 
 initialization
   TDUnitX.RegisterTestFixture(TTestPolicyMemoryAdapter);

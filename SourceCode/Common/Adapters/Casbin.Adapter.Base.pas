@@ -101,13 +101,20 @@ end;
 
 procedure TBaseAdapter.load(const aFilter: TFilterArray);
 begin
-  fFiltered:= Length(aFilter) <> 0;
-  fFilter:=aFilter;
+  SetLength(fFilter, 0);
+  for var str in aFilter do
+  begin
+    SetLength(fFilter, Length(fFilter) + 1);
+    fFilter[Length(fFilter) - 1]:=str;
+  end;
+  fFiltered:= Length(fFilter) <> 0;
 end;
 
 procedure TBaseAdapter.setAssertions(const aValue: TList<string>);
 begin
-  fAssertions:=aValue;
+  fAssertions.Clear;
+  for var str in aValue do
+    fAssertions.Add(str);
 end;
 
 procedure TBaseAdapter.setLogger(const aValue: ILogger);

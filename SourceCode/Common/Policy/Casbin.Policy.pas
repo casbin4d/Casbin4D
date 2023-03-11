@@ -526,8 +526,8 @@ end;
 procedure TPolicyManager.loadPolicies;
 begin
   fPoliciesList.Clear;
-  fAdapter.clear;
-  fAdapter.load(fAdapter.Filter);
+//  fAdapter.clear;
+  fAdapter.load(fAdapter.Filter);  // Forces the default tags
   fParser:=TParser.Create(fAdapter.toOutputString, ptPolicy);
   fParser.parse;
   if fParser.Status=psError then
@@ -687,13 +687,15 @@ begin
       for node in headerNode.ChildNodes do
       begin
         for tag in sectionItem.Tag do
-          if node.Key=tag then
+        begin
+          if node.Key <> tag then
+            foundTag:=false
+          else
           begin
             foundTag:=True;
             Break;
           end
-          else
-            foundTag:=False;
+        end;
         if foundTag then
           fPoliciesList.add(node.Key+AssignmentCharForPolicies+node.Value)
       end;

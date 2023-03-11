@@ -2,6 +2,16 @@
 
 This changelog describes the changes in Casbin4D project
 
+## [1.2.0 - Beta] - 2023 - 03 - 11
+### Added
+- **[Casbin.Core.Logger.Default]** Add a Logger Pool
+- New model (RBAC with explicit user) added. Check \Examples\Additional folder
+
+### Changed
+- The use of loggers (logger pool)
+- Main Demo has more useful UI and a log window
+- Cleaned code
+
 ## [1.1.2 - Beta] - 2023 - 02 - 25
 ### Added
 - **[Casbin.Tests.Function]** New tests added (KeyMatch-10, KeyMatch2-9) (Many thanks to **wiphi**)

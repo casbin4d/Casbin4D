@@ -33,7 +33,7 @@ implementation
 constructor TMemoryAdapter.Create;
 begin
   inherited;
-  resetSections;
+//  resetSections;
 end;
 
 procedure TMemoryAdapter.load(const aFilter: TFilterArray);

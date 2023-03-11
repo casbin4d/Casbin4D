@@ -51,9 +51,12 @@ uses
   System.SysUtils;
 
 procedure TPolicyMemoryAdapter.add(const aTag: string);
+var
+  tag: string;
 begin
-  if getAssertions.IndexOf(aTag)=-1 then
-    getAssertions.Add(aTag);
+  tag:=Trim(aTag);
+  if (tag <> '') and (getAssertions.IndexOf(tag) = -1) then
+    getAssertions.Add(tag);
 end;
 
 constructor TPolicyMemoryAdapter.Create;
@@ -78,9 +81,28 @@ begin
 end;
 
 procedure TPolicyMemoryAdapter.load(const aFilter: TFilterArray);
+var
+  policy: string;
+  filter: string;
+  i: Integer;
+  found: Boolean;
 begin
-  inherited;
-  clear;
+  inherited; // <-- This loads aFilter to fFilter and sets fFiltered
+
+  // This implementation does not consider cached policies
+  // See TFileSystemAdapter for more comments
+  if Length(fFilter)<>0 then
+  begin
+    for i:=getAssertions.Count-1 downto 0 do
+    begin
+      found:=False;
+      policy:=getAssertions.Items[i];
+      for filter in fFilter do
+        found:=found or policy.Contains(Trim(filter));
+      if not found then
+        getAssertions.Delete(i);
+    end;
+  end;
   resetSections;
 end;
 

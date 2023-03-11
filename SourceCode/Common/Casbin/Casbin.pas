@@ -67,7 +67,7 @@ uses
   Casbin.Core.Utilities, System.Rtti, Casbin.Effect.Types, Casbin.Effect,
   Casbin.Functions, Casbin.Adapter.Memory, Casbin.Adapter.Memory.Policy,
   System.SyncObjs, System.Types, System.StrUtils, Casbin.Core.Defaults,
-  ArrayHelper;
+  ArrayHelper, Quick.Chrono;
 
 var
   criticalSection: TCriticalSection;
@@ -152,12 +152,16 @@ var
   cType: TRttiType;
   cField: TRttiField;
   abacList: TList<string>;
+  chrono: TChronometer;
 begin
   result:=true;
   if Length(aParams) = 0 then
     Exit;
   if not fEnabled then
     Exit;
+
+  chrono:=TChronometer.Create(true);
+  chrono.ReportFormatPrecission:=TPrecissionFormat.pfFloat;
 
   requestArrayRec:=TArrayRecord<string>.Create(aParams);
   request:=TList<string>.Create;
@@ -331,13 +335,17 @@ begin
 
     Result:=mergeEffects(fModel.effectCondition, effectArray);
 
-    fLogger.log('Enforcement completed (Result: '+BoolToStr(Result, true)+')');
+    chrono.Stop;
+
+    fLogger.log('Enforcement completed (Result: '+BoolToStr(Result, true)+') - ' +
+                chrono.ElapsedTime);
 
   finally
     criticalSection.Release;
     request.Free;
     requestDict.Free;
     abacList.Free;
+    chrono.Free;
   end;
 end;
 

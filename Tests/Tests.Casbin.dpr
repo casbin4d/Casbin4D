@@ -84,7 +84,8 @@ uses
   Casbin.Functions.KeyMatch in '..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch.pas',
   Casbin.Functions.KeyMatch2 in '..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch2.pas',
   Casbin.Functions.KeyMatch3 in '..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch3.pas',
-  Casbin.Functions.RegExMatch in '..\SourceCode\Common\Functions\Casbin.Functions.RegExMatch.pas';
+  Casbin.Functions.RegExMatch in '..\SourceCode\Common\Functions\Casbin.Functions.RegExMatch.pas',
+  Tests.Adapter.Base in 'Tests.Adapter.Base.pas';
 
 var
   runner : ITestRunner;
@@ -131,6 +132,7 @@ begin
       System.Writeln(E.ClassName, ': ', E.Message);
   end;
 end.
+
 
 
 

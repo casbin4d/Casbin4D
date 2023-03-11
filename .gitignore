@@ -88,3 +88,4 @@ Tests/CodeCoverage/
 *.txaPackage
 *.txvpck
 Reports
+Demos/Main/MainDemo.exe

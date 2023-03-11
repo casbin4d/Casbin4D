@@ -1,0 +1,25 @@
+object FormLog: TFormLog
+  Left = 0
+  Top = 0
+  BorderIcons = [biMinimize, biMaximize]
+  Caption = 'Log'
+  ClientHeight = 279
+  ClientWidth = 551
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  DesignerMasterStyle = 0
+  object lbLog: TListBox
+    Align = Client
+    Size.Width = 551.000000000000000000
+    Size.Height = 279.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    DisableFocusEffect = True
+    DefaultItemStyles.ItemStyle = ''
+    DefaultItemStyles.GroupHeaderStyle = ''
+    DefaultItemStyles.GroupFooterStyle = ''
+    Viewport.Width = 547.000000000000000000
+    Viewport.Height = 275.000000000000000000
+  end
+end

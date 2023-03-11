@@ -223,6 +223,7 @@
         <DCCReference Include="..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch2.pas"/>
         <DCCReference Include="..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch3.pas"/>
         <DCCReference Include="..\SourceCode\Common\Functions\Casbin.Functions.RegExMatch.pas"/>
+        <DCCReference Include="Tests.Adapter.Base.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -267,6 +268,12 @@
                 </DeployFile>
                 <DeployFile LocalName="$(BDS)\Redist\osx64\libcgsqlite3.dylib" Class="DependencyModule"/>
                 <DeployFile LocalName="Win32\Debug\Tests.Casbin.exe" Configuration="Debug" Class="ProjectOutput"/>
+                <DeployFile LocalName="Win32\Debug\Tests.Casbin.exe" Configuration="Debug" Class="ProjectOutput">
+                    <Platform Name="Win32">
+                        <RemoteName>Tests_Casbin.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployClass Name="AdditionalDebugSymbols">
                     <Platform Name="OSX32">
                         <Operation>1</Operation>

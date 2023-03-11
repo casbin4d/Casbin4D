@@ -17,7 +17,8 @@ interface
 
 uses
   Casbin.Core.Base.Types, Casbin.Model.Sections.Types,
-  System.Generics.Collections, System.Rtti, System.Types, Casbin.Watcher.Types, Casbin.Adapter.Types, Casbin.Adapter.Policy.Types;
+  System.Generics.Collections, System.Rtti, System.Types,
+  Casbin.Watcher.Types, Casbin.Adapter.Types, Casbin.Adapter.Policy.Types;
 
 const
   DefaultDomain = 'default';

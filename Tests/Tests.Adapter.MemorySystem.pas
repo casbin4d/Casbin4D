@@ -19,6 +19,8 @@ uses
 
 type
 
+  // No need to test anything because
+  // TAdapterBase and TMemoryAdapter are very basic
   [TestFixture]
   TTestAdapterMemory = class(TObject)
   private

@@ -6,6 +6,8 @@ uses
   DUnitX.TestFramework, Casbin.Adapter.Types;
 
 type
+  // No need to test anything as TBaseAdapter is very basic
+  // This unit is a placeholder for future tests
   [TestFixture]
   TTestAdapterBase = class
   private

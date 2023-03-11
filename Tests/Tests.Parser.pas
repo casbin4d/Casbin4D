@@ -112,7 +112,8 @@ type
 implementation
 
 uses
-  Casbin.Parser, System.SysUtils, Casbin.Parser.AST.Types, System.Generics.Collections;
+  Casbin.Parser, System.SysUtils, Casbin.Parser.AST.Types,
+  System.Generics.Collections;
 
 procedure TTestParser.checkParserError;
 begin

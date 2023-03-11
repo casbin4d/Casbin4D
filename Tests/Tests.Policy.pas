@@ -74,14 +74,15 @@ type
     procedure testRemovePolicy;
 
     [Test]
-    procedure testPolicyWithAdapter;
+    procedure testPolicyWithMemoryAdapter;
   end;
 
 implementation
 
 uses
   Casbin.Policy, System.Generics.Collections, System.SysUtils,
-  Casbin.Core.Base.Types, Casbin.Adapter.Types, Casbin.Adapter.Policy.Types, Casbin.Adapter.Memory.Policy;
+  Casbin.Core.Base.Types, Casbin.Adapter.Types,
+  Casbin.Adapter.Policy.Types, Casbin.Adapter.Memory.Policy;
 
 procedure TTestPolicyManager.Setup;
 begin
@@ -143,7 +144,7 @@ begin
   Assert.AreEqual(True, fPolicy.policyExists(['g','_','_']), 'Equal.5');
 end;
 
-procedure TTestPolicyManager.testPolicyWithAdapter;
+procedure TTestPolicyManager.testPolicyWithMemoryAdapter;
 var
   manager: IPolicyManager;
   adapter: IPolicyAdapter;
@@ -153,7 +154,7 @@ begin
   Assert.IsTrue(adapter.Assertions.Count > 0, '1');
 
   manager:=TPolicyManager.Create(adapter);
-  Assert.IsTrue(manager.policyExists(['p, alice, data1, read']), '2');
+  Assert.IsTrue(manager.policyExists(['alice', 'data1', 'read']), '2');
 end;
 
 procedure TTestPolicyManager.testRemovePolicy;

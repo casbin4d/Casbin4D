@@ -31,6 +31,9 @@ type
 
     [Test]
     procedure testAdd;
+
+    [Test]
+    procedure testLoad;
   end;
 
 implementation
@@ -52,6 +55,19 @@ procedure TTestPolicyMemoryAdapter.testAdd;
 begin
   fAdapter.add('123');
   Assert.IsTrue(fAdapter.Assertions.Count = 2, '1'); // There is a [default] line
+  Assert.IsTrue(fAdapter.Assertions.Contains('123'), '2');
+end;
+
+procedure TTestPolicyMemoryAdapter.testLoad;
+begin
+  fAdapter.add('ABC');
+  fAdapter.add('DEF');
+  fAdapter.add('XYZ');
+  fAdapter.load(['DEF']);
+  Assert.IsTrue(fAdapter.Assertions.Count = 2, '1');
+  Assert.IsTrue(fAdapter.Assertions.Contains('DEF'), '2');
+  Assert.IsTrue(Length(fAdapter.Filter) = 1, '3');
+  Assert.IsTrue(fAdapter.Filter[0] = 'DEF', '4');
 end;
 
 initialization

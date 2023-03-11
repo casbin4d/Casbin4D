@@ -40,6 +40,8 @@ type
     Rectangle2: TRectangle;
     Label2: TLabel;
     Image2: TImage;
+    cbUseTextAsModel: TCheckBox;
+    cbUseTextAsPolicy: TCheckBox;
     procedure Button1Click(Sender: TObject);
     procedure buttonValidateModelClick(Sender: TObject);
     procedure buttonValidatePoliciesClick(Sender: TObject);
@@ -60,13 +62,20 @@ implementation
 
 uses
   System.IOUtils, Casbin.Parser.Types, Casbin.Parser, Casbin.Types, Casbin,
-  Casbin.Core.Utilities;
+  Casbin.Core.Utilities, Casbin.Model.Types, Casbin.Policy.Types, Casbin.Model,
+  Casbin.Adapter.Types, Casbin.Policy, Casbin.Adapter.Memory.Policy,
+  Casbin.Adapter.Policy.Types, Casbin.Adapter.Filesystem, Casbin.Adapter.Memory,
+  Casbin.Adapter.Filesystem.Policy;
 
 {$R *.fmx}
 
 procedure TForm1.Button1Click(Sender: TObject);
 var
   casbin: ICasbin;
+  model: IModel;
+  modelAdapter: IAdapter;
+  policy: IPolicyManager;
+  policyAdapter: IPolicyAdapter;
   params: TStringDynArray;
 begin
   if Trim(editParams.Text)='' then
@@ -75,7 +84,31 @@ begin
     Exit;
   end;
   params:=TStringDynArray(editParams.Text.Split([',']));
-  casbin:=TCasbin.Create(fFolder+popupModel.Text, fFolder+popupPolicies.Text);
+
+  model:=nil;
+  modelAdapter:=nil;
+  if not cbUseTextAsModel.IsChecked then
+    modelAdapter:=TFileAdapter.Create(TPath.Combine(fFolder, popupModel.Text))
+  else
+  begin
+    modelAdapter:=TMemoryAdapter.Create;
+    modelAdapter.Assertions.AddRange(Memo1.Lines.ToStringArray);
+  end;
+  model:=TModel.Create(modelAdapter);
+
+  policy:=nil;
+  policyAdapter:=nil;
+  if not cbUseTextAsPolicy.IsChecked then
+    policyAdapter:=TPolicyFileAdapter.Create(TPath.Combine(fFolder, popupPolicies.Text))
+  else
+  begin
+    policyAdapter:=TPolicyMemoryAdapter.Create;
+    policyAdapter.Assertions.AddRange(Memo2.Lines.ToStringArray);
+  end;
+  policy:=TPolicyManager.Create(policyAdapter);
+
+  casbin:=TCasbin.Create(model, policy);
+
   try
     if casbin.enforce(params) then
     begin
@@ -156,7 +189,7 @@ var
   SRec: TSearchRec;
   Res: Integer;
 begin
-  labelVersion.Text:=version;
+  labelVersion.Text:='Casbin4D - ' + version;
 //  fFolder:='..\..\..\..\Examples\Default\'; //When in Platform/Config folder
   fFolder:='..\..\Examples\Default\';
   Res := FindFirst(fFolder+'*.conf', faAnyfile, SRec );
@@ -196,6 +229,41 @@ begin
 
   // Warnings
   Image2.Bitmap:=ImageList1.Bitmap(TSizeF.Create(Image2.Height,Image2.Height), 2);
+
+  //// debug
+  cbUseTextAsModel.IsChecked:=true;
+  cbUseTextAsPolicy.IsChecked:=true;
+//  popupModel.Enabled:=false;
+//  popupPolicies.Enabled:=false;
+  Memo1.Text:=
+  '[request_definition]' + sLineBreak +
+  'r = sub, dom, obj, act' + sLineBreak +
+  '' +                                  sLineBreak +
+  '[policy_definition]' + sLineBreak +
+  'p = sub, dom, obj, act' + sLineBreak +
+  '' + sLineBreak +
+  '[role_definition]' + sLineBreak +
+  'g = _, _, _' + sLineBreak +
+  '' + sLineBreak +
+  '[policy_effect]' + sLineBreak +
+  'e = some(where (p.eft == allow))' + sLineBreak +
+  '' + sLineBreak +
+  '[matchers]' + sLineBreak +
+  'm = g(r.sub, p.sub, r.dom) && r.dom == p.dom && r.obj == p.obj && r.act == p.act';
+
+  Memo2.Text:=
+  'p, admin, domain1, data1, read' + sLineBreak +
+  'p, admin, domain1, data1, write' + sLineBreak +
+  'p, admin, domain2, data2, read' + sLineBreak +
+  'p, admin, domain2, data2, write' + sLineBreak +
+  '' + sLineBreak +
+  'p, alice, domain3, data3, read' + sLineBreak +
+  '' + sLineBreak +
+  'g, alice, admin, domain1' + sLineBreak +
+  'g, bob, admin, domain2';
+
+  editParams.Text:='alice,domain3,data3,read';
+
 end;
 
 procedure TForm1.popupModelChange(Sender: TObject);

@@ -16,7 +16,8 @@ unit Casbin.Core.Logger.Default;
 interface
 
 uses
-  Casbin.Core.Logger.Base;
+  Casbin.Core.Logger.Base, Casbin.Core.Logger.Types,
+  System.Generics.Collections;
 
 type
   TDefaultLogger = class (TBaseLogger)
@@ -24,13 +25,29 @@ type
     procedure log(const aMessage: string); override;
   end;
 
+  TDefaultLoggerPool = class (TInterfacedObject, ILoggerPool)
+  private
+    fLoggers: TList<ILogger>;
+    function GetLoggers: TList<ILogger>;
+    procedure SetLoggers(const Value: TList<ILogger>);
+
+    procedure log(const aMessage: string);
+
+  public
+    constructor Create; overload;
+    constructor Create(const aLogger: ILogger); overload;
+
+    destructor Destroy; override;
+    property Loggers: TList<ILogger> read GetLoggers write SetLoggers;
+  end;
+
 implementation
 
 uses
   {$IFDEF MSWINDOWS}
-  Winapi.Windows,
+  Winapi.Windows
   {$ENDIF}
-  Casbin.Core.Logger.Types;
+  ;
 
 { TDefaultLogger }
 
@@ -48,6 +65,46 @@ begin
     {$ELSE}
     raise Exception.Create('Not implemented yet');
     {$ENDIF}
+end;
+
+constructor TDefaultLoggerPool.Create;
+begin
+  inherited;
+  fLoggers:=TList<ILogger>.Create;
+  fLoggers.Add(TDefaultLogger.Create);
+end;
+
+constructor TDefaultLoggerPool.Create(const aLogger: ILogger);
+begin
+  self.Create;
+  if assigned(aLogger) then
+    fLoggers.Add(aLogger);
+end;
+
+destructor TDefaultLoggerPool.Destroy;
+begin
+  fLoggers.Free;
+  inherited;
+end;
+
+function TDefaultLoggerPool.GetLoggers: TList<ILogger>;
+begin
+  result:=fLoggers;
+end;
+
+procedure TDefaultLoggerPool.log(const aMessage: string);
+var
+  logger: ILogger;
+begin
+  for logger in fLoggers do
+    if logger.Enabled then
+      logger.log(aMessage);
+end;
+
+procedure TDefaultLoggerPool.SetLoggers(const Value: TList<ILogger>);
+begin
+  if assigned(Value) then
+    fLoggers:=Value;
 end;
 
 end.

@@ -15,6 +15,9 @@ unit Casbin.Core.Logger.Types;
 
 interface
 
+uses
+  System.Generics.Collections;
+
 type
   ILogger = interface
     ['{A2FB7DFB-BB81-421C-B2DF-5E76AB6FCB4D}']
@@ -57,6 +60,16 @@ type
     /// </summary>
     {$ENDREGION}
     property LastLoggedMessage: String read getLastLoggedMessage;
+  end;
+
+  ILoggerPool = interface
+    ['{BBA7D2FA-DA89-4118-923E-2B8BE3E70AF5}']
+    function GetLoggers: TList<ILogger>;
+    procedure SetLoggers(const Value: TList<ILogger>);
+
+    procedure log(const aMessage: string);
+
+    property Loggers: TList<ILogger> read GetLoggers write SetLoggers;
   end;
 
 implementation

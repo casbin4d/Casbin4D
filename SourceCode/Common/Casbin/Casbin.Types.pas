@@ -16,8 +16,8 @@ unit Casbin.Types;
 interface
 
 uses
-  Casbin.Core.Base.Types, Casbin.Model.Types, Casbin.Policy.Types,
-  Casbin.Core.Logger.Types, System.Types, System.TypInfo;
+  Casbin.Model.Types, Casbin.Policy.Types,
+  Casbin.Core.Logger.Types, System.Types, System.TypInfo, Casbin.Core.Base.Types;
 
 type
   TEnforceParameters = TStringDynArray;
@@ -25,11 +25,11 @@ type
   ICasbin = interface (IBaseInterface)
     ['{7DC6F205-0000-40EF-BA8A-BF18018E5674}']
     function getEnabled: Boolean;
-    function getLogger: ILogger;
+    function GetLoggerPool: ILoggerPool;
     function getModel: IModel;
     function getPolicy: IPolicyManager;
     procedure setEnabled(const aValue: Boolean);
-    procedure setLogger(const aValue: ILogger);
+    procedure SetLoggerPool(const aValue: ILoggerPool);
     procedure setModel(const aValue: IModel);
     procedure setPolicy(const aValue: IPolicyManager);
 
@@ -39,7 +39,7 @@ type
                       const aRec): boolean; overload;
 
     property Enabled: Boolean read getEnabled write setEnabled;
-    property Logger: ILogger read getLogger write setLogger;
+    property LoggerPool: ILoggerPool read GetLoggerPool write SetLoggerPool;
     property Model: IModel read getModel write setModel;
     property Policy: IPolicyManager read getPolicy write setPolicy;
   end;

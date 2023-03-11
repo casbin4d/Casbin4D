@@ -25,7 +25,7 @@ type
   private
     fModel: IModel;
     fPolicy: IPolicyManager;
-    fLogger: ILogger;
+    fLoggerPool: ILoggerPool;
     fEnabled: boolean;
     fFunctions: IFunctions;
 
@@ -38,8 +38,8 @@ type
     function getPolicy: IPolicyManager;
     procedure setModel(const aValue: IModel);
     procedure setPolicy(const aValue: IPolicyManager);
-    function getLogger: ILogger;
-    procedure setLogger(const aValue: ILogger);
+    function getLoggerPool: ILoggerPool;
+    procedure setLoggerPool(const aValue: ILoggerPool);
     function getEnabled: Boolean;
     procedure setEnabled(const aValue: Boolean);
 
@@ -100,7 +100,7 @@ begin
   inherited Create;
   fModel:=aModel;
   fPolicy:=aPolicyAdapter;
-  fLogger:=TDefaultLogger.Create;
+  fLoggerPool:=TDefaultLoggerPool.Create(TDefaultLogger.Create);
   fEnabled:=True;
   fFunctions:=TFunctions.Create;
   fFunctions.registerFunction('g', rolesG);
@@ -173,18 +173,18 @@ begin
 
     requestStr:=string.Join(',', aParams);
 
-    fLogger.log('Enforcing request '''+requestStr+'''');
-    fLogger.log('   Resolving Request...');
+    fLoggerPool.log('Enforcing request '''+requestStr+'''');
+    fLoggerPool.log('   Resolving Request...');
 
     // Resolve Request
   {$IFDEF DEBUG}
-    fLogger.log('   Request: '+requestStr);
-    fLogger.log('      Assertions: ');
+    fLoggerPool.log('   Request: '+requestStr);
+    fLoggerPool.log('      Assertions: ');
     if fModel.assertions(stRequestDefinition).Count=0 then
-      fLogger.log('         No Request Assertions found')
+      fLoggerPool.log('         No Request Assertions found')
     else
       for item in fModel.assertions(stRequestDefinition) do
-        fLogger.log('         '+item);
+        fLoggerPool.log('         '+item);
   {$ENDIF}
     requestDict:=resolve(request, rtRequest,
                             fModel.assertions(stRequestDefinition));
@@ -192,14 +192,14 @@ begin
     // Resolve ABAC record
     if Assigned(aPointer) and Assigned(@aRec) then
     begin
-      fLogger.log('Record Identified');
+      fLoggerPool.log('Record Identified');
       ctx:=TRttiContext.Create;
       cType:=ctx.GetType(aPointer);
 
       if fModel.assertions(stRequestDefinition).Count>0 then
       begin
         abacList.AddRange(fModel.assertions(stRequestDefinition));
-        fLogger.log('Request identifiers retrieved ('+string.Join(',', abacList.ToArray)+')');
+        fLoggerPool.log('Request identifiers retrieved ('+string.Join(',', abacList.ToArray)+')');
       end
       else
       begin
@@ -207,10 +207,10 @@ begin
         abacList.Add('r.sub');
         abacList.Add('r.obj');
         abacList.Add('r.act');
-        fLogger.log('Default identifiers used (r)');
+        fLoggerPool.log('Default identifiers used (r)');
       end;
 
-      fLogger.log('Retrieving content of '+cType.Name+' record');
+      fLoggerPool.log('Retrieving content of '+cType.Name+' record');
       for cField in cType.GetFields do
       begin
         for item in abacList do
@@ -221,30 +221,30 @@ begin
       end;
     end;
 
-    fLogger.log('   Resolving Policies...');
+    fLoggerPool.log('   Resolving Policies...');
 
   {$IFDEF DEBUG}
-    fLogger.log('   Policies: ');
-    fLogger.log('      Assertions: ');
+    fLoggerPool.log('   Policies: ');
+    fLoggerPool.log('      Assertions: ');
     if fPolicy.policies.Count=0 then
-      fLogger.log('         No Policy Assertions found')
+      fLoggerPool.log('         No Policy Assertions found')
     else
       for item in fPolicy.policies do
-        fLogger.log('         '+item);
+        fLoggerPool.log('         '+item);
 
-    fLogger.log('      Assertions: '+requestStr);
+    fLoggerPool.log('      Assertions: '+requestStr);
     for item in fModel.assertions(stPolicyDefinition) do
-      fLogger.log('         '+item);
+      fLoggerPool.log('         '+item);
   {$ENDIF}
 
   {$IFDEF DEBUG}
-    fLogger.log('   Matchers: '+requestStr);
-    fLogger.log('      Assertions: ');
+    fLoggerPool.log('   Matchers: '+requestStr);
+    fLoggerPool.log('      Assertions: ');
     if fModel.assertions(stMatchers).Count=0 then
-      fLogger.log('         No Matcher Assertions found')
+      fLoggerPool.log('         No Matcher Assertions found')
     else
       for item in fModel.assertions(stMatchers) do
-        fLogger.log('         '+item);
+        fLoggerPool.log('         '+item);
   {$ENDIF}
     if fModel.assertions(stMatchers).Count>0 then
     begin
@@ -262,7 +262,7 @@ begin
     domainsArrayRec:=TArrayRecord<string>.Create(fPolicy.domains.ToArray);
     for item in fPolicy.policies do
     begin
-      fLogger.log('   Processing policy: '+item);
+      fLoggerPool.log('   Processing policy: '+item);
       // Resolve Policy
       policyList:=TList<string>.Create;   //PALOFF
       policyList.AddRange(item.Split([',']));     //PALOFF
@@ -293,7 +293,7 @@ begin
         policyDict:=resolve(policyList, rtPolicy,
                               fModel.assertions(stPolicyDefinition));
 
-        fLogger.log('   Resolving Functions and Matcher...');
+        fLoggerPool.log('   Resolving Functions and Matcher...');
 
         // Resolve Matcher
         if string.Compare('indeterminate', Trim(policyList[policyList.Count-1]),
@@ -331,13 +331,13 @@ begin
     end;
 
     //Resolve Effector
-    fLogger.log('   Merging effects...');
+    fLoggerPool.log('   Merging effects...');
 
     Result:=mergeEffects(fModel.effectCondition, effectArray);
 
     chrono.Stop;
 
-    fLogger.log('Enforcement completed (Result: '+BoolToStr(Result, true)+') - ' +
+    fLoggerPool.log('Enforcement completed (Result: '+BoolToStr(Result, true)+') - ' +
                 chrono.ElapsedTime);
 
   finally
@@ -356,9 +356,9 @@ begin
   Result:=fEnabled;
 end;
 
-function TCasbin.getLogger: ILogger;
+function TCasbin.getLoggerPool: ILoggerPool;
 begin
-  Result:=fLogger;
+  Result:=fLoggerPool;
 end;
 
 function TCasbin.getModel: IModel;
@@ -398,13 +398,13 @@ begin
   fEnabled:=aValue;
 end;
 
-procedure TCasbin.setLogger(const aValue: ILogger);
+procedure TCasbin.setLoggerPool(const aValue: ILoggerPool);
 begin
-  fLogger:=nil;
-  if Assigned(aValue) then
-    fLogger:=aValue
-  else
-    fLogger:=TDefaultLogger.Create;
+  if assigned(aValue) then
+  begin
+    fLoggerPool:=nil;
+    fLoggerPool:=aValue;
+  end;
 end;
 
 procedure TCasbin.setModel(const aValue: IModel);

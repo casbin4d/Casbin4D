@@ -50,6 +50,9 @@ type
     tvModels: TTreeView;
     TreeViewItem1: TTreeViewItem;
     Splitter2: TSplitter;
+    Layout5: TLayout;
+    Rectangle3: TRectangle;
+    lbTime: TLabel;
     procedure Button1Click(Sender: TObject);
     procedure buttonValidateModelClick(Sender: TObject);
     procedure buttonValidatePoliciesClick(Sender: TObject);
@@ -81,7 +84,7 @@ uses
   Casbin.Core.Utilities, Casbin.Model.Types, Casbin.Policy.Types, Casbin.Model,
   Casbin.Adapter.Types, Casbin.Policy, Casbin.Adapter.Memory.Policy,
   Casbin.Adapter.Policy.Types, Casbin.Adapter.Filesystem, Casbin.Adapter.Memory,
-  Casbin.Adapter.Filesystem.Policy, System.UITypes, System.SysUtils;
+  Casbin.Adapter.Filesystem.Policy, System.UITypes, System.SysUtils, Quick.Chrono;
 
 {$R *.fmx}
 
@@ -161,6 +164,8 @@ var
   policy: IPolicyManager;
   policyAdapter: IPolicyAdapter;
   params: TStringDynArray;
+  chrono: TChronometer;
+  enfRes: boolean;
 begin
   if Trim(editParams.Text)='' then
   begin
@@ -182,31 +187,41 @@ begin
   policyAdapter.Assertions.AddRange(Memo2.Lines.ToStringArray);
   policy:=TPolicyManager.Create(policyAdapter);
 
+  chrono:=TChronometer.Create(false);
+  chrono.ReportFormatPrecission:=TPrecissionFormat.pfFloat;
   casbin:=TCasbin.Create(model, policy);
   try
-    if casbin.enforce(params) then
-    begin
-      rectangleEnforced.Fill.Color:=TAlphaColorRec.Green;
-      labelEnforced.Text:='ALLOW';
-      // No Errors
-      Image1.Bitmap:=ImageList1.Bitmap(TSizeF.Create(Image1.Height,Image1.Height), 1);
-      LabelError.Text:='No Errors';
-    end
-    else
-    begin
-      rectangleEnforced.Fill.Color:=TAlphaColorRec.Red;
-      labelEnforced.Text:='DENY';
-    end;
-    labelEnforced.FontColor:=TAlphaColorRec.White;
-  except
-    on E: Exception do
-    begin
-      Image1.Bitmap:=ImageList1.Bitmap(TSizeF.Create(Image1.Height,Image1.Height), 0);
-      if E.Message.Contains('math') then
-        LabelError.Text:='Select the correct model-policy files'
+    try
+      chrono.Start;
+      enfRes:= casbin.enforce(params);
+      chrono.Stop;
+      if enfRes then
+      begin
+        rectangleEnforced.Fill.Color:=TAlphaColorRec.Green;
+        labelEnforced.Text:='ALLOW';
+        // No Errors
+        Image1.Bitmap:=ImageList1.Bitmap(TSizeF.Create(Image1.Height,Image1.Height), 1);
+        LabelError.Text:='No Errors';
+      end
       else
-        LabelError.Text:=E.Message;
+      begin
+        rectangleEnforced.Fill.Color:=TAlphaColorRec.Red;
+        labelEnforced.Text:='DENY';
+      end;
+      labelEnforced.FontColor:=TAlphaColorRec.White;
+      lbTime.Text:=chrono.ElapsedTime;
+    except
+      on E: Exception do
+      begin
+        Image1.Bitmap:=ImageList1.Bitmap(TSizeF.Create(Image1.Height,Image1.Height), 0);
+        if E.Message.Contains('math') then
+          LabelError.Text:='Select the correct model-policy files'
+        else
+          LabelError.Text:=E.Message;
+      end;
     end;
+  finally
+    chrono.Free;
   end;
 end;
 
@@ -338,12 +353,15 @@ begin
   layoutWarning.Visible:=false;
 
   popupPolicies.ItemIndex:=-1;
+
+  lbTime.Text:='';
 end;
 
 procedure TForm1.tvModelsChange(Sender: TObject);
 var
   rootFolder: string;
   policyFile: string;
+  line: string;
 begin
   mainLayout.Enabled:= (tvModels.Selected.TagString <> 'models') and
         (tvModels.Selected.TagString <> 'default') and
@@ -377,6 +395,16 @@ begin
             'You can select a policy file manually';
     layoutWarning.Visible:=true;
   end;
+
+  if (memo2.Lines.Count > 0) then
+  begin
+    for line in memo2.Lines do
+    begin
+      if (Trim(line) <> '') and (line.StartsWith('p,')) then
+        editParams.Text:=line.Substring('p,'.Length + 1).Trim;
+    end;
+  end;
+
 end;
 
 end.

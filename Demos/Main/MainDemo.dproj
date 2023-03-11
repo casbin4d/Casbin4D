@@ -290,6 +290,11 @@
         <DCCReference Include="..\..\SourceCode\Common\Functions\Casbin.Functions.KeyMatch3.pas"/>
         <DCCReference Include="..\..\SourceCode\Common\Functions\Casbin.Functions.RegExMatch.pas"/>
         <DCCReference Include="..\..\SourceCode\Common\Third Party\QuickLib\Quick.Chrono.pas"/>
+        <DCCReference Include="LogWindow.pas">
+            <Form>FormLog</Form>
+            <FormType>fmx</FormType>
+        </DCCReference>
+        <DCCReference Include="Logger.Debug.pas"/>
         <RcItem Include="Images\delete_button_error.png">
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>PngImage_1</ResourceId>

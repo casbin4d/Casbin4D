@@ -7,7 +7,7 @@ uses
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.StdCtrls,
   FMX.Controls.Presentation, FMX.ExtCtrls, FMX.ScrollBox, FMX.Memo, FMX.Objects,
   FMX.Layouts, FMX.Edit, System.ImageList, FMX.ImgList, FMX.Memo.Types,
-  FMX.TreeView;
+  FMX.TreeView, LogWindow;
 
 type
   TForm1 = class(TForm)
@@ -53,6 +53,10 @@ type
     Layout5: TLayout;
     Rectangle3: TRectangle;
     lbTime: TLabel;
+    Rectangle4: TRectangle;
+    btnDebug: TSpeedButton;
+    Image3: TImage;
+    procedure btnDebugClick(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure buttonValidateModelClick(Sender: TObject);
     procedure buttonValidatePoliciesClick(Sender: TObject);
@@ -64,6 +68,7 @@ type
     fFolder: string;
     fDefaultFolder: string;
     fAdditionalFolder: string;
+    fLogForm: TFormLog;
 
     procedure addDefaultModels (const aParent: TTreeViewItem);
     procedure addAdditionalModels (const aParent: TTreeViewItem);
@@ -84,7 +89,7 @@ uses
   Casbin.Core.Utilities, Casbin.Model.Types, Casbin.Policy.Types, Casbin.Model,
   Casbin.Adapter.Types, Casbin.Policy, Casbin.Adapter.Memory.Policy,
   Casbin.Adapter.Policy.Types, Casbin.Adapter.Filesystem, Casbin.Adapter.Memory,
-  Casbin.Adapter.Filesystem.Policy, System.UITypes, System.SysUtils, Quick.Chrono;
+  Casbin.Adapter.Filesystem.Policy, System.UITypes, System.SysUtils, Quick.Chrono, Logger.Debug;
 
 {$R *.fmx}
 
@@ -156,6 +161,11 @@ begin
   end;
 end;
 
+procedure TForm1.btnDebugClick(Sender: TObject);
+begin
+  fLogForm.Visible:=not fLogForm.Visible;
+end;
+
 procedure TForm1.Button1Click(Sender: TObject);
 var
   casbin: ICasbin;
@@ -190,6 +200,8 @@ begin
   chrono:=TChronometer.Create(false);
   chrono.ReportFormatPrecission:=TPrecissionFormat.pfFloat;
   casbin:=TCasbin.Create(model, policy);
+  casbin.LoggerPool.Loggers.Add(TLogDebug.Create(fLogForm));
+  casbin.LoggerPool.log('------------------- ENFORCER STARTED ------->');
   try
     try
       chrono.Start;
@@ -222,6 +234,7 @@ begin
     end;
   finally
     chrono.Free;
+    casbin.LoggerPool.log('------------------- ENFORCER FINISHED ------->');
   end;
 end;
 
@@ -314,6 +327,9 @@ begin
   Image2.Bitmap:=ImageList1.Bitmap(TSizeF.Create(Image2.Height,Image2.Height), 2);
 
   resetLayout;
+
+  fLogForm:=TFormLog.Create(self);
+  fLogForm.Visible:=false;
 end;
 
 procedure TForm1.popupPoliciesChange(Sender: TObject);

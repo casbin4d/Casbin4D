@@ -43,8 +43,8 @@ type
 implementation
 
 uses
-  System.StrUtils, System.SysUtils, Casbin.Exception.Types, System.Rtti, Casbin.Core.Defaults,
-  System.RegularExpressions;
+  System.StrUtils, System.SysUtils, Casbin.Exception.Types, System.Rtti,
+  Casbin.Core.Defaults, System.RegularExpressions;
 
 procedure TMatcher.clearIdentifiers;
 begin
@@ -59,8 +59,6 @@ begin
   fMathsParser:=TCStyleParser.Create;
   TCStyleParser(fMathsParser).CStyle:=False;
   fIdentifiers:=TDictionary<string, integer>.Create;
-
-  fNextID:=0;
 
   addIdentifier('true');
   addIdentifier('false');

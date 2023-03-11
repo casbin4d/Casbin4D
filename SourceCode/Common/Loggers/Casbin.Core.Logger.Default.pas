@@ -76,7 +76,7 @@ end;
 
 constructor TDefaultLoggerPool.Create(const aLogger: ILogger);
 begin
-  self.Create;
+  self.Create; // PALOFF
   if assigned(aLogger) then
     fLoggers.Add(aLogger);
 end;

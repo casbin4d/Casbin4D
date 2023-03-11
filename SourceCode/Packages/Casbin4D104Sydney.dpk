@@ -75,6 +75,7 @@ contains
   Casbin.Functions.KeyMatch in '..\Common\Functions\Casbin.Functions.KeyMatch.pas',
   Casbin.Functions.KeyMatch2 in '..\Common\Functions\Casbin.Functions.KeyMatch2.pas',
   Casbin.Functions.KeyMatch3 in '..\Common\Functions\Casbin.Functions.KeyMatch3.pas',
-  Casbin.Functions.RegExMatch in '..\Common\Functions\Casbin.Functions.RegExMatch.pas';
+  Casbin.Functions.RegExMatch in '..\Common\Functions\Casbin.Functions.RegExMatch.pas',
+  Quick.Chrono in '..\Common\Third Party\QuickLib\Quick.Chrono.pas';
 
 end.

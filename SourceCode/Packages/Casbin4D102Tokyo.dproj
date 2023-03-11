@@ -178,6 +178,7 @@
         <DCCReference Include="..\Common\Functions\Casbin.Functions.KeyMatch2.pas"/>
         <DCCReference Include="..\Common\Functions\Casbin.Functions.KeyMatch3.pas"/>
         <DCCReference Include="..\Common\Functions\Casbin.Functions.RegExMatch.pas"/>
+        <DCCReference Include="..\Common\Third Party\QuickLib\Quick.Chrono.pas"/>
         <None Include="..\Common\Version.inc"/>
         <None Include="..\Common\Casbin.inc"/>
         <BuildConfiguration Include="Base">
@@ -221,6 +222,12 @@
                 </DeployFile>
                 <DeployFile LocalName="$(BDS)\Redist\osx64\libcgsqlite3.dylib" Class="DependencyModule"/>
                 <DeployFile LocalName="C:\Users\Public\Documents\Embarcadero\Studio\22.0\Bpl\Casbin4D102Tokyo.bpl" Configuration="Debug" Class="ProjectOutput"/>
+                <DeployFile LocalName="C:\Users\Public\Documents\Embarcadero\Studio\22.0\Bpl\Casbin4D102Tokyo.bpl" Configuration="Debug" Class="ProjectOutput">
+                    <Platform Name="Win32">
+                        <RemoteName>Casbin4D102Tokyo.bpl</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployClass Name="AdditionalDebugSymbols">
                     <Platform Name="OSX32">
                         <Operation>1</Operation>

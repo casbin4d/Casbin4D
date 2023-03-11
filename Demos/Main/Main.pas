@@ -3,14 +3,14 @@ unit Main;
 interface
 
 uses
-  System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
+  System.Types, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.StdCtrls,
   FMX.Controls.Presentation, FMX.ExtCtrls, FMX.ScrollBox, FMX.Memo, FMX.Objects,
-  FMX.Layouts, FMX.Edit, System.ImageList, FMX.ImgList, FMX.Memo.Types;
+  FMX.Layouts, FMX.Edit, System.ImageList, FMX.ImgList, FMX.Memo.Types,
+  FMX.TreeView;
 
 type
   TForm1 = class(TForm)
-    popupModel: TPopupBox;
     GroupBox1: TGroupBox;
     Memo1: TMemo;
     GroupBox2: TGroupBox;
@@ -36,21 +36,37 @@ type
     LabelError: TLabel;
     ImageList1: TImageList;
     Image1: TImage;
-    Layout5: TLayout;
+    layoutWarning: TLayout;
     Rectangle2: TRectangle;
-    Label2: TLabel;
+    lblWarning: TLabel;
     Image2: TImage;
-    cbUseTextAsModel: TCheckBox;
-    cbUseTextAsPolicy: TCheckBox;
+    mainLayout: TLayout;
+    Layout7: TLayout;
+    Layout8: TLayout;
+    Splitter1: TSplitter;
+    Layout9: TLayout;
+    Layout10: TLayout;
+    Label3: TLabel;
+    tvModels: TTreeView;
+    TreeViewItem1: TTreeViewItem;
+    Splitter2: TSplitter;
     procedure Button1Click(Sender: TObject);
     procedure buttonValidateModelClick(Sender: TObject);
     procedure buttonValidatePoliciesClick(Sender: TObject);
     procedure editParamsChangeTracking(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure popupModelChange(Sender: TObject);
     procedure popupPoliciesChange(Sender: TObject);
+    procedure tvModelsChange(Sender: TObject);
   private
     fFolder: string;
+    fDefaultFolder: string;
+    fAdditionalFolder: string;
+
+    procedure addDefaultModels (const aParent: TTreeViewItem);
+    procedure addAdditionalModels (const aParent: TTreeViewItem);
+    procedure addFolder(const aParent: TTreeViewItem; const aPath: string;
+                  const aLabel: string = '%s'; const aTag: integer = 0);
+    procedure resetLayout;
   public
     { Public declarations }
   end;
@@ -65,9 +81,77 @@ uses
   Casbin.Core.Utilities, Casbin.Model.Types, Casbin.Policy.Types, Casbin.Model,
   Casbin.Adapter.Types, Casbin.Policy, Casbin.Adapter.Memory.Policy,
   Casbin.Adapter.Policy.Types, Casbin.Adapter.Filesystem, Casbin.Adapter.Memory,
-  Casbin.Adapter.Filesystem.Policy;
+  Casbin.Adapter.Filesystem.Policy, System.UITypes, System.SysUtils;
 
 {$R *.fmx}
+
+procedure TForm1.addAdditionalModels(const aParent: TTreeViewItem);
+var
+  item: TTreeViewItem;
+begin
+  if TDirectory.Exists(fAdditionalFolder) then
+  begin
+    item:=TTreeViewItem.Create(aParent);
+    item.Text:='Additional';
+    item.TagString:='additional';
+    item.TextSettings.Font.Style:=[TFontStyle.fsBold];
+    item.Parent:=aParent;
+    addFolder(item, fAdditionalFolder, 'Additional - %s', 1);
+  end;
+end;
+
+
+procedure TForm1.addDefaultModels(const aParent: TTreeViewItem);
+var
+  item: TTreeViewItem;
+begin
+  if TDirectory.Exists(fDefaultFolder) then
+  begin
+    item:=TTreeViewItem.Create(aParent);
+    item.Text:='Default';
+    item.TextSettings.Font.Style:=[TFontStyle.fsBold];
+    item.TagString:='default';
+    item.Parent:=aParent;
+    addFolder(item, fDefaultFolder, 'Default - %s', 0);
+  end;
+end;
+
+procedure TForm1.addFolder(const aParent: TTreeViewItem; const aPath: string;
+    const aLabel: string = '%s'; const aTag: integer = 0);
+var
+  res: integer;
+  SRec: TSearchRec;
+  name: string;
+  item: TTreeViewItem;
+begin
+  Res := FindFirst(TPath.Combine(aPath, '*.conf'), faAnyfile, SRec );
+  if Res = 0 then
+  try
+    while res = 0 do
+    begin
+      if (SRec.Attr and faDirectory <> faDirectory) then
+      begin
+        name:=TPath.GetFileNameWithoutExtension(SRec.Name);
+        item:=TTreeViewItem.Create(aParent);
+        item.Text:=name;
+        item.TagString:=name;
+        item.Parent:=aParent;
+
+        if name.Contains('model') then
+          name:=StringReplace(name, 'model', 'policy', [rfIgnoreCase])
+        else
+          name:=name+'_policy';
+
+        if FileExists(TPath.Combine(aPath, name + '.csv')) then
+          popupPolicies.Items.AddObject(format(aLabel, [name]), TObject(aTag));
+
+      end;
+      Res := FindNext(SRec);
+    end;
+  finally
+    FindClose(SRec)
+  end;
+end;
 
 procedure TForm1.Button1Click(Sender: TObject);
 var
@@ -87,28 +171,18 @@ begin
 
   model:=nil;
   modelAdapter:=nil;
-  if not cbUseTextAsModel.IsChecked then
-    modelAdapter:=TFileAdapter.Create(TPath.Combine(fFolder, popupModel.Text))
-  else
-  begin
-    modelAdapter:=TMemoryAdapter.Create;
-    modelAdapter.Assertions.AddRange(Memo1.Lines.ToStringArray);
-  end;
-  model:=TModel.Create(modelAdapter);
-
   policy:=nil;
   policyAdapter:=nil;
-  if not cbUseTextAsPolicy.IsChecked then
-    policyAdapter:=TPolicyFileAdapter.Create(TPath.Combine(fFolder, popupPolicies.Text))
-  else
-  begin
-    policyAdapter:=TPolicyMemoryAdapter.Create;
-    policyAdapter.Assertions.AddRange(Memo2.Lines.ToStringArray);
-  end;
+
+  modelAdapter:=TMemoryAdapter.Create;
+  modelAdapter.Assertions.AddRange(Memo1.Lines.ToStringArray);
+  model:=TModel.Create(modelAdapter);
+
+  policyAdapter:=TPolicyMemoryAdapter.Create;
+  policyAdapter.Assertions.AddRange(Memo2.Lines.ToStringArray);
   policy:=TPolicyManager.Create(policyAdapter);
 
   casbin:=TCasbin.Create(model, policy);
-
   try
     if casbin.enforce(params) then
     begin
@@ -188,104 +262,121 @@ procedure TForm1.FormCreate(Sender: TObject);
 var
   SRec: TSearchRec;
   Res: Integer;
+  nItem: TTreeViewItem;
 begin
-  labelVersion.Text:='Casbin4D - ' + version;
-//  fFolder:='..\..\..\..\Examples\Default\'; //When in Platform/Config folder
-  fFolder:='..\..\Examples\Default\';
-  Res := FindFirst(fFolder+'*.conf', faAnyfile, SRec );
-  if Res = 0 then
-  try
-    while res = 0 do
-    begin
-      if (SRec.Attr and faDirectory <> faDirectory) then
-        popupModel.Items.Add(SRec.Name);
-      Res := FindNext(SRec);
-    end;
-  finally
-    FindClose(SRec)
-  end;
-  if popupModel.Items.Count>0 then
-    popupModel.ItemIndex:=0;
+  fDefaultFolder:='..\..\Examples\Default\';
+  fAdditionalFolder:='..\..\Examples\Additional\';
 
-  //Policies
-  Res := FindFirst(fFolder+'*.csv', faAnyfile, SRec );
-  if Res = 0 then
+  labelVersion.Text:='Casbin4D - ' + version;
+
+  mainLayout.Enabled:=false;
+  tvModels.BeginUpdate;
   try
-    while res = 0 do
+    with tvModels do
     begin
-      if (SRec.Attr and faDirectory <> faDirectory) then
-        popupPolicies.Items.Add(SRec.Name);
-      Res := FindNext(SRec);
+      Clear;
+      nItem:=TTreeViewItem.Create(tvModels);
+      nItem.Text:='Models';
+      nItem.TextSettings.Font.Style:=[TFontStyle.fsBold];
+      nItem.TagString:='models';
+      nItem.Parent:=tvModels;
+
+      addDefaultModels(nItem);
+      addAdditionalModels(nItem);
+
+      Selected:=nItem;
+
+      ExpandAll;
     end;
   finally
-    FindClose(SRec)
+    tvModels.EndUpdate;
   end;
-  if popupPolicies.Items.Count>0 then
-    popupPolicies.ItemIndex:=0;
 
   // No Errors
   Image1.Bitmap:=ImageList1.Bitmap(TSizeF.Create(Image1.Height,Image1.Height), 1);
-  LabelError.Text:='No Errors';
 
   // Warnings
   Image2.Bitmap:=ImageList1.Bitmap(TSizeF.Create(Image2.Height,Image2.Height), 2);
 
-  //// debug
-  cbUseTextAsModel.IsChecked:=true;
-  cbUseTextAsPolicy.IsChecked:=true;
-//  popupModel.Enabled:=false;
-//  popupPolicies.Enabled:=false;
-  Memo1.Text:=
-  '[request_definition]' + sLineBreak +
-  'r = sub, dom, obj, act' + sLineBreak +
-  '' +                                  sLineBreak +
-  '[policy_definition]' + sLineBreak +
-  'p = sub, dom, obj, act' + sLineBreak +
-  '' + sLineBreak +
-  '[role_definition]' + sLineBreak +
-  'g = _, _, _' + sLineBreak +
-  '' + sLineBreak +
-  '[policy_effect]' + sLineBreak +
-  'e = some(where (p.eft == allow))' + sLineBreak +
-  '' + sLineBreak +
-  '[matchers]' + sLineBreak +
-  'm = g(r.sub, p.sub, r.dom) && r.dom == p.dom && r.obj == p.obj && r.act == p.act';
-
-  Memo2.Text:=
-  'p, admin, domain1, data1, read' + sLineBreak +
-  'p, admin, domain1, data1, write' + sLineBreak +
-  'p, admin, domain2, data2, read' + sLineBreak +
-  'p, admin, domain2, data2, write' + sLineBreak +
-  '' + sLineBreak +
-  'p, alice, domain3, data3, read' + sLineBreak +
-  '' + sLineBreak +
-  'g, alice, admin, domain1' + sLineBreak +
-  'g, bob, admin, domain2';
-
-  editParams.Text:='alice,domain3,data3,read';
-
+  resetLayout;
 end;
 
-procedure TForm1.popupModelChange(Sender: TObject);
+procedure TForm1.popupPoliciesChange(Sender: TObject);
+var
+  name: string;
+begin
+  if popupPolicies.ItemIndex = -1 then
+    Exit;
+
+  Memo2.Lines.Clear;
+  name:=popupPolicies.Text.Split(['-'])[1].Trim;
+  if integer(popupPolicies.Items.Objects[popupPolicies.ItemIndex]) = 0 then
+    name:=TPath.Combine(fDefaultFolder, name);
+  if integer(popupPolicies.Items.Objects[popupPolicies.ItemIndex]) = 1 then
+    name:=TPath.Combine(fAdditionalFolder, name);
+  name:=name + '.csv';
+
+  Memo2.Lines.AddStrings(TArray<string>(TFile.ReadAllLines(name)));
+
+  labelValidatePolicies.FontColor:=TAlphaColorRec.Black;
+  rectanglePolicies.Fill.Color:=TAlphaColorRec.Null;
+end;
+
+procedure TForm1.resetLayout;
 begin
   Memo1.Lines.Clear;
-  Memo1.Lines.AddStrings(TArray<string>(
-    TFile.ReadAllLines('..\..\Examples\Default\'+
-                                    popupModel.Items[popupModel.ItemIndex])));
   labelValidateModel.Text:='Not Validated Yet';
   labelValidateModel.FontColor:=TAlphaColorRec.Black;
   rectangleModel.Fill.Color:=TAlphaColorRec.Null;
 
-end;
-
-procedure TForm1.popupPoliciesChange(Sender: TObject);
-begin
   Memo2.Lines.Clear;
-  Memo2.Lines.AddStrings(TArray<string>(
-    TFile.ReadAllLines('..\..\Examples\Default\'+
-                                    popupPolicies.Items[popupPolicies.ItemIndex])));
   labelValidatePolicies.FontColor:=TAlphaColorRec.Black;
   rectanglePolicies.Fill.Color:=TAlphaColorRec.Null;
+
+  LabelError.Text:='No Errors';
+
+  layoutWarning.Visible:=false;
+
+  popupPolicies.ItemIndex:=-1;
+end;
+
+procedure TForm1.tvModelsChange(Sender: TObject);
+var
+  rootFolder: string;
+  policyFile: string;
+begin
+  mainLayout.Enabled:= (tvModels.Selected.TagString <> 'models') and
+        (tvModels.Selected.TagString <> 'default') and
+          (tvModels.Selected.TagString <> 'additional');
+  if not mainLayout.Enabled then
+    Exit;
+  resetLayout;
+
+  if tvModels.Selected.ParentItem.TagString = 'default' then
+    rootFolder:=fDefaultFolder;
+  if tvModels.Selected.ParentItem.TagString = 'additional' then
+    rootFolder:=fAdditionalFolder;
+
+  Memo1.Lines.AddStrings(TArray<string>(TFile.ReadAllLines(
+                TPath.Combine(rootFolder,
+                            tvModels.Selected.TagString + '.conf'))));
+
+
+  policyFile:=tvModels.Selected.TagString;
+  if policyFile.Contains('model') then
+    policyFile:=StringReplace(policyFile, 'model', 'policy', [rfIgnoreCase])
+  else
+    policyFile:=policyFile +'_policy';
+  policyFile:=policyFile + '.csv';
+  policyFile:=TPath.Combine(rootFolder, policyFile);
+  if FileExists(policyFile) then
+    Memo2.Lines.AddStrings(TArray<string>(TFile.ReadAllLines(policyFile)))
+  else
+  begin
+    lblWarning.Text:='Policy file ' + policyFile + ' not found' + sLineBreak +
+            'You can select a policy file manually';
+    layoutWarning.Visible:=true;
+  end;
 end;
 
 end.

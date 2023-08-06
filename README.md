@@ -20,9 +20,9 @@ Please feel free to comment and offer suggestions. If you want to contribute, ch
 [Casbin](https://github.com/casbin/casbin) | [jCasbin](https://github.com/casbin/jcasbin) | [node-Casbin](https://github.com/casbin/node-casbin) | [PHP-Casbin](https://github.com/php-casbin/php-casbin)
 production-ready | production-ready | production-ready | production-ready
 
-[![python](https://casbin.org/img/langs/python.png)](https://github.com/casbin/pycasbin) | [![delphi](https://github.com/casbin4d/Casbin4D/blob/master/Images/Delphi.png)](https://github.com/casbin4d/Casbin4D) | [![dotnet](https://casbin.org/img/langs/dotnet.png)](https://github.com/Devolutions/casbin-net) | [![rust](https://casbin.org/img/langs/rust.png)](https://github.com/casbin/casbin-rs)
+[![python](https://casbin.org/img/langs/python.png)](https://github.com/casbin/pycasbin) | [![delphi](https://github.com/casbin4d/Casbin4D/blob/master/Images/Delphi.png)](https://github.com/casbin4d/Casbin4D) | [![dotnet](https://casbin.org/img/langs/dotnet.png)](https://github.com/casbin/Casbin.NET) | [![rust](https://casbin.org/img/langs/rust.png)](https://github.com/casbin/casbin-rs)
 ----|----|----|----
-[PyCasbin](https://github.com/casbin/pycasbin) | [Casbin4D](https://github.com/casbin4d/Casbin4D) | [Casbin-Net](https://github.com/Devolutions/casbin-net) | [Casbin-RS](https://github.com/casbin/casbin-rs)
+[PyCasbin](https://github.com/casbin/pycasbin) | [Casbin4D](https://github.com/casbin4d/Casbin4D) | [Casbin-Net](https://github.com/casbin/Casbin.NET) | [Casbin-RS](https://github.com/casbin/casbin-rs)
 production-ready | experimental | production-ready | production-ready
 
 ## Table of contents
@@ -219,7 +219,7 @@ Deny-override | [rbac_model_with_deny.conf](https://github.com/casbin4d/Casbin4D
 Priority | [priority_model.conf](https://github.com/casbin4d/Casbin4D/blob/master/Examples/Default/priority_model.conf)  | [priority_policy.csv](https://github.com/casbin4d/Casbin4D/blob/master/Examples/Default/priority_policy.csv)
 
 ## Tests
-The vast majority of the tests of the original implementation in Go have been imported in Delphi. Please see the [Tests](<https://github.com/casbin4d/Casbin4D/Tests>)
+The vast majority of the tests of the original implementation in Go have been imported in Delphi. Please see the [Tests](<https://github.com/casbin4d/Casbin4D/tree/master/Tests>)
 
 You can check the code coverage [here](http://codecoverage.casbin4d.kouraklis.com/) for the up to date status. You are welcome to improve the tests and the coverage
 

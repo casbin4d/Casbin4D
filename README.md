@@ -1,7 +1,6 @@
 Casbin4D
 ====
 
-[![Made With Delphi](https://img.shields.io/badge/MADE%20WITH-DELPHI-red.svg)](<https://www.embarcadero.com/products/delphi>)
 [![CodeCoverage](https://img.shields.io/badge/coverage-91%25-green.svg)]()
 [![Version](https://img.shields.io/github/tag/casbin4D/casbin4D.svg?label=latest%20version&style=popout)]()
 [![Discord](https://img.shields.io/discord/1022748306096537660?logo=discord&label=discord&color=5865F2)](https://discord.gg/S5UjpzGZjN)
@@ -218,10 +217,17 @@ RESTful | [keymatch_model.conf](https://github.com/casbin4d/Casbin4D/blob/master
 Deny-override | [rbac_model_with_deny.conf](https://github.com/casbin4d/Casbin4D/blob/master/Examples/Default/rbac_with_deny_model.conf)  | [rbac_policy_with_deny.csv](https://github.com/casbin4d/Casbin4D/blob/master/Examples/Default/rbac_with_deny_policy.csv)
 Priority | [priority_model.conf](https://github.com/casbin4d/Casbin4D/blob/master/Examples/Default/priority_model.conf)  | [priority_policy.csv](https://github.com/casbin4d/Casbin4D/blob/master/Examples/Default/priority_policy.csv)
 
-## Tests
-The vast majority of the tests of the original implementation in Go have been imported in Delphi. Please see the [Tests](<https://github.com/casbin4d/Casbin4D/tree/master/Tests>)
+## Middlewares
 
-You can check the code coverage [here](http://codecoverage.casbin4d.kouraklis.com/) for the up to date status. You are welcome to improve the tests and the coverage
+Authz middlewares for web frameworks: https://casbin.org/docs/middlewares
+
+## Our adopters
+
+https://casbin.org/docs/adopters
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=casbin4d/Casbin4D&type=Date)](https://star-history.com/#casbin4d/Casbin4D&Date)
 
 ## License
 
@@ -229,8 +235,6 @@ This project is licensed under the [Apache 2.0 license](LICENSE).
 
 ## Contact
 
-If you have any issues or feature requests, please contact us. PR is welcome
-- [https://github.com/casbin4d/Casbin4D/issues](https://github.com/casbin4d/Casbin4D/issues)
-- [j_kour@hotmail.com](mailto:j_kour@hotmail.com)
-- [Discord](https://discord.gg/S5UjpzGZjN)
-
+If you have any issues or feature requests, please contact us. PR is welcomed.
+- https://github.com/casbin4d/Casbin4D/issues
+- https://discord.gg/S5UjpzGZjN
